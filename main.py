@@ -41,7 +41,7 @@ class HDLGen(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     window = HDLGen()
-    window.resize(720, 480)
+    window.resize(1000, 500)
     window.show()
 
     app.exec_()
