@@ -10,6 +10,7 @@ class ProjectManager(QWidget):
     def __init__(self):
         super().__init__()
 
+
         self.small_spacing = 10
         self.large_spacing = 30
         self.medium_spacing = 25
@@ -18,6 +19,7 @@ class ProjectManager(QWidget):
 
         self.blackColor = "color: black"
         self.titleColor = "color: white;"
+
         # Initializing Widgets
 
         title_font = QFont()
@@ -56,8 +58,10 @@ class ProjectManager(QWidget):
         self.verilog_check.setStyleSheet(self.blackColor)
         self.sverilog_check = QCheckBox("System Verilog")
         self.sverilog_check.setStyleSheet(self.blackColor)
+        self.sverilog_check.setEnabled(False)
         self.chisel_check = QCheckBox("Chisel")
         self.chisel_check.setStyleSheet(self.blackColor)
+        self.chisel_check.setEnabled(False)
 
         self.intel_check = QCheckBox("Intel Quartus")
         self.intel_check.setFont(bold_font)
@@ -96,15 +100,18 @@ class ProjectManager(QWidget):
         self.proj_open_btn = QPushButton("Open")
         self.proj_open_btn.setFixedHeight(40)
         self.proj_open_btn.setStyleSheet(
-            "background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
         self.proj_save_btn = QPushButton("Save")
         self.proj_save_btn.setFixedHeight(40)
         self.proj_save_btn.setStyleSheet(
-            "background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
         self.proj_reset_btn = QPushButton("Reset")
         self.proj_reset_btn.setFixedHeight(40)
         self.proj_reset_btn.setStyleSheet(
-            "background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
         # Initializing layouts
         self.mainLayout = QHBoxLayout()
@@ -131,9 +138,13 @@ class ProjectManager(QWidget):
 
         self.proj_action_layout = QHBoxLayout()
 
+        proj_name = self.proj_name_input.text()
+        proj_dir = self.proj_folder_input.text()
+
         self.setup_ui()
 
     def setup_ui(self):
+
         self.projSettingLayout.addWidget(self.proj_setting_title)
         self.projSettingLayout.addSpacing(self.small_spacing)
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
@@ -142,6 +153,9 @@ class ProjectManager(QWidget):
         self.projDetailIpLayout.addWidget(self.proj_folder_input, 3, 0, 1, 4)
         self.projDetailIpLayout.addWidget(self.proj_folder_btn, 3, 3, 1, 1, Qt.AlignRight)
         self.projSettingLayout.addLayout(self.projDetailIpLayout)
+
+        self.proj_name_input.textChanged.connect(self.proj_detail_change)
+        self.proj_folder_input.textChanged.connect(self.proj_detail_change)
 
         self.projSettingFrame.setFrameShape(QFrame.StyledPanel)
         self.projSettingFrame.setStyleSheet(".QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}")
@@ -205,6 +219,7 @@ class ProjectManager(QWidget):
         self.rightColLayout.addWidget(self.generateFrame)
         self.rightColLayout.addSpacing(self.medium_spacing)
 
+
         self.proj_action_layout.addWidget(self.proj_reset_btn)
         self.proj_action_layout.addWidget(self.proj_open_btn)
         self.proj_action_layout.addWidget(self.proj_save_btn)
@@ -220,17 +235,29 @@ class ProjectManager(QWidget):
 
 
         # Setting actions for buttons
-        self.proj_folder_btn.clicked.connect(self.get_proj_dir)
+        self.proj_folder_btn.clicked.connect(self.set_proj_dir)
         self.vivado_select_dir.clicked.connect(self.get_vivado_dir)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
 
         self.proj_reset_btn.clicked.connect(self.reset_all_data)
         self.proj_save_btn.clicked.connect(self.create_xml)
-        # self.save_btn.clicked.connect(self.create_xml)
-        # self.gen_btn.clicked.connect(self.generate_folders)
+        self.proj_open_btn.clicked.connect(self.load_proj_data)
+
+    def proj_detail_change(self):
+        print("Text changed")
+        # Getting project name from the text field
+        ProjectManager.proj_name = self.proj_name_input.text()
+        # Getting project location from the text field
+        ProjectManager.proj_dir = self.proj_folder_input.text()
+
+    def get_proj_name():
+        return ProjectManager.proj_name
+
+    def get_proj_dir():
+        return ProjectManager.proj_dir
 
     # get_dir() opens up folder chooser and gets selected folder directory
-    def get_proj_dir(self):
+    def set_proj_dir(self):
         self.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
         self.proj_folder_input.setText(self.proj_dir)
 
@@ -240,17 +267,20 @@ class ProjectManager(QWidget):
 
     def get_intel_dir(self):
         self.intel_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "C:\\")
-        self.vivado_dir_input.setText(self.intel_dir)
+        self.intel_dir_input.setText(self.intel_dir)
 
     def create_xml(self):
 
         # Getting project name from the text field
-        self.proj_name = self.proj_name_input.text()
+        proj_name = self.proj_name_input.text()
         # Getting project location from the text field
-        self.selected_dir = self.proj_folder_input.text()
+        proj_dir = self.proj_folder_input.text()
+
+        self.vivado_dir = self.vivado_dir_input.text()
+        self.intel_dir = self.intel_dir_input.text()
 
         # Creating main project folder
-        os.makedirs(self.selected_dir + "\\" + self.proj_name + "\\HDLGen", exist_ok=True)
+        os.makedirs(proj_dir + "\\" + proj_name + "\\HDLGen", exist_ok=True)
 
         # Creating XML doc
         root = minidom.Document()
@@ -276,9 +306,9 @@ class ProjectManager(QWidget):
         project_name = root.createElement('name')
         project_loc = root.createElement('location')
         # Inserting project name to the name element
-        project_name.appendChild(root.createTextNode(self.proj_name))
+        project_name.appendChild(root.createTextNode(proj_name))
         # Inserting project location to the location element
-        project_loc.appendChild(root.createTextNode(self.selected_dir))
+        project_loc.appendChild(root.createTextNode(proj_dir))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
         settings_data.appendChild(project_loc)
@@ -289,13 +319,13 @@ class ProjectManager(QWidget):
 
         # If xilinx vivado is selected then it's details is added to the EDA Element
         if self.vivado_check.isChecked():
-            eda_tool_data = root.createElement('Tool')
+            eda_tool_data = root.createElement('tool')
             tool_name = root.createElement('name')
-            tool_name.appendChild(root.createTextNode('Vivado'))
+            tool_name.appendChild(root.createTextNode('Xilinx Vivado'))
             tool_dir = root.createElement('dir')
             tool_dir.appendChild(root.createTextNode(self.vivado_dir))
             tool_ver = root.createElement('version')
-            tool_ver.appndChild(root.createTextNode(self.vivado_ver_combo.currentText()))
+            tool_ver.appendChild(root.createTextNode(self.vivado_ver_combo.currentText()))
             eda_tool_data.appendChild(tool_name)
             eda_tool_data.appendChild(tool_dir)
             eda_tool_data.appendChild(tool_ver)
@@ -303,13 +333,13 @@ class ProjectManager(QWidget):
 
         # If Intel Quartus is selected then it's details is added to the EDA Element
         if self.intel_check.isChecked():
-            eda_tool_data = root.createElement('Tool')
+            eda_tool_data = root.createElement('tool')
             tool_name = root.createElement('name')
             tool_name.appendChild(root.createTextNode('Intel Quartus'))
             tool_dir = root.createElement('dir')
             tool_dir.appendChild(root.createTextNode(self.intel_dir))
             tool_ver = root.createElement('version')
-            tool_ver.appndChild(root.createTextNode(self.intel_ver_combo.currentText()))
+            tool_ver.appendChild(root.createTextNode(self.intel_ver_combo.currentText()))
             eda_tool_data.appendChild(tool_name)
             eda_tool_data.appendChild(tool_dir)
             eda_tool_data.appendChild(tool_ver)
@@ -371,8 +401,8 @@ class ProjectManager(QWidget):
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
-                verilog_mxlnxprj_dir = root.createTextNode(self.proj_name + '\\Verilog\\EDAprj\\xilinxprj')
-                verilog_folders.append(verilog_mxlnxprj_dir)
+                verilog_xlnxprj_dir = root.createTextNode(self.proj_name + '\\Verilog\\EDAprj\\xilinxprj')
+                verilog_folders.append(verilog_xlnxprj_dir)
                 no_of_folders = no_of_folders + 1
 
             # If intel is chosen then the intelxprj folder is added
@@ -387,14 +417,53 @@ class ProjectManager(QWidget):
                 verilog_dir.appendChild(verilog_folders[i])
                 genFolder_data.appendChild(verilog_dir)
 
+
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml(indent="\t")
 
-        save_path_file = self.selected_dir + "\\" + self.proj_name + "\\HDLGen\\HDLGenTest_data.xml"
+        save_path_file = self.proj_dir + "\\" + self.proj_name + "\\HDLGen\\HDLGenTest_data.xml"
 
         # Writing xml file
         with open(save_path_file, "w") as f:
             f.write(xml_str)
+
+    def load_proj_data(self):
+        self.load_proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
+
+        # Parsing the xml file
+        data = minidom.parse(self.load_proj_dir + '\\HDLGen\\HDLGenTest_data.xml')
+        HDLGen = data.documentElement
+
+        # Accessing the projectManager and genFolder Elements
+        project_Manager = HDLGen.getElementsByTagName("projectManager")
+
+        settings = project_Manager[0].getElementsByTagName("settings")[0]
+
+        proj_name = settings.getElementsByTagName("name")[0].firstChild.data
+        proj_loc = settings.getElementsByTagName("location")[0].firstChild.data
+        self.proj_name_input.setText(proj_name)
+        self.proj_folder_input.setText(proj_loc)
+
+        eda_data = project_Manager[0].getElementsByTagName("EDA")[0]
+        tools_data = eda_data.getElementsByTagName("tool")
+        for tool in tools_data:
+            if tool.getElementsByTagName("name")[0].firstChild.data == "Xilinx Vivado":
+                self.vivado_check.setChecked(True)
+                self.vivado_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
+                self.vivado_dir_input.setText(tool.getElementsByTagName("dir")[0].firstChild.data)
+            elif tool.getElementsByTagName("name")[0].firstChild.data == "Intel Quartus":
+                self.intel_check.setChecked(True)
+                self.intel_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
+                self.intel_dir_input.setText(tool.getElementsByTagName("dir")[0].firstChild.data)
+
+        hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]
+        hdl_langs = hdl_data.getElementsByTagName("language")
+
+        for hdl_lang in hdl_langs:
+            if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "VHDL":
+                self.vhdl_check.setChecked(True)
+            elif hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
+                self.verilog_check.setChecked(True)
 
     def reset_all_data(self):
         self.proj_name_input.clear()
@@ -404,8 +473,11 @@ class ProjectManager(QWidget):
         self.intel_dir_input.clear()
         self.vivado_check.setChecked(False)
         self.intel_check.setChecked(False)
+        self.vivado_ver_combo.setCurrentIndex(0)
+        self.intel_ver_combo.setCurrentIndex(0)
 
         self.vhdl_check.setChecked(False)
         self.verilog_check.setChecked(False)
         self.sverilog_check.setChecked(False)
         self.chisel_check.setChecked(False)
+
