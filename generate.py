@@ -5,6 +5,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from projectManager import ProjectManager
 
+
 class Generate(QWidget):
 
     def __init__(self):
@@ -28,12 +29,14 @@ class Generate(QWidget):
 
         self.setLayout(self.mainLayout)
 
-
     def generate_folders(self):
 
-        #print("Project name:" + ProjectManager.get_proj_name())
+        print("Generating Project folders...")
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), ProjectManager.get_proj_name())
+        xml_data_path = os.path.join(proj_path, 'HDLGen', 'HDLGenTest_data.xml')
+
         # Parsing the xml file
-        data = minidom.parse(ProjectManager.get_proj_dir() + "\\" + ProjectManager.get_proj_name() + '\\HDLGen\\HDLGenTest_data.xml')
+        data = minidom.parse(xml_data_path)
         HDLGen = data.documentElement
 
         # Accessing the projectManager and genFolder Elements
@@ -50,11 +53,12 @@ class Generate(QWidget):
                 for folder in genFolder_data[0].getElementsByTagName("vhdl_folder"):
                     # Creating the directory
                     path = os.path.join(location, folder.firstChild.data)
-                    os.makedirs(path)
+                    os.makedirs(path, exist_ok=True)
                     # If verilog is present in the hdl settings then directory with verilog_folder are read
             if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
                 for folder in genFolder_data[0].getElementsByTagName("verilog_folder"):
                     # Creating the directory
                     path = os.path.join(location, folder.firstChild.data)
-                    os.makedirs(path)
+                    os.makedirs(path, exist_ok=True)
 
+        print("All project folders have been successfully generated at ", proj_path)

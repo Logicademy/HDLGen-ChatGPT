@@ -6,6 +6,8 @@ from PySide2.QtGui import *
 from projectManager import ProjectManager
 from generate import Generate
 from help import Help
+from configureDesign import ConfigureDesign
+from design import Design
 
 
 class HDLGen(QMainWindow):
@@ -29,6 +31,8 @@ class HDLGen(QMainWindow):
         print("Setting up UI")
         self.tabs.addTab(ProjectManager(), "Project Manager")
         self.tabs.addTab(Generate(), "Generate")
+        self.tabs.addTab(ConfigureDesign(), "Configure Design")
+        self.tabs.addTab(Design(), "Design")
         self.tabs.addTab(Help(), "Help")
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)

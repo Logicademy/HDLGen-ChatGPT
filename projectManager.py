@@ -244,15 +244,16 @@ class ProjectManager(QWidget):
         self.proj_open_btn.clicked.connect(self.load_proj_data)
 
     def proj_detail_change(self):
-        print("Text changed")
         # Getting project name from the text field
         ProjectManager.proj_name = self.proj_name_input.text()
         # Getting project location from the text field
         ProjectManager.proj_dir = self.proj_folder_input.text()
 
+    @staticmethod
     def get_proj_name():
         return ProjectManager.proj_name
 
+    @staticmethod
     def get_proj_dir():
         return ProjectManager.proj_dir
 
@@ -271,6 +272,7 @@ class ProjectManager(QWidget):
 
     def create_xml(self):
 
+
         # Getting project name from the text field
         proj_name = self.proj_name_input.text()
         # Getting project location from the text field
@@ -279,8 +281,10 @@ class ProjectManager(QWidget):
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
 
+        xml_data_dir = os.path.join(proj_dir, proj_name, "HDLGen")
+        print("Saving project details at ", xml_data_dir)
         # Creating main project folder
-        os.makedirs(proj_dir + "\\" + proj_name + "\\HDLGen", exist_ok=True)
+        os.makedirs(xml_data_dir, exist_ok=True)
 
         # Creating XML doc
         root = minidom.Document()
@@ -427,8 +431,12 @@ class ProjectManager(QWidget):
         with open(save_path_file, "w") as f:
             f.write(xml_str)
 
+        print("Successfully saved!")
+
     def load_proj_data(self):
         self.load_proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
+
+        print("Loading project from ", self.load_proj_dir)
 
         # Parsing the xml file
         data = minidom.parse(self.load_proj_dir + '\\HDLGen\\HDLGenTest_data.xml')
@@ -464,6 +472,8 @@ class ProjectManager(QWidget):
                 self.vhdl_check.setChecked(True)
             elif hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
                 self.verilog_check.setChecked(True)
+
+        print("Project successfully loaded!")
 
     def reset_all_data(self):
         self.proj_name_input.clear()
