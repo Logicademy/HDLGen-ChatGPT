@@ -4,21 +4,21 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
+SMALL_SPACING = 10
+LARGE_SPACING = 30
+MEDIUM_SPACING = 25
+LARGE_CORNER_R = 15
+SMALL_CORNER_R = 15
+
+BLACK_COLOR = "color: black"
+WHITE_COLOR = "color: white;"
+
+ICONS_DIR = "resources/icons/"
 
 class ProjectManager(QWidget):
 
     def __init__(self):
         super().__init__()
-
-
-        self.small_spacing = 10
-        self.large_spacing = 30
-        self.medium_spacing = 25
-        self.large_corner_r = 15
-        self.small_corner_r = 15
-
-        self.blackColor = "color: black"
-        self.titleColor = "color: white;"
 
         # Initializing Widgets
 
@@ -30,13 +30,13 @@ class ProjectManager(QWidget):
 
         self.proj_setting_title = QLabel("Project Settings")
         self.proj_setting_title.setFont(title_font)
-        self.proj_setting_title.setStyleSheet(self.titleColor)
+        self.proj_setting_title.setStyleSheet(WHITE_COLOR)
         self.eda_tools_title = QLabel("EDA Tools")
         self.eda_tools_title.setFont(title_font)
-        self.eda_tools_title.setStyleSheet(self.titleColor)
+        self.eda_tools_title.setStyleSheet(WHITE_COLOR)
         self.generate_title = QLabel("Generate")
         self.generate_title.setFont(title_font)
-        self.generate_title.setStyleSheet(self.titleColor)
+        self.generate_title.setStyleSheet(WHITE_COLOR)
 
         self.name_label = QLabel('Project Name')
         self.name_label.setStyleSheet("color: white;")
@@ -45,55 +45,55 @@ class ProjectManager(QWidget):
         self.proj_folder_input = QLineEdit()
         self.proj_name_input = QLineEdit()
         self.proj_folder_btn = QPushButton()
-        self.proj_folder_btn.setIcon(QIcon("resources/icons/folder.svg"))
+        self.proj_folder_btn.setIcon(QIcon(ICONS_DIR + "folder.svg"))
         self.proj_folder_btn.setStyleSheet("background-color: white; border-style: plain;")
         self.proj_folder_btn.setFixedSize(25, 20)
 
         self.lang_label = QLabel("Languages")
         self.lang_label.setFont(bold_font)
-        self.lang_label.setStyleSheet(self.blackColor)
+        self.lang_label.setStyleSheet(BLACK_COLOR)
         self.vhdl_check = QCheckBox("VHDL")
-        self.vhdl_check.setStyleSheet(self.blackColor)
+        self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QCheckBox("Verilog")
-        self.verilog_check.setStyleSheet(self.blackColor)
+        self.verilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check = QCheckBox("System Verilog")
-        self.sverilog_check.setStyleSheet(self.blackColor)
+        self.sverilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check.setEnabled(False)
         self.chisel_check = QCheckBox("Chisel")
-        self.chisel_check.setStyleSheet(self.blackColor)
+        self.chisel_check.setStyleSheet(BLACK_COLOR)
         self.chisel_check.setEnabled(False)
 
         self.intel_check = QCheckBox("Intel Quartus")
         self.intel_check.setFont(bold_font)
-        self.intel_check.setStyleSheet(self.blackColor)
+        self.intel_check.setStyleSheet(BLACK_COLOR)
         self.intel_ver_label = QLabel("Version")
-        self.intel_ver_label.setStyleSheet(self.blackColor)
+        self.intel_ver_label.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo = QComboBox()
-        self.intel_ver_combo.setStyleSheet(self.blackColor)
+        self.intel_ver_combo.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo.addItem("1")
         self.intel_ver_combo.addItem("2")
         self.intel_dir_label = QLabel('Intel Quartus Installation Directory')
-        self.intel_dir_label.setStyleSheet(self.blackColor)
+        self.intel_dir_label.setStyleSheet(BLACK_COLOR)
         self.intel_dir_input = QLineEdit()
         self.intel_select_dir = QPushButton()
-        self.intel_select_dir.setIcon(QIcon("resources/icons/folder.svg"))
+        self.intel_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
         self.intel_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.intel_select_dir.setFixedSize(25, 20)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
         self.vivado_check.setFont(bold_font)
-        self.vivado_check.setStyleSheet(self.blackColor)
+        self.vivado_check.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_label = QLabel("Version")
-        self.vivado_ver_label.setStyleSheet(self.blackColor)
+        self.vivado_ver_label.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo = QComboBox()
-        self.vivado_ver_combo.setStyleSheet(self.blackColor)
+        self.vivado_ver_combo.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo.addItem("2019.1")
         self.vivado_ver_combo.addItem("2020.2")
         self.vivado_dir_label = QLabel('Vivado Installation Directory')
-        self.vivado_dir_label.setStyleSheet(self.blackColor)
+        self.vivado_dir_label.setStyleSheet(BLACK_COLOR)
         self.vivado_dir_input = QLineEdit()
         self.vivado_select_dir = QPushButton()
-        self.vivado_select_dir.setIcon(QIcon("resources/icons/folder.svg"))
+        self.vivado_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
         self.vivado_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.vivado_select_dir.setFixedSize(25, 20)
 
@@ -146,7 +146,7 @@ class ProjectManager(QWidget):
     def setup_ui(self):
 
         self.projSettingLayout.addWidget(self.proj_setting_title)
-        self.projSettingLayout.addSpacing(self.small_spacing)
+        self.projSettingLayout.addSpacing(SMALL_SPACING)
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 4)
         self.projDetailIpLayout.addWidget(self.dir_label, 2, 0, 1, 1)
@@ -164,7 +164,7 @@ class ProjectManager(QWidget):
         self.leftColLayout.addStretch()
 
         self.edaToolsLayout.addWidget(self.eda_tools_title)
-        self.edaToolsLayout.addSpacing(self.small_spacing)
+        self.edaToolsLayout.addSpacing(SMALL_SPACING)
         self.vivadoToolLayout.addWidget(self.vivado_check, 0, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_ver_label, 0, 2, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_ver_combo, 0, 3, 1, 1)
@@ -176,7 +176,7 @@ class ProjectManager(QWidget):
             ".QFrame{background-color: white; border-radius: 5px;}")
         self.edaToolsLayout.addWidget(self.vivadoToolFrame)
 
-        self.edaToolsLayout.addSpacing(self.medium_spacing)
+        self.edaToolsLayout.addSpacing(MEDIUM_SPACING)
 
         self.intelToolLayout.addWidget(self.intel_check, 0, 0, 1, 1)
         self.intelToolLayout.addWidget(self.intel_ver_label, 0, 2, 1, 1)
@@ -197,7 +197,7 @@ class ProjectManager(QWidget):
         self.midColLayout.addWidget(self.edaToolsFrame)
 
         self.generateLayout.addWidget(self.generate_title)
-        self.generateLayout.addSpacing(self.small_spacing)
+        self.generateLayout.addSpacing(SMALL_SPACING)
         self.langLayout.addWidget(self.lang_label, 0, 1, 1, 1, Qt.AlignCenter)
         self.langLayout.addWidget(self.vhdl_check, 1, 0, 1, 1)
         self.langLayout.addWidget(self.verilog_check, 2, 0, 1, 1)
@@ -217,7 +217,7 @@ class ProjectManager(QWidget):
         self.generateFrame.setLayout(self.generateLayout)
 
         self.rightColLayout.addWidget(self.generateFrame)
-        self.rightColLayout.addSpacing(self.medium_spacing)
+        self.rightColLayout.addSpacing(MEDIUM_SPACING)
 
 
         self.proj_action_layout.addWidget(self.proj_reset_btn)
@@ -226,9 +226,9 @@ class ProjectManager(QWidget):
         self.rightColLayout.addLayout(self.proj_action_layout)
 
         self.mainLayout.addLayout(self.leftColLayout)
-        self.mainLayout.addSpacing(self.medium_spacing)
+        self.mainLayout.addSpacing(MEDIUM_SPACING)
         self.mainLayout.addLayout(self.midColLayout)
-        self.mainLayout.addSpacing(self.medium_spacing)
+        self.mainLayout.addSpacing(MEDIUM_SPACING)
         self.mainLayout.addLayout(self.rightColLayout)
 
         self.setLayout(self.mainLayout)
