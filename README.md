@@ -5,13 +5,30 @@
 
 ### To Do
 
-- [ ] ConfigureDesign Tab XML structure
+- [ ] Design Tab UI in PySide
+- [ ] Design Tab XML structure
+  - [ ] Entity and Header
+  - [ ] Clk and Rst
+  - [ ] Input/Output Signals
+  - [ ] Architecture name
+  - [ ] Architecture Elements
+  - [ ] FSM Signals
+- [ ] Read and write Design XML
 - [ ] VHDL statements XML 
-- [ ] Create VHDL File
+- [ ] Generate VHDL File
+  - [ ] Header comment
+  - [ ] Input/Output Signals
+  - [ ] Architecture name
+  - [ ] Default Initializations
+  - [ ] Process
 
 ### In Progress
 
-- [ ] ConfigureDesign Tab UI 
+- [ ] Design Tab UI design
+- [ ] Render Markdown in help Tab
+  - [x] Render basic md
+  - [ ] Render tables
+  - [ ] Render code block
 
 ### Completed
 
@@ -22,4 +39,3 @@
 - [x] Add borders to UI 
 - [x] Generate folders from XML 
 
-### Dropped
