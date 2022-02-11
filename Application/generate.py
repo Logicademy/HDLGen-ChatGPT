@@ -32,8 +32,11 @@ class Generate(QWidget):
     def generate_folders(self):
 
         print("Generating Project folders...")
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), ProjectManager.get_proj_name())
-        xml_data_path = os.path.join(proj_path, 'HDLGen', 'HDLGenTest_data.xml')
+
+        proj_name =  ProjectManager.get_proj_name();
+
+        proj_path = os.path.join(ProjectManager.get_proj_dir(),)
+        xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen',  proj_name, '.HDLGen_data.xml')
 
         # Parsing the xml file
         data = minidom.parse(xml_data_path)

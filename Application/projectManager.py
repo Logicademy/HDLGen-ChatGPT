@@ -281,7 +281,7 @@ class ProjectManager(QWidget):
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
 
-        xml_data_dir = os.path.join(proj_dir, proj_name, "HDLGen")
+        xml_data_dir = os.path.join(proj_dir, proj_name, proj_name + ".HDLGen")
         print("Saving project details at ", xml_data_dir)
         # Creating main project folder
         os.makedirs(xml_data_dir, exist_ok=True)
@@ -425,7 +425,7 @@ class ProjectManager(QWidget):
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml(indent="\t")
 
-        save_path_file = self.proj_dir + "\\" + self.proj_name + "\\HDLGen\\HDLGenTest_data.xml"
+        save_path_file = self.proj_dir + "\\" + self.proj_name + "\\" + self.proj_name + ".HDLGen\\" + self.proj_name + "_data.xml"
 
         # Writing xml file
         with open(save_path_file, "w") as f:
@@ -434,12 +434,13 @@ class ProjectManager(QWidget):
         print("Successfully saved!")
 
     def load_proj_data(self):
-        self.load_proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
 
-        print("Loading project from ", self.load_proj_dir)
+        self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", "E:\\", filter= "XML (*.xml)")
+
+        print("Loading project from ", self.load_proj_dir[0])
 
         # Parsing the xml file
-        data = minidom.parse(self.load_proj_dir + '\\HDLGen\\HDLGenTest_data.xml')
+        data = minidom.parse(self.load_proj_dir[0])
         HDLGen = data.documentElement
 
         # Accessing the projectManager and genFolder Elements

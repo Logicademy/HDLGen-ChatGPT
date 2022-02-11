@@ -24,8 +24,6 @@ class Help(QWidget):
 
     def setup_ui(self):
 
-
-
         # Writing xml file
         with open(HELP_DOC_FILE_PATH, "r") as f:
            doc = md.markdown(f.read(),  extensions=['fenced_code', 'codehilite', 'tables', 'attr_list'])
