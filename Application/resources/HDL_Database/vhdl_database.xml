@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<vhdl>
+    <libraries>
+        <library>use ieee;</library>
+        <library>use ieee.std_logic_1164.all;</library>
+        <library>use numeric_std.all;</library>
+    </libraries>
+
+    <entity>entity $comp_name is &#10;Port(&#10; $signals&#10;);&#10;end entity $comp_name;</entity>
+
+    <signalDeclaration>
+        $sig_name : $mode $type;
+    </signalDeclaration>
+
+    <architecture>
+        architecture $arch_name of $comp_name is
+
+        $int_sig_declaration
+
+        begin
+
+        $arch_elements
+
+        end $arch_name;
+    </architecture>
+
+    <intSigDeclaration>
+        signal $int_sig_name : $int_sig_type;
+    </intSigDeclaration>
+
+    <process>
+        $process_name: process($input_signals)
+        begin
+            $default_assignments
+
+            -- Complete the process
+        end_process
+    </process>
+
+    <sigAssingn>
+        $output_signal &lt;= $value
+    </sigAssingn>
+
+</vhdl>

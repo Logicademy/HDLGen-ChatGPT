@@ -1,0 +1,134 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>SampleProject\VHDL\model</vhdl_folder>
+		<vhdl_folder>SampleProject\VHDL\testbench</vhdl_folder>
+		<vhdl_folder>SampleProject\VHDL\EDAprj\xilinxprj</vhdl_folder>
+		<vhdl_folder>SampleProject\VHDL\EDAprj\intelprj</vhdl_folder>
+		<verilog_folder>SampleProject\Verilog\model</verilog_folder>
+		<verilog_folder>SampleProject\Verilog\testbench</verilog_folder>
+		<verilog_folder>SampleProject\Verilog\EDAprj\xilinxprj</verilog_folder>
+		<verilog_folder>SampleProject\Verilog\EDAprj\intelprj</verilog_folder>
+	</genFolder>
+
+	<projectManager>
+		<settings>
+			<name>SampleProject</name>
+			<location>E:/</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin</dir>
+				<version>2019.1</version>
+			</tool>
+			<tool>
+				<name>Intel Quartus</name>
+				<dir>C:/Intel</dir>
+				<version>21.1 Lite</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+			<language>
+				<name>Verilog</name>
+			</language>
+		</HDL>
+	</projectManager>
+
+	<hdlDesign>
+		<header>
+			<compName>sample_component</compName>
+			<title>Sample Component title</title>
+			<description>Sample component description</description>
+			<author>Abishek Bupathi</author>
+			<author>Fearghal Morgan</author>
+			<company>National University of Ireland, Galway</company>
+			<email>a.bupathi1@nuigalway.ie</email>
+			<date>11-02-2022</date>
+		</header>
+
+		<clkAndRst>
+			<signal>
+				<name>clk</name>
+				<assertion>rising edge</assertion>
+				<description>System clk strobe, rising edge active</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<assertion>high</assertion>
+				<resetMode>Asynchronous</resetMode>
+				<description>Asynchronous reset, h asserted</description>
+			</signal>
+		</clkAndRst>
+
+		<entityIOPorts>
+			<signal>
+				<name>inputSignal1</name>
+				<mode>input</mode>
+				<type>std_logic</type>
+				<description>Input Signal 1 description</description>
+			</signal>
+			<signal>
+				<name>inputSignal2</name>
+				<mode>input</mode>
+				<type>std_logic</type>
+				<description>Input Signal 1 description</description>
+			</signal>
+			<signal>
+				<name>inputSignal3</name>
+				<mode>input</mode>
+				<type>std_logic</type>
+				<description>Input Signal 1 description</description>
+			</signal>
+			<signal>
+				<name>inputSignal4</name>
+				<mode>input</mode>
+				<type>std_logic</type>
+				<description>Input Signal 1 description</description>
+			</signal>
+			<signal>
+				<name>outputSignal1</name>
+				<mode>output</mode>
+				<type>std_logic</type>
+				<defaultVal>inputSignal1</defaultVal>
+				<description>Input Signal 1 description</description>
+			</signal>
+			<signal>
+				<name>outputSignal2</name>
+				<mode>output</mode>
+				<type>std_logic</type>
+				<defaultVal>0</defaultVal>
+				<description>Input Signal 1 description</description>
+			</signal>
+		</entityIOPorts>
+
+		<internalSignals>
+			<signal>
+				<name>internalSignal1</name>
+				<type>std_logic</type>
+				<description>Internal Signal 1 description</description>
+			</signal>
+		</internalSignals>
+
+		<architecure>
+			<archName>comb</archName>
+			<process>
+				<label>process1</label>
+				<inputSignal>inputSignal1</inputSignal>
+				<inputSignal>inputSignal2</inputSignal>
+				<inputSignal>inputSignal3</inputSignal>
+				<defaultOutput>outputSignal1,inputSignal1</defaultOutput>
+			</process>
+			<process>
+				<label>process2</label>
+				<inputSignal>inputSignal4</inputSignal>
+				<defaultOutput>outputSignal2,inputSignal4</defaultOutput>
+			</process>
+		</architecure>
+
+	</hdlDesign>
+
+</HDLGen>
