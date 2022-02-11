@@ -6,24 +6,24 @@
 ### To Do
 
 - [ ] Design Tab UI in PySide
-- [ ] Design Tab XML structure
-  - [ ] Entity and Header
-  - [ ] Clk and Rst
-  - [ ] Input/Output Signals
-  - [ ] Architecture name
-  - [ ] Architecture Elements
-  - [ ] FSM Signals
 - [ ] Read and write Design XML
-- [ ] VHDL statements XML 
+
+### In Progress
+
+- [ ] Design Tab XML structure
+  - [x] Entity and Header
+  - [x] Clk and Rst
+  - [x] Input/Output Signals
+  - [x] Architecture name
+  - [x] Architecture Elements
+  - [ ] FSM Signals
 - [ ] Generate VHDL File
-  - [ ] Header comment
+  - [x] Header comment
   - [ ] Input/Output Signals
   - [ ] Architecture name
   - [ ] Default Initializations
   - [ ] Process
-
-### In Progress
-
+- [ ] VHDL statements Database XML
 - [ ] Design Tab UI design
 - [ ] Render Markdown in help Tab
   - [x] Render basic md
