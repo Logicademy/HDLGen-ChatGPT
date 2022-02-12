@@ -6,36 +6,15 @@
         <library>use numeric_std.all;</library>
     </libraries>
 
-    <entity>entity $comp_name is &#10;Port(&#10; $signals&#10;);&#10;end entity $comp_name;</entity>
+    <entity>entity $comp_name is &#10;Port(&#10;$signals&#10;);&#10;end entity $comp_name;</entity>
 
-    <signalDeclaration>
-        $sig_name : $mode $type;
-    </signalDeclaration>
+    <signalDeclaration>$sig_name : $mode $type;</signalDeclaration>
 
-    <architecture>
-        architecture $arch_name of $comp_name is
+    <architecture>architecture $arch_name of $comp_name is&#10;&#10;$int_sig_declaration&#10;&#10;begin&#10;&#10;$arch_elements&#10;end $arch_name;</architecture>
 
-        $int_sig_declaration
+    <intSigDeclaration>signal $int_sig_name : $int_sig_type;</intSigDeclaration>
 
-        begin
-
-        $arch_elements
-
-        end $arch_name;
-    </architecture>
-
-    <intSigDeclaration>
-        signal $int_sig_name : $int_sig_type;
-    </intSigDeclaration>
-
-    <process>
-        $process_name: process($input_signals)
-        begin
-            $default_assignments
-
-            -- Complete the process
-        end_process
-    </process>
+    <process>$process_name: process($input_signals)&#10;begin&#10;$default_assignments&#10;&#10;-- Complete the process&#10;&#10;end_process;</process>
 
     <sigAssingn>
         $output_signal &lt;= $value

@@ -130,19 +130,68 @@ class Generate(QWidget):
         gen_library += "\n"
         self.gen_vhdl += gen_library
 
-
         # Entity Section
 
         gen_signals = ""
+        io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
 
-        entity_node = vhdl_root.getElementsByTagName("entity")
+        for signal in io_port_node[0].getElementsByTagName('signal'):
+            signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
+
+            signal_declare_syntax = signal_declare_syntax.replace("$sig_name", signal.getElementsByTagName('name')[0].firstChild.data)
+            signal_declare_syntax = signal_declare_syntax.replace("$mode", signal.getElementsByTagName('mode')[0].firstChild.data)
+            signal_declare_syntax = signal_declare_syntax.replace("$type", signal.getElementsByTagName('type')[0].firstChild.data)
+
+            gen_signals += "\t" + signal_declare_syntax + "\n"
+
+        gen_signals = gen_signals.rstrip()
+
+        entity_syntax = vhdl_root.getElementsByTagName("entity")
         gen_entity = "-- Entity Section\n"
-        gen_entity += entity_node[0].firstChild.data
+        gen_entity += entity_syntax[0].firstChild.data
 
-        gen_entity.replace("$comp_name", entity_name)
-        gen_entity.replace("$signals", gen_signals)
+        gen_entity = gen_entity.replace("$comp_name", entity_name)
+        gen_entity = gen_entity.replace("$signals", gen_signals)
 
-        self.gen_vhdl += gen_entity
+        self.gen_vhdl += gen_entity + "\n\n"
+
+
+        # Architecure section
+
+        gen_arch = ""
+
+        # Internal signals
+        gen_int_sig = ""
+        int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
+
+        for signal in int_sig_node[0].getElementsByTagName("signal"):
+            int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
+            int_sig_syntax = int_sig_syntax.replace("$int_sig_name", signal.getElementsByTagName('name')[0].firstChild.data)
+            int_sig_syntax = int_sig_syntax.replace("$int_sig_type", signal.getElementsByTagName('type')[0].firstChild.data)
+
+            gen_int_sig += int_sig_syntax
+
+        gen_int_sig.rstrip()
+
+        # Process
+        arch_node = hdl_design[0].getElementsByTagName("architecture")
+
+        gen_process = ""
+
+        for process in arch_node[0].getElementsByTag("process"):
+            process_syntax = vhdl_root.getElementsByTagName("process")[0].firstChild.data
+
+            process
+
+        arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
+        arch_name = arch_node[0].getElementsByTagName("archName")[0].firstChild.data
+
+        gen_arch = arch_syntax.replace("$arch_name", arch_name)
+        gen_arch = gen_arch.replace("$comp_name", entity_name)
+        gen_arch = gen_arch.replace("$int_sig_declaration", gen_int_sig)
+
+
+        self.gen_vhdl += gen_arch
 
         print(self.gen_vhdl)
 

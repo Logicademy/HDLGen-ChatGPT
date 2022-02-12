@@ -67,38 +67,38 @@
 		<entityIOPorts>
 			<signal>
 				<name>inputSignal1</name>
-				<mode>input</mode>
+				<mode>in</mode>
 				<type>std_logic</type>
 				<description>Input Signal 1 description</description>
 			</signal>
 			<signal>
 				<name>inputSignal2</name>
-				<mode>input</mode>
+				<mode>in</mode>
 				<type>std_logic</type>
 				<description>Input Signal 1 description</description>
 			</signal>
 			<signal>
 				<name>inputSignal3</name>
-				<mode>input</mode>
+				<mode>in</mode>
 				<type>std_logic</type>
 				<description>Input Signal 1 description</description>
 			</signal>
 			<signal>
 				<name>inputSignal4</name>
-				<mode>input</mode>
+				<mode>in</mode>
 				<type>std_logic</type>
 				<description>Input Signal 1 description</description>
 			</signal>
 			<signal>
 				<name>outputSignal1</name>
-				<mode>output</mode>
+				<mode>out</mode>
 				<type>std_logic</type>
 				<defaultVal>inputSignal1</defaultVal>
 				<description>Input Signal 1 description</description>
 			</signal>
 			<signal>
 				<name>outputSignal2</name>
-				<mode>output</mode>
+				<mode>out</mode>
 				<type>std_logic</type>
 				<defaultVal>0</defaultVal>
 				<description>Input Signal 1 description</description>
@@ -113,7 +113,7 @@
 			</signal>
 		</internalSignals>
 
-		<architecure>
+		<architecture>
 			<archName>comb</archName>
 			<process>
 				<label>process1</label>
@@ -127,7 +127,7 @@
 				<inputSignal>inputSignal4</inputSignal>
 				<defaultOutput>outputSignal2,inputSignal4</defaultOutput>
 			</process>
-		</architecure>
+		</architecture>
 
 	</hdlDesign>
 
