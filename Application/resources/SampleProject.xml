@@ -66,6 +66,18 @@
 
 		<entityIOPorts>
 			<signal>
+				<name>clk</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>System clk strobe, rising edge active</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>Asynchronous reset, h asserted</description>
+			</signal>
+			<signal>
 				<name>inputSignal1</name>
 				<mode>in</mode>
 				<type>std_logic</type>

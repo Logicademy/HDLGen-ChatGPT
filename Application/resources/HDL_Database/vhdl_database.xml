@@ -1,4 +1,16 @@
 <?xml version="1.0" ?>
+
+<!--
+    Escape Characters
+    "   &quot;
+    '   &apos;
+    <   &lt;
+    >   &gt;
+    &   &amp;
+    \n  &#10;
+    \t  &#x9;
+-->
+
 <vhdl>
     <libraries>
         <library>use ieee;</library>
@@ -14,10 +26,8 @@
 
     <intSigDeclaration>signal $int_sig_name : $int_sig_type;</intSigDeclaration>
 
-    <process>$process_name: process($input_signals)&#10;begin&#10;$default_assignments&#10;&#10;-- Complete the process&#10;&#10;end_process;</process>
+    <process>$process_label: process($input_signals)&#10;begin&#10;$default_assignments&#10;&#x9;-- Complete the process&#10;&#10;end_process;</process>
 
-    <sigAssingn>
-        $output_signal &lt;= $value
-    </sigAssingn>
+    <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
 
 </vhdl>

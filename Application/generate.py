@@ -79,9 +79,10 @@ class Generate(QWidget):
 
     def generate_vhdl(self):
 
-        #proj_name = ProjectManager.get_proj_name();
-        #proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        #xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
+        proj_name = ProjectManager.get_proj_name();
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
+
         test_xml = os.path.join("resources", "SampleProject.xml")
 
         vhdl_database_path = os.path.join("resources", "HDL_Database", "vhdl_database.xml")
@@ -100,6 +101,7 @@ class Generate(QWidget):
 
         header_node = hdl_design[0].getElementsByTagName("header")
         entity_name = header_node[0].getElementsByTagName("compName")[0].firstChild.data
+        vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
 
         gen_header = "-- Header Section\n"
         gen_header += "-- Component Name : " + entity_name + "\n"
@@ -178,10 +180,31 @@ class Generate(QWidget):
 
         gen_process = ""
 
-        for process in arch_node[0].getElementsByTag("process"):
+        for process_node in arch_node[0].getElementsByTagName("process"):
             process_syntax = vhdl_root.getElementsByTagName("process")[0].firstChild.data
 
-            process
+            process_syntax = process_syntax.replace("$process_label", process_node.getElementsByTagName("label")[0].firstChild.data)
+
+            gen_in_sig = ""
+
+            for input_signal in process_node.getElementsByTagName("inputSignal"):
+                gen_in_sig += input_signal.firstChild.data + ","
+
+            gen_in_sig = gen_in_sig[:-1]
+
+            process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
+
+            gen_defaults = ""
+            for default_out in process_node.getElementsByTagName("defaultOutput"):
+                assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                signals = default_out.firstChild.data.split(",")
+                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                assign_syntax = assign_syntax.replace("$value", signals[1])
+
+                gen_defaults += "\t" + assign_syntax + "\n"
+
+            process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
+            gen_process += process_syntax + "\n\n"
 
         arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
         arch_name = arch_node[0].getElementsByTagName("archName")[0].firstChild.data
@@ -189,11 +212,17 @@ class Generate(QWidget):
         gen_arch = arch_syntax.replace("$arch_name", arch_name)
         gen_arch = gen_arch.replace("$comp_name", entity_name)
         gen_arch = gen_arch.replace("$int_sig_declaration", gen_int_sig)
-
+        gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
         self.gen_vhdl += gen_arch
 
         print(self.gen_vhdl)
+
+        # Writing xml file
+        with open(vhdl_file_path, "w") as f:
+            f.write(self.gen_vhdl)
+
+        print("VHDL Model successfully generated at ", vhdl_file_path)
 
 
 
