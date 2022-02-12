@@ -71,7 +71,7 @@ class ProjectManager(QWidget):
         self.intel_ver_combo = QComboBox()
         self.intel_ver_combo.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo.addItem("21.1 Lite")
-        self.intel_dir_label = QLabel('Intel Quartus Installation Directory')
+        self.intel_dir_label = QLabel('Intel Quartus executable File path')
         self.intel_dir_label.setStyleSheet(BLACK_COLOR)
         self.intel_dir_input = QLineEdit()
         self.intel_select_dir = QPushButton()
@@ -87,7 +87,7 @@ class ProjectManager(QWidget):
         self.vivado_ver_combo = QComboBox()
         self.vivado_ver_combo.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo.addItem("2019.1")
-        self.vivado_dir_label = QLabel('Vivado Installation Directory')
+        self.vivado_dir_label = QLabel('Xilinx Vivado executable File path')
         self.vivado_dir_label.setStyleSheet(BLACK_COLOR)
         self.vivado_dir_input = QLineEdit()
         self.vivado_select_dir = QPushButton()
@@ -234,7 +234,7 @@ class ProjectManager(QWidget):
 
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
-        self.vivado_select_dir.clicked.connect(self.get_vivado_dir)
+        self.vivado_select_dir.clicked.connect(self.get_vivado_exe_path)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
 
         self.proj_reset_btn.clicked.connect(self.reset_all_data)
@@ -260,13 +260,13 @@ class ProjectManager(QWidget):
         self.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
         self.proj_folder_input.setText(self.proj_dir)
 
-    def get_vivado_dir(self):
-        self.vivado_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "C:\\")
-        self.vivado_dir_input.setText(self.vivado_dir)
+    def get_vivado_exe_path(self):
+        self.vivado_exe_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado exe", "C:\\", filter="EXE (*.exe)")
+        self.vivado_dir_input.setText(self.vivado_exe_path[0])
 
     def get_intel_dir(self):
-        self.intel_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "C:\\")
-        self.intel_dir_input.setText(self.intel_dir)
+        self.intel_dir = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:\\", filter="EXE (*.exe)")
+        self.intel_dir_input.setText(self.intel_dir[0])
 
     def create_xml(self):
 

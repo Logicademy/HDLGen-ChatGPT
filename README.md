@@ -15,15 +15,30 @@
   - [x] Clk and Rst
   - [x] Input/Output Signals
   - [x] Architecture name
-  - [x] Architecture Elements
-  - [ ] FSM Signals
+  - [x] Process
+  - [ ] Concurrent statement
+  - [ ] State reg
+  - [ ] FSM
 - [ ] Generate VHDL File
   - [x] Header comment
-  - [ ] Input/Output Signals
-  - [ ] Architecture name
-  - [ ] Default Initializations
-  - [ ] Process
+  - [x] Input/Output Signals
+  - [x] Architecture name
+  - [x] Default Initializations
+  - [x] Process
+  - [ ] Concurrent statements
+  - [ ] clk and rst
+  - [ ] state reg
+  - [ ] FSM
 - [ ] VHDL statements Database XML
+  - [x] Header comment
+  - [x] Input/Output Signals
+  - [x] Architecture name
+  - [x] Default Initializations
+  - [x] Process
+  - [ ] Concurrent statements
+  - [ ] clk and rst
+  - [ ] state reg
+  - [ ] FSM
 - [ ] Design Tab UI design
 - [ ] Render Markdown in help Tab
   - [x] Render basic md
