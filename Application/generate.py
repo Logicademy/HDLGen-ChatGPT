@@ -158,9 +158,7 @@ class Generate(QWidget):
         self.gen_vhdl += gen_entity + "\n\n"
 
 
-        # Architecure section
-
-        gen_arch = ""
+        # Architecture section
 
         # Internal signals
         gen_int_sig = ""
