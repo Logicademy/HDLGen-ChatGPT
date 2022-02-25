@@ -11,7 +11,7 @@ LARGE_CORNER_R = 15
 SMALL_CORNER_R = 15
 
 BLACK_COLOR = "color: black"
-WHITE_COLOR = "color: white;"
+WHITE_COLOR = "color: white"
 
 ICONS_DIR = "resources/icons/"
 

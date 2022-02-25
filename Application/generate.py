@@ -79,7 +79,7 @@ class Generate(QWidget):
 
     def generate_vhdl(self):
 
-        proj_name = ProjectManager.get_proj_name();
+        proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
 
