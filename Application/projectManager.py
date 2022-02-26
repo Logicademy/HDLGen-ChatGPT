@@ -270,7 +270,6 @@ class ProjectManager(QWidget):
 
     def create_xml(self):
 
-
         # Getting project name from the text field
         proj_name = self.proj_name_input.text()
         # Getting project location from the text field
@@ -419,6 +418,47 @@ class ProjectManager(QWidget):
                 verilog_dir.appendChild(verilog_folders[i])
                 genFolder_data.appendChild(verilog_dir)
 
+
+        # Creating hdlDesign tag
+        hdlDesign_data = root.createElement('hdlDesign')
+        HDLGen_data.appendChild(hdlDesign_data)
+
+        header_data = root.createElement('header')
+
+        comp_name = root.createElement('compName')
+        comp_name.appendChild(root.createTextNode("null"))
+        header_data.appendChild(comp_name)
+
+        comp_title = root.createElement('title')
+        comp_title.appendChild(root.createTextNode("null"))
+        header_data.appendChild(comp_title)
+
+        comp_desc = root.createElement('description')
+        comp_desc.appendChild(root.createTextNode("null"))
+        header_data.appendChild(comp_desc)
+
+        comp_authors = root.createElement('authors')
+        comp_authors.appendChild(root.createTextNode("null"))
+        header_data.appendChild(comp_authors)
+
+        comp_company = root.createElement('company')
+        comp_company.appendChild(root.createTextNode("null"))
+        header_data.appendChild(comp_company)
+
+        comp_email = root.createElement('email')
+        comp_email.appendChild(root.createTextNode("null"))
+        header_data.appendChild(comp_email)
+
+        comp_date = root.createElement('date')
+        comp_date.appendChild(root.createTextNode("null"))
+        header_data.appendChild(comp_date)
+
+        hdlDesign_data.appendChild(header_data)
+
+        hdlDesign_data.appendChild(root.createElement('clkAndRst'))
+        hdlDesign_data.appendChild(root.createElement('entityIOPorts'))
+        hdlDesign_data.appendChild(root.createElement('internalSignals'))
+        hdlDesign_data.appendChild(root.createElement('architecture'))
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml(indent="\t")

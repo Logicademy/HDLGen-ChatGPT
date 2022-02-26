@@ -107,12 +107,7 @@ class Generate(QWidget):
         gen_header += "-- Component Name : " + entity_name + "\n"
         gen_header += "-- Title          : " + header_node[0].getElementsByTagName("title")[0].firstChild.data + "\n"
         gen_header += "-- Description    : " + header_node[0].getElementsByTagName("description")[0].firstChild.data + "\n"
-
-        author_str = ""
-        for author in header_node[0].getElementsByTagName("author"):
-            author_str += author.firstChild.data + ", "
-
-        gen_header += "-- Author(s)      : " + author_str[:-2] + "\n"
+        gen_header += "-- Author(s)      : " + header_node[0].getElementsByTagName("authors")[0].firstChild.data + "\n"
         gen_header += "-- Company        : " + header_node[0].getElementsByTagName("company")[0].firstChild.data + "\n"
         gen_header += "-- Email          : " + header_node[0].getElementsByTagName("email")[0].firstChild.data + "\n"
         gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[0].firstChild.data + "\n\n\n"

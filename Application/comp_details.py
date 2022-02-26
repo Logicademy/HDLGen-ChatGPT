@@ -68,6 +68,8 @@ class CompDetails(QWidget):
 
         self.setup_ui()
 
+        #self.load_data()
+
     def setup_ui(self):
 
         self.input_layout.addWidget(self.comp_name_label, 0, 0)
@@ -113,6 +115,15 @@ class CompDetails(QWidget):
 
 
     def save_comp_details(self):
+
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
+
+        root = minidom.parse(xml_data_path)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+
         comp_name = self.comp_name_input.text()
         comp_title = self.comp_title_input.text()
         comp_description = self.comp_description_input.text()
@@ -121,25 +132,68 @@ class CompDetails(QWidget):
         comp_email = self.comp_email_input.text()
         comp_date = self.comp_date_picker.text()
 
-        proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
 
-        root = minidom.parse(xml_data_path)
-        HDLGen = root.documentElement
+        header = hdlDesign[0].getElementsByTagName('header')
 
-        hdlDesign = root.createElement("hdlDesign")
-        HDLGen.appendChild(hdlDesign)
+        header[0].getElementsByTagName('compName')[0].firstChild.data = comp_name
+        header[0].getElementsByTagName('title')[0].firstChild.data = comp_title
+        header[0].getElementsByTagName('description')[0].firstChild.data = comp_description
+        header[0].getElementsByTagName('authors')[0].firstChild.data = comp_authors
+        header[0].getElementsByTagName('company')[0].firstChild.data = comp_company
+        header[0].getElementsByTagName('email')[0].firstChild.data = comp_email
+        header[0].getElementsByTagName('date')[0].firstChild.data = comp_date
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
         xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
 
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(self.xml_data_path, "w") as f:
             f.write(xml_str)
 
         print("Successfully saved!")
 
     def reset_comp_details(self):
         print("reset button clicked")
+
+    def load_data(self):
+
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
+
+        root = minidom.parse(self.xml_data_path)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+
+
+        header = hdlDesign[0].getElementsByTagName('header')
+
+        comp_name = header[0].getElementsByTagName('compName')[0].firstChild.data
+        comp_title = header[0].getElementsByTagName('title')[0].firstChild.data
+        comp_description = header[0].getElementsByTagName('description')[0].firstChild.data
+        comp_authors = header[0].getElementsByTagName('authors')[0].firstChild.data
+        comp_company = header[0].getElementsByTagName('company')[0].firstChild.data
+        comp_email = header[0].getElementsByTagName('email')[0].firstChild.data
+        comp_date = header[0].getElementsByTagName('date')[0].firstChild.data
+
+        if comp_name != "null":
+            self.comp_name_input.setText(comp_name)
+
+        if comp_title != "null":
+            self.comp_title_input.setText(comp_title)
+
+        if comp_description != "null":
+            self.comp_description_input.setText(comp_description)
+
+        if comp_authors != "null":
+            self.comp_author_input.setText(comp_authors)
+
+        if comp_company != "null":
+            self.comp_company_input.setText(comp_company)
+
+        if comp_email != "null":
+            self.comp_email_input.setText(comp_email)
+
+        if comp_date != "null":
+            self.comp_date_picker.setDate(comp_date)
