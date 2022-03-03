@@ -17,8 +17,10 @@ ICONS_DIR = "resources/icons/"
 
 class ProjectManager(QWidget):
 
-    def __init__(self):
+    def __init__(self, proj_dir, MainWindow):
         super().__init__()
+
+        self.MainWindow = MainWindow
 
         # Initializing Widgets
 
@@ -95,9 +97,9 @@ class ProjectManager(QWidget):
         self.vivado_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.vivado_select_dir.setFixedSize(25, 20)
 
-        self.proj_open_btn = QPushButton("Open")
-        self.proj_open_btn.setFixedHeight(40)
-        self.proj_open_btn.setStyleSheet(
+        self.proj_close_btn = QPushButton("Close")
+        self.proj_close_btn.setFixedHeight(40)
+        self.proj_close_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
         self.proj_save_btn = QPushButton("Save")
@@ -136,10 +138,10 @@ class ProjectManager(QWidget):
 
         self.proj_action_layout = QHBoxLayout()
 
-        proj_name = self.proj_name_input.text()
-        proj_dir = self.proj_folder_input.text()
-
         self.setup_ui()
+
+        if proj_dir != None:
+            self.load_proj_data(proj_dir)
 
     def setup_ui(self):
 
@@ -219,7 +221,7 @@ class ProjectManager(QWidget):
 
 
         self.proj_action_layout.addWidget(self.proj_reset_btn)
-        self.proj_action_layout.addWidget(self.proj_open_btn)
+        self.proj_action_layout.addWidget(self.proj_close_btn)
         self.proj_action_layout.addWidget(self.proj_save_btn)
         self.rightColLayout.addLayout(self.proj_action_layout)
 
@@ -237,9 +239,12 @@ class ProjectManager(QWidget):
         self.vivado_select_dir.clicked.connect(self.get_vivado_exe_path)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
 
+        self.proj_close_btn.clicked.connect(self.close_project)
         self.proj_reset_btn.clicked.connect(self.reset_all_data)
         self.proj_save_btn.clicked.connect(self.create_xml)
-        self.proj_open_btn.clicked.connect(self.load_proj_data)
+
+
+        #self.proj_open_btn.clicked.connect(self.load_proj_data)
 
     def proj_detail_change(self):
         # Getting project name from the text field
@@ -471,14 +476,21 @@ class ProjectManager(QWidget):
 
         print("Successfully saved!")
 
-    def load_proj_data(self):
+    def close_project(self):
 
-        self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", "E:\\", filter= "XML (*.xml)")
+        from main import HDLGen
+        self.MainWindow.close()
+        self.window = HDLGen()
+        self.window.resize(1000, 500)
+        self.window.show()
+        print("Project Closed!")
 
-        print("Loading project from ", self.load_proj_dir[0])
+    def load_proj_data(self, load_proj_dir):
+
+        print("Loading project from ", load_proj_dir[0])
 
         # Parsing the xml file
-        data = minidom.parse(self.load_proj_dir[0])
+        data = minidom.parse(load_proj_dir[0])
         HDLGen = data.documentElement
 
         # Accessing the projectManager and genFolder Elements

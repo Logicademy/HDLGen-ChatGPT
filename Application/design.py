@@ -12,8 +12,10 @@ from clk_rst import ClkRst
 
 class Design(QWidget):
 
-    def __init__(self):
+    def __init__(self, proj_dir):
         super().__init__()
+
+        self.proj_dir = proj_dir
 
         self.mainLayout = QHBoxLayout()
         self.preview_pane_layout = QVBoxLayout()
@@ -33,10 +35,10 @@ class Design(QWidget):
         self.preview_pane_layout.addWidget(self.preview_label)
         self.preview_pane_layout.addWidget(self.preview_window)
 
-        self.tabs.addTab(CompDetails(), "Component Details")
-        self.tabs.addTab(ClkRst(), "Clock and Reset")
-        self.tabs.addTab(IOPorts(), "Component I/O Ports")
-        self.tabs.addTab(Architecture(), "Architecture")
+        self.tabs.addTab(CompDetails(self.proj_dir), "Component Details")
+        self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
+        self.tabs.addTab(IOPorts(self.proj_dir), "Component I/O Ports")
+        self.tabs.addTab(Architecture(self.proj_dir), "Architecture")
 
         self.mainLayout.addWidget(self.tabs)
         self.mainLayout.addLayout(self.preview_pane_layout)

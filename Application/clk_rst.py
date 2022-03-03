@@ -8,7 +8,7 @@ from projectManager import ProjectManager
 
 class ClkRst(QWidget):
 
-    def __init__(self):
+    def __init__(self, proj_dir):
         super().__init__()
 
         self.mainLayout = QHBoxLayout()

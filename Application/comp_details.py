@@ -10,7 +10,7 @@ WHITE_COLOR = "color: white"
 
 class CompDetails(QWidget):
 
-    def __init__(self):
+    def __init__(self, proj_dir):
         super().__init__()
 
         self.mainLayout = QVBoxLayout()
@@ -68,7 +68,7 @@ class CompDetails(QWidget):
 
         self.setup_ui()
 
-        #self.load_data()
+        self.load_data(proj_dir)
 
     def setup_ui(self):
 
@@ -156,13 +156,9 @@ class CompDetails(QWidget):
     def reset_comp_details(self):
         print("reset button clicked")
 
-    def load_data(self):
+    def load_data(self, proj_dir):
 
-        proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
-
-        root = minidom.parse(self.xml_data_path)
+        root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
@@ -196,4 +192,4 @@ class CompDetails(QWidget):
             self.comp_email_input.setText(comp_email)
 
         if comp_date != "null":
-            self.comp_date_picker.setDate(comp_date)
+            self.comp_date_picker.setDate(QDate.fromString(comp_date))
