@@ -67,8 +67,8 @@ class CompDetails(QWidget):
         self.input_frame = QFrame()
 
         self.setup_ui()
-
-        self.load_data(proj_dir)
+        if proj_dir != None:
+            self.load_data(proj_dir)
 
     def setup_ui(self):
 
@@ -118,7 +118,7 @@ class CompDetails(QWidget):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        xml_data_path = os.path.join(proj_path, proj_name + '.HDLGen', proj_name + '_data.xml')
+        xml_data_path = os.path.join(proj_path, 'HDLGenPrj', proj_name + '.hdlgen')
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement
@@ -148,7 +148,7 @@ class CompDetails(QWidget):
         xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
 
         # Writing xml file
-        with open(self.xml_data_path, "w") as f:
+        with open(xml_data_path, "w") as f:
             f.write(xml_str)
 
         print("Successfully saved!")

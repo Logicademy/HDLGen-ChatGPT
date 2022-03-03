@@ -219,9 +219,8 @@ class ProjectManager(QWidget):
         self.rightColLayout.addWidget(self.generateFrame)
         self.rightColLayout.addSpacing(MEDIUM_SPACING)
 
-
-        self.proj_action_layout.addWidget(self.proj_reset_btn)
         self.proj_action_layout.addWidget(self.proj_close_btn)
+        self.proj_action_layout.addWidget(self.proj_reset_btn)
         self.proj_action_layout.addWidget(self.proj_save_btn)
         self.rightColLayout.addLayout(self.proj_action_layout)
 
@@ -243,8 +242,6 @@ class ProjectManager(QWidget):
         self.proj_reset_btn.clicked.connect(self.reset_all_data)
         self.proj_save_btn.clicked.connect(self.create_xml)
 
-
-        #self.proj_open_btn.clicked.connect(self.load_proj_data)
 
     def proj_detail_change(self):
         # Getting project name from the text field
@@ -283,7 +280,7 @@ class ProjectManager(QWidget):
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
 
-        xml_data_dir = os.path.join(proj_dir, proj_name, proj_name + ".HDLGen")
+        xml_data_dir = os.path.join(proj_dir, proj_name, "HDLGenPrj")
         print("Saving project details at ", xml_data_dir)
         # Creating main project folder
         os.makedirs(xml_data_dir, exist_ok=True)
@@ -468,7 +465,7 @@ class ProjectManager(QWidget):
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml(indent="\t")
 
-        save_path_file = self.proj_dir + "\\" + self.proj_name + "\\" + self.proj_name + ".HDLGen\\" + self.proj_name + "_data.xml"
+        save_path_file = self.proj_dir + self.proj_name + "\\" + "HDLGenPrj" + "\\" + self.proj_name + ".hdlgen"
 
         # Writing xml file
         with open(save_path_file, "w") as f:

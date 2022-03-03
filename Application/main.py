@@ -55,7 +55,7 @@ class HDLGen(QMainWindow):
 
     def open_project(self):
         self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", "E:\\",
-                                                         filter="XML (*.xml)")
+                                                         filter="HDLGen (*.hdlgen)")
         print("Loading project from ", self.load_proj_dir[0])
 
         self.window = Home(self.load_proj_dir)

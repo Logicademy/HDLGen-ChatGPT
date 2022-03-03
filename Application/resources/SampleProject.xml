@@ -43,8 +43,7 @@
 			<compName>sample_component</compName>
 			<title>Sample Component title</title>
 			<description>Sample component description</description>
-			<author>Abishek Bupathi</author>
-			<author>Fearghal Morgan</author>
+			<authors>Abishek Bupathi</authors>
 			<company>National University of Ireland, Galway</company>
 			<email>a.bupathi1@nuigalway.ie</email>
 			<date>11-02-2022</date>
