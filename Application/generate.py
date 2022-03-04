@@ -92,7 +92,7 @@ class Generate(QWidget):
 
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
 
-
+        entity_name = ""
 
         # Header Section
 
@@ -200,7 +200,12 @@ class Generate(QWidget):
                 gen_process += process_syntax + "\n\n"
 
             arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
-            arch_name = arch_node[0].getElementsByTagName("archName")[0].firstChild.data
+            arch_name_node = arch_node[0].getElementsByTagName("archName")
+
+            arch_name = ""
+
+            if len(arch_name_node) != 0:
+                arch_name = arch_name_node[0].firstChild.data
 
             gen_arch = arch_syntax.replace("$arch_name", arch_name)
             gen_arch = gen_arch.replace("$comp_name", entity_name)

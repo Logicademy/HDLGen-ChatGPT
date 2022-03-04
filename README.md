@@ -3,6 +3,22 @@
 ### Screenshots
 <img src="https://github.com/abishek-bupathi/HDLGen/blob/83c569e9b708c27212a69c125e69bcc74a5cb2ac/Docs/Screenshots/Project%20Manager%20v1.png" width="700"></img>
 
+### Project Setup
+1. Install Python v3.9
+2. Clone the repository
+``
+git clone https://github.com/abishek-bupathi/HDLGen.git
+``
+3. Open the project in IntelliJ PyCharm or VSCode
+4. Install required libraries
+``
+pip install -r requirements.txt
+``
+5. Run main.py
+
+Using the Application
+1. When creating a new project make sure to click on save in the project manager before navigating to design tab.
+
 ### To Do
 
 - [ ] Design Tab UI in PySide
@@ -10,6 +26,13 @@
 
 ### In Progress
 
+- [ ] Component details
+  - [ ] Get data from input
+  - [ ] Update preview
+- [ ] Architecture Details
+  - [ ] UI
+  - [ ] Write data into XML
+  - [ ] Update preview
 - [ ] Design Tab XML structure
   - [x] Entity and Header
   - [x] Clk and Rst

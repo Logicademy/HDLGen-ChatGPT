@@ -8,10 +8,13 @@ from projectManager import ProjectManager
 
 WHITE_COLOR = "color: white"
 
+
 class CompDetails(QWidget):
 
     def __init__(self, proj_dir):
         super().__init__()
+
+        self.proj_dir = proj_dir
 
         self.mainLayout = QVBoxLayout()
 
@@ -27,7 +30,7 @@ class CompDetails(QWidget):
 
         self.comp_description_label = QLabel("Component Description")
         self.comp_description_label.setStyleSheet(WHITE_COLOR)
-        self.comp_description_input = QLineEdit()
+        self.comp_description_input = QPlainTextEdit()
 
         self.comp_author_label = QLabel("Authors")
         self.comp_author_label.setStyleSheet(WHITE_COLOR)
@@ -45,15 +48,21 @@ class CompDetails(QWidget):
         self.comp_date_label.setStyleSheet(WHITE_COLOR)
 
         self.save_btn = QPushButton("Save")
-        self.save_btn.setFixedHeight(30)
+        self.save_btn.setFixedSize(60, 30)
         self.save_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
 
         self.reset_btn = QPushButton("Reset")
-        self.reset_btn.setFixedHeight(30)
+        self.reset_btn.setFixedSize(60, 30)
         self.reset_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+
+        self.preview_btn = QPushButton("Preview")
+        self.preview_btn.setFixedSize(60, 30)
+        self.preview_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
@@ -78,6 +87,7 @@ class CompDetails(QWidget):
         self.input_layout.addWidget(self.comp_title_label, 2, 0)
         self.input_layout.addWidget(self.comp_title_input, 3, 0, 1, 2)
 
+        self.comp_description_input.setFixedHeight(50)
         self.input_layout.addWidget(self.comp_description_label, 4, 0)
         self.input_layout.addWidget(self.comp_description_input, 5, 0, 2, 2)
 
@@ -96,6 +106,7 @@ class CompDetails(QWidget):
 
         self.btn_layout.addWidget(self.reset_btn)
         self.btn_layout.addWidget(self.save_btn)
+        self.btn_layout.addWidget(self.preview_btn)
 
         self.save_btn.clicked.connect(self.save_comp_details)
         self.reset_btn.clicked.connect(self.reset_comp_details)
@@ -193,3 +204,5 @@ class CompDetails(QWidget):
 
         if comp_date != "null":
             self.comp_date_picker.setDate(QDate.fromString(comp_date))
+
+
