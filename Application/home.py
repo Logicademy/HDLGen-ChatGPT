@@ -31,9 +31,14 @@ class Home(QMainWindow):
 
     def setup_ui(self):
 
+        load_data = False
+
+        if self.proj_dir is not None:
+            load_data = True
+
         print("Setting up UI")
         self.tabs.addTab(ProjectManager(self.proj_dir, self), "Project Manager")
-        self.tabs.addTab(Design(self.proj_dir), "Design")
+        self.tabs.addTab(Design(self.proj_dir, load_data), "Design")
         self.tabs.addTab(Generate(self.proj_dir), "Generate")
         self.tabs.addTab(Help(), "Help")
         self.mainLayout.addWidget(self.tabs)

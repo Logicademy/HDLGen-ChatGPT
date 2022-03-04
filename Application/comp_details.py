@@ -53,23 +53,15 @@ class CompDetails(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
-
         self.reset_btn = QPushButton("Reset")
         self.reset_btn.setFixedSize(60, 30)
         self.reset_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
-        self.preview_btn = QPushButton("Preview")
-        self.preview_btn.setFixedSize(60, 30)
-        self.preview_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-
         self.btn_layout = QHBoxLayout()
 
         self.vspacer = QSpacerItem(30, 40)
-
 
         self.comp_date_picker = QDateEdit(calendarPopup=True)
         self.comp_date_picker.setDate(QDate.currentDate())
@@ -103,10 +95,8 @@ class CompDetails(QWidget):
         self.input_layout.addWidget(self.comp_date_label, 9, 1)
         self.input_layout.addWidget(self.comp_date_picker, 10, 1, 1, 1)
 
-
         self.btn_layout.addWidget(self.reset_btn)
         self.btn_layout.addWidget(self.save_btn)
-        self.btn_layout.addWidget(self.preview_btn)
 
         self.save_btn.clicked.connect(self.save_comp_details)
         self.reset_btn.clicked.connect(self.reset_comp_details)
@@ -115,7 +105,7 @@ class CompDetails(QWidget):
         self.input_layout.addLayout(self.btn_layout, 12, 1)
 
         self.input_frame.setFrameShape(QFrame.StyledPanel)
-        self.input_frame.setStyleSheet(".QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}")
+        self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(30, 30, 30, 25)
         self.input_frame.setFixedSize(400, 400)
         self.input_frame.setLayout(self.input_layout)
@@ -123,7 +113,6 @@ class CompDetails(QWidget):
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
-
 
     def save_comp_details(self):
 
@@ -136,13 +125,24 @@ class CompDetails(QWidget):
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
         comp_name = self.comp_name_input.text()
+        if comp_name == "":
+            comp_name = "null"
         comp_title = self.comp_title_input.text()
-        comp_description = self.comp_description_input.text()
+        if comp_title == "":
+            comp_title = "null"
+        comp_description = self.comp_description_input.toPlainText()
+        if comp_description == "":
+            comp_description = "null"
         comp_authors = self.comp_author_input.text()
+        if comp_authors == "":
+            comp_authors = "null"
         comp_company = self.comp_company_input.text()
+        if comp_company == "":
+            comp_company = "null"
         comp_email = self.comp_email_input.text()
+        if comp_email == "":
+            comp_email = "null"
         comp_date = self.comp_date_picker.text()
-
 
         header = hdlDesign[0].getElementsByTagName('header')
 
@@ -165,6 +165,14 @@ class CompDetails(QWidget):
         print("Successfully saved!")
 
     def reset_comp_details(self):
+
+        self.comp_name_input.clear()
+        self.comp_title_input.clear()
+        self.comp_description_input.clear()
+        self.comp_author_input.clear()
+        self.comp_company_input.clear()
+        self.comp_email_input.clear()
+        self.comp_date_picker.setDate(QDate.currentDate())
         print("reset button clicked")
 
     def load_data(self, proj_dir):
@@ -172,7 +180,6 @@ class CompDetails(QWidget):
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-
 
         header = hdlDesign[0].getElementsByTagName('header')
 
@@ -191,7 +198,7 @@ class CompDetails(QWidget):
             self.comp_title_input.setText(comp_title)
 
         if comp_description != "null":
-            self.comp_description_input.setText(comp_description)
+            self.comp_description_input.setPlainText(comp_description)
 
         if comp_authors != "null":
             self.comp_author_input.setText(comp_authors)
@@ -204,5 +211,3 @@ class CompDetails(QWidget):
 
         if comp_date != "null":
             self.comp_date_picker.setDate(QDate.fromString(comp_date))
-
-
