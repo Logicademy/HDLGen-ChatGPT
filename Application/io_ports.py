@@ -56,11 +56,19 @@ class IOPorts(QWidget):
         self.sig_description_label.setStyleSheet(WHITE_COLOR)
         self.sig_description_input = QLineEdit()
 
+        self.add_btn = QPushButton("Add")
+        self.add_btn.setFixedSize(60, 25)
+        self.add_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+
+
         self.io_list_label = QLabel("List of Input/Output Ports")
         self.io_list_label.setFont(title_font)
+        self.io_list_label.setStyleSheet(WHITE_COLOR)
 
         self.save_btn = QPushButton("Save")
-        self.save_btn.setFixedSize(60, 30)
+        self.save_btn.setFixedSize(60, 25)
         self.save_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
@@ -72,16 +80,18 @@ class IOPorts(QWidget):
 
     def setup_ui(self):
 
+        self.sig_size_input.setFixedWidth(80)
         self.input_layout.addWidget(self.sig_name_label, 0, 0, 1, 1)
-        self.input_layout.addWidget(self.sig_name_input, 1, 0, 1, 3)
-        self.input_layout.addWidget(self.sig_mode_label, 2, 0, 1, 1)
-        self.input_layout.addWidget(self.sig_mode_input, 3, 0, 1, 1)
-        self.input_layout.addWidget(self.sig_type_label, 2, 1, 1, 1)
-        self.input_layout.addWidget(self.sig_type_input, 3, 1, 1, 1)
+        self.input_layout.addWidget(self.sig_name_input, 1, 0, 1, 2)
+        self.input_layout.addWidget(self.sig_mode_label, 0, 2, 1, 1)
+        self.input_layout.addWidget(self.sig_mode_input, 1, 2, 1, 1)
+        self.input_layout.addWidget(self.sig_type_label, 2, 0, 1, 1)
+        self.input_layout.addWidget(self.sig_type_input, 3, 0, 1, 2)
         self.input_layout.addWidget(self.sig_size_label, 2, 2, 1, 1)
         self.input_layout.addWidget(self.sig_size_input, 3, 2, 1, 1)
         self.input_layout.addWidget(self.sig_description_label, 4, 0, 1, 1)
         self.input_layout.addWidget(self.sig_description_input, 5, 0, 1, 3)
+        self.input_layout.addWidget(self.add_btn, 6, 2, 1, 1, alignment=Qt.AlignRight)
 
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -93,7 +103,7 @@ class IOPorts(QWidget):
 
 
         # Port List section
-        self.port_list_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
+        self.port_list_layout.addWidget(self.io_list_label, alignment=Qt.AlignTop)
 
         self.port_list_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
 
