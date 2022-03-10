@@ -42,7 +42,7 @@ pip install -r requirements.txt
 
 ### In Progress
 
-- I/O Ports
+- [ ] I/O Ports
   - [x] Add signal button
   - [ ] inout mode addition 
   - [x] Save button
