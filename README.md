@@ -85,7 +85,7 @@ pip install -r requirements.txt
   - [ ] clk and rst
   - [ ] state reg
   - [ ] FSM
-- Design Tab UI
+- [ ] Design Tab UI
   - [x] Header details
   - [x] I/O Ports
   - [ ] Architecture
@@ -94,7 +94,7 @@ pip install -r requirements.txt
   - [x] Render basic md
   - [ ] Render tables
   - [ ] Render code block
-- [ ]Welcome screen
+- [ ] Welcome screen
   - [x] New Project
   - [x] Open Project
   - [ ] Welcome Info
