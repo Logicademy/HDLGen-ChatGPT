@@ -231,7 +231,10 @@ class IOPorts(QWidget):
             mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
             port = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
             type = port[0:port.index("(")] if port.endswith(")") else port
-            desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            if len(signal_nodes[i].getElementsByTagName('description')) != 1:
+                desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            else:
+                desc = ""
 
             loaded_sig_data = [
                 name,

@@ -130,6 +130,7 @@ class Design(QWidget):
                         gen_signals += "\t" + signal_declare_syntax + "\n"
 
                     gen_signals = gen_signals.rstrip()
+                    gen_signals = gen_signals[0:-1]
 
                     entity_syntax = vhdl_root.getElementsByTagName("entity")
                     gen_entity = "-- Entity Section\n"
