@@ -76,10 +76,6 @@ class IOPorts(QWidget):
 
     def setup_ui(self):
 
-
-       # self.add_btn.clicked.connect(self.add_signal)
-
-
         # Port List section
         self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
@@ -155,9 +151,8 @@ class IOPorts(QWidget):
             print(signal_data)
             delete_btn = QPushButton()
             delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
-           # delete_btn.setStyleSheet("background-color: white; border-style: plain;")
             delete_btn.setFixedSize(45, 25)
-            delete_btn.clicked.connect(self.deleteClicked)
+            delete_btn.clicked.connect(self.delete_clicked)
 
             row_position = self.port_table.rowCount()
             self.port_table.insertRow(row_position)
@@ -169,7 +164,7 @@ class IOPorts(QWidget):
             self.port_table.setItem(row_position, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
             self.port_table.setCellWidget(row_position, 4, delete_btn)
 
-    def deleteClicked(self):
+    def delete_clicked(self):
         button = self.sender()
         if button:
             row = self.port_table.indexAt(button.pos()).row()
@@ -250,7 +245,7 @@ class IOPorts(QWidget):
             delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
             # delete_btn.setStyleSheet("background-color: white; border-style: plain;")
             delete_btn.setFixedSize(45, 25)
-            delete_btn.clicked.connect(self.deleteClicked)
+            delete_btn.clicked.connect(self.delete_clicked)
 
             self.port_table.insertRow(i)
             self.port_table.setRowHeight(i, 5)
