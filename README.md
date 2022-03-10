@@ -17,8 +17,11 @@ pip install -r requirements.txt
 1. When creating a new project make sure to click on save in the project manager before navigating to design tab.
 
 ### Screenshots
+#### Project Manager
 <img src="https://github.com/abishek-bupathi/HDLGen/blob/83c569e9b708c27212a69c125e69bcc74a5cb2ac/Docs/Screenshots/Project%20Manager%20v1.png" width="700"></img>
-
+#### Design
+##### Component details
+##### Port IO Signals
 ### To Do
 
 - [ ] Design Tab UI in PySide
@@ -26,9 +29,16 @@ pip install -r requirements.txt
 
 ### In Progress
 
-- [ ] Component details
-  - [ ] Get data from input
-  - [ ] Update preview
+- I/O Ports
+  - [x] Add signal button
+  - [ ] inout mode addition 
+  - [x] Save button
+  - [x] Signal List
+  - [x] Delete signal button
+  - [x] Signal mode
+  - [x] Signal Name
+  - [x] Signal Type
+  - [x] Description
 - [ ] Architecture Details
   - [ ] UI
   - [ ] Write data into XML
@@ -62,14 +72,25 @@ pip install -r requirements.txt
   - [ ] clk and rst
   - [ ] state reg
   - [ ] FSM
-- [ ] Design Tab UI design
+- Design Tab UI
+  - [x] Header details
+  - [x] I/O Ports
+  - [ ] Architecture
+  - [ ] Clk and Rst
 - [ ] Render Markdown in help Tab
   - [x] Render basic md
   - [ ] Render tables
   - [ ] Render code block
+- [ ]Welcome screen
+  - [x] New Project
+  - [x] Open Project
+  - [ ] Welcome Info
 
 ### Completed
 
+- [x] Component details
+  - [x] Get data from input
+  - [x] Update preview
 - [x] Read XML file and populate details
 - [x] Write Tool Version to xml
 - [x] Write Tool dir to xml
