@@ -37,6 +37,7 @@ class Design(QWidget):
     def setup_ui(self):
 
         compDetails = CompDetails(self.proj_dir)
+        ioPorts = IOPorts(self.proj_dir)
 
         self.preview_window.setReadOnly(True)
         self.preview_pane_layout.addWidget(self.preview_label)
@@ -44,7 +45,7 @@ class Design(QWidget):
 
         self.tabs.addTab(compDetails, "Component Details")
         self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
-        self.tabs.addTab(IOPorts(self.proj_dir), "Component I/O Ports")
+        self.tabs.addTab(ioPorts, "Component I/O Ports")
         self.tabs.addTab(Architecture(self.proj_dir), "Architecture")
 
         self.mainLayout.addWidget(self.tabs)
@@ -52,7 +53,7 @@ class Design(QWidget):
         self.setLayout(self.mainLayout)
 
         compDetails.save_btn.clicked.connect(self.update_preview)
-
+        ioPorts.save_signal_btn.clicked.connect(self.update_preview)
 
     def update_preview(self):
         vhdl = self.generate_vhdl()

@@ -37,7 +37,7 @@ class AddIO(QDialog):
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_type_input.setPalette(pal)
         self.sig_type_input.addItem("std_logic_vector")
-        self.sig_type_input.addItem("logic")
+        self.sig_type_input.addItem("std_logic")
 
         self.sig_size_label = QLabel("Size (eg. 32)")
         self.sig_size_label.setStyleSheet(WHITE_COLOR)
@@ -122,3 +122,4 @@ class AddIO(QDialog):
             self.sig_size_input.clear()
         else:
             self.sig_size_input.setEnabled(False)
+            self.sig_size_input.setText("1")
