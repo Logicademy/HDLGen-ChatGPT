@@ -17,9 +17,10 @@ class AddIO(QDialog):
 
         self.mainLayout = QVBoxLayout()
 
-        self.sig_name_label = QLabel("Signal Name")
+        self.sig_name_label = QLabel("Signal Name *")
         self.sig_name_label.setStyleSheet(WHITE_COLOR)
         self.sig_name_input = QLineEdit()
+
 
         self.sig_mode_label = QLabel("Mode")
         self.sig_mode_label.setStyleSheet(WHITE_COLOR)
@@ -39,7 +40,7 @@ class AddIO(QDialog):
         self.sig_type_input.addItem("std_logic_vector")
         self.sig_type_input.addItem("std_logic")
 
-        self.sig_size_label = QLabel("Size (eg. 32)")
+        self.sig_size_label = QLabel("Size (eg. 32) * ")
         self.sig_size_label.setStyleSheet(WHITE_COLOR)
         self.sig_size_input = QLineEdit()
         self.onlyInt = QIntValidator()
@@ -57,10 +58,12 @@ class AddIO(QDialog):
 
 
         self.ok_btn = QPushButton("Ok")
+        self.ok_btn.setEnabled(False)
         self.ok_btn.setFixedSize(60, 25)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
 
         self.input_frame = QFrame()
 
@@ -90,6 +93,8 @@ class AddIO(QDialog):
         self.input_frame.setFixedSize(400, 250)
         self.input_frame.setLayout(self.input_layout)
 
+        self.sig_name_input.textChanged.connect(self.enable_ok_btn);
+        self.sig_size_input.textChanged.connect(self.enable_ok_btn);
         self.sig_type_input.currentTextChanged.connect(self.enable_size_option)
 
         self.ok_btn.clicked.connect(self.get_signals)
@@ -115,6 +120,11 @@ class AddIO(QDialog):
         self.cancelled = True
         self.close()
 
+    def enable_ok_btn(self):
+        if self.sig_name_input.text() != "" and self.sig_size_input.text() != "":
+            self.ok_btn.setEnabled(True)
+        else:
+            self.ok_btn.setEnabled(False)
 
     def enable_size_option(self):
         if self.sig_type_input.currentText() == "std_logic_vector":
