@@ -19,9 +19,22 @@ pip install -r requirements.txt
 ### Screenshots
 #### Project Manager
 <img src="https://github.com/abishek-bupathi/HDLGen/blob/83c569e9b708c27212a69c125e69bcc74a5cb2ac/Docs/Screenshots/Project%20Manager%20v1.png" width="700"></img>
+
 #### Design
+
 ##### Component details
+<img src="https://github.com/abishek-bupathi/HDLGen/blob/692434cfc7d68ff379cdc9abe3e9e324f68e444c/Docs/Screenshots/Design-comp_details.png" width="700"></img>
+
 ##### Port IO Signals
+**Add New Signals**
+
+<img src="https://github.com/abishek-bupathi/HDLGen/blob/692434cfc7d68ff379cdc9abe3e9e324f68e444c/Docs/Screenshots/design-io_ports-add_signal.png" width="300"></img>
+
+**IO Signal List**
+
+<img src="https://github.com/abishek-bupathi/HDLGen/blob/692434cfc7d68ff379cdc9abe3e9e324f68e444c/Docs/Screenshots/design-io_ports-signal_list.png" width="700"></img>
+
+
 ### To Do
 
 - [ ] Design Tab UI in PySide
