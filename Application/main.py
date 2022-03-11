@@ -68,7 +68,7 @@ def main():
     window = HDLGen()
     window.resize(1000, 500)
     window.show()
-
+    app.setStyle('windowsvista')
     app.exec_()
 
 
