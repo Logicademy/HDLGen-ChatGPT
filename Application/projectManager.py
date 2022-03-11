@@ -13,7 +13,7 @@ SMALL_CORNER_R = 15
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-ICONS_DIR = "resources/icons/"
+ICONS_DIR = "./resources/icons/"
 
 class ProjectManager(QWidget):
 

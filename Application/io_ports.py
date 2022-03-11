@@ -8,7 +8,7 @@ from add_io_port import AddIO
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
-ICONS_DIR = "resources/icons/"
+ICONS_DIR = "./resources/icons/"
 
 class IOPorts(QWidget):
 
