@@ -11,6 +11,7 @@ from clk_rst import ClkRst
 
 from projectManager import ProjectManager
 
+
 class Design(QWidget):
 
     def __init__(self, proj_dir, load_data):
@@ -63,9 +64,7 @@ class Design(QWidget):
 
         self.gen_vhdl = ""
 
-        proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        xml_data_path = os.path.join(proj_path, 'HDLGenPrj', proj_name + '.hdlgen')
+        xml_data_path = ProjectManager.get_xml_data_path()
 
         test_xml = os.path.join("resources", "SampleProject.xml")
 

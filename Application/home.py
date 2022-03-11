@@ -35,12 +35,13 @@ class Home(QMainWindow):
 
         if self.proj_dir is not None:
             load_data = True
+        project_manager = ProjectManager(self.proj_dir, self)
 
         print("Setting up UI")
-        self.tabs.addTab(ProjectManager(self.proj_dir, self), "Project Manager")
+        self.tabs.addTab(project_manager, "Project Manager")
         self.tabs.addTab(Design(self.proj_dir, load_data), "Design")
         self.tabs.addTab(Generate(self.proj_dir), "Generate")
-        #self.tabs.addTab(Help(), "Help")
+        # self.tabs.addTab(Help(), "Help")
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)
 

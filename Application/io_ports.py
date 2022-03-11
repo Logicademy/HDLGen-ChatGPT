@@ -150,7 +150,8 @@ class IOPorts(QWidget):
 
             print(signal_data)
             delete_btn = QPushButton()
-            delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+            #delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
             delete_btn.setFixedSize(45, 25)
             delete_btn.clicked.connect(self.delete_clicked)
 
@@ -173,9 +174,7 @@ class IOPorts(QWidget):
 
     def save_signals(self):
 
-        proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        xml_data_path = os.path.join(proj_path, 'HDLGenPrj', proj_name + '.hdlgen')
+        xml_data_path = ProjectManager.get_xml_data_path()
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement
@@ -245,7 +244,7 @@ class IOPorts(QWidget):
             ]
 
             delete_btn = QPushButton()
-            delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
             # delete_btn.setStyleSheet("background-color: white; border-style: plain;")
             delete_btn.setFixedSize(45, 25)
             delete_btn.clicked.connect(self.delete_clicked)

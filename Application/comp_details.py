@@ -20,7 +20,7 @@ class CompDetails(QWidget):
 
         self.input_layout = QGridLayout()
 
-        self.comp_name_label = QLabel("Component Name")
+        self.comp_name_label = QLabel("Component Name*")
         self.comp_name_label.setStyleSheet(WHITE_COLOR)
         self.comp_name_input = QLineEdit()
 
@@ -50,8 +50,10 @@ class CompDetails(QWidget):
         self.save_btn = QPushButton("Save")
         self.save_btn.setFixedSize(60, 30)
         self.save_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+        self.save_btn.setEnabled(False)
 
         self.reset_btn = QPushButton("Reset")
         self.reset_btn.setFixedSize(60, 30)
@@ -75,7 +77,7 @@ class CompDetails(QWidget):
 
         self.input_layout.addWidget(self.comp_name_label, 0, 0)
         self.input_layout.addWidget(self.comp_name_input, 1, 0, 1, 2)
-
+        self.comp_name_input.textChanged.connect(self.enable_save_btn)
         self.input_layout.addWidget(self.comp_title_label, 2, 0)
         self.input_layout.addWidget(self.comp_title_input, 3, 0, 1, 2)
 
@@ -114,11 +116,15 @@ class CompDetails(QWidget):
 
         self.setLayout(self.mainLayout)
 
+    def enable_save_btn(self):
+        if self.comp_name_input.text() != "":
+            self.save_btn.setEnabled(True)
+        else:
+            self.save_btn.setEnabled(False)
+
     def save_comp_details(self):
 
-        proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        xml_data_path = os.path.join(proj_path, 'HDLGenPrj', proj_name + '.hdlgen')
+        xml_data_path = ProjectManager.get_xml_data_path()
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement

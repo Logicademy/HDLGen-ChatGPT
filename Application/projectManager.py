@@ -20,7 +20,10 @@ class ProjectManager(QWidget):
     def __init__(self, proj_dir, MainWindow):
         super().__init__()
 
+        ProjectManager.proj_dir = None
+        ProjectManager.proj_name = None
         self.MainWindow = MainWindow
+        ProjectManager.xml_data_path = None
 
         # Initializing Widgets
 
@@ -40,16 +43,20 @@ class ProjectManager(QWidget):
         self.generate_title.setFont(title_font)
         self.generate_title.setStyleSheet(WHITE_COLOR)
 
-        self.name_label = QLabel('Project Name')
+        self.name_label = QLabel('Project Name*')
         self.name_label.setStyleSheet("color: white;")
-        self.dir_label = QLabel('Project Directory')
+        self.dir_label = QLabel('Project Directory*')
         self.dir_label.setStyleSheet("color: white;")
         self.proj_folder_input = QLineEdit()
         self.proj_name_input = QLineEdit()
-        self.proj_folder_btn = QPushButton()
-        self.proj_folder_btn.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        self.proj_folder_btn.setStyleSheet("background-color: white; border-style: plain;")
-        self.proj_folder_btn.setFixedSize(25, 20)
+        self.proj_folder_btn = QPushButton("Browse")
+        # self.proj_folder_btn.setIcon(QIcon(ICONS_DIR + "folder.svg"))
+        # self.proj_folder_btn.setStyleSheet("background-color: white; border-style: plain;")
+        self.proj_folder_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+
+        self.proj_folder_btn.setFixedSize(50, 22)
 
         self.lang_label = QLabel("Languages")
         self.lang_label.setFont(bold_font)
@@ -76,10 +83,10 @@ class ProjectManager(QWidget):
         self.intel_dir_label = QLabel('Intel Quartus executable File path')
         self.intel_dir_label.setStyleSheet(BLACK_COLOR)
         self.intel_dir_input = QLineEdit()
-        self.intel_select_dir = QPushButton()
-        self.intel_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        self.intel_select_dir.setStyleSheet("background-color: white; border-style: plain;")
-        self.intel_select_dir.setFixedSize(25, 20)
+        self.intel_select_dir = QPushButton("Browse")
+        # self.intel_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
+        # self.intel_select_dir.setStyleSheet("background-color: white; border-style: plain;")
+        self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
         self.vivado_check.setFont(bold_font)
@@ -92,10 +99,12 @@ class ProjectManager(QWidget):
         self.vivado_dir_label = QLabel('Xilinx Vivado executable File path')
         self.vivado_dir_label.setStyleSheet(BLACK_COLOR)
         self.vivado_dir_input = QLineEdit()
-        self.vivado_select_dir = QPushButton()
-        self.vivado_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        self.vivado_select_dir.setStyleSheet("background-color: white; border-style: plain;")
-        self.vivado_select_dir.setFixedSize(25, 20)
+        self.vivado_select_dir = QPushButton("Browse")
+        # self.vivado_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
+        # self.vivado_select_dir.setStyleSheet("background-color: white; border-style: plain;")
+        self.vivado_select_dir.setFixedSize(60, 26)
+
+        self.note_label = QLabel("Please Save the project before moving to other tabs")
 
         self.proj_close_btn = QPushButton("Close")
         self.proj_close_btn.setFixedHeight(40)
@@ -105,8 +114,11 @@ class ProjectManager(QWidget):
         self.proj_save_btn = QPushButton("Save")
         self.proj_save_btn.setFixedHeight(40)
         self.proj_save_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            "QPushButton {background-color: rgb(129, 134, 145);  color: white; border-radius: 8px; border-style: plain;}"
+            "QPushButton:enabled {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.proj_save_btn.setEnabled(False)
+
         self.proj_reset_btn = QPushButton("Reset")
         self.proj_reset_btn.setFixedHeight(40)
         self.proj_reset_btn.setStyleSheet(
@@ -150,7 +162,7 @@ class ProjectManager(QWidget):
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 4)
         self.projDetailIpLayout.addWidget(self.dir_label, 2, 0, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_folder_input, 3, 0, 1, 4)
+        self.projDetailIpLayout.addWidget(self.proj_folder_input, 3, 0, 1, 3)
         self.projDetailIpLayout.addWidget(self.proj_folder_btn, 3, 3, 1, 1, Qt.AlignRight)
         self.projSettingLayout.addLayout(self.projDetailIpLayout)
 
@@ -169,7 +181,7 @@ class ProjectManager(QWidget):
         self.vivadoToolLayout.addWidget(self.vivado_ver_label, 0, 2, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_ver_combo, 0, 3, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_label, 1, 0, 1, 1)
-        self.vivadoToolLayout.addWidget(self.vivado_dir_input, 2, 0, 1, 4)
+        self.vivadoToolLayout.addWidget(self.vivado_dir_input, 2, 0, 1, 3)
         self.vivadoToolLayout.addWidget(self.vivado_select_dir, 2, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolFrame.setLayout(self.vivadoToolLayout)
         self.vivadoToolFrame.setStyleSheet(
@@ -182,7 +194,7 @@ class ProjectManager(QWidget):
         self.intelToolLayout.addWidget(self.intel_ver_label, 0, 2, 1, 1)
         self.intelToolLayout.addWidget(self.intel_ver_combo, 0, 3, 1, 1)
         self.intelToolLayout.addWidget(self.intel_dir_label, 1, 0, 1, 1)
-        self.intelToolLayout.addWidget(self.intel_dir_input, 2, 0, 1, 4)
+        self.intelToolLayout.addWidget(self.intel_dir_input, 2, 0, 1, 3)
         self.intelToolLayout.addWidget(self.intel_select_dir, 2, 3, 1, 1, Qt.AlignRight)
         self.intelToolFrame.setLayout(self.intelToolLayout)
         self.intelToolFrame.setStyleSheet(
@@ -219,6 +231,8 @@ class ProjectManager(QWidget):
         self.rightColLayout.addWidget(self.generateFrame)
         self.rightColLayout.addSpacing(MEDIUM_SPACING)
 
+        self.rightColLayout.addWidget(self.note_label)
+
         self.proj_action_layout.addWidget(self.proj_close_btn)
         self.proj_action_layout.addWidget(self.proj_reset_btn)
         self.proj_action_layout.addWidget(self.proj_save_btn)
@@ -244,10 +258,22 @@ class ProjectManager(QWidget):
 
 
     def proj_detail_change(self):
-        # Getting project name from the text field
-        ProjectManager.proj_name = self.proj_name_input.text()
-        # Getting project location from the text field
-        ProjectManager.proj_dir = self.proj_folder_input.text()
+
+        if self.proj_name_input.text() != "" and self.proj_folder_input.text() != "":
+            # Getting project name from the text field
+            ProjectManager.proj_name = self.proj_name_input.text()
+            # Getting project location from the text field
+            ProjectManager.proj_dir = self.proj_folder_input.text() + "/"
+
+            ProjectManager.xml_data_path = self.proj_dir + self.proj_name + "\\" + "HDLGenPrj" + "\\" + self.proj_name + ".hdlgen"
+
+            self.proj_save_btn.setEnabled(True)
+        else:
+            self.proj_save_btn.setEnabled(False)
+
+    @staticmethod
+    def get_xml_data_path():
+        return ProjectManager.xml_data_path
 
     @staticmethod
     def get_proj_name():
@@ -259,7 +285,7 @@ class ProjectManager(QWidget):
 
     # get_dir() opens up folder chooser and gets selected folder directory
     def set_proj_dir(self):
-        self.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
+        ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
         self.proj_folder_input.setText(self.proj_dir)
 
     def get_vivado_exe_path(self):
@@ -272,15 +298,10 @@ class ProjectManager(QWidget):
 
     def create_xml(self):
 
-        # Getting project name from the text field
-        proj_name = self.proj_name_input.text()
-        # Getting project location from the text field
-        proj_dir = self.proj_folder_input.text()
-
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
 
-        xml_data_dir = os.path.join(proj_dir, proj_name, "HDLGenPrj")
+        xml_data_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj")
         print("Saving project details at ", xml_data_dir)
         # Creating main project folder
         os.makedirs(xml_data_dir, exist_ok=True)
@@ -309,9 +330,9 @@ class ProjectManager(QWidget):
         project_name = root.createElement('name')
         project_loc = root.createElement('location')
         # Inserting project name to the name element
-        project_name.appendChild(root.createTextNode(proj_name))
+        project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
         # Inserting project location to the location element
-        project_loc.appendChild(root.createTextNode(proj_dir))
+        project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
         settings_data.appendChild(project_loc)
@@ -356,8 +377,8 @@ class ProjectManager(QWidget):
         # and the vhdl language detail is written into hdl element
         if self.vhdl_check.isChecked():
             vhdl_dir = root.createElement('vhdl_folder')
-            vhdl_model_dir = root.createTextNode(self.proj_name + '\\VHDL\\model')
-            vhdl_testbench_dir = root.createTextNode(self.proj_name + '\\VHDL\\testbench')
+            vhdl_model_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\model')
+            vhdl_testbench_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\testbench')
 
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
@@ -370,13 +391,13 @@ class ProjectManager(QWidget):
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
-                vhdl_xlnxprj_dir = root.createTextNode(self.proj_name + '\\VHDL\\EDAprj\\xilinxprj')
+                vhdl_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\EDAprj\\xilinxprj')
                 vhdl_folders.append(vhdl_xlnxprj_dir)
                 no_of_folders = no_of_folders + 1
 
             # If intel is chosen then the intelxprj folder is added
             if self.intel_check.isChecked():
-                vhdl_intel_dir = root.createTextNode(self.proj_name + '\\VHDL\EDAprj\\intelprj')
+                vhdl_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\EDAprj\\intelprj')
                 vhdl_folders.append(vhdl_intel_dir)
                 no_of_folders = no_of_folders + 1
 
@@ -390,8 +411,8 @@ class ProjectManager(QWidget):
         # and the verliog language detail is written into hdl element
         if self.verilog_check.isChecked():
             verilog_dir = root.createElement('verilog_folder')
-            verilog_model_dir = root.createTextNode(self.proj_name + '\\Verilog\\model')
-            verilog_tstbnch_dir = root.createTextNode(self.proj_name + '\\Verilog\\testbench')
+            verilog_model_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\model')
+            verilog_tstbnch_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\testbench')
 
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
@@ -404,13 +425,13 @@ class ProjectManager(QWidget):
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
-                verilog_xlnxprj_dir = root.createTextNode(self.proj_name + '\\Verilog\\EDAprj\\xilinxprj')
+                verilog_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\EDAprj\\xilinxprj')
                 verilog_folders.append(verilog_xlnxprj_dir)
                 no_of_folders = no_of_folders + 1
 
             # If intel is chosen then the intelxprj folder is added
             if self.intel_check.isChecked():
-                verilog_intel_dir = root.createTextNode(self.proj_name + '\\Verilog\\EDAprj\\intelprj')
+                verilog_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\EDAprj\\intelprj')
                 verilog_folders.append(verilog_intel_dir)
                 no_of_folders = no_of_folders + 1
 
@@ -465,10 +486,10 @@ class ProjectManager(QWidget):
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml(indent="\t")
 
-        save_path_file = self.proj_dir + self.proj_name + "\\" + "HDLGenPrj" + "\\" + self.proj_name + ".hdlgen"
+        ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
 
         # Writing xml file
-        with open(save_path_file, "w") as f:
+        with open(ProjectManager.xml_data_path, "w") as f:
             f.write(xml_str)
 
         print("Successfully saved!")
@@ -506,11 +527,15 @@ class ProjectManager(QWidget):
             if tool.getElementsByTagName("name")[0].firstChild.data == "Xilinx Vivado":
                 self.vivado_check.setChecked(True)
                 self.vivado_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
-                self.vivado_dir_input.setText(tool.getElementsByTagName("dir")[0].firstChild.data)
+                vivado_dir_node = tool.getElementsByTagName("dir")
+                if len(vivado_dir_node) != 1:
+                    self.vivado_dir_input.setText(vivado_dir_node[0].firstChild.data)
             elif tool.getElementsByTagName("name")[0].firstChild.data == "Intel Quartus":
                 self.intel_check.setChecked(True)
                 self.intel_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
-                self.intel_dir_input.setText(tool.getElementsByTagName("dir")[0].firstChild.data)
+                intel_dir_node = tool.getElementsByTagName("dir")
+                if len(intel_dir_node) != 1:
+                    self.intel_dir_input.setText(intel_dir_node[0].firstChild.data)
 
         hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]
         hdl_langs = hdl_data.getElementsByTagName("language")

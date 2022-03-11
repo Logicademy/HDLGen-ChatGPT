@@ -67,7 +67,7 @@ class AddIO(QDialog):
 
         self.input_frame = QFrame()
 
-        self.cancelled = False
+        self.cancelled = True
 
         self.setup_ui()
 
@@ -112,7 +112,7 @@ class AddIO(QDialog):
                        self.sig_size_input.text(),
                        self.sig_description_input.text()
                        ]
-
+        self.cancelled = False
         self.close()
         return sig_details
 
