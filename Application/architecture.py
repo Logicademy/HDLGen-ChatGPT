@@ -4,6 +4,7 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from projectManager import ProjectManager
+from add_process import AddProcess
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -14,6 +15,8 @@ class Architecture(QWidget):
     def __init__(self, proj_dir):
         super().__init__()
 
+        self.proj_dir = proj_dir
+        self.all_data = []
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -82,6 +85,7 @@ class Architecture(QWidget):
         self.top_layout.addWidget(self.arch_label, 0, 0, alignment=Qt.AlignLeft)
         self.top_layout.addWidget(self.arch_input, 1, 0)
         self.top_layout.addWidget(self.new_proc_btn, 1, 1)
+        self.new_proc_btn.clicked.connect(self.add_proc)
         # self.top_layout.addWidget(self.new_conc_btn, 2, 0)
         # self.top_layout.addWidget(self.new_strg_btn, 2, 1)
 
@@ -129,3 +133,39 @@ class Architecture(QWidget):
         self.mainLayout.addWidget(self.main_frame)
 
         self.setLayout(self.mainLayout)
+
+    def add_proc(self):
+        add_proc = AddProcess(self.proj_dir)
+        add_proc.exec_()
+
+        if not add_proc.cancelled:
+            data = add_proc.get_data()
+            self.all_data.append(data)
+            print(data)
+
+            delete_btn = QPushButton()
+            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+            delete_btn.setFixedSize(45, 25)
+            delete_btn.clicked.connect(self.delete_clicked)
+
+            row_position = self.proc_table.rowCount()
+            self.proc_table.insertRow(row_position)
+            self.proc_table.setRowHeight(row_position, 5)
+
+            self.proc_table.setItem(row_position, 0, QTableWidgetItem(data[0]))
+
+
+            self.proc_table.setItem(row_position, 1, QTableWidgetItem("Process"))
+            input_signals = ""
+            for in_sig in data[1]:
+                input_signals = input_signals + ", " + in_sig
+            self.proc_table.setItem(row_position, 2, QTableWidgetItem(input_signals))
+            self.proc_table.setCellWidget(row_position, 3, delete_btn)
+
+    def delete_clicked(self):
+        button = self.sender()
+        if button:
+            row = self.proc_table.indexAt(button.pos()).row()
+            self.proc_table.removeRow(row)
+            self.all_data.pop(row)
