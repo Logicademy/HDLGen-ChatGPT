@@ -28,9 +28,9 @@ class Architecture(QWidget):
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
 
-        self.arch_input = QLineEdit()
-        self.arch_label = QLabel("Architecture Name")
-        self.arch_label.setStyleSheet(WHITE_COLOR)
+        self.arch_name_input = QLineEdit()
+        self.arch_name_label = QLabel("Architecture Name")
+        self.arch_name_label.setStyleSheet(WHITE_COLOR)
 
         self.new_proc_btn = QPushButton("New process")
         self.new_proc_btn.setFixedSize(100, 25)
@@ -82,8 +82,8 @@ class Architecture(QWidget):
 
     def setup_ui(self):
 
-        self.top_layout.addWidget(self.arch_label, 0, 0, alignment=Qt.AlignLeft)
-        self.top_layout.addWidget(self.arch_input, 1, 0)
+        self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
+        self.top_layout.addWidget(self.arch_name_input, 1, 0)
         self.top_layout.addWidget(self.new_proc_btn, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
         # self.top_layout.addWidget(self.new_conc_btn, 2, 0)
@@ -97,17 +97,20 @@ class Architecture(QWidget):
         self.main_frame.setFixedSize(400, 400)
         self.main_frame.setLayout(self.arch_action_layout)
 
+        self.name_label.setFixedWidth(100)
         self.list_header_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
+        self.type_label.setFixedWidth(50)
         self.list_header_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
         self.list_header_layout.addWidget(self.in_sig_label, alignment=Qt.AlignLeft)
+        self.list_header_layout.addItem(QSpacerItem(103, 1))
         self.list_layout.addLayout(self.list_header_layout)
         self.list_layout.addWidget(self.list_div)
 
         self.proc_table.setColumnCount(4)
         self.proc_table.setShowGrid(False)
-        self.proc_table.setColumnWidth(0, 102)
-        self.proc_table.setColumnWidth(1, 55)
-        self.proc_table.setColumnWidth(2, 105)
+        self.proc_table.setColumnWidth(0, 100)
+        self.proc_table.setColumnWidth(1, 70)
+        self.proc_table.setColumnWidth(2, 130)
         self.proc_table.setColumnWidth(3, 5)
         self.proc_table.horizontalScrollMode()
         self.proc_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -129,6 +132,7 @@ class Architecture(QWidget):
         self.arch_action_layout.addWidget(self.list_frame)
         self.arch_action_layout.addItem(QSpacerItem(10, 15))
         self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
+        self.save_btn.clicked.connect(self.save_data)
 
         self.mainLayout.addWidget(self.main_frame)
 
@@ -160,6 +164,9 @@ class Architecture(QWidget):
             input_signals = ""
             for in_sig in data[1]:
                 input_signals = input_signals + ", " + in_sig
+
+            input_signals = input_signals[1:]
+
             self.proc_table.setItem(row_position, 2, QTableWidgetItem(input_signals))
             self.proc_table.setCellWidget(row_position, 3, delete_btn)
 
@@ -169,3 +176,46 @@ class Architecture(QWidget):
             row = self.proc_table.indexAt(button.pos()).row()
             self.proc_table.removeRow(row)
             self.all_data.pop(row)
+
+    def save_data(self):
+
+        xml_data_path = ProjectManager.get_xml_data_path()
+
+        root = minidom.parse(xml_data_path)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        new_arch_node = root.createElement("architecture")
+
+        arch_name = root.createElement("archName")
+        arch_name.appendChild(root.createTextNode(self.arch_name_input.text()))
+        new_arch_node.appendChild(arch_name)
+
+
+        for data in self.all_data:
+            process_node = root.createElement("process")
+            label_node = root.createElement("label")
+            label_node.appendChild(root.createTextNode(data[0]))
+            process_node.appendChild(label_node)
+
+            for input_signal in data[1]:
+                in_sig_node = root.createElement("inputSignal")
+                in_sig_node.appendChild(root.createTextNode(input_signal))
+                process_node.appendChild(in_sig_node)
+
+            for output_signal in data[2]:
+                out_sig_node = root.createElement("defaultOutput")
+                out_sig_node.appendChild(root.createTextNode(output_signal))
+                process_node.appendChild(out_sig_node)
+
+            new_arch_node.appendChild(process_node)
+
+
+        hdlDesign[0].replaceChild(new_arch_node, hdlDesign[0].getElementsByTagName("architecture")[0])
+        # converting the doc into a string in xml format
+        xml_str = root.toprettyxml()
+        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        # Writing xml file
+        with open(xml_data_path, "w") as f:
+            f.write(xml_str)
+
+        print("Successfully saved all the signals!")

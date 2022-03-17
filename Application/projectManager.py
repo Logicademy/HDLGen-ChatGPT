@@ -481,7 +481,8 @@ class ProjectManager(QWidget):
         hdlDesign_data.appendChild(root.createElement('clkAndRst'))
         hdlDesign_data.appendChild(root.createElement('entityIOPorts'))
         hdlDesign_data.appendChild(root.createElement('internalSignals'))
-        hdlDesign_data.appendChild(root.createElement('architecture'))
+        arch_node = root.createElement('architecture')
+        hdlDesign_data.appendChild(arch_node)
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml(indent="\t")
