@@ -78,7 +78,8 @@ class Architecture(QWidget):
 
         self.setup_ui()
 
-
+        if proj_dir != None:
+            self.load_data(proj_dir)
 
     def setup_ui(self):
 
@@ -219,3 +220,18 @@ class Architecture(QWidget):
             f.write(xml_str)
 
         print("Successfully saved all the signals!")
+
+
+    def load_data(self, proj_dir):
+
+        root = minidom.parse(proj_dir[0])
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+
+        arch_node = hdlDesign[0].getElementsByTagName('architecture')
+        arch_name_node = hdlDesign[0].getElementsByTagName("archName")
+        process_nodes = arch_node[0].getElementsByTagName('process')
+
+        if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
+            self.arch_name_input.setText(arch_name_node[0].firstChild.data)
+

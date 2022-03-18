@@ -195,7 +195,7 @@ class Design(QWidget):
 
                     arch_name = "comb"
 
-                    if len(arch_name_node) != 0:
+                    if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
                         arch_name = arch_name_node[0].firstChild.data
 
                     gen_arch = arch_syntax.replace("$arch_name", arch_name)
