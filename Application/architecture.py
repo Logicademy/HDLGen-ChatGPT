@@ -235,3 +235,49 @@ class Architecture(QWidget):
         if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
             self.arch_name_input.setText(arch_name_node[0].firstChild.data)
 
+
+        for process_node in process_nodes:
+            temp_data = []
+            label_val = process_node.getElementsByTagName("label")[0].firstChild.data
+
+            temp_data.append(label_val)
+
+            input_signal_nodes = process_node.getElementsByTagName("inputSignal")
+
+            input_signals = []
+            for input_signal_node in input_signal_nodes:
+                input_signals.append(input_signal_node.firstChild.data)
+
+            temp_data.append(input_signals)
+
+            output_signal_nodes = process_node.getElementsByTagName("defaultOutput")
+
+            output_signals = []
+            for output_signal_node in output_signal_nodes:
+                output_signals.append(output_signal_node.firstChild.data)
+
+            temp_data.append(output_signals)
+
+            self.all_data.append(temp_data)
+
+            delete_btn = QPushButton()
+            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+            delete_btn.setFixedSize(45, 25)
+            delete_btn.clicked.connect(self.delete_clicked)
+
+            row_position = self.proc_table.rowCount()
+            self.proc_table.insertRow(row_position)
+            self.proc_table.setRowHeight(row_position, 5)
+
+            self.proc_table.setItem(row_position, 0, QTableWidgetItem(label_val))
+
+            self.proc_table.setItem(row_position, 1, QTableWidgetItem("Process"))
+            temp_in_sig = ""
+            for in_sig in input_signals:
+                temp_in_sig = temp_in_sig + ", " + in_sig
+
+            temp_in_sig = temp_in_sig[1:]
+
+            self.proc_table.setItem(row_position, 2, QTableWidgetItem(temp_in_sig))
+            self.proc_table.setCellWidget(row_position, 3, delete_btn)

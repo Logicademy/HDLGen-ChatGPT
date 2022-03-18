@@ -334,7 +334,7 @@ class ProjectManager(QWidget):
         # Inserting project name to the name element
         project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
         # Inserting project location to the location element
-        project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir))
+        project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir[:-1]))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
         settings_data.appendChild(project_loc)
