@@ -29,7 +29,7 @@ class Architecture(QWidget):
         self.arch_action_layout = QVBoxLayout()
 
         self.arch_name_input = QLineEdit()
-        self.arch_name_label = QLabel("Architecture Name")
+        self.arch_name_label = QLabel("Architecture Name*")
         self.arch_name_label.setStyleSheet(WHITE_COLOR)
 
         self.new_proc_btn = QPushButton("New process")
@@ -51,10 +51,12 @@ class Architecture(QWidget):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
 
         self.save_btn = QPushButton("Save")
+        self.save_btn.setEnabled(False)
         self.save_btn.setFixedSize(100, 25)
         self.save_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
 
         self.name_label = QLabel("Name")
         self.name_label.setFont(bold_font)
@@ -85,6 +87,7 @@ class Architecture(QWidget):
 
         self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
         self.top_layout.addWidget(self.arch_name_input, 1, 0)
+        self.arch_name_input.textChanged.connect(self.enable_save_btn);
         self.top_layout.addWidget(self.new_proc_btn, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
         # self.top_layout.addWidget(self.new_conc_btn, 2, 0)
@@ -221,7 +224,6 @@ class Architecture(QWidget):
 
         print("Successfully saved all the signals!")
 
-
     def load_data(self, proj_dir):
 
         root = minidom.parse(proj_dir[0])
@@ -281,3 +283,9 @@ class Architecture(QWidget):
 
             self.proc_table.setItem(row_position, 2, QTableWidgetItem(temp_in_sig))
             self.proc_table.setCellWidget(row_position, 3, delete_btn)
+
+    def enable_save_btn(self):
+        if self.arch_name_input.text() != "":
+            self.save_btn.setEnabled(True)
+        else:
+            self.save_btn.setEnabled(False)

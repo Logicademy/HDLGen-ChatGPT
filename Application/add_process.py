@@ -209,7 +209,7 @@ class AddProcess(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.proc_name_input.text() != "" and self.proc_name_input.text() != "":
+        if self.proc_name_input.text() != "":
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)
