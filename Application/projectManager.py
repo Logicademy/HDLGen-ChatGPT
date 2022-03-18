@@ -303,23 +303,25 @@ class ProjectManager(QWidget):
 
         xml_data_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj")
         print("Saving project details at ", xml_data_dir)
-        # Creating main project folder
-        os.makedirs(xml_data_dir, exist_ok=True)
+
+        temp_xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
 
         # Creating XML doc
         root = minidom.Document()
-
         # Creating XML top Element
         HDLGen_data = root.createElement('HDLGen')
         root.appendChild(HDLGen_data)
-
         # Creating and adding genFolder Element
         genFolder_data = root.createElement('genFolder')
-        HDLGen_data.appendChild(genFolder_data)
+
 
         # Creating and adding projectManager Element
         projectManager_data = root.createElement('projectManager')
-        HDLGen_data.appendChild(projectManager_data)
+
+
+
+        # Creating main project folder
+        os.makedirs(xml_data_dir, exist_ok=True)
 
         # Set project name and location details
 
@@ -441,57 +443,81 @@ class ProjectManager(QWidget):
                 verilog_dir.appendChild(verilog_folders[i])
                 genFolder_data.appendChild(verilog_dir)
 
+        if not os.path.exists(temp_xml_data_path):
+            HDLGen_data.appendChild(genFolder_data)
+            HDLGen_data.appendChild(projectManager_data)
 
-        # Creating hdlDesign tag
-        hdlDesign_data = root.createElement('hdlDesign')
-        HDLGen_data.appendChild(hdlDesign_data)
+            # Creating hdlDesign tag
+            hdlDesign_data = root.createElement('hdlDesign')
+            HDLGen_data.appendChild(hdlDesign_data)
 
-        header_data = root.createElement('header')
+            header_data = root.createElement('header')
 
-        comp_name = root.createElement('compName')
-        comp_name.appendChild(root.createTextNode("null"))
-        header_data.appendChild(comp_name)
+            comp_name = root.createElement('compName')
+            comp_name.appendChild(root.createTextNode("null"))
+            header_data.appendChild(comp_name)
 
-        comp_title = root.createElement('title')
-        comp_title.appendChild(root.createTextNode("null"))
-        header_data.appendChild(comp_title)
+            comp_title = root.createElement('title')
+            comp_title.appendChild(root.createTextNode("null"))
+            header_data.appendChild(comp_title)
 
-        comp_desc = root.createElement('description')
-        comp_desc.appendChild(root.createTextNode("null"))
-        header_data.appendChild(comp_desc)
+            comp_desc = root.createElement('description')
+            comp_desc.appendChild(root.createTextNode("null"))
+            header_data.appendChild(comp_desc)
 
-        comp_authors = root.createElement('authors')
-        comp_authors.appendChild(root.createTextNode("null"))
-        header_data.appendChild(comp_authors)
+            comp_authors = root.createElement('authors')
+            comp_authors.appendChild(root.createTextNode("null"))
+            header_data.appendChild(comp_authors)
 
-        comp_company = root.createElement('company')
-        comp_company.appendChild(root.createTextNode("null"))
-        header_data.appendChild(comp_company)
+            comp_company = root.createElement('company')
+            comp_company.appendChild(root.createTextNode("null"))
+            header_data.appendChild(comp_company)
 
-        comp_email = root.createElement('email')
-        comp_email.appendChild(root.createTextNode("null"))
-        header_data.appendChild(comp_email)
+            comp_email = root.createElement('email')
+            comp_email.appendChild(root.createTextNode("null"))
+            header_data.appendChild(comp_email)
 
-        comp_date = root.createElement('date')
-        comp_date.appendChild(root.createTextNode("null"))
-        header_data.appendChild(comp_date)
+            comp_date = root.createElement('date')
+            comp_date.appendChild(root.createTextNode("null"))
+            header_data.appendChild(comp_date)
 
-        hdlDesign_data.appendChild(header_data)
+            hdlDesign_data.appendChild(header_data)
 
-        hdlDesign_data.appendChild(root.createElement('clkAndRst'))
-        hdlDesign_data.appendChild(root.createElement('entityIOPorts'))
-        hdlDesign_data.appendChild(root.createElement('internalSignals'))
-        arch_node = root.createElement('architecture')
-        hdlDesign_data.appendChild(arch_node)
+            hdlDesign_data.appendChild(root.createElement('clkAndRst'))
+            hdlDesign_data.appendChild(root.createElement('entityIOPorts'))
+            hdlDesign_data.appendChild(root.createElement('internalSignals'))
+            arch_node = root.createElement('architecture')
+            hdlDesign_data.appendChild(arch_node)
 
-        # converting the doc into a string in xml format
-        xml_str = root.toprettyxml(indent="\t")
+            # converting the doc into a string in xml format
+            xml_str = root.toprettyxml(indent="\t")
+
+            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
+
+            # Writing xml file
+            with open(ProjectManager.xml_data_path, "w") as f:
+                f.write(xml_str)
+
+        else:
+
+            # Parsing the xml file
+            data = minidom.parse(temp_xml_data_path)
+            HDLGen = data.documentElement
+
+            HDLGen.replaceChild(genFolder_data, HDLGen.getElementsByTagName("genFolder")[0])
+            HDLGen.replaceChild(projectManager_data, HDLGen.getElementsByTagName("projectManager")[0])
+
+            # converting the doc into a string in xml format
+            xml_str = data.toprettyxml()
+            xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+
+            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
+
+            # Writing xml file
+            with open(ProjectManager.xml_data_path, "w") as f:
+                f.write(xml_str)
 
         ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
-
-        # Writing xml file
-        with open(ProjectManager.xml_data_path, "w") as f:
-            f.write(xml_str)
 
         print("Successfully saved!")
 
@@ -529,13 +555,13 @@ class ProjectManager(QWidget):
                 self.vivado_check.setChecked(True)
                 self.vivado_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
                 vivado_dir_node = tool.getElementsByTagName("dir")
-                if len(vivado_dir_node) != 1:
+                if vivado_dir_node != 0 and vivado_dir_node[0].firstChild is not None:
                     self.vivado_dir_input.setText(vivado_dir_node[0].firstChild.data)
             elif tool.getElementsByTagName("name")[0].firstChild.data == "Intel Quartus":
                 self.intel_check.setChecked(True)
                 self.intel_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
                 intel_dir_node = tool.getElementsByTagName("dir")
-                if len(intel_dir_node) != 1:
+                if len(intel_dir_node) != 0 and intel_dir_node[0].firstChild is not None:
                     self.intel_dir_input.setText(intel_dir_node[0].firstChild.data)
 
         hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]

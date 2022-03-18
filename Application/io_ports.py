@@ -194,7 +194,7 @@ class IOPorts(QWidget):
             signal_node.appendChild(mode_node)
 
             type_node = root.createElement('type')
-            sig_size = ("(" + signal[3] + " downto 0)") if signal[2] == "std_logic_vector" else ""
+            sig_size = ("(" + str(int(signal[3])-1) + " downto 0)") if signal[2] == "std_logic_vector" else ""
             sig_type = signal[2] + sig_size
             type_node.appendChild(root.createTextNode(sig_type))
             signal_node.appendChild(type_node)
