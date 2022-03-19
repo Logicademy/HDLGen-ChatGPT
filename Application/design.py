@@ -93,11 +93,16 @@ class Design(QWidget):
 
                 gen_header = "-- Header Section\n"
                 gen_header += "-- Component Name : " + entity_name + "\n"
-                gen_header += "-- Title          : " + header_node[0].getElementsByTagName("title")[0].firstChild.data + "\n"
-                gen_header += "-- Description    : " + header_node[0].getElementsByTagName("description")[0].firstChild.data + "\n"
-                gen_header += "-- Author(s)      : " + header_node[0].getElementsByTagName("authors")[0].firstChild.data + "\n"
-                gen_header += "-- Company        : " + header_node[0].getElementsByTagName("company")[0].firstChild.data + "\n"
-                gen_header += "-- Email          : " + header_node[0].getElementsByTagName("email")[0].firstChild.data + "\n"
+                title = header_node[0].getElementsByTagName("title")[0].firstChild.data
+                gen_header += "-- Title          : " + (title if title != "null" else "") + "\n"
+                desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
+                gen_header += "-- Description    : " + (desc if desc != "null" else "") + "\n"
+                authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
+                gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
+                company = header_node[0].getElementsByTagName("company")[0].firstChild.data
+                gen_header += "-- Company        : " + (company if company != "null" else "") + "\n"
+                email = header_node[0].getElementsByTagName("email")[0].firstChild.data
+                gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[0].firstChild.data + "\n\n\n"
 
                 self.gen_vhdl += gen_header
@@ -120,7 +125,7 @@ class Design(QWidget):
                 gen_signals = ""
                 io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
 
-                if io_port_node is not None:
+                if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
                     for signal in io_port_node[0].getElementsByTagName('signal'):
                         signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
@@ -146,7 +151,7 @@ class Design(QWidget):
                 # Architecture section
 
                 # Internal signals
-                gen_int_sig = ""
+                gen_int_sig = "-- Internal Signals"
                 int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
                 if int_sig_node is not None:
                     for signal in int_sig_node[0].getElementsByTagName("signal"):
@@ -163,7 +168,7 @@ class Design(QWidget):
 
                 gen_process = ""
 
-                if arch_node is not None:
+                if len(arch_node) != 0 and arch_node[0].firstChild is not None:
                     for process_node in arch_node[0].getElementsByTagName("process"):
                         process_syntax = vhdl_root.getElementsByTagName("process")[0].firstChild.data
 

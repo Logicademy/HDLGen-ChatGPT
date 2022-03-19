@@ -143,7 +143,7 @@ class Architecture(QWidget):
         self.setLayout(self.mainLayout)
 
     def add_proc(self):
-        add_proc = AddProcess(self.proj_dir)
+        add_proc = AddProcess()
         add_proc.exec_()
 
         if not add_proc.cancelled:

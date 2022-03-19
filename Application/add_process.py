@@ -10,7 +10,7 @@ WHITE_COLOR = "color: white"
 
 class AddProcess(QDialog):
 
-    def __init__(self, proj_dir):
+    def __init__(self):
         super().__init__()
 
         title_font = QFont()
@@ -77,7 +77,7 @@ class AddProcess(QDialog):
 
         self.setup_ui()
 
-        self.populate_signals(proj_dir)
+        self.populate_signals(ProjectManager.get_xml_data_path())
 
     def setup_ui(self):
 
@@ -145,7 +145,7 @@ class AddProcess(QDialog):
     def populate_signals(self, proj_dir):
 
         if (proj_dir != None):
-            root = minidom.parse(proj_dir[0])
+            root = minidom.parse(proj_dir)
             HDLGen = root.documentElement
             hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
