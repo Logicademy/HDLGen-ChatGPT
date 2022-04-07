@@ -46,7 +46,7 @@ class Design(QWidget):
         self.preview_pane_layout.addWidget(self.preview_window)
 
         self.tabs.addTab(compDetails, "Component Details")
-        self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
+        # self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
         self.tabs.addTab(ioPorts, "Component I/O Ports")
         self.tabs.addTab(architecture, "Architecture")
 

@@ -46,7 +46,8 @@ class Generate(QWidget):
         print("Generating Project folders...")
 
         # Parsing the xml file
-        project_data = minidom.parse(self.proj_dir[0])
+        xml_data_path = ProjectManager.get_xml_data_path()
+        project_data = minidom.parse(xml_data_path)
         HDLGen = project_data.documentElement
 
         # Accessing the projectManager and genFolder Elements
@@ -155,7 +156,7 @@ class Generate(QWidget):
         # Architecture section
 
         # Internal signals
-        gen_int_sig = ""
+        gen_int_sig = "-- Internal Signals"
         int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
         if int_sig_node is not None:
             for signal in int_sig_node[0].getElementsByTagName("signal"):
