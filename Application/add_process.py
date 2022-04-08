@@ -182,6 +182,7 @@ class AddProcess(QDialog):
                         out_val_options = self.input_signals
                         out_val_options.insert(0, "Custom")
                         out_val_combo.addItems(out_val_options)
+                        out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
