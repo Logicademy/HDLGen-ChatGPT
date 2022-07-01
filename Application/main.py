@@ -1,10 +1,9 @@
-import os
 import sys
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from xml.dom import minidom
 
-from home import Home
+from PySide2.QtWidgets import *
+
+from Application.Home.home import Home
+
 
 class HDLGen(QMainWindow):
 

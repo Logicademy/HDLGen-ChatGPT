@@ -1,76 +1,86 @@
 import os
-import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from PySide2.QtCore import *
-from comp_details import CompDetails
-from io_ports import IOPorts
-from architecture import Architecture
-from clk_rst import ClkRst
-
-from projectManager import ProjectManager
+from Application.ProjectManager.projectManager import ProjectManager
 
 
-class Design(QWidget):
+class Generator(QWidget):
 
-    def __init__(self, proj_dir, load_data):
+    def __init__(self, proj_dir):
         super().__init__()
 
         self.proj_dir = proj_dir
 
+        self.gen_folder_btn = QPushButton("Generate Folders")
+        self.gen_folder_btn.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+        self.gen_vhdl_btn = QPushButton("Generate VHDL")
+        self.gen_vhdl_btn.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
         self.mainLayout = QHBoxLayout()
-        self.preview_pane_layout = QVBoxLayout()
-
-        self.preview_label = QLabel("Preview")
-        self.preview_window = QTextEdit()
-
-        self.tabs = VerticalTabWidget()
-
-        # Creating a container
-        self.container = QWidget()
 
         self.setup_ui()
 
-        if load_data:
-            self.update_preview()
 
     def setup_ui(self):
 
-        compDetails = CompDetails(self.proj_dir)
-        ioPorts = IOPorts(self.proj_dir)
-        architecture = Architecture(self.proj_dir)
+        self.gen_folder_btn.setFixedSize(150, 50)
+        self.gen_folder_btn.clicked.connect(self.generate_folders)
+        self.mainLayout.addWidget(self.gen_folder_btn)
 
-        self.preview_window.setReadOnly(True)
-        self.preview_pane_layout.addWidget(self.preview_label)
-        self.preview_pane_layout.addWidget(self.preview_window)
+        self.gen_vhdl_btn.setFixedSize(150, 50)
+        self.gen_vhdl_btn.clicked.connect(self.create_vhdl_file)
+        self.mainLayout.addWidget(self.gen_vhdl_btn)
 
-        self.tabs.addTab(compDetails, "Component Details")
-        # self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
-        self.tabs.addTab(ioPorts, "Component I/O Ports")
-        self.tabs.addTab(architecture, "Architecture")
-
-        self.mainLayout.addWidget(self.tabs)
-        self.mainLayout.addLayout(self.preview_pane_layout)
         self.setLayout(self.mainLayout)
 
-        compDetails.save_btn.clicked.connect(self.update_preview)
-        ioPorts.save_signal_btn.clicked.connect(self.update_preview)
-        architecture.save_btn.clicked.connect(self.update_preview)
+    def generate_folders(self):
 
-    def update_preview(self):
-        vhdl = self.generate_vhdl()
-        self.preview_window.setText(vhdl)
+        print("Generating Project folders...")
 
-    def generate_vhdl(self):
+        # Parsing the xml file
+        xml_data_path = ProjectManager.get_xml_data_path()
+        project_data = minidom.parse(xml_data_path)
+        HDLGen = project_data.documentElement
 
-        self.gen_vhdl = ""
+        # Accessing the projectManager and genFolder Elements
+        project_Manager = HDLGen.getElementsByTagName("projectManager")
+        settings = project_Manager[0].getElementsByTagName("settings")[0]
+        location = settings.getElementsByTagName("location")[0].firstChild.data
+        genFolder_data = HDLGen.getElementsByTagName("genFolder")
+        hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]
+        hdl_langs = hdl_data.getElementsByTagName("language")
+
+        for hdl_lang in hdl_langs:
+            # If vhdl is present in the hdl settings then directory with vhdl_folder tag are read
+            if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "VHDL":
+                for folder in genFolder_data[0].getElementsByTagName("vhdl_folder"):
+                    # Creating the directory
+                    path = os.path.join(location, folder.firstChild.data)
+                    os.makedirs(path, exist_ok=True)
+                    # If verilog is present in the hdl settings then directory with verilog_folder are read
+            if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
+                for folder in genFolder_data[0].getElementsByTagName("verilog_folder"):
+                    # Creating the directory
+                    path = os.path.join(location, folder.firstChild.data)
+                    os.makedirs(path, exist_ok=True)
+
+        print("All project folders have been successfully generated at ", self.proj_dir[0])
+
+    @staticmethod
+    def generate_vhdl():
+
+        gen_vhdl = ""
 
         xml_data_path = ProjectManager.get_xml_data_path()
 
-        test_xml = os.path.join("resources", "SampleProject.xml")
+        test_xml = os.path.join("../Resources", "SampleProject.xml")
 
-        vhdl_database_path = os.path.join("resources", "HDL_Database", "vhdl_database.xml")
+        vhdl_database_path = "./Generator/HDL_Database/vhdl_database.xml"
 
         # Parsing the xml file
         project_data = minidom.parse(xml_data_path)
@@ -103,10 +113,10 @@ class Design(QWidget):
                 gen_header += "-- Company        : " + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
                 gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
-                gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[0].firstChild.data + "\n\n\n"
+                gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[
+                    0].firstChild.data + "\n\n\n"
 
-                self.gen_vhdl += gen_header
-
+                gen_vhdl += gen_header
 
                 # Libraries Section
 
@@ -118,7 +128,7 @@ class Design(QWidget):
                     gen_library += library.firstChild.data + "\n"
 
                 gen_library += "\n"
-                self.gen_vhdl += gen_library
+                gen_vhdl += gen_library
 
                 # Entity Section
 
@@ -129,9 +139,15 @@ class Design(QWidget):
                     for signal in io_port_node[0].getElementsByTagName('signal'):
                         signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
-                        signal_declare_syntax = signal_declare_syntax.replace("$sig_name", signal.getElementsByTagName('name')[0].firstChild.data)
-                        signal_declare_syntax = signal_declare_syntax.replace("$mode", signal.getElementsByTagName('mode')[0].firstChild.data)
-                        signal_declare_syntax = signal_declare_syntax.replace("$type", signal.getElementsByTagName('type')[0].firstChild.data)
+                        signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
+                                                                              signal.getElementsByTagName('name')[
+                                                                                  0].firstChild.data)
+                        signal_declare_syntax = signal_declare_syntax.replace("$mode",
+                                                                              signal.getElementsByTagName('mode')[
+                                                                                  0].firstChild.data)
+                        signal_declare_syntax = signal_declare_syntax.replace("$type",
+                                                                              signal.getElementsByTagName('type')[
+                                                                                  0].firstChild.data)
 
                         gen_signals += "\t" + signal_declare_syntax + "\n"
 
@@ -145,8 +161,7 @@ class Design(QWidget):
                     gen_entity = gen_entity.replace("$comp_name", entity_name)
                     gen_entity = gen_entity.replace("$signals", gen_signals)
 
-                    self.gen_vhdl += gen_entity + "\n\n"
-
+                    gen_vhdl += gen_entity + "\n\n"
 
                 # Architecture section
 
@@ -156,8 +171,10 @@ class Design(QWidget):
                 if int_sig_node is not None:
                     for signal in int_sig_node[0].getElementsByTagName("signal"):
                         int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
-                        int_sig_syntax = int_sig_syntax.replace("$int_sig_name", signal.getElementsByTagName('name')[0].firstChild.data)
-                        int_sig_syntax = int_sig_syntax.replace("$int_sig_type", signal.getElementsByTagName('type')[0].firstChild.data)
+                        int_sig_syntax = int_sig_syntax.replace("$int_sig_name",
+                                                                signal.getElementsByTagName('name')[0].firstChild.data)
+                        int_sig_syntax = int_sig_syntax.replace("$int_sig_type",
+                                                                signal.getElementsByTagName('type')[0].firstChild.data)
 
                         gen_int_sig += int_sig_syntax
 
@@ -172,7 +189,9 @@ class Design(QWidget):
                     for process_node in arch_node[0].getElementsByTagName("process"):
                         process_syntax = vhdl_root.getElementsByTagName("process")[0].firstChild.data
 
-                        process_syntax = process_syntax.replace("$process_label", process_node.getElementsByTagName("label")[0].firstChild.data)
+                        process_syntax = process_syntax.replace("$process_label",
+                                                                process_node.getElementsByTagName("label")[
+                                                                    0].firstChild.data)
 
                         gen_in_sig = ""
 
@@ -208,40 +227,25 @@ class Design(QWidget):
                     gen_arch = gen_arch.replace("$int_sig_declaration", gen_int_sig)
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
-                    self.gen_vhdl += gen_arch
+                    gen_vhdl += gen_arch
 
-        return self.gen_vhdl
+        return entity_name, gen_vhdl
 
-class TabBar(QTabBar):
-    def tabSizeHint(self, index):
-        s = QTabBar.tabSizeHint(self, index)
-        s.transpose()
-        return s
+    def create_vhdl_file(self):
 
-    def paintEvent(self, event):
-        painter = QStylePainter(self)
-        opt = QStyleOptionTab()
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        entity_name, vhdl_code = self.generate_vhdl()
 
-        for i in range(self.count()):
-            self.initStyleOption(opt, i)
-            painter.drawControl(QStyle.CE_TabBarTabShape, opt)
-            painter.save()
+        vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
 
-            s = opt.rect.size() * 100
-            s.transpose()
-            r = QRect(QPoint(), s)
-            r.moveCenter(opt.rect.center())
-            opt.rect = r
+        print(vhdl_code)
 
-            c = self.tabRect(i).center()
-            painter.translate(c)
-            painter.rotate(90)
-            painter.translate(-c)
-            painter.drawControl(QStyle.CE_TabBarTabLabel, opt)
-            painter.restore()
+        # Writing xml file
+        with open(vhdl_file_path, "w") as f:
+            f.write(vhdl_code)
 
-class VerticalTabWidget(QTabWidget):
-    def __init__(self, *args, **kwargs):
-        QTabWidget.__init__(self, *args, **kwargs)
-        self.setTabBar(TabBar())
-        self.setTabPosition(QTabWidget.West)
+        print("VHDL Model successfully generated at ", vhdl_file_path)
+
+
+

@@ -3,12 +3,12 @@ import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-from projectManager import ProjectManager
-from add_process import AddProcess
+from Application.ProjectManager.projectManager import ProjectManager
+from Application.HDLDesigner.Architecture.add_process import AddProcess
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
-ICONS_DIR = "./resources/icons/"
+ICONS_DIR = "../../Resources/icons/"
 
 class Architecture(QWidget):
 

@@ -1,12 +1,9 @@
-import os
-import sys
 from PySide2.QtWidgets import *
-from PySide2.QtGui import *
 
-from projectManager import ProjectManager
-from generate import Generate
-from help import Help
-from design import Design
+from Application.ProjectManager.projectManager import ProjectManager
+from Application.Generator.generator import Generator
+from Application.Help.help import Help
+from Application.HDLDesigner.hdlDesigner import HDLDesigner
 
 
 class Home(QMainWindow):
@@ -39,9 +36,9 @@ class Home(QMainWindow):
 
         print("Setting up UI")
         self.tabs.addTab(project_manager, "Project Manager")
-        self.tabs.addTab(Design(self.proj_dir, load_data), "Design")
-        self.tabs.addTab(Generate(self.proj_dir), "Generate")
-        # self.tabs.addTab(Help(), "Help")
+        self.tabs.addTab(HDLDesigner(self.proj_dir, load_data), "HDL Designer")
+        self.tabs.addTab(Generator(self.proj_dir), "Generator")
+        self.tabs.addTab(Help(), "Help")
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)
 

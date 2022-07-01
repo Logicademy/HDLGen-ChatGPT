@@ -13,12 +13,12 @@
 
 <vhdl>
     <libraries>
-        <library>use ieee;</library>
+        <library>library ieee;</library>
         <library>use ieee.std_logic_1164.all;</library>
-        <library>use numeric_std.all;</library>
+        <library>use ieee.numeric_std.all;</library>
     </libraries>
 
-    <entity>entity $comp_name is &#10;Port(&#10;$signals&#10;)&#10;end entity $comp_name;</entity>
+    <entity>entity $comp_name is &#10;Port(&#10;$signals&#10;);&#10;end entity $comp_name;</entity>
 
     <signalDeclaration>$sig_name : $mode $type;</signalDeclaration>
 

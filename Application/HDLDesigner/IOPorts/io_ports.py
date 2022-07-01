@@ -3,12 +3,12 @@ import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-from projectManager import ProjectManager
-from add_io_port import AddIO
+from Application.ProjectManager.projectManager import ProjectManager
+from Application.HDLDesigner.IOPorts.add_io_port import AddIO
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
-ICONS_DIR = "./resources/icons/"
+ICONS_DIR = "../../Resources/icons/"
 
 class IOPorts(QWidget):
 

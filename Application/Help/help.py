@@ -9,7 +9,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import *
 
-HELP_DOC_FILE_PATH = "resources/help.md"
+HELP_DOC_FILE_PATH = "./Help/help.md"
 
 class Help(QWidget):
 
