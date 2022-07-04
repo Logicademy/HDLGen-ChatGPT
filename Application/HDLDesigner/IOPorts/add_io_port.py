@@ -3,7 +3,7 @@ import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-from Application.ProjectManager.projectManager import ProjectManager
+from Application.ProjectManager.project_manager import ProjectManager
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"

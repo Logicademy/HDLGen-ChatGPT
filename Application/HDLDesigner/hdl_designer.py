@@ -6,7 +6,7 @@ from Application.HDLDesigner.comp_details import CompDetails
 from Application.HDLDesigner.IOPorts.io_ports import IOPorts
 from Application.HDLDesigner.Architecture.architecture import Architecture
 from Application.Generator.generator import Generator
-from Application.ProjectManager.projectManager import ProjectManager
+from Application.ProjectManager.project_manager import ProjectManager
 
 
 class HDLDesigner(QWidget):

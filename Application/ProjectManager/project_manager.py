@@ -523,7 +523,7 @@ class ProjectManager(QWidget):
 
     def close_project(self):
 
-        from main import HDLGen
+        from Application.main import HDLGen
         self.MainWindow.close()
         self.window = HDLGen()
         self.window.resize(1000, 500)
@@ -545,6 +545,27 @@ class ProjectManager(QWidget):
 
         proj_name = settings.getElementsByTagName("name")[0].firstChild.data
         proj_loc = settings.getElementsByTagName("location")[0].firstChild.data
+
+        new_xml_path = load_proj_dir[0].split("/")
+
+        new_proj_loc = new_xml_path[0]
+
+        for i in range(1, len(new_xml_path) - 3):
+            new_proj_loc = new_proj_loc + "/" + new_xml_path[i]
+
+        if proj_loc != new_proj_loc:
+            print("Project Location Change Detected!\nNew location:" + new_proj_loc)
+            settings.getElementsByTagName("location")[0].firstChild.data = new_proj_loc
+            # converting the doc into a string in xml format
+            xml_str = data.toprettyxml()
+            xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+            # Writing xml file
+            with open(load_proj_dir[0], "w") as f:
+                f.write(xml_str)
+
+            proj_loc = new_proj_loc
+
+
         self.proj_name_input.setText(proj_name)
         self.proj_folder_input.setText(proj_loc)
 
