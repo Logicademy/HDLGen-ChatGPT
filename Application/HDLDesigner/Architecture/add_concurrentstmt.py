@@ -111,7 +111,7 @@ class AddConcurrentStmt(QDialog):
         self.input_frame.setFixedSize(450, 400)
         self.input_frame.setLayout(self.input_layout)
 
-        #self.ok_btn.clicked.connect(self.get_data)
+        self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
@@ -162,12 +162,31 @@ class AddConcurrentStmt(QDialog):
 
         self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
 
+    def get_data(self):
+        data = []
+        out_sigs = []
+        data.append(self.conc_name_input.text())
+
+        for i in range(self.out_sig_table.rowCount()):
+            if self.out_sig_table.cellWidget(i, 0).checkState() == Qt.Checked:
+                output = self.out_sig_table.item(i, 1).text()
+
+                value = self.out_sig_table.cellWidget(i, 2).text()
+
+                out_sigs.append(output + "," + value)
+
+        data.append(out_sigs)
+        print(out_sigs)
+        self.cancelled = False
+        self.close()
+        return data
+
     def cancel_selected(self):
         self.cancelled = True
         self.close()
 
     def enable_ok_btn(self):
-        if self.proc_name_input.text() != "":
+        if self.conc_name_input.text() != "":
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)
