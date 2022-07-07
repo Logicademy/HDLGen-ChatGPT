@@ -17,8 +17,7 @@ class Architecture(QWidget):
         super().__init__()
 
         self.proj_dir = proj_dir
-        self.all_process_data = []
-        self.all_conc_data = []
+        self.all_data = []
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -151,7 +150,8 @@ class Architecture(QWidget):
 
         if not add_proc.cancelled:
             data = add_proc.get_data()
-            self.all_process_data.append(data)
+            data.insert(0, "process")
+            self.all_data.append(data)
             print(data)
 
             delete_btn = QPushButton()
@@ -164,12 +164,11 @@ class Architecture(QWidget):
             self.proc_table.insertRow(row_position)
             self.proc_table.setRowHeight(row_position, 5)
 
-            self.proc_table.setItem(row_position, 0, QTableWidgetItem(data[0]))
-
+            self.proc_table.setItem(row_position, 0, QTableWidgetItem(data[1]))
 
             self.proc_table.setItem(row_position, 1, QTableWidgetItem("Process"))
             input_signals = ""
-            for in_sig in data[1]:
+            for in_sig in data[2]:
                 input_signals = input_signals + ", " + in_sig
 
             input_signals = input_signals[1:]
@@ -183,7 +182,8 @@ class Architecture(QWidget):
 
         if not add_concurrentstmt.cancelled:
             data = add_concurrentstmt.get_data()
-            self.all_conc_data.append(data)
+            data.insert(0, "concurrentStmt")
+            self.all_data.append(data)
             print(data)
 
             delete_btn = QPushButton()
@@ -196,7 +196,7 @@ class Architecture(QWidget):
             self.proc_table.insertRow(row_position)
             self.proc_table.setRowHeight(row_position, 5)
 
-            self.proc_table.setItem(row_position, 0, QTableWidgetItem(data[0]))
+            self.proc_table.setItem(row_position, 0, QTableWidgetItem(data[1]))
 
 
             self.proc_table.setItem(row_position, 1, QTableWidgetItem("Concurrent Statement"))
@@ -224,36 +224,38 @@ class Architecture(QWidget):
         new_arch_node.appendChild(arch_name)
 
 
-        for process_data in self.all_process_data:
-            process_node = root.createElement("process")
-            label_node = root.createElement("label")
-            label_node.appendChild(root.createTextNode(process_data[0]))
-            process_node.appendChild(label_node)
+        for data in self.all_data:
 
-            for input_signal in process_data[1]:
-                in_sig_node = root.createElement("inputSignal")
-                in_sig_node.appendChild(root.createTextNode(input_signal))
-                process_node.appendChild(in_sig_node)
+            if data[0] == "process":
+                process_node = root.createElement("process")
+                label_node = root.createElement("label")
+                label_node.appendChild(root.createTextNode(data[1]))
+                process_node.appendChild(label_node)
 
-            for output_signal in process_data[2]:
-                out_sig_node = root.createElement("defaultOutput")
-                out_sig_node.appendChild(root.createTextNode(output_signal))
-                process_node.appendChild(out_sig_node)
+                for input_signal in data[2]:
+                    in_sig_node = root.createElement("inputSignal")
+                    in_sig_node.appendChild(root.createTextNode(input_signal))
+                    process_node.appendChild(in_sig_node)
 
-            new_arch_node.appendChild(process_node)
+                for output_signal in data[3]:
+                    out_sig_node = root.createElement("defaultOutput")
+                    out_sig_node.appendChild(root.createTextNode(output_signal))
+                    process_node.appendChild(out_sig_node)
 
-        for conc_data in self.all_conc_data:
-            conc_node = root.createElement("concurrentStmt")
-            label_node = root.createElement("label")
-            label_node.appendChild(root.createTextNode(conc_data[0]))
-            conc_node.appendChild(label_node)
+                new_arch_node.appendChild(process_node)
 
-            for output_signal in conc_data[1]:
-                out_sig_node = root.createElement("statement")
-                out_sig_node.appendChild(root.createTextNode(output_signal))
-                conc_node.appendChild(out_sig_node)
+            elif data[0] == "concurrentStmt":
+                conc_node = root.createElement("concurrentStmt")
+                label_node = root.createElement("label")
+                label_node.appendChild(root.createTextNode(data[1]))
+                conc_node.appendChild(label_node)
 
-            new_arch_node.appendChild(conc_node)
+                for output_signal in data[2]:
+                    out_sig_node = root.createElement("statement")
+                    out_sig_node.appendChild(root.createTextNode(output_signal))
+                    conc_node.appendChild(out_sig_node)
+
+                new_arch_node.appendChild(conc_node)
 
         hdlDesign[0].replaceChild(new_arch_node, hdlDesign[0].getElementsByTagName("architecture")[0])
         # converting the doc into a string in xml format
@@ -273,96 +275,99 @@ class Architecture(QWidget):
 
         arch_node = hdlDesign[0].getElementsByTagName('architecture')
         arch_name_node = hdlDesign[0].getElementsByTagName("archName")
-        process_nodes = arch_node[0].getElementsByTagName('process')
-        conc_nodes = arch_node[0].getElementsByTagName("concurrentStmt")
 
         if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
             self.arch_name_input.setText(arch_name_node[0].firstChild.data)
 
+        if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
-        for process_node in process_nodes:
-            temp_data = []
-            label_val = process_node.getElementsByTagName("label")[0].firstChild.data
+            child = arch_node[0].firstChild
 
-            temp_data.append(label_val)
+            while child is not None:
 
-            input_signal_nodes = process_node.getElementsByTagName("inputSignal")
+                next = child.nextSibling
 
-            input_signals = []
-            for input_signal_node in input_signal_nodes:
-                input_signals.append(input_signal_node.firstChild.data)
+                if (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "process"):
+                    temp_data = []
+                    label_val = child.getElementsByTagName("label")[0].firstChild.data
 
-            temp_data.append(input_signals)
+                    temp_data.append(label_val)
 
-            output_signal_nodes = process_node.getElementsByTagName("defaultOutput")
+                    input_signal_nodes = child.getElementsByTagName("inputSignal")
 
-            output_signals = []
-            for output_signal_node in output_signal_nodes:
-                output_signals.append(output_signal_node.firstChild.data)
+                    input_signals = []
+                    for input_signal_node in input_signal_nodes:
+                        input_signals.append(input_signal_node.firstChild.data)
 
-            temp_data.append(output_signals)
+                    temp_data.append(input_signals)
 
-            self.all_process_data.append(temp_data)
+                    output_signal_nodes = child.getElementsByTagName("defaultOutput")
 
-            delete_btn = QPushButton()
-            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
-            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-            delete_btn.setFixedSize(45, 25)
-            delete_btn.clicked.connect(self.delete_clicked)
+                    output_signals = []
+                    for output_signal_node in output_signal_nodes:
+                        output_signals.append(output_signal_node.firstChild.data)
 
-            row_position = self.proc_table.rowCount()
-            self.proc_table.insertRow(row_position)
-            self.proc_table.setRowHeight(row_position, 5)
+                    temp_data.append(output_signals)
 
-            self.proc_table.setItem(row_position, 0, QTableWidgetItem(label_val))
+                    self.all_data.append(temp_data)
 
-            self.proc_table.setItem(row_position, 1, QTableWidgetItem("Process"))
-            temp_in_sig = ""
-            for in_sig in input_signals:
-                temp_in_sig = temp_in_sig + ", " + in_sig
+                    delete_btn = QPushButton()
+                    # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+                    delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+                    delete_btn.setFixedSize(45, 25)
+                    delete_btn.clicked.connect(self.delete_clicked)
 
-            temp_in_sig = temp_in_sig[1:]
+                    row_position = self.proc_table.rowCount()
+                    self.proc_table.insertRow(row_position)
+                    self.proc_table.setRowHeight(row_position, 5)
 
-            self.proc_table.setItem(row_position, 2, QTableWidgetItem(temp_in_sig))
-            self.proc_table.setCellWidget(row_position, 3, delete_btn)
+                    self.proc_table.setItem(row_position, 0, QTableWidgetItem(label_val))
 
-        for conc_node in conc_nodes:
-            temp_data = []
-            label_val = conc_node.getElementsByTagName("label")[0].firstChild.data
+                    self.proc_table.setItem(row_position, 1, QTableWidgetItem("Process"))
+                    temp_in_sig = ""
+                    for in_sig in input_signals:
+                        temp_in_sig = temp_in_sig + ", " + in_sig
 
-            temp_data.append(label_val)
+                    temp_in_sig = temp_in_sig[1:]
 
-            output_signal_nodes = conc_node.getElementsByTagName("statement")
+                    self.proc_table.setItem(row_position, 2, QTableWidgetItem(temp_in_sig))
+                    self.proc_table.setCellWidget(row_position, 3, delete_btn)
 
-            output_signals = []
-            for output_signal_node in output_signal_nodes:
-                output_signals.append(output_signal_node.firstChild.data)
+                elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
 
-            temp_data.append(output_signals)
+                    temp_data = []
+                    label_val = child.getElementsByTagName("label")[0].firstChild.data
 
-            self.all_conc_data.append(temp_data)
+                    temp_data.append(label_val)
 
-            delete_btn = QPushButton()
-            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
-            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-            delete_btn.setFixedSize(45, 25)
-            delete_btn.clicked.connect(self.delete_clicked)
+                    output_signal_nodes = child.getElementsByTagName("statement")
 
-            row_position = self.proc_table.rowCount()
-            self.proc_table.insertRow(row_position)
-            self.proc_table.setRowHeight(row_position, 5)
+                    output_signals = []
+                    for output_signal_node in output_signal_nodes:
+                        output_signals.append(output_signal_node.firstChild.data)
 
-            self.proc_table.setItem(row_position, 0, QTableWidgetItem(label_val))
+                    temp_data.append(output_signals)
 
-            self.proc_table.setItem(row_position, 1, QTableWidgetItem("Concurrent Statement"))
-            temp_in_sig = ""
-            for in_sig in input_signals:
-                temp_in_sig = temp_in_sig + ", " + in_sig
+                    self.all_data.append(temp_data)
 
-            temp_in_sig = temp_in_sig[1:]
+                    delete_btn = QPushButton()
+                    # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+                    delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+                    delete_btn.setFixedSize(45, 25)
+                    delete_btn.clicked.connect(self.delete_clicked)
 
-            self.proc_table.setItem(row_position, 2, QTableWidgetItem("-"))
-            self.proc_table.setCellWidget(row_position, 3, delete_btn)
+                    row_position = self.proc_table.rowCount()
+                    self.proc_table.insertRow(row_position)
+                    self.proc_table.setRowHeight(row_position, 5)
+
+                    self.proc_table.setItem(row_position, 0, QTableWidgetItem(label_val))
+
+                    self.proc_table.setItem(row_position, 1, QTableWidgetItem("Concurrent Statement"))
+
+                    self.proc_table.setItem(row_position, 2, QTableWidgetItem("-"))
+                    self.proc_table.setCellWidget(row_position, 3, delete_btn)
+
+                child = next
 
     def enable_save_btn(self):
         if self.arch_name_input.text() != "":

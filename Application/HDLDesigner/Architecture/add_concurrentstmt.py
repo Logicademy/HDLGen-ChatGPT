@@ -29,21 +29,19 @@ class AddConcurrentStmt(QDialog):
         self.conc_name_input = QLineEdit()
 
         self.out_sig_header_layout = QHBoxLayout()
-        self.out_sig_label = QLabel("Output Signals")
-        self.out_sig_label.setFont(bold_font)
+        self.out_sig_label = QLabel("Output Signal")
+        self.out_sig_label.setStyleSheet(WHITE_COLOR)
         self.out_sig_label.setFixedWidth(100)
         self.val_label = QLabel("Value")
-        self.val_label.setFont(bold_font)
+        self.val_label.setStyleSheet(WHITE_COLOR)
         self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in the IO Ports")
         self.out_sig_empty_info.setFixedSize(400, 300)
-        self.list_div = QFrame()
-        self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
-        self.list_div.setFixedHeight(1)
 
-        self.out_sig_table = QTableWidget()
+        self.out_signals_combo = QComboBox()
+        self.out_val_input = QLineEdit()
 
-        self.out_sig_layout = QVBoxLayout()
-        self.out_sig_frame = QFrame()
+        self.out_sig_layout = QHBoxLayout()
+
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setFixedSize(60, 25)
@@ -70,45 +68,21 @@ class AddConcurrentStmt(QDialog):
 
     def setup_ui(self):
 
-        self.out_sig_header_layout.addItem(QSpacerItem(40, 1))
-        self.out_sig_header_layout.addWidget(self.out_sig_label)
-        self.out_sig_header_layout.addWidget(self.val_label)
-        self.out_sig_header_layout.addItem(QSpacerItem(80, 1))
-
-        self.out_sig_layout.addLayout(self.out_sig_header_layout)
-        self.out_sig_layout.addWidget(self.list_div)
-        self.out_sig_table.setFrameStyle(QFrame.NoFrame)
-        self.out_sig_table.setColumnCount(3)
-        self.out_sig_table.setShowGrid(False)
-        self.out_sig_table.setColumnWidth(0, 1)
-        self.out_sig_table.setColumnWidth(1, 105)
-        self.out_sig_table.setColumnWidth(2, 240)
-        self.out_sig_table.horizontalScrollMode()
-        self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.out_sig_table.horizontalScrollBar().hide()
-        header = self.out_sig_table.horizontalHeader()
-        header.hide()
-        header = self.out_sig_table.verticalHeader()
-        header.hide()
-
-        self.out_sig_frame.setFrameStyle(QFrame.NoFrame)
-        self.out_sig_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
-        self.out_sig_frame.setLayout(self.out_sig_layout)
-        self.out_sig_frame.setFixedSize(410, 275)
-
         self.input_layout.addWidget(self.conc_name_label, 0, 0, 1, 1)
-        self.input_layout.addWidget(self.conc_name_input, 1, 0, 2, 4)
-        self.input_layout.addWidget(self.out_sig_frame, 3, 0, 4, 2)
-
-        self.input_layout.addItem(QSpacerItem(0, 50), 6, 0, 1, 3)
-        self.input_layout.addWidget(self.cancel_btn, 7, 2, 1, 1, alignment=Qt.AlignRight)
-        self.input_layout.addWidget(self.ok_btn, 7, 3, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.conc_name_input, 1, 0, 2, 5)
+        self.input_layout.addWidget(self.out_sig_label, 3, 0, 1, 1)
+        self.input_layout.addWidget(self.out_signals_combo, 4, 0, 1, 1)
+        self.input_layout.addWidget(self.val_label, 3, 1, 1, 1)
+        self.input_layout.addWidget(self.out_val_input, 4, 1, 1, 4)
+        self.input_layout.addItem(QSpacerItem(0, 10), 5, 0, 1, 3)
+        self.input_layout.addWidget(self.cancel_btn, 6, 3, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.ok_btn, 6, 4, 1, 1, alignment=Qt.AlignRight)
 
         self.conc_name_input.textChanged.connect(self.enable_ok_btn);
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(450, 400)
+        self.input_frame.setFixedSize(400, 175)
         self.input_frame.setLayout(self.input_layout)
 
         self.ok_btn.clicked.connect(self.get_data)
@@ -134,28 +108,13 @@ class AddConcurrentStmt(QDialog):
                     mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
 
                     if mode == "out":
+
                         self.output_signals.append(name)
 
-
                 if len(self.output_signals) != 0:
-                    for signal in self.output_signals:
-                        checkbox = QCheckBox()
-                        checkbox.setFixedWidth(45)
-
-                        out_val_input = QLineEdit()
-                        out_val_input.setPlaceholderText("Eg. 1")
-
-                        row_position = self.out_sig_table.rowCount()
-                        self.out_sig_table.insertRow(row_position)
-                        self.out_sig_table.setRowHeight(row_position, 5)
-
-                        self.out_sig_table.setCellWidget(row_position, 0, checkbox)
-                        self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
-                        self.out_sig_table.setCellWidget(row_position, 2, out_val_input)
-
-
-                    self.out_sig_layout.addWidget(self.out_sig_table)
-
+                    self.output_signals.insert(0, "Please select")
+                    self.out_signals_combo.addItems(self.output_signals)
+                    self.output_signals.pop(0)
                 else:
                     self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
                 return
@@ -164,19 +123,16 @@ class AddConcurrentStmt(QDialog):
 
     def get_data(self):
         data = []
-        out_sigs = []
+        out_sig = []
         data.append(self.conc_name_input.text())
 
-        for i in range(self.out_sig_table.rowCount()):
-            if self.out_sig_table.cellWidget(i, 0).checkState() == Qt.Checked:
-                output = self.out_sig_table.item(i, 1).text()
+        if (self.out_signals_combo.currentText() != "Please select"):
+            output = self.out_signals_combo.currentText()
+            value = self.out_val_input.text()
+            out_sig.append(output + "," + value)
 
-                value = self.out_sig_table.cellWidget(i, 2).text()
+        data.append(out_sig)
 
-                out_sigs.append(output + "," + value)
-
-        data.append(out_sigs)
-        print(out_sigs)
         self.cancelled = False
         self.close()
         return data

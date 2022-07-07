@@ -182,37 +182,66 @@ class Generator(QWidget):
 
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
-
                 gen_process = ""
 
                 if len(arch_node) != 0 and arch_node[0].firstChild is not None:
-                    for process_node in arch_node[0].getElementsByTagName("process"):
-                        process_syntax = vhdl_root.getElementsByTagName("process")[0].firstChild.data
 
-                        process_syntax = process_syntax.replace("$process_label",
-                                                                process_node.getElementsByTagName("label")[
-                                                                    0].firstChild.data)
+                    child = arch_node[0].firstChild
 
-                        gen_in_sig = ""
+                    while child is not None:
 
-                        for input_signal in process_node.getElementsByTagName("inputSignal"):
-                            gen_in_sig += input_signal.firstChild.data + ","
+                        next = child.nextSibling
 
-                        gen_in_sig = gen_in_sig[:-1]
+                        if (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "process"):
 
-                        process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
+                            process_syntax = vhdl_root.getElementsByTagName("process")[0].firstChild.data
 
-                        gen_defaults = ""
-                        for default_out in process_node.getElementsByTagName("defaultOutput"):
-                            assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
-                            signals = default_out.firstChild.data.split(",")
-                            assign_syntax = assign_syntax.replace("$output_signal", signals[0])
-                            assign_syntax = assign_syntax.replace("$value", signals[1])
+                            process_syntax = process_syntax.replace("$process_label",
+                                                                    child.getElementsByTagName("label")[
+                                                                        0].firstChild.data)
 
-                            gen_defaults += "\t" + assign_syntax + "\n"
+                            gen_in_sig = ""
 
-                        process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
-                        gen_process += process_syntax + "\n\n"
+                            for input_signal in child.getElementsByTagName("inputSignal"):
+                                gen_in_sig += input_signal.firstChild.data + ","
+
+                            gen_in_sig = gen_in_sig[:-1]
+
+                            process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
+
+                            gen_defaults = ""
+                            for default_out in child.getElementsByTagName("defaultOutput"):
+                                assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                signals = default_out.firstChild.data.split(",")
+                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                assign_syntax = assign_syntax.replace("$value", signals[1])
+
+                                gen_defaults += "\t" + assign_syntax + "\n"
+
+                            process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
+                            gen_process += process_syntax + "\n\n"
+
+                        elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
+
+                            gen_stmts = ""
+                            conc_syntax = vhdl_root.getElementsByTagName("concurrentstmt")[0].firstChild.data
+
+                            conc_syntax = conc_syntax.replace("$concurrentstmt_label",
+                                                                    child.getElementsByTagName("label")[
+                                                                        0].firstChild.data)
+
+                            for statement in child.getElementsByTagName("statement"):
+                                assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                signals = statement.firstChild.data.split(",")
+                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                assign_syntax = assign_syntax.replace("$value", signals[1])
+
+                                gen_stmts += assign_syntax + "\n"
+
+                            conc_syntax = conc_syntax.replace("$statement", gen_stmts)
+                            gen_process += conc_syntax + "\n"
+
+                        child = next
 
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
                     arch_name_node = arch_node[0].getElementsByTagName("archName")

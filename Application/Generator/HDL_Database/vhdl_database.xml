@@ -30,6 +30,6 @@
 
     <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
 
-    <concurrentstmt>$concurrentstmt_label: $output_signal &lt;= $output_value;</concurrentstmt>
+    <concurrentstmt>$concurrentstmt_label: $statement</concurrentstmt>
 
 </vhdl>
