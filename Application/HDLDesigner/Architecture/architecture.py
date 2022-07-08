@@ -308,7 +308,7 @@ class Architecture(QWidget):
                         output_signals.append(output_signal_node.firstChild.data)
 
                     temp_data.append(output_signals)
-
+                    temp_data.insert(0, "process")
                     self.all_data.append(temp_data)
 
                     delete_btn = QPushButton()
@@ -347,7 +347,7 @@ class Architecture(QWidget):
                         output_signals.append(output_signal_node.firstChild.data)
 
                     temp_data.append(output_signals)
-
+                    temp_data.insert(0, "concurrentStmt")
                     self.all_data.append(temp_data)
 
                     delete_btn = QPushButton()
