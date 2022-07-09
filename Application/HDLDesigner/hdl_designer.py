@@ -2,6 +2,8 @@ import os
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
+import sys
+sys.path.append("..")
 from Application.HDLDesigner.comp_details import CompDetails
 from Application.HDLDesigner.IOPorts.io_ports import IOPorts
 from Application.HDLDesigner.Architecture.architecture import Architecture

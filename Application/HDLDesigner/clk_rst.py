@@ -3,7 +3,6 @@ import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-from Application.ProjectManager.project_manager import ProjectManager
 
 
 class ClkRst(QWidget):

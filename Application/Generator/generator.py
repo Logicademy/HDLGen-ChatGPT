@@ -1,7 +1,9 @@
 import os
 from xml.dom import minidom
 from PySide2.QtWidgets import *
-from Application.ProjectManager.project_manager import ProjectManager
+import sys
+sys.path.append("..")
+from ProjectManager.project_manager import ProjectManager
 
 
 class Generator(QWidget):

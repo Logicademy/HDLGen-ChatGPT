@@ -1,8 +1,9 @@
 import sys
 
 from PySide2.QtWidgets import *
-
-from Application.Home.home import Home
+import sys
+sys.path.append(".")
+from Home.home import Home
 
 
 class HDLGen(QMainWindow):

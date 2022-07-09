@@ -1,9 +1,10 @@
 from PySide2.QtWidgets import *
-
-from Application.ProjectManager.project_manager import ProjectManager
-from Application.Generator.generator import Generator
-from Application.Help.help import Help
-from Application.HDLDesigner.hdl_designer import HDLDesigner
+import sys
+sys.path.append("..")
+from ProjectManager.project_manager import ProjectManager
+from Generator.generator import Generator
+from Help.help import Help
+from HDLDesigner.hdl_designer import HDLDesigner
 
 
 class Home(QMainWindow):

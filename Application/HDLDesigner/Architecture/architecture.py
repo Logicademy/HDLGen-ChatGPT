@@ -3,9 +3,11 @@ import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-from Application.ProjectManager.project_manager import ProjectManager
-from Application.HDLDesigner.Architecture.add_process import AddProcess
-from Application.HDLDesigner.Architecture.add_concurrentstmt import AddConcurrentStmt
+import sys
+sys.path.append("..")
+from ProjectManager.project_manager import ProjectManager
+from HDLDesigner.Architecture.add_process import AddProcess
+from HDLDesigner.Architecture.add_concurrentstmt import AddConcurrentStmt
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
