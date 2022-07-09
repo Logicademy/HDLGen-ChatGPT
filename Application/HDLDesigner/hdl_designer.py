@@ -4,11 +4,11 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 import sys
 sys.path.append("..")
-from Application.HDLDesigner.comp_details import CompDetails
-from Application.HDLDesigner.IOPorts.io_ports import IOPorts
-from Application.HDLDesigner.Architecture.architecture import Architecture
-from Application.Generator.generator import Generator
-from Application.ProjectManager.project_manager import ProjectManager
+from HDLDesigner.comp_details import CompDetails
+from HDLDesigner.IOPorts.io_ports import IOPorts
+from HDLDesigner.Architecture.architecture import Architecture
+from HDLDesigner.InternalSignal.internal_signal import InternalSignal
+from Generator.generator import Generator
 
 
 class HDLDesigner(QWidget):
@@ -39,6 +39,7 @@ class HDLDesigner(QWidget):
         compDetails = CompDetails(self.proj_dir)
         ioPorts = IOPorts(self.proj_dir)
         architecture = Architecture(self.proj_dir)
+        internalSignal = InternalSignal(self.proj_dir)
 
         self.preview_window.setReadOnly(True)
         self.preview_pane_layout.addWidget(self.preview_label)
@@ -47,6 +48,7 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(compDetails, "Component Details")
         # self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
         self.tabs.addTab(ioPorts, "Component I/O Ports")
+        self.tabs.addTab(internalSignal, "Internal Signals")
         self.tabs.addTab(architecture, "Architecture")
 
         self.mainLayout.addWidget(self.tabs)
@@ -56,6 +58,7 @@ class HDLDesigner(QWidget):
         compDetails.save_btn.clicked.connect(self.update_preview)
         ioPorts.save_signal_btn.clicked.connect(self.update_preview)
         architecture.save_btn.clicked.connect(self.update_preview)
+        internalSignal.save_signal_btn.clicked.connect(self.update_preview)
 
     def update_preview(self):
         entity_name, vhdl = Generator.generate_vhdl()
