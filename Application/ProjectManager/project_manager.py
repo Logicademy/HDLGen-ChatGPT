@@ -104,7 +104,7 @@ class ProjectManager(QWidget):
         # self.vivado_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.vivado_select_dir.setFixedSize(60, 26)
 
-        self.note_label = QLabel("Please Save the project before moving to other tabs")
+        self.note_label = QLabel("Save the project before moving to other tabs")
 
         self.proj_close_btn = QPushButton("Close")
         self.proj_close_btn.setFixedHeight(40)
@@ -393,13 +393,13 @@ class ProjectManager(QWidget):
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
-                vhdl_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\EDAprj\\xilinxprj')
+                vhdl_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\AMDprj')
                 vhdl_folders.append(vhdl_xlnxprj_dir)
                 no_of_folders = no_of_folders + 1
 
             # If intel is chosen then the intelxprj folder is added
             if self.intel_check.isChecked():
-                vhdl_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\EDAprj\\intelprj')
+                vhdl_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\intelprj')
                 vhdl_folders.append(vhdl_intel_dir)
                 no_of_folders = no_of_folders + 1
 
@@ -427,13 +427,13 @@ class ProjectManager(QWidget):
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
-                verilog_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\EDAprj\\xilinxprj')
+                verilog_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\AMDprj')
                 verilog_folders.append(verilog_xlnxprj_dir)
                 no_of_folders = no_of_folders + 1
 
             # If intel is chosen then the intelxprj folder is added
             if self.intel_check.isChecked():
-                verilog_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\EDAprj\\intelprj')
+                verilog_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\intelprj')
                 verilog_folders.append(verilog_intel_dir)
                 no_of_folders = no_of_folders + 1
 
