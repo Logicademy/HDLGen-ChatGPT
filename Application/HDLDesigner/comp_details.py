@@ -6,7 +6,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 import sys
 sys.path.append("..")
-from Application.ProjectManager.project_manager import ProjectManager
+from ProjectManager.project_manager import ProjectManager
 
 WHITE_COLOR = "color: white"
 
