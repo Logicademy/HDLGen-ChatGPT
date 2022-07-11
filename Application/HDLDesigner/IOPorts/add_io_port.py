@@ -14,6 +14,7 @@ class AddIO(QDialog):
 
         self.input_layout = QGridLayout()
 
+        self.setWindowTitle("New IO Port")
         self.mainLayout = QVBoxLayout()
 
         self.sig_name_label = QLabel("Signal Name *")
@@ -36,12 +37,15 @@ class AddIO(QDialog):
         pal = self.sig_type_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_type_input.setPalette(pal)
-        self.sig_type_input.addItem("std_logic_vector")
         self.sig_type_input.addItem("std_logic")
+        self.sig_type_input.addItem("std_logic_vector")
 
         self.sig_size_label = QLabel("Size (eg. 32) * ")
         self.sig_size_label.setStyleSheet(WHITE_COLOR)
         self.sig_size_input = QLineEdit()
+        self.sig_size_input.setText("1")
+        self.sig_size_input.setEnabled(False)
+
         self.onlyInt = QIntValidator()
         self.sig_size_input.setValidator(self.onlyInt)
 

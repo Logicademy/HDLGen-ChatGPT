@@ -71,7 +71,8 @@ class InternalSignal(QWidget):
         self.setup_ui()
 
         if proj_dir != None:
-            self.load_data(proj_dir)
+            print("")
+            #self.load_data(proj_dir)
 
     def setup_ui(self):
 

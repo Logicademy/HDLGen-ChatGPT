@@ -13,6 +13,7 @@ class AddConcurrentStmt(QDialog):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("New Concurrent Statement")
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
