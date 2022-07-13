@@ -1,6 +1,7 @@
 import os
 import sys
 from xml.dom import minidom
+from pathlib import Path
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
@@ -117,7 +118,7 @@ class ProjectManager(QWidget):
             "QPushButton {background-color: rgb(129, 134, 145);  color: white; border-radius: 8px; border-style: plain;}"
             "QPushButton:enabled {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-        self.proj_save_btn.setEnabled(False)
+
 
         self.proj_reset_btn = QPushButton("Reset")
         self.proj_reset_btn.setFixedHeight(40)
@@ -154,6 +155,8 @@ class ProjectManager(QWidget):
 
         if proj_dir != None:
             self.load_proj_data(proj_dir)
+        else:
+            self.fill_default_proj_details()
 
     def setup_ui(self):
 
@@ -257,6 +260,18 @@ class ProjectManager(QWidget):
         self.proj_save_btn.clicked.connect(self.create_xml)
 
 
+
+
+    def fill_default_proj_details(self):
+
+        path = Path(os.getcwd())
+        parent_path = path.parent.absolute()
+        self.proj_dir = os.path.join(parent_path, "Projects")
+        print(self.proj_dir)
+        self.proj_folder_input.setText(self.proj_dir)
+        self.proj_name_input.setText("Untitled")
+
+
     def proj_detail_change(self):
 
         if self.proj_name_input.text() != "" and self.proj_folder_input.text() != "":
@@ -285,7 +300,7 @@ class ProjectManager(QWidget):
 
     # get_dir() opens up folder chooser and gets selected folder directory
     def set_proj_dir(self):
-        ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", "E:\\")
+        ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         self.proj_folder_input.setText(self.proj_dir)
 
     def get_vivado_exe_path(self):

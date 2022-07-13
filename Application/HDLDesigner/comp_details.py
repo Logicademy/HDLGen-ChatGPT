@@ -10,7 +10,6 @@ from ProjectManager.project_manager import ProjectManager
 
 WHITE_COLOR = "color: white"
 
-
 class CompDetails(QWidget):
 
     def __init__(self, proj_dir):

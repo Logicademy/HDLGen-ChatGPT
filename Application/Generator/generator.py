@@ -11,7 +11,10 @@ class Generator(QWidget):
     def __init__(self, proj_dir):
         super().__init__()
 
-        self.proj_dir = proj_dir
+        if proj_dir != None:
+            self.proj_dir = proj_dir
+        else:
+            self.proj_dir = ProjectManager.get_proj_dir()
 
         self.gen_folder_btn = QPushButton("Generate Folders")
         self.gen_folder_btn.setStyleSheet(
@@ -71,7 +74,7 @@ class Generator(QWidget):
                     path = os.path.join(location, folder.firstChild.data)
                     os.makedirs(path, exist_ok=True)
 
-        print("All project folders have been successfully generated at ", self.proj_dir[0])
+        print("All project folders have been successfully generated at ", self.proj_dir)
 
     @staticmethod
     def generate_vhdl():
