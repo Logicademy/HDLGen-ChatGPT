@@ -33,7 +33,7 @@ class AddProcess(QDialog):
         self.proc_name_label.setStyleSheet(WHITE_COLOR)
         self.proc_name_input = QLineEdit()
 
-        self.in_sig_label = QLabel("Input Signals")
+        self.in_sig_label = QLabel("Sensitivity List")
         self.in_sig_label.setFont(title_font)
 
 

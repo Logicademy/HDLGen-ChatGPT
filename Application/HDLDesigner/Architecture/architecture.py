@@ -65,7 +65,7 @@ class Architecture(QWidget):
         self.name_label.setFont(bold_font)
         self.type_label = QLabel("Type")
         self.type_label.setFont(bold_font)
-        self.in_sig_label = QLabel("Input Signals")
+        self.in_sig_label = QLabel("Sensitivity List")
         self.in_sig_label.setFont(bold_font)
 
         self.list_div = QFrame()

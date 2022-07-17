@@ -7,6 +7,7 @@ from PySide2.QtGui import *
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.IOPorts.add_io_port import AddIO
+from HDLDesigner.InternalSignal.add_int_sig import AddIntSignal
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -135,7 +136,8 @@ class InternalSignal(QWidget):
         self.setLayout(self.mainLayout)
 
     def add_signal(self):
-        print("Add signal button clicked")
+        add_intSig = AddIntSignal()
+        add_intSig.exec_()
 
     def save_signals(self):
         print("Add signal button clicked")
