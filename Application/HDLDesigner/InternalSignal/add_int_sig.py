@@ -20,8 +20,7 @@ class AddIntSignal(QDialog):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.input_signals = []
-        self.output_signals = []
+        self.sig_types = ["std_logic", "std_logic_vector"]
 
         self.input_layout = QGridLayout()
 
@@ -35,6 +34,7 @@ class AddIntSignal(QDialog):
         self.sig_type_label.setStyleSheet(WHITE_COLOR)
         self.sig_type_combo = QComboBox()
         self.sig_type_combo.setFixedWidth(150)
+        self.sig_type_combo.addItems(self.sig_types)
 
         self.sig_desc_label = QLabel("Signal Description")
         self.sig_desc_label.setStyleSheet(WHITE_COLOR)
@@ -64,7 +64,6 @@ class AddIntSignal(QDialog):
 
         self.setup_ui()
 
-        # self.populate_signals(ProjectManager.get_xml_data_path())
 
     def setup_ui(self):
 
@@ -85,12 +84,21 @@ class AddIntSignal(QDialog):
         self.input_frame.setFixedSize(400, 175)
         self.input_frame.setLayout(self.input_layout)
 
-        # self.ok_btn.clicked.connect(self.get_data)
+        self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
+
+    def get_data(self):
+        data = []
+        data.append(self.intSig_name_input.text())
+        data.append(self.sig_type_combo.currentText())
+        data.append(self.sig_desc_input.text())
+        self.cancelled = False
+        self.close()
+        return data
 
     def cancel_selected(self):
         self.cancelled = True

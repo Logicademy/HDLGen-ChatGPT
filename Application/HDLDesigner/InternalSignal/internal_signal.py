@@ -23,12 +23,12 @@ class InternalSignal(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.all_signals = []
+        self.all_intSignals = []
 
         self.port_heading_layout = QHBoxLayout()
         self.intSig_action_layout = QVBoxLayout()
         self.intSig_list_layout = QVBoxLayout()
-        self.port_list_title_layout = QHBoxLayout()
+        self.instSig_list_title_layout = QHBoxLayout()
 
         self.mainLayout = QVBoxLayout()
 
@@ -80,26 +80,26 @@ class InternalSignal(QWidget):
         # Port List section
         self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
-        self.add_btn.clicked.connect(self.add_signal)
+        self.add_btn.clicked.connect(self.add_intSignal)
 
-        self.name_label.setFixedWidth(102)
+        self.name_label.setFixedWidth(90)
         self.type_label.setFixedWidth(50)
-        self.description_label.setFixedWidth(85)
+        self.description_label.setFixedWidth(155)
 
-        self.port_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.description_label, alignment=Qt.AlignLeft)
+        self.instSig_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
+        self.instSig_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
+        self.instSig_list_title_layout.addWidget(self.description_label, alignment=Qt.AlignLeft)
 
         self.intSig_list_layout.setAlignment(Qt.AlignTop)
-        self.intSig_list_layout.addLayout(self.port_list_title_layout)
+        self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
         self.intSig_list_layout.addWidget(self.list_div)
 
         self.intSig_table.setColumnCount(4)
         self.intSig_table.setShowGrid(False)
-        self.intSig_table.setColumnWidth(0, 102)
-        self.intSig_table.setColumnWidth(1, 55)
+        self.intSig_table.setColumnWidth(0, 95)
+        self.intSig_table.setColumnWidth(1, 100)
         self.intSig_table.setColumnWidth(2, 105)
-        self.intSig_table.setColumnWidth(4, 5)
+        self.intSig_table.setColumnWidth(3, 5)
         self.intSig_table.horizontalScrollMode()
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.intSig_table.horizontalScrollBar().hide()
@@ -135,9 +135,36 @@ class InternalSignal(QWidget):
 
         self.setLayout(self.mainLayout)
 
-    def add_signal(self):
+    def add_intSignal(self):
         add_intSig = AddIntSignal()
         add_intSig.exec_()
+
+        if not add_intSig.cancelled:
+            intSignal_data = add_intSig.get_data()
+            self.all_intSignals.append(intSignal_data)
+
+            print(intSignal_data)
+            delete_btn = QPushButton()
+            #delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+            delete_btn.setFixedSize(45, 25)
+            delete_btn.clicked.connect(self.delete_clicked)
+
+            row_position = self.intSig_table.rowCount()
+            self.intSig_table.insertRow(row_position)
+            self.intSig_table.setRowHeight(row_position, 5)
+
+            self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
+            self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
+            self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
+            self.intSig_table.setCellWidget(row_position, 3, delete_btn)
+
+    def delete_clicked(self):
+        button = self.sender()
+        if button:
+            row = self.intSig_table.indexAt(button.pos()).row()
+            self.intSig_table.removeRow(row)
+            self.all_intSignals.pop(row)
 
     def save_signals(self):
         print("Add signal button clicked")
