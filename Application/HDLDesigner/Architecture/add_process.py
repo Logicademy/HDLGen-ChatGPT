@@ -22,6 +22,7 @@ class AddProcess(QDialog):
         bold_font = QFont()
         bold_font.setBold(True)
 
+        self.internal_signals = []
         self.input_signals = []
         self.output_signals = []
 
@@ -147,6 +148,9 @@ class AddProcess(QDialog):
 
     def populate_signals(self, proj_dir):
 
+        sensitivityList_flag = 0
+        outputList_flag = 0
+
         if (proj_dir != None):
             root = minidom.parse(proj_dir)
             HDLGen = root.documentElement
@@ -155,17 +159,27 @@ class AddProcess(QDialog):
             io_ports = hdlDesign[0].getElementsByTagName('entityIOPorts')
             signal_nodes = io_ports[0].getElementsByTagName('signal')
 
-            if len(signal_nodes) != 0:
-                for i in range(0, len(signal_nodes)):
-                    name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
-                    mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
+            intSignals = hdlDesign[0].getElementsByTagName('internalSignals')
+            intSignal_nodes = intSignals[0].getElementsByTagName('signal')
 
-                    if mode == "in":
-                        self.input_signals.append(name)
-                    elif mode == "out":
-                        self.output_signals.append(name)
+            if len(signal_nodes) != 0 or len(intSignal_nodes) != 0:
+                for i in range(0, len(signal_nodes)):
+                    port_name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                    port_mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
+
+                    if port_mode == "in":
+                        self.input_signals.append(port_name)
+                    elif port_mode == "out":
+                        self.output_signals.append(port_name)
+
+                for i in range(0, len(intSignal_nodes)):
+                    internal_signal = intSignal_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                    self.internal_signals.append(internal_signal)
 
                 if len(self.input_signals) != 0:
+
+                    sensitivityList_flag = 1
+
                     for signal in self.input_signals:
                         item = QListWidgetItem(signal)
                         item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
@@ -173,16 +187,34 @@ class AddProcess(QDialog):
                         self.in_sig_list.addItem(item)
 
                         self.in_sig_layout.addWidget(self.in_sig_list)
-                else:
+
+                if len(self.internal_signals) != 0:
+
+                    sensitivityList_flag = 1
+
+                    for signal in self.internal_signals:
+                        item = QListWidgetItem(signal)
+                        item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+                        item.setCheckState(Qt.Unchecked)
+                        self.in_sig_list.addItem(item)
+
+                        self.in_sig_layout.addWidget(self.in_sig_list)
+
+                if sensitivityList_flag == 0:
+
                     self.in_sig_layout.addWidget(self.in_sig_empty_info, alignment=Qt.AlignTop)
 
+
                 if len(self.output_signals) != 0:
+
+                    outputList_flag = 1
+
                     for signal in self.output_signals:
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
 
                         out_val_combo = QComboBox()
-                        out_val_options = self.input_signals
+                        out_val_options = self.input_signals + self.internal_signals
                         out_val_options.insert(0, "Custom")
                         out_val_combo.addItems(out_val_options)
                         out_val_options.pop(0)
@@ -202,8 +234,41 @@ class AddProcess(QDialog):
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
 
                     self.out_sig_layout.addWidget(self.out_sig_table)
-                else:
+
+                if len(self.internal_signals) != 0:
+
+                    outputList_flag = 1
+
+                    for signal in self.internal_signals:
+                        checkbox = QCheckBox()
+                        checkbox.setFixedWidth(45)
+
+                        out_val_combo = QComboBox()
+                        out_val_options = self.input_signals + self.internal_signals
+                        out_val_options.insert(0, "Custom")
+                        out_val_combo.addItems(out_val_options)
+                        out_val_options.pop(0)
+
+                        out_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                        out_val_input = QLineEdit()
+                        out_val_input.setFixedWidth(60)
+                        out_val_input.setPlaceholderText("Eg. 1")
+
+                        row_position = self.out_sig_table.rowCount()
+                        self.out_sig_table.insertRow(row_position)
+                        self.out_sig_table.setRowHeight(row_position, 5)
+
+                        self.out_sig_table.setCellWidget(row_position, 0, checkbox)
+                        self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
+                        self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
+                        self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
+
+                    self.out_sig_layout.addWidget(self.out_sig_table)
+
+                if outputList_flag == 0:
+
                         self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
+
                 return
         self.in_sig_layout.addWidget(self.in_sig_empty_info, alignment=Qt.AlignTop)
         self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)

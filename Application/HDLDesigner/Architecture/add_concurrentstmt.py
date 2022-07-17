@@ -20,6 +20,7 @@ class AddConcurrentStmt(QDialog):
         bold_font = QFont()
         bold_font.setBold(True)
 
+        self.internal_signals = []
         self.input_signals = []
         self.output_signals = []
 
@@ -105,19 +106,28 @@ class AddConcurrentStmt(QDialog):
             io_ports = hdlDesign[0].getElementsByTagName('entityIOPorts')
             signal_nodes = io_ports[0].getElementsByTagName('signal')
 
-            if len(signal_nodes) != 0:
+            intSignals = hdlDesign[0].getElementsByTagName('internalSignals')
+            intSignal_nodes = intSignals[0].getElementsByTagName('signal')
+
+            if len(signal_nodes) != 0 or len(intSignal_nodes) != 0:
+
                 for i in range(0, len(signal_nodes)):
                     name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
                     mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
 
                     if mode == "out":
-
                         self.output_signals.append(name)
 
-                if len(self.output_signals) != 0:
+                for i in range(0, len(intSignal_nodes)):
+                    internal_signal = intSignal_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                    self.internal_signals.append(internal_signal)
+
+                if len(self.output_signals) != 0 or len(self.internal_signals) != 0:
+
                     self.output_signals.insert(0, "Please select")
-                    self.out_signals_combo.addItems(self.output_signals)
+                    self.out_signals_combo.addItems(self.output_signals + self.internal_signals)
                     self.output_signals.pop(0)
+
                 else:
                     self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
                 return
