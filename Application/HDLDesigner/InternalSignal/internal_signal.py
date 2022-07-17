@@ -72,8 +72,7 @@ class InternalSignal(QWidget):
         self.setup_ui()
 
         if proj_dir != None:
-            print("")
-            #self.load_data(proj_dir)
+            self.load_data(proj_dir)
 
     def setup_ui(self):
 
@@ -167,4 +166,79 @@ class InternalSignal(QWidget):
             self.all_intSignals.pop(row)
 
     def save_signals(self):
-        print("Add signal button clicked")
+
+        xml_data_path = ProjectManager.get_xml_data_path()
+
+        root = minidom.parse(xml_data_path)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+
+        new_intSigs = root.createElement('internalSignals')
+
+        for signal in self.all_intSignals:
+            signal_node = root.createElement('signal')
+
+            name_node = root.createElement('name')
+            name_node.appendChild(root.createTextNode(signal[0]))
+            signal_node.appendChild(name_node)
+
+            type_node = root.createElement('type')
+            sig_type = signal[1]
+            type_node.appendChild(root.createTextNode(sig_type))
+            signal_node.appendChild(type_node)
+
+            desc_node = root.createElement('description')
+            desc_node.appendChild(root.createTextNode(signal[2]))
+            signal_node.appendChild(desc_node)
+
+            new_intSigs.appendChild(signal_node)
+
+        hdlDesign[0].replaceChild(new_intSigs, hdlDesign[0].getElementsByTagName('internalSignals')[0])
+
+        # converting the doc into a string in xml format
+        xml_str = root.toprettyxml()
+        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        # Writing xml file
+        with open(xml_data_path, "w") as f:
+            f.write(xml_str)
+
+        print("Successfully saved all the signals!")
+
+
+    def load_data(self, proj_dir):
+
+        root = minidom.parse(proj_dir[0])
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+
+        io_ports = hdlDesign[0].getElementsByTagName('internalSignals')
+        signal_nodes = io_ports[0].getElementsByTagName('signal')
+
+        for i in range(0, len(signal_nodes)):
+            name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
+            type = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
+            if len(signal_nodes[i].getElementsByTagName('description')) != 1:
+                desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            else:
+                desc = ""
+
+            loaded_sig_data = [
+                name,
+                type,
+                desc
+            ]
+
+            delete_btn = QPushButton()
+            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+            # delete_btn.setStyleSheet("background-color: white; border-style: plain;")
+            delete_btn.setFixedSize(45, 25)
+            delete_btn.clicked.connect(self.delete_clicked)
+
+            self.intSig_table.insertRow(i)
+            self.intSig_table.setRowHeight(i, 5)
+
+            self.intSig_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
+            self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
+            self.intSig_table.setItem(i, 2, QTableWidgetItem(loaded_sig_data[2]))
+            self.intSig_table.setCellWidget(i, 3, delete_btn)
+            self.all_intSignals.append(loaded_sig_data)

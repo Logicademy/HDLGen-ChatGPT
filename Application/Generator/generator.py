@@ -171,7 +171,7 @@ class Generator(QWidget):
                 # Architecture section
 
                 # Internal signals
-                gen_int_sig = "-- Internal Signals"
+                gen_int_sig = "-- Internal Signals\n"
                 int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
                 if int_sig_node is not None:
                     for signal in int_sig_node[0].getElementsByTagName("signal"):
@@ -181,7 +181,7 @@ class Generator(QWidget):
                         int_sig_syntax = int_sig_syntax.replace("$int_sig_type",
                                                                 signal.getElementsByTagName('type')[0].firstChild.data)
 
-                        gen_int_sig += int_sig_syntax
+                        gen_int_sig += int_sig_syntax + "\n"
 
                     gen_int_sig.rstrip()
 
