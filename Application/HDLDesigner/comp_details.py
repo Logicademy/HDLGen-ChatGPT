@@ -155,6 +155,7 @@ class CompDetails(QWidget):
 
         header[0].getElementsByTagName('compName')[0].firstChild.data = comp_name
         header[0].getElementsByTagName('title')[0].firstChild.data = comp_title
+        comp_description = comp_description.replace("\n", "&#10;")
         header[0].getElementsByTagName('description')[0].firstChild.data = comp_description
         header[0].getElementsByTagName('authors')[0].firstChild.data = comp_authors
         header[0].getElementsByTagName('company')[0].firstChild.data = comp_company

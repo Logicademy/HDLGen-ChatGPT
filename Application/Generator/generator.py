@@ -111,6 +111,7 @@ class Generator(QWidget):
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
                 gen_header += "-- Title          : " + (title if title != "null" else "") + "\n"
                 desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
+                desc = desc.replace("&#10;", "\n \t--")
                 gen_header += "-- Description    : " + (desc if desc != "null" else "") + "\n"
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"

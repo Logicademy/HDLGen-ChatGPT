@@ -1,0 +1,8 @@
+Markdown==3.3.6
+PySide2==5.15.2.1
+QtAwesome==1.1.1
+importlib-metadata==4.10.1
+Markdown==3.3.6
+PySide2==5.15.2.1
+shiboken2==5.15.2.1
+zipp==3.7.0
