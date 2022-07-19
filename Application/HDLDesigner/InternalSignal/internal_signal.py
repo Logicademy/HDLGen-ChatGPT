@@ -6,7 +6,6 @@ from PySide2.QtGui import *
 
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
-from HDLDesigner.IOPorts.add_io_port import AddIO
 from HDLDesigner.InternalSignal.add_int_sig import AddIntSignal
 
 BLACK_COLOR = "color: black"
@@ -112,7 +111,7 @@ class InternalSignal(QWidget):
 
         self.intSig_list_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.intSig_list_frame.setFixedSize(370, 295)
+        self.intSig_list_frame.setFixedSize(380, 295)
         self.intSig_list_frame.setLayout(self.intSig_list_layout)
 
         self.intSig_action_layout.addLayout(self.port_heading_layout)
@@ -125,7 +124,6 @@ class InternalSignal(QWidget):
 
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.intSig_action_frame.setContentsMargins(5, 5, 5, 5)
         self.intSig_action_frame.setFixedSize(400, 400)
         self.intSig_action_frame.setLayout(self.intSig_action_layout)
 

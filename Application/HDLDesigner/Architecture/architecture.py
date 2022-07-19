@@ -101,7 +101,6 @@ class Architecture(QWidget):
 
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.main_frame.setContentsMargins(5, 5, 5, 5)
         self.main_frame.setFixedSize(400, 400)
         self.main_frame.setLayout(self.arch_action_layout)
 
@@ -133,7 +132,7 @@ class Architecture(QWidget):
 
         self.list_frame.setFrameShape(QFrame.StyledPanel)
         self.list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.list_frame.setFixedSize(370, 245)
+        self.list_frame.setFixedSize(380, 245)
         self.list_frame.setLayout(self.list_layout)
 
         self.arch_action_layout.addItem(QSpacerItem(10, 5))

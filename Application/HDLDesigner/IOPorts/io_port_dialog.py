@@ -7,14 +7,18 @@ from PySide2.QtGui import *
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-class AddIO(QDialog):
+class IOPortDialog(QDialog):
 
-    def __init__(self):
+    def __init__(self, add_or_edit, signal_data = None):
         super().__init__()
 
         self.input_layout = QGridLayout()
 
-        self.setWindowTitle("New IO Port")
+        if add_or_edit == "add":
+            self.setWindowTitle("New IO Port")
+        elif add_or_edit == "edit":
+            self.setWindowTitle("Edit IO Port")
+
         self.mainLayout = QVBoxLayout()
 
         self.sig_name_label = QLabel("Signal Name *")
@@ -74,6 +78,9 @@ class AddIO(QDialog):
 
         self.setup_ui()
 
+        if add_or_edit == "edit" and signal_data != None:
+            self.load_signal_data(signal_data)
+
     def setup_ui(self):
         self.sig_size_input.setFixedWidth(80)
         self.input_layout.addWidget(self.sig_name_label, 0, 0, 1, 1)
@@ -118,6 +125,13 @@ class AddIO(QDialog):
         self.cancelled = False
         self.close()
         return sig_details
+
+    def load_signal_data(self, signal_data):
+        self.sig_name_input.setText(signal_data[0])
+        self.sig_mode_input.setCurrentText(signal_data[1])
+        self.sig_type_input.setCurrentText(signal_data[2])
+        self.sig_size_input.setText(signal_data[3])
+        self.sig_description_input.setText(signal_data[4])
 
     def cancel_selected(self):
         self.cancelled = True

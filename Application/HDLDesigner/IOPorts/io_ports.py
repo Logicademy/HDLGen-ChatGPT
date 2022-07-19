@@ -3,10 +3,11 @@ import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+import qtawesome as qta
 
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
-from HDLDesigner.IOPorts.add_io_port import AddIO
+from HDLDesigner.IOPorts.io_port_dialog import IOPortDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -83,27 +84,30 @@ class IOPorts(QWidget):
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_signal)
 
-        self.name_label.setFixedWidth(102)
-        self.mode_label.setFixedWidth(36)
-        self.type_label.setFixedWidth(50)
-        self.size_label.setFixedWidth(85)
+        self.name_label.setFixedWidth(95)
+        self.mode_label.setFixedWidth(30)
+        self.type_label.setFixedWidth(30)
+        self.size_label.setFixedWidth(30)
 
         self.port_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.port_list_title_layout.addWidget(self.mode_label, alignment=Qt.AlignLeft)
         self.port_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
+        self.port_list_title_layout.addSpacerItem(QSpacerItem(45, 1))
         self.port_list_title_layout.addWidget(self.size_label, alignment=Qt.AlignLeft)
+        self.port_list_title_layout.addSpacerItem(QSpacerItem(70, 1))
 
         self.port_list_layout.setAlignment(Qt.AlignTop)
         self.port_list_layout.addLayout(self.port_list_title_layout)
         self.port_list_layout.addWidget(self.list_div)
 
-        self.port_table.setColumnCount(5)
+        self.port_table.setColumnCount(6)
         self.port_table.setShowGrid(False)
-        self.port_table.setColumnWidth(0, 102)
-        self.port_table.setColumnWidth(1, 55)
-        self.port_table.setColumnWidth(2, 105)
+        self.port_table.setColumnWidth(0, 100)
+        self.port_table.setColumnWidth(1, 50)
+        self.port_table.setColumnWidth(2, 95)
         self.port_table.setColumnWidth(3, 1)
-        self.port_table.setColumnWidth(4, 5)
+        self.port_table.setColumnWidth(4, 1)
+        self.port_table.setColumnWidth(5, 1)
         self.port_table.horizontalScrollMode()
         self.port_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.port_table.horizontalScrollBar().hide()
@@ -117,7 +121,7 @@ class IOPorts(QWidget):
 
         self.port_list_frame.setFrameShape(QFrame.StyledPanel)
         self.port_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.port_list_frame.setFixedSize(370, 295)
+        self.port_list_frame.setFixedSize(380, 295)
         self.port_list_frame.setLayout(self.port_list_layout)
 
         self.port_action_layout.addLayout(self.port_heading_layout)
@@ -130,7 +134,6 @@ class IOPorts(QWidget):
 
         self.port_action_frame.setFrameShape(QFrame.StyledPanel)
         self.port_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.port_action_frame.setContentsMargins(5, 5, 5, 5)
         self.port_action_frame.setFixedSize(400, 400)
         self.port_action_frame.setLayout(self.port_action_layout)
 
@@ -142,20 +145,23 @@ class IOPorts(QWidget):
 
     def add_signal(self):
 
-        add_io = AddIO()
-        add_io.exec_()
+        io_dialog = IOPortDialog("add")
+        io_dialog.exec_()
 
-
-        if not add_io.cancelled:
-            signal_data = add_io.get_signals()
+        if not io_dialog.cancelled:
+            signal_data = io_dialog.get_signals()
             self.all_signals.append(signal_data)
 
             print(signal_data)
             delete_btn = QPushButton()
-            #delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
-            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-            delete_btn.setFixedSize(45, 25)
+            delete_btn.setIcon(qta.icon("mdi.delete"))
+            delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
+
+            edit_btn = QPushButton()
+            edit_btn.setIcon(qta.icon("mdi.pencil"))
+            edit_btn.setFixedSize(35, 22)
+            edit_btn.clicked.connect(self.edit_clicked)
 
             row_position = self.port_table.rowCount()
             self.port_table.insertRow(row_position)
@@ -165,7 +171,9 @@ class IOPorts(QWidget):
             self.port_table.setItem(row_position, 1, QTableWidgetItem(signal_data[1]))
             self.port_table.setItem(row_position, 2, QTableWidgetItem(signal_data[2]))
             self.port_table.setItem(row_position, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
-            self.port_table.setCellWidget(row_position, 4, delete_btn)
+            self.port_table.setCellWidget(row_position, 4, edit_btn)
+            self.port_table.setCellWidget(row_position, 5, delete_btn)
+
 
     def delete_clicked(self):
         button = self.sender()
@@ -173,6 +181,47 @@ class IOPorts(QWidget):
             row = self.port_table.indexAt(button.pos()).row()
             self.port_table.removeRow(row)
             self.all_signals.pop(row)
+
+
+    def edit_clicked(self):
+
+        button = self.sender()
+        if button:
+            row = self.port_table.indexAt(button.pos()).row()
+
+            io_dialog = IOPortDialog("edit", self.all_signals[row])
+            io_dialog.exec_()
+
+            if not io_dialog.cancelled:
+                signal_data = io_dialog.get_signals()
+                self.port_table.removeRow(row)
+                self.all_signals.pop(row)
+
+                print(signal_data)
+                delete_btn = QPushButton()
+                delete_btn.setIcon(qta.icon("mdi.delete"))
+                delete_btn.setFixedSize(35, 22)
+                delete_btn.clicked.connect(self.delete_clicked)
+
+                edit_btn = QPushButton()
+                edit_btn.setIcon(qta.icon("mdi.pencil"))
+                edit_btn.setFixedSize(35, 22)
+                edit_btn.clicked.connect(self.edit_clicked)
+
+                self.all_signals.insert(row, signal_data)
+
+                self.port_table.insertRow(row)
+                self.port_table.setRowHeight(row, 5)
+
+                self.port_table.setItem(row, 0, QTableWidgetItem(signal_data[0]))
+                self.port_table.setItem(row, 1, QTableWidgetItem(signal_data[1]))
+                self.port_table.setItem(row, 2, QTableWidgetItem(signal_data[2]))
+                self.port_table.setItem(row, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
+                self.port_table.setCellWidget(row, 4, edit_btn)
+                self.port_table.setCellWidget(row, 5, delete_btn)
+
+
+
 
     def save_signals(self):
 
