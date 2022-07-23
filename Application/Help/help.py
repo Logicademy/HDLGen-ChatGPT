@@ -48,10 +48,11 @@ class Help(QWidget):
         shutil.copyfile(custom_doc_path[0], HELP_DOC_FILE_PATH)
         self.uploadButton.clicked.disconnect(self.update_help_doc)
         self.mainLayout.removeWidget(self.uploadButton)
-        self.mainLayout.removeWidget(self.webview)
+        self.mainLayout.removeWidget(self.markdown_view)
         self.setup_ui()
 
 
+"""
 class WebEnginePage(QWebEnginePage):
     def acceptNavigationRequest(self, url,  _type, isMainFrame):
         if _type == QWebEnginePage.NavigationTypeLinkClicked:
@@ -63,5 +64,7 @@ class HtmlView(QWebEngineView):
     def __init__(self, *args, **kwargs):
         QWebEngineView.__init__(self, *args, **kwargs)
         self.setPage(WebEnginePage(self))
+"""
+
 
 
