@@ -530,7 +530,7 @@ class ProjectManager(QWidget):
         from Application.main import HDLGen
         self.MainWindow.close()
         self.window = HDLGen()
-        self.window.resize(1000, 500)
+        self.window.resize(600, 300)
         self.window.show()
         print("Project Closed!")
 
