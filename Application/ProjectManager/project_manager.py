@@ -107,23 +107,16 @@ class ProjectManager(QWidget):
 
         self.note_label = QLabel("Save the project before moving to other tabs")
 
-        self.proj_close_btn = QPushButton("Close")
-        self.proj_close_btn.setFixedHeight(40)
+        self.proj_close_btn = QPushButton("Close Project")
+        self.proj_close_btn.setFixedHeight(50)
         self.proj_close_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-        self.proj_save_btn = QPushButton("Save")
-        self.proj_save_btn.setFixedHeight(40)
+        self.proj_save_btn = QPushButton("Save Project")
+        self.proj_save_btn.setFixedHeight(50)
         self.proj_save_btn.setStyleSheet(
             "QPushButton {background-color: rgb(129, 134, 145);  color: white; border-radius: 8px; border-style: plain;}"
             "QPushButton:enabled {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-
-
-        self.proj_reset_btn = QPushButton("Reset")
-        self.proj_reset_btn.setFixedHeight(40)
-        self.proj_reset_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
         # Initializing layouts
@@ -237,7 +230,6 @@ class ProjectManager(QWidget):
         self.rightColLayout.addWidget(self.note_label)
 
         self.proj_action_layout.addWidget(self.proj_close_btn)
-        self.proj_action_layout.addWidget(self.proj_reset_btn)
         self.proj_action_layout.addWidget(self.proj_save_btn)
         self.rightColLayout.addLayout(self.proj_action_layout)
 
@@ -256,10 +248,7 @@ class ProjectManager(QWidget):
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
 
         self.proj_close_btn.clicked.connect(self.close_project)
-        self.proj_reset_btn.clicked.connect(self.reset_all_data)
         self.proj_save_btn.clicked.connect(self.create_xml)
-
-
 
 
     def fill_default_proj_details(self):
@@ -611,19 +600,4 @@ class ProjectManager(QWidget):
 
         print("Project successfully loaded!")
 
-    def reset_all_data(self):
-        self.proj_name_input.clear()
-        self.proj_folder_input.clear()
-
-        self.vivado_dir_input.clear()
-        self.intel_dir_input.clear()
-        self.vivado_check.setChecked(False)
-        self.intel_check.setChecked(False)
-        self.vivado_ver_combo.setCurrentIndex(0)
-        self.intel_ver_combo.setCurrentIndex(0)
-
-        self.vhdl_check.setChecked(False)
-        self.verilog_check.setChecked(False)
-        self.sverilog_check.setChecked(False)
-        self.chisel_check.setChecked(False)
 
