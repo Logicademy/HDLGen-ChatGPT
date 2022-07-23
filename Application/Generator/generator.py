@@ -8,40 +8,9 @@ from ProjectManager.project_manager import ProjectManager
 
 class Generator(QWidget):
 
-    def __init__(self, proj_dir):
+    def __init__(self):
         super().__init__()
 
-        if proj_dir != None:
-            self.proj_dir = proj_dir
-        else:
-            self.proj_dir = ProjectManager.get_proj_dir()
-
-        self.gen_folder_btn = QPushButton("Generate Folders")
-        self.gen_folder_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-
-        self.gen_vhdl_btn = QPushButton("Generate VHDL")
-        self.gen_vhdl_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-
-        self.mainLayout = QHBoxLayout()
-
-        self.setup_ui()
-
-
-    def setup_ui(self):
-
-        self.gen_folder_btn.setFixedSize(150, 50)
-        self.gen_folder_btn.clicked.connect(self.generate_folders)
-        self.mainLayout.addWidget(self.gen_folder_btn)
-
-        self.gen_vhdl_btn.setFixedSize(150, 50)
-        self.gen_vhdl_btn.clicked.connect(self.create_vhdl_file)
-        self.mainLayout.addWidget(self.gen_vhdl_btn)
-
-        self.setLayout(self.mainLayout)
 
     def generate_folders(self):
 
@@ -74,7 +43,7 @@ class Generator(QWidget):
                     path = os.path.join(location, folder.firstChild.data)
                     os.makedirs(path, exist_ok=True)
 
-        print("All project folders have been successfully generated at ", self.proj_dir)
+        # print("All project folders have been successfully generated at ", self.proj_dir)
 
     @staticmethod
     def generate_vhdl():

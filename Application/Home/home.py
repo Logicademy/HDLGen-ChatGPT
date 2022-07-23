@@ -12,7 +12,10 @@ class Home(QMainWindow):
     def __init__(self, proj_dir=None):
 
         super().__init__()
+
         self.setWindowTitle("HDLGen")
+
+        self.generate_btn = QPushButton("Generate")
 
         # Initializing UI Elements
         self.mainLayout = QVBoxLayout()
@@ -23,6 +26,7 @@ class Home(QMainWindow):
         self.container = QWidget()
 
         self.proj_dir = proj_dir
+        self.generator = Generator()
 
         self.setup_ui()
 
@@ -38,8 +42,9 @@ class Home(QMainWindow):
         print("Setting up UI")
         self.tabs.addTab(project_manager, "Project Manager")
         self.tabs.addTab(HDLDesigner(self.proj_dir, load_data), "HDL Designer")
-        self.tabs.addTab(Generator(self.proj_dir), "Generator")
         self.tabs.addTab(Help(), "Help")
+        self.generate_btn.clicked.connect(self.generate_btn_clicked)
+        self.tabs.setCornerWidget(self.generate_btn)
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)
 
@@ -48,3 +53,7 @@ class Home(QMainWindow):
         self.setCentralWidget(self.container)
 
 
+    def generate_btn_clicked(self):
+
+        self.generator.generate_folders()
+        self.generator.create_vhdl_file()

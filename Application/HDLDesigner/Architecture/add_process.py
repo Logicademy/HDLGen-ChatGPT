@@ -300,7 +300,7 @@ class AddProcess(QDialog):
             if self.out_sig_table.cellWidget(i, 0).checkState() == Qt.Checked:
                 output = self.out_sig_table.item(i, 1).text()
                 if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
-                    default_val = "\'" + self.out_sig_table.cellWidget(i, 3).text() + "\'"
+                    default_val = self.out_sig_table.cellWidget(i, 3).text()
                 else:
                     default_val = self.out_sig_table.cellWidget(i, 2).currentText()
 

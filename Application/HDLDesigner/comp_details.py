@@ -78,11 +78,14 @@ class CompDetails(QWidget):
 
         self.input_layout.addWidget(self.comp_name_label, 0, 0)
         self.input_layout.addWidget(self.comp_name_input, 1, 0, 1, 2)
+        self.comp_name_input.setText(ProjectManager.get_proj_name())
         self.comp_name_input.textChanged.connect(self.enable_save_btn)
+        self.comp_title_input.setText("To be Completed")
         self.input_layout.addWidget(self.comp_title_label, 2, 0)
         self.input_layout.addWidget(self.comp_title_input, 3, 0, 1, 2)
 
         self.comp_description_input.setFixedHeight(50)
+        self.comp_description_input.setPlainText("To be Completed")
         self.input_layout.addWidget(self.comp_description_label, 4, 0)
         self.input_layout.addWidget(self.comp_description_input, 5, 0, 2, 2)
 
