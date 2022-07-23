@@ -1,11 +1,11 @@
 import os
 import shutil
 import sys
-import webbrowser
+#import webbrowser
 from xml.dom import minidom
 import markdown as md
 
-from PySide2.QtCore import QUrl
+#from PySide2.QtCore import QUrl
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import *
@@ -20,8 +20,9 @@ class Help(QWidget):
 
         self.uploadButton = QPushButton("Upload Help doc")
 
-        self.webEngineView = QWebEngineView()
+        # self.webEngineView = QWebEngineView()
 
+        self.markdown_view = QTextEdit(readOnly=True)
         self.mainLayout = QVBoxLayout()
 
         self.setup_ui()
@@ -32,12 +33,13 @@ class Help(QWidget):
         with open(HELP_DOC_FILE_PATH, "r") as f:
            doc = md.markdown(f.read(),  extensions=['fenced_code', 'codehilite', 'tables', 'attr_list'])
 
-        self.webview = HtmlView()
-        self.webview.setHtml(doc)
-
+        #self.webview = HtmlView()
+        #self.webview.setHtml(doc)
+        self.markdown_view.setHtml(doc)
         self.uploadButton.clicked.connect(self.update_help_doc)
         self.mainLayout.addWidget(self.uploadButton, alignment=Qt.AlignRight)
-        self.mainLayout.addWidget(self.webview)
+        self.mainLayout.addWidget(self.markdown_view)
+        #self.mainLayout.addWidget(self.webview)
         self.setLayout(self.mainLayout)
 
     def update_help_doc(self):
