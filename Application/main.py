@@ -9,6 +9,8 @@ from Home.home import Home
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
+APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
+
 class HDLGen(QMainWindow):
 
     def __init__(self):
@@ -30,7 +32,7 @@ class HDLGen(QMainWindow):
 
         self.hdlgen_logo = QLabel("HDLGen")
         self.hdlgen_logo.setFont(title_font)
-        self.app_description = QLabel("Application Description")
+        self.app_description = QLabel(APP_DESCRIPTION)
         self.github_link = QLabel('<a href="https://github.com/abishek-bupathi/HDLGen">HDLGen GitHub Repository</a>')
         self.github_link.linkActivated.connect(self.link)
 

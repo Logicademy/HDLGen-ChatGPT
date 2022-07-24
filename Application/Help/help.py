@@ -11,6 +11,7 @@ from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import *
 
 HELP_DOC_FILE_PATH = "./Help/help.md"
+OLD_HELP_DOC_FILE_PATH = "./Help/help(old).md"
 HELP_DOC_FILE_DIR = "./Help/"
 
 class Help(QWidget):
@@ -44,7 +45,9 @@ class Help(QWidget):
 
     def update_help_doc(self):
         custom_doc_path= QFileDialog.getOpenFileName(self, "Select the Help document XML File", filter="Markdown (*.md)")
-        os.remove(HELP_DOC_FILE_PATH)
+        if os.path.exists(OLD_HELP_DOC_FILE_PATH):
+            os.remove(OLD_HELP_DOC_FILE_PATH)
+        os.rename(HELP_DOC_FILE_PATH, OLD_HELP_DOC_FILE_PATH)
         shutil.copyfile(custom_doc_path[0], HELP_DOC_FILE_PATH)
         self.uploadButton.clicked.disconnect(self.update_help_doc)
         self.mainLayout.removeWidget(self.uploadButton)
