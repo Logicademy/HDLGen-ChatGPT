@@ -28,7 +28,7 @@ class HDLDesigner(QWidget):
 
         # Creating a container
         self.container = QWidget()
-
+        self.compDetails = CompDetails(self.proj_dir)
         self.setup_ui()
 
         if load_data:
@@ -36,7 +36,7 @@ class HDLDesigner(QWidget):
 
     def setup_ui(self):
 
-        compDetails = CompDetails(self.proj_dir)
+        self.compDetails = CompDetails(self.proj_dir)
         ioPorts = IOPorts(self.proj_dir)
         architecture = Architecture(self.proj_dir)
         internalSignal = InternalSignal(self.proj_dir)
@@ -45,7 +45,7 @@ class HDLDesigner(QWidget):
         self.preview_pane_layout.addWidget(self.preview_label)
         self.preview_pane_layout.addWidget(self.preview_window)
 
-        self.tabs.addTab(compDetails, "Component Details")
+        self.tabs.addTab(self.compDetails, "Component Details")
         # self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
         self.tabs.addTab(ioPorts, "Component I/O Ports")
         self.tabs.addTab(internalSignal, "Internal Signals")
@@ -55,7 +55,7 @@ class HDLDesigner(QWidget):
         self.mainLayout.addLayout(self.preview_pane_layout)
         self.setLayout(self.mainLayout)
 
-        compDetails.save_btn.clicked.connect(self.update_preview)
+        self.compDetails.save_btn.clicked.connect(self.update_preview)
         ioPorts.save_signal_btn.clicked.connect(self.update_preview)
         architecture.save_btn.clicked.connect(self.update_preview)
         internalSignal.save_signal_btn.clicked.connect(self.update_preview)

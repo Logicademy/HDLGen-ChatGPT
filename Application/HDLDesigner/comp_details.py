@@ -8,6 +8,7 @@ import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 
+
 WHITE_COLOR = "color: white"
 
 class CompDetails(QWidget):
@@ -69,7 +70,6 @@ class CompDetails(QWidget):
         self.comp_date_picker = QDateEdit(calendarPopup=True)
         self.comp_date_picker.setDate(QDate.currentDate())
         self.input_frame = QFrame()
-
         self.setup_ui()
         if proj_dir != None:
             self.load_data(proj_dir)
@@ -125,6 +125,9 @@ class CompDetails(QWidget):
             self.save_btn.setEnabled(True)
         else:
             self.save_btn.setEnabled(False)
+
+    def update_comp_name(self):
+        self.comp_name_input.setText(ProjectManager.get_proj_name())
 
     def save_comp_details(self):
 

@@ -66,7 +66,6 @@ class HDLGen(QMainWindow):
         self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 70))
 
-
         self.mainLayout.addLayout(self.button_layout)
         self.mainLayout.addLayout(self.info_layout)
 

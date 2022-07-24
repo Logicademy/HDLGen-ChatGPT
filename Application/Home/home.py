@@ -38,13 +38,17 @@ class Home(QMainWindow):
         if self.proj_dir is not None:
             load_data = True
         project_manager = ProjectManager(self.proj_dir, self)
+        hdl_designer = HDLDesigner(self.proj_dir, load_data)
 
         print("Setting up UI")
         self.tabs.addTab(project_manager, "Project Manager")
-        self.tabs.addTab(HDLDesigner(self.proj_dir, load_data), "HDL Designer")
+        self.tabs.addTab(hdl_designer, "HDL Designer")
         self.tabs.addTab(Help(), "Help")
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
         self.tabs.setCornerWidget(self.generate_btn)
+
+        self.tabs.currentChanged.connect(hdl_designer.compDetails.update_comp_name)
+
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)
 
