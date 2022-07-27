@@ -161,7 +161,7 @@ class IOPorts(QWidget):
             edit_btn = QPushButton()
             edit_btn.setIcon(qta.icon("mdi.pencil"))
             edit_btn.setFixedSize(35, 22)
-            edit_btn.clicked.connect(self.edit_clicked)
+            edit_btn.clicked.connect(self.edit_io_port)
 
             row_position = self.port_table.rowCount()
             self.port_table.insertRow(row_position)
@@ -183,7 +183,7 @@ class IOPorts(QWidget):
             self.all_signals.pop(row)
 
 
-    def edit_clicked(self):
+    def edit_io_port(self):
 
         button = self.sender()
         if button:
@@ -206,7 +206,7 @@ class IOPorts(QWidget):
                 edit_btn = QPushButton()
                 edit_btn.setIcon(qta.icon("mdi.pencil"))
                 edit_btn.setFixedSize(35, 22)
-                edit_btn.clicked.connect(self.edit_clicked)
+                edit_btn.clicked.connect(self.edit_io_port)
 
                 self.all_signals.insert(row, signal_data)
 
@@ -295,10 +295,14 @@ class IOPorts(QWidget):
             ]
 
             delete_btn = QPushButton()
-            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-            # delete_btn.setStyleSheet("background-color: white; border-style: plain;")
-            delete_btn.setFixedSize(45, 25)
+            delete_btn.setIcon(qta.icon("mdi.delete"))
+            delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
+
+            edit_btn = QPushButton()
+            edit_btn.setIcon(qta.icon("mdi.pencil"))
+            edit_btn.setFixedSize(35, 22)
+            edit_btn.clicked.connect(self.edit_io_port)
 
             self.port_table.insertRow(i)
             self.port_table.setRowHeight(i, 5)
@@ -307,5 +311,6 @@ class IOPorts(QWidget):
             self.port_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             self.port_table.setItem(i, 2, QTableWidgetItem(loaded_sig_data[2]))
             self.port_table.setItem(i, 3, QTableWidgetItem(loaded_sig_data[3]))
-            self.port_table.setCellWidget(i, 4, delete_btn)
+            self.port_table.setCellWidget(i, 4, edit_btn)
+            self.port_table.setCellWidget(i, 5, delete_btn)
             self.all_signals.append(loaded_sig_data)

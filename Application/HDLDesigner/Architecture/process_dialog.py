@@ -10,9 +10,9 @@ from ProjectManager.project_manager import ProjectManager
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-class AddProcess(QDialog):
+class ProcessDialog(QDialog):
 
-    def __init__(self):
+    def __init__(self, add_or_edit, process_data = None):
         super().__init__()
 
         self.setWindowTitle("New Process")
@@ -83,6 +83,9 @@ class AddProcess(QDialog):
 
         self.populate_signals(ProjectManager.get_xml_data_path())
 
+        if add_or_edit == "edit" and process_data != None:
+            self.load_process_data(process_data)
+
     def setup_ui(self):
 
         self.in_sig_layout.addWidget(self.in_sig_label, alignment=Qt.AlignTop)
@@ -114,9 +117,6 @@ class AddProcess(QDialog):
         header.hide()
         header = self.out_sig_table.verticalHeader()
         header.hide()
-
-
-
 
         self.out_sig_frame.setFrameStyle(QFrame.NoFrame)
         self.out_sig_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
@@ -272,6 +272,31 @@ class AddProcess(QDialog):
                 return
         self.in_sig_layout.addWidget(self.in_sig_empty_info, alignment=Qt.AlignTop)
         self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
+
+    def load_process_data(self, process_data):
+
+        self.proc_name_input.setText(process_data[1])
+        for i in range(0, self.in_sig_list.count()):
+            if self.in_sig_list.item(i).text() in process_data[2]:
+                self.in_sig_list.item(i).setCheckState(Qt.Checked)
+        out_sigs = []
+        default_vals = []
+        for out_sig in process_data[3]:
+            temp = out_sig.split(',')
+            out_sigs.append(temp[0])
+            default_vals.append(temp[1])
+
+
+        for i in range(self.out_sig_table.rowCount()):
+            if self.out_sig_table.item(i, 1).text() in out_sigs:
+                self.out_sig_table.item(i, 0).setCheckState(Qt.Checked)
+                if self.out_sig_table.item(i, 2).itemText in default_vals:
+                    self.out_sig_table.item(i, 2).setCurrentText(default_vals[default_vals.index(self.out_sig_table.item(i, 2).itemText)])
+                else:
+                    self.out_sig_table.item(i, 2).setCurrentText("Custom")
+                    self.out_sig_table.item(i, 3).setText(default_vals[i])
+
+
 
     def cancel_selected(self):
         self.cancelled = True

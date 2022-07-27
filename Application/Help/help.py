@@ -55,6 +55,32 @@ class Help(QWidget):
         self.setup_ui()
 
 
+class HelpDialog(QDialog):
+
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("New IO Port")
+        # self.webEngineView = QWebEngineView()
+
+        self.markdown_view = QTextEdit(readOnly=True)
+        self.mainLayout = QVBoxLayout()
+        self.setFixedSize(700, 500)
+        self.setup_ui()
+
+    def setup_ui(self):
+
+        # Writing xml file
+        with open(HELP_DOC_FILE_PATH, "r") as f:
+           doc = md.markdown(f.read(),  extensions=['fenced_code', 'codehilite', 'tables', 'attr_list'])
+
+        #self.webview = HtmlView()
+        #self.webview.setHtml(doc)
+        self.markdown_view.setHtml(doc)
+        self.mainLayout.addWidget(self.markdown_view)
+        #self.mainLayout.addWidget(self.webview)
+        self.setLayout(self.mainLayout)
+
+
 """
 class WebEnginePage(QWebEnginePage):
     def acceptNavigationRequest(self, url,  _type, isMainFrame):

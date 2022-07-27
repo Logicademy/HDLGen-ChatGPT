@@ -2,14 +2,19 @@ import sys
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
+import qtawesome as qta
 import sys
 sys.path.append(".")
 from Home.home import Home
+from Help.help import HelpDialog
+
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
+APP_AUTHORS = "Abishek Bupathi & Fearghal Morgan"
 APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
+VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
 
 class HDLGen(QMainWindow):
 
@@ -22,6 +27,9 @@ class HDLGen(QMainWindow):
         title_font.setPointSize(30)
         title_font.setBold(True)
 
+        bold_font = QFont()
+        bold_font.setBold(True)
+
         # Initializing UI Elements
         self.mainLayout = QHBoxLayout()
         self.button_layout = QVBoxLayout()
@@ -29,12 +37,22 @@ class HDLGen(QMainWindow):
 
         self.open_btn = QPushButton("Open Existing project")
         self.new_btn = QPushButton("Create New project")
+        self.help_btn = QPushButton()
+
+        self.help_btn.setIcon(qta.icon("mdi.help"))
+        self.help_btn.setFixedSize(25, 25)
+        self.help_btn.clicked.connect(self.help_window)
 
         self.hdlgen_logo = QLabel("HDLGen")
         self.hdlgen_logo.setFont(title_font)
         self.app_description = QLabel(APP_DESCRIPTION)
         self.github_link = QLabel('<a href="https://github.com/abishek-bupathi/HDLGen">HDLGen GitHub Repository</a>')
+        self.app_authors = QLabel(APP_AUTHORS)
+        self.app_authors.setFont(bold_font)
         self.github_link.linkActivated.connect(self.link)
+        self.vici_description = QLabel(VICI_DESCRIPTION)
+        self.vici_link = QLabel('<a href="https://vicilogic.com">vicilogic.com</a>')
+        self.vici_link.linkActivated.connect(self.link)
 
         # Creating a container
         self.container = QWidget()
@@ -60,20 +78,30 @@ class HDLGen(QMainWindow):
         self.button_layout.addSpacerItem(QSpacerItem(1, 70))
         self.new_btn.clicked.connect(self.new_project)
 
-        self.info_layout.addSpacerItem(QSpacerItem(1, 70))
+        self.info_layout.addSpacerItem(QSpacerItem(1, 50))
         self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
+        self.info_layout.addWidget(self.app_authors, alignment=Qt.AlignCenter)
         self.info_layout.addWidget(self.app_description, alignment= Qt.AlignCenter)
         self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
-        self.info_layout.addSpacerItem(QSpacerItem(1, 70))
+        self.info_layout.addSpacerItem(QSpacerItem(1, 10))
+        self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
+        self.info_layout.addWidget(self.vici_description, alignment=Qt.AlignCenter)
+
+        self.info_layout.addSpacerItem(QSpacerItem(1, 50))
 
         self.mainLayout.addLayout(self.button_layout)
         self.mainLayout.addLayout(self.info_layout)
+        self.mainLayout.addWidget(self.help_btn, alignment=Qt.AlignTop)
 
         self.setLayout(self.mainLayout)
 
         self.container.setLayout(self.mainLayout)
 
         self.setCentralWidget(self.container)
+
+    def help_window(self):
+        help_dialog = HelpDialog()
+        help_dialog.exec_()
 
     def new_project(self):
         self.window = Home()
