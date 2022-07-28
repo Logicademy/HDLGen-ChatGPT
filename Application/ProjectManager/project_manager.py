@@ -255,7 +255,7 @@ class ProjectManager(QWidget):
 
         path = Path(os.getcwd())
         parent_path = path.parent.absolute()
-        self.proj_dir = os.path.join(parent_path, "Projects")
+        self.proj_dir = os.path.join(parent_path, "User Projects")
         print(self.proj_dir)
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_name_input.setText("Untitled")
