@@ -254,6 +254,7 @@ class ProcessDialog(QDialog):
                         out_val_input.setFixedWidth(60)
                         out_val_input.setPlaceholderText("Eg. 1")
 
+
                         row_position = self.out_sig_table.rowCount()
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
@@ -288,14 +289,15 @@ class ProcessDialog(QDialog):
 
 
         for i in range(self.out_sig_table.rowCount()):
-            if self.out_sig_table.item(i, 1).text() in out_sigs:
-                self.out_sig_table.item(i, 0).setCheckState(Qt.Checked)
-                if self.out_sig_table.item(i, 2).itemText in default_vals:
-                    self.out_sig_table.item(i, 2).setCurrentText(default_vals[default_vals.index(self.out_sig_table.item(i, 2).itemText)])
-                else:
-                    self.out_sig_table.item(i, 2).setCurrentText("Custom")
-                    self.out_sig_table.item(i, 3).setText(default_vals[i])
 
+            if self.out_sig_table.item(i, 1).text() in out_sigs:
+                self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Checked)
+
+                self.out_sig_table.cellWidget(i, 2).setCurrentText(default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
+                print(default_vals)
+                if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
+                    print(i)
+                    self.out_sig_table.cellWidget(i, 3).setText(default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
 
 
     def cancel_selected(self):

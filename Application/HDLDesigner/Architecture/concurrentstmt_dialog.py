@@ -8,9 +8,9 @@ from ProjectManager.project_manager import ProjectManager
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-class AddConcurrentStmt(QDialog):
+class ConcurrentStmtDialog(QDialog):
 
-    def __init__(self):
+    def __init__(self, add_or_edit, conc_data = None):
         super().__init__()
 
         self.setWindowTitle("New Concurrent Statement")
@@ -69,6 +69,9 @@ class AddConcurrentStmt(QDialog):
         self.setup_ui()
 
         self.populate_signals(ProjectManager.get_xml_data_path())
+
+        if add_or_edit == "edit" and conc_data != None:
+            self.load_conc_data(conc_data)
 
     def setup_ui(self):
 
@@ -133,6 +136,18 @@ class AddConcurrentStmt(QDialog):
                 return
 
         self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
+
+    def load_conc_data(self, conc_data):
+
+        self.conc_name_input.setText(conc_data[1])
+
+        if len(conc_data[2]) != 0:
+            temp = conc_data[2][0].split(",")
+            out_sig = temp[0]
+            out_val = temp[1]
+            self.out_signals_combo.setCurrentText(out_sig)
+            self.out_val_input.setText(out_val)
+
 
     def get_data(self):
         data = []

@@ -9,7 +9,7 @@ import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Architecture.process_dialog import ProcessDialog
-from HDLDesigner.Architecture.add_concurrentstmt import AddConcurrentStmt
+from HDLDesigner.Architecture.concurrentstmt_dialog import ConcurrentStmtDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -196,6 +196,7 @@ class Architecture(QWidget):
 
             if not proc_dialog.cancelled:
                 data = proc_dialog.get_data()
+                data.insert(0, "process")
                 self.proc_table.removeRow(row)
                 self.all_data.pop(row)
 
@@ -210,27 +211,26 @@ class Architecture(QWidget):
                 edit_btn.setFixedSize(35, 22)
                 edit_btn.clicked.connect(self.edit_proc)
 
-                row_position = self.proc_table.rowCount()
                 self.all_data.insert(row, data)
 
-                self.proc_table.insertRow(row_position)
-                self.proc_table.setRowHeight(row_position, 5)
+                self.proc_table.insertRow(row)
+                self.proc_table.setRowHeight(row, 5)
 
-                self.proc_table.setItem(row_position, 0, QTableWidgetItem(data[1]))
+                self.proc_table.setItem(row, 0, QTableWidgetItem(data[1]))
 
-                self.proc_table.setItem(row_position, 1, QTableWidgetItem("Process"))
+                self.proc_table.setItem(row, 1, QTableWidgetItem("Process"))
                 input_signals = ""
                 for in_sig in data[2]:
                     input_signals = input_signals + ", " + in_sig
 
                 input_signals = input_signals[1:]
 
-                self.proc_table.setItem(row_position, 2, QTableWidgetItem(input_signals))
-                self.proc_table.setCellWidget(row_position, 3, edit_btn)
-                self.proc_table.setCellWidget(row_position, 4, delete_btn)
+                self.proc_table.setItem(row, 2, QTableWidgetItem(input_signals))
+                self.proc_table.setCellWidget(row, 3, edit_btn)
+                self.proc_table.setCellWidget(row, 4, delete_btn)
 
     def add_concurrentstmt(self):
-        add_concurrentstmt = AddConcurrentStmt()
+        add_concurrentstmt = ConcurrentStmtDialog("add")
         add_concurrentstmt.exec_()
 
         if not add_concurrentstmt.cancelled:
@@ -241,9 +241,14 @@ class Architecture(QWidget):
 
             delete_btn = QPushButton()
             # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
-            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-            delete_btn.setFixedSize(45, 25)
+            delete_btn.setIcon(qta.icon("mdi.delete"))
+            delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
+
+            edit_btn = QPushButton()
+            edit_btn.setIcon(qta.icon("mdi.pencil"))
+            edit_btn.setFixedSize(35, 22)
+            edit_btn.clicked.connect(self.edit_concurrentstmt)
 
             row_position = self.proc_table.rowCount()
             self.proc_table.insertRow(row_position)
@@ -254,7 +259,43 @@ class Architecture(QWidget):
 
             self.proc_table.setItem(row_position, 1, QTableWidgetItem("Concurrent Statement"))
             self.proc_table.setItem(row_position, 2, QTableWidgetItem("-"))
-            self.proc_table.setCellWidget(row_position, 3, delete_btn)
+            self.proc_table.setCellWidget(row_position, 3, edit_btn)
+            self.proc_table.setCellWidget(row_position, 4, delete_btn)
+
+    def edit_concurrentstmt(self):
+
+        button = self.sender()
+        if button:
+            row = self.proc_table.indexAt(button.pos()).row()
+
+            edit_concurrentstmt = ConcurrentStmtDialog("edit", self.all_data[row])
+            edit_concurrentstmt.exec_()
+
+            if not edit_concurrentstmt.cancelled:
+                data = edit_concurrentstmt.get_data()
+                data.insert(0, "concurrentStmt")
+                self.proc_table.removeRow(row)
+                self.all_data.pop(row)
+                print(data)
+
+                delete_btn = QPushButton()
+                # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
+                delete_btn.setIcon(qta.icon("mdi.delete"))
+                delete_btn.setFixedSize(35, 22)
+                delete_btn.clicked.connect(self.delete_clicked)
+                edit_btn = QPushButton()
+                edit_btn.setIcon(qta.icon("mdi.pencil"))
+                edit_btn.setFixedSize(35, 22)
+                edit_btn.clicked.connect(self.edit_concurrentstmt)
+
+                self.all_data.insert(row, data)
+                self.proc_table.insertRow(row)
+                self.proc_table.setRowHeight(row, 5)
+                self.proc_table.setItem(row, 0, QTableWidgetItem(data[1]))
+                self.proc_table.setItem(row, 1, QTableWidgetItem("Concurrent Statement"))
+                self.proc_table.setItem(row, 2, QTableWidgetItem("-"))
+                self.proc_table.setCellWidget(row, 3, edit_btn)
+                self.proc_table.setCellWidget(row, 4, delete_btn)
 
     def delete_clicked(self):
         button = self.sender()
