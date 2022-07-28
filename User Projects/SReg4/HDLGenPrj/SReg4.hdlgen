@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>SReg4\VHDL\model</vhdl_folder>
+		<vhdl_folder>SReg4\VHDL\testbench</vhdl_folder>
+		<vhdl_folder>SReg4\VHDL\AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>SReg4</name>
+			<location>C:/2022/projects/AbishekBupathi/HDLGen6/HDLGen/Projects</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir/>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>SReg4</compName>
+			<title>Cascadable 4-bit shift register with asynchronous reset</title>
+			<description>Cascadable 4-bit shift register with asynchronous reset&amp;#10;ABC detaggggghffsghs</description>
+			<authors>F Morgan</authors>
+			<company>NUIG</company>
+			<email>f.m@n.ie</email>
+			<date>26/07/2022</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>clk</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>clk strobe</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>asynh reset, high asserted</description>
+			</signal>
+			<signal>
+				<name>ce</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>chip enable, high asserted</description>
+			</signal>
+			<signal>
+				<name>left</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>asserted high to shift left</description>
+			</signal>
+			<signal>
+				<name>ld</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>assert high to synchronously load ldDat(3:0) in SReg(3:0)</description>
+			</signal>
+			<signal>
+				<name>ldDat</name>
+				<mode>in</mode>
+				<type>std_logic_vector(3 downto 0)</type>
+				<description>load data</description>
+			</signal>
+			<signal>
+				<name>SReg</name>
+				<mode>out</mode>
+				<type>std_logic_vector(3 downto 0)</type>
+				<description>Registered shift register signal digit</description>
+			</signal>
+			<signal>
+				<name>ceo</name>
+				<mode>out</mode>
+				<type>std_logic</type>
+				<description>chip enable output</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals>
+			<signal>
+				<name>NS</name>
+				<type>std_logic_vector</type>
+				<description>next state</description>
+			</signal>
+			<signal>
+				<name>CS</name>
+				<type>std_logic_vector</type>
+				<description>current state</description>
+			</signal>
+		</internalSignals>
+		<architecture>
+			<archName>RTL</archName>
+			<process>
+				<label>stateReg_p</label>
+				<inputSignal>clk</inputSignal>
+				<inputSignal>rst</inputSignal>
+				<defaultOutput>CS,ldDat</defaultOutput>
+			</process>
+			<process>
+				<label>NSDecode_p</label>
+				<inputSignal>ce</inputSignal>
+				<inputSignal>left</inputSignal>
+				<inputSignal>ld</inputSignal>
+				<inputSignal>ldDat</inputSignal>
+				<inputSignal>CS</inputSignal>
+				<defaultOutput>ceo,ce</defaultOutput>
+				<defaultOutput>NS,CS</defaultOutput>
+			</process>
+			<concurrentStmt>
+				<label>genCS_c</label>
+				<statement>SReg,CS</statement>
+			</concurrentStmt>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

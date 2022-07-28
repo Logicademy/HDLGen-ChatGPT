@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>ANDTest\VHDL\model</vhdl_folder>
+		<vhdl_folder>ANDTest\VHDL\testbench</vhdl_folder>
+		<vhdl_folder>ANDTest\VHDL\AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>ANDTest</name>
+			<location>C:/2022/projects/AbishekBupathi/HDLGen5/HDLGen/Projects</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir/>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>ANDTest</compName>
+			<title>AND gate model</title>
+			<description>aadfsdaaaaaaaaaaaaaaaaa&amp;#10;agagg&amp;#10;agggas&amp;#10;afhafddjj&amp;#10;kkkk</description>
+			<authors>FM</authors>
+			<company>NUIG</company>
+			<email>f@n.ie</email>
+			<date>23/07/2022</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>andIn1</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>ddddff</description>
+			</signal>
+			<signal>
+				<name>andIn0</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>ccdxh</description>
+			</signal>
+			<signal>
+				<name>andOut</name>
+				<mode>out</mode>
+				<type>std_logic</type>
+				<description>qqrewr</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals/>
+		<architecture>
+			<archName>comb</archName>
+			<concurrentStmt>
+				<label>andOut_c</label>
+				<statement>andOut,andIn1 and andIn0</statement>
+			</concurrentStmt>
+		</architecture>
+	</hdlDesign>
+</HDLGen>
