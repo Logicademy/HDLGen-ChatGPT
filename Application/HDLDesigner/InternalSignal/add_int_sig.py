@@ -29,12 +29,23 @@ class AddIntSignal(QDialog):
         self.intSig_name_label = QLabel("Internal Signal Name*")
         self.intSig_name_label.setStyleSheet(WHITE_COLOR)
         self.intSig_name_input = QLineEdit()
+        self.intSig_name_input.setFixedWidth(120)
 
         self.sig_type_label = QLabel("Signal Type")
         self.sig_type_label.setStyleSheet(WHITE_COLOR)
         self.sig_type_combo = QComboBox()
-        self.sig_type_combo.setFixedWidth(150)
+        self.sig_type_combo.setFixedWidth(110)
         self.sig_type_combo.addItems(self.sig_types)
+
+        self.sig_size_label = QLabel("Size (eg. 32) * ")
+        self.sig_size_label.setStyleSheet(WHITE_COLOR)
+        self.sig_size_input = QLineEdit()
+        self.sig_size_input.setText("1")
+        self.sig_size_input.setFixedWidth(100)
+        self.sig_size_input.setEnabled(False)
+
+        self.onlyInt = QIntValidator()
+        self.sig_size_input.setValidator(self.onlyInt)
 
         self.sig_desc_label = QLabel("Signal Description")
         self.sig_desc_label.setStyleSheet(WHITE_COLOR)
@@ -68,14 +79,16 @@ class AddIntSignal(QDialog):
     def setup_ui(self):
 
         self.input_layout.addWidget(self.intSig_name_label, 0, 0, 1, 1)
-        self.input_layout.addWidget(self.intSig_name_input, 1, 0, 1, 4)
-        self.input_layout.addWidget(self.sig_type_label, 0, 4, 1, 1)
-        self.input_layout.addWidget(self.sig_type_combo, 1, 4, 1, 2)
+        self.input_layout.addWidget(self.intSig_name_input, 1, 0, 1, 2)
+        self.input_layout.addWidget(self.sig_type_label, 0, 3, 1, 1)
+        self.input_layout.addWidget(self.sig_type_combo, 1, 3, 1, 2)
+        self.input_layout.addWidget(self.sig_size_label, 0, 5, 1, 1)
+        self.input_layout.addWidget(self.sig_size_input, 1, 5, 1, 2)
         self.input_layout.addWidget(self.sig_desc_label, 2, 0, 1, 1)
-        self.input_layout.addWidget(self.sig_desc_input, 3, 0, 1, 6)
-        self.input_layout.addItem(QSpacerItem(0, 10), 4, 0, 1, 3)
+        self.input_layout.addWidget(self.sig_desc_input, 3, 0, 1, 7)
+        self.input_layout.addItem(QSpacerItem(0, 10), 4, 0, 1, 5)
         self.input_layout.addWidget(self.cancel_btn, 5, 4, 1, 1, alignment=Qt.AlignRight)
-        self.input_layout.addWidget(self.ok_btn, 5, 5, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.ok_btn, 5, 5, 1, 2, alignment=Qt.AlignRight)
 
         self.intSig_name_input.textChanged.connect(self.enable_ok_btn);
         self.input_frame.setFrameShape(QFrame.StyledPanel)
@@ -83,6 +96,8 @@ class AddIntSignal(QDialog):
         self.input_frame.setContentsMargins(10, 10, 10, 10)
         self.input_frame.setFixedSize(400, 175)
         self.input_frame.setLayout(self.input_layout)
+
+        self.sig_type_combo.currentTextChanged.connect(self.enable_size_option)
 
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
@@ -95,6 +110,7 @@ class AddIntSignal(QDialog):
         data = []
         data.append(self.intSig_name_input.text())
         data.append(self.sig_type_combo.currentText())
+        data.append(self.sig_size_input.text())
         data.append(self.sig_desc_input.text())
         self.cancelled = False
         self.close()
@@ -105,7 +121,15 @@ class AddIntSignal(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.intSig_name_input.text() != "":
+        if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "":
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)
+
+    def enable_size_option(self):
+        if self.sig_type_combo.currentText() == "std_logic_vector":
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
+        else:
+            self.sig_size_input.setEnabled(False)
+            self.sig_size_input.setText("1")

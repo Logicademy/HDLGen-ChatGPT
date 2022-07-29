@@ -54,8 +54,8 @@ class InternalSignal(QWidget):
         self.name_label.setFont(bold_font)
         self.type_label = QLabel("Type")
         self.type_label.setFont(bold_font)
-        self.description_label = QLabel("Description")
-        self.description_label.setFont(bold_font)
+        self.size_label = QLabel("Size")
+        self.size_label.setFont(bold_font)
 
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
@@ -80,13 +80,13 @@ class InternalSignal(QWidget):
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_intSignal)
 
-        self.name_label.setFixedWidth(90)
-        self.type_label.setFixedWidth(50)
-        self.description_label.setFixedWidth(155)
+        self.name_label.setFixedWidth(150)
+        self.type_label.setFixedWidth(100)
+        self.size_label.setFixedWidth(110)
 
         self.instSig_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
-        self.instSig_list_title_layout.addWidget(self.description_label, alignment=Qt.AlignLeft)
+        self.instSig_list_title_layout.addWidget(self.size_label, alignment=Qt.AlignLeft)
 
         self.intSig_list_layout.setAlignment(Qt.AlignTop)
         self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
@@ -94,9 +94,9 @@ class InternalSignal(QWidget):
 
         self.intSig_table.setColumnCount(4)
         self.intSig_table.setShowGrid(False)
-        self.intSig_table.setColumnWidth(0, 95)
-        self.intSig_table.setColumnWidth(1, 100)
-        self.intSig_table.setColumnWidth(2, 105)
+        self.intSig_table.setColumnWidth(0, 140)
+        self.intSig_table.setColumnWidth(1, 110)
+        self.intSig_table.setColumnWidth(2, 50)
         self.intSig_table.setColumnWidth(3, 5)
         self.intSig_table.horizontalScrollMode()
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -181,7 +181,8 @@ class InternalSignal(QWidget):
             signal_node.appendChild(name_node)
 
             type_node = root.createElement('type')
-            sig_type = signal[1]
+            sig_size = ("(" + str(int(signal[2]) - 1) + " downto 0)") if signal[1] == "std_logic_vector" else ""
+            sig_type = signal[1] + sig_size
             type_node.appendChild(root.createTextNode(sig_type))
             signal_node.appendChild(type_node)
 

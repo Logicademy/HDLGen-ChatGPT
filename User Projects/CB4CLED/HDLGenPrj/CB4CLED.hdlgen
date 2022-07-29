@@ -8,7 +8,7 @@
 	<projectManager>
 		<settings>
 			<name>CB4CLED</name>
-			<location>C:/2022/projects/AbishekBupathi/HDLGen5/HDLGen/Projects</location>
+			<location>E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User Projects</location>
 		</settings>
 		<EDA>
 			<tool>
@@ -60,7 +60,18 @@
 				<description/>
 			</signal>
 		</entityIOPorts>
-		<internalSignals/>
+		<internalSignals>
+			<signal>
+				<name>test1</name>
+				<type>std_logic</type>
+				<description>1</description>
+			</signal>
+			<signal>
+				<name>test2</name>
+				<type>std_logic_vector(127 downto 0)</type>
+				<description>128</description>
+			</signal>
+		</internalSignals>
 		<architecture>
 			<archName>comb</archName>
 			<process>

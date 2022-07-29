@@ -26,7 +26,7 @@
 
     <intSigDeclaration>signal $int_sig_name : $int_sig_type;</intSigDeclaration>
 
-    <process>$process_label: process($input_signals)&#10;begin&#10;$default_assignments&#10;&#x9;-- Complete the process&#10;&#10;end_process;</process>
+    <process>$process_label: process($input_signals)&#10;begin&#10;$default_assignments&#10;&#x9;-- Complete the process&#10;&#10;end process;</process>
 
     <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
 
