@@ -8,12 +8,12 @@
 	<projectManager>
 		<settings>
 			<name>CB4CLED</name>
-			<location>E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User Projects</location>
+			<location>E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User_Projects</location>
 		</settings>
 		<EDA>
 			<tool>
 				<name>Xilinx Vivado</name>
-				<dir>C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/vivado.exe</dir>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
 				<version>2019.1</version>
 			</tool>
 		</EDA>

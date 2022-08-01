@@ -26,6 +26,9 @@ end entity cb4cled;
 architecture comb of cb4cled is
 
 -- Internal Signals
+signal test1 : std_logic;
+signal test2 : std_logic_vector(127 downto 0);
+
 
 begin
 
@@ -35,7 +38,7 @@ begin
 
 	-- Complete the process
 
-end_process;
+end process;
 
 conc1_c: Q <= '1';
 

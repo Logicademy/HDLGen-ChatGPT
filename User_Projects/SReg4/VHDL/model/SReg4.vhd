@@ -2,11 +2,11 @@
 -- Component Name : SReg4
 -- Title          : Cascadable 4-bit shift register with asynchronous reset
 -- Description    : Cascadable 4-bit shift register with asynchronous reset
- 	--ABC details
+ 	--ABC detaggggghffsghs
 -- Author(s)      : F Morgan
 -- Company        : NUIG
 -- Email          : f.m@n.ie
--- Date           : 25/07/2022
+-- Date           : 26/07/2022
 
 
 -- Library Section
@@ -39,11 +39,11 @@ begin
 
 stateReg_p: process(clk,rst)
 begin
-	CS <= NS;
+	CS <= ldDat;
 
 	-- Complete the process
 
-end_process;
+end process;
 
 NSDecode_p: process(ce,left,ld,ldDat,CS)
 begin
@@ -52,7 +52,7 @@ begin
 
 	-- Complete the process
 
-end_process;
+end process;
 
 genCS_c: SReg <= CS;
 

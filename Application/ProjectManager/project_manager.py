@@ -23,6 +23,7 @@ class ProjectManager(QWidget):
 
         ProjectManager.proj_dir = None
         ProjectManager.proj_name = None
+        ProjectManager.vivado_bat_path = None
         self.MainWindow = MainWindow
         ProjectManager.xml_data_path = None
 
@@ -97,7 +98,7 @@ class ProjectManager(QWidget):
         self.vivado_ver_combo = QComboBox()
         self.vivado_ver_combo.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo.addItem("2019.1")
-        self.vivado_dir_label = QLabel('Xilinx Vivado executable File path')
+        self.vivado_dir_label = QLabel('Xilinx Vivado Batch File path')
         self.vivado_dir_label.setStyleSheet(BLACK_COLOR)
         self.vivado_dir_input = QLineEdit()
         self.vivado_select_dir = QPushButton("Browse")
@@ -244,7 +245,7 @@ class ProjectManager(QWidget):
 
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
-        self.vivado_select_dir.clicked.connect(self.get_vivado_exe_path)
+        self.vivado_select_dir.clicked.connect(self.set_vivado_bat_path)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
 
         self.proj_close_btn.clicked.connect(self.close_project)
@@ -255,7 +256,7 @@ class ProjectManager(QWidget):
 
         path = Path(os.getcwd())
         parent_path = path.parent.absolute()
-        self.proj_dir = os.path.join(parent_path, "User Projects")
+        self.proj_dir = os.path.join(parent_path, "User_Projects")
         print(self.proj_dir)
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_name_input.setText("Untitled")
@@ -292,9 +293,14 @@ class ProjectManager(QWidget):
         ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         self.proj_folder_input.setText(self.proj_dir)
 
-    def get_vivado_exe_path(self):
-        self.vivado_exe_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado exe", "C:\\", filter="EXE (*.exe)")
-        self.vivado_dir_input.setText(self.vivado_exe_path[0])
+    def set_vivado_bat_path(self):
+        ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:\\", filter="Batch (*.bat)")
+        ProjectManager.vivado_bat_path = ProjectManager.vivado_bat_path[0]
+        self.vivado_dir_input.setText(ProjectManager.vivado_bat_path)
+
+    @staticmethod
+    def get_vivado_bat_path():
+        return ProjectManager.vivado_bat_path
 
     def get_intel_dir(self):
         self.intel_dir = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:\\", filter="EXE (*.exe)")
@@ -582,6 +588,7 @@ class ProjectManager(QWidget):
                 vivado_dir_node = tool.getElementsByTagName("dir")
                 if vivado_dir_node != 0 and vivado_dir_node[0].firstChild is not None:
                     self.vivado_dir_input.setText(vivado_dir_node[0].firstChild.data)
+                    ProjectManager.vivado_bat_path = vivado_dir_node[0].firstChild.data
             elif tool.getElementsByTagName("name")[0].firstChild.data == "Intel Quartus":
                 self.intel_check.setChecked(True)
                 self.intel_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)

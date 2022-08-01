@@ -15,7 +15,16 @@ class Home(QMainWindow):
 
         self.setWindowTitle("HDLGen")
 
-        self.generate_btn = QPushButton("Generate")
+        self.cornerWidget = QWidget()
+        self.generate_btn = QPushButton("Generate HDL Model and TCL")
+        self.generate_btn.setFixedHeight(20)
+        self.start_vivado_btn = QPushButton("Generate Vivado Project")
+        self.start_vivado_btn.setFixedHeight(20)
+        self.cornerWidgetLayout = QHBoxLayout()
+        self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)
+        self.cornerWidgetLayout.addWidget(self.generate_btn)
+        self.cornerWidgetLayout.addWidget(self.start_vivado_btn)
+        self.cornerWidget.setLayout(self.cornerWidgetLayout)
 
         # Initializing UI Elements
         self.mainLayout = QVBoxLayout()
@@ -45,7 +54,9 @@ class Home(QMainWindow):
         self.tabs.addTab(hdl_designer, "HDL Designer")
         self.tabs.addTab(Help(), "Help")
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
-        self.tabs.setCornerWidget(self.generate_btn)
+        self.tabs.setCornerWidget(self.cornerWidget)
+        self.start_vivado_btn.clicked.connect(self.start_vivado_btn_clicked)
+
 
         self.tabs.currentChanged.connect(hdl_designer.compDetails.update_comp_name)
 
@@ -61,3 +72,8 @@ class Home(QMainWindow):
 
         self.generator.generate_folders()
         self.generator.create_vhdl_file()
+        self.generator.create_tcl_file()
+
+    def start_vivado_btn_clicked(self):
+
+        self.generator.run_tcl_file()

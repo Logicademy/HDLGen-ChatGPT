@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+
+<!--
+    Escape Characters
+    "   &quot;
+    '   &apos;
+    <   &lt;
+    >   &gt;
+    &   &amp;
+    \n  &#10;
+    \t  &#x9;
+-->
+<tcl>
+    <vivado_vhdl_tcl>
+        # AMD-Xilinx Vivado project start and tcl script: Create project, xc7z020clg400-1 technology, VHDL model &#10;
+        # To execute, &#10;
+        # open cmd window &#10;
+        # cd to project folder &#10;
+        # start Vivado (with tcl file parameter) &#10;
+        # e.g, for project name $proj_name &#10;
+        # cmd &#10;
+        # cd $proj_dir &#10;
+        # $vivado_bat_path -source $tcl_path &#10;
+
+        # Vivado tcl file $proj_name.tcl, created in AMDprj folder &#10;
+        cd $proj_dir &#10;
+        # Close_project  Not required. Will advise that Vivado sessions should be closed. &#10;
+        start_gui&#10;
+        create_project  $proj_name  ./VHDL/AMDprj -part xc7z020clg400-1 -force&#10;
+        set_property target_language VHDL [current_project]&#10;
+        add_files -norecurse  ./VHDL/model/$comp_name.vhd&#10;
+        update_compile_order -fileset sources_1&#10;
+        set_property SOURCE_SET sources_1 [get_filesets sim_1]&#10;
+        <!--add_files -fileset sim_1 -norecurse ./VHDL/testbench/$tb_name.vhd&#10;-->
+        update_compile_order -fileset sim_1&#10;
+    </vivado_vhdl_tcl>
+</tcl>

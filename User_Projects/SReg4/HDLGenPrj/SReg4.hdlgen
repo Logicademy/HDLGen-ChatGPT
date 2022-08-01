@@ -8,12 +8,12 @@
 	<projectManager>
 		<settings>
 			<name>SReg4</name>
-			<location>C:/2022/projects/AbishekBupathi/HDLGen6/HDLGen/Projects</location>
+			<location>E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User_Projects</location>
 		</settings>
 		<EDA>
 			<tool>
 				<name>Xilinx Vivado</name>
-				<dir/>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
 				<version>2019.1</version>
 			</tool>
 		</EDA>

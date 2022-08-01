@@ -8,12 +8,12 @@
 	<projectManager>
 		<settings>
 			<name>numOf1sInByte</name>
-			<location>C:/2022/projects/AbishekBupathi/HDLGen3/HDLGen/Projects</location>
+			<location>E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User_Projects</location>
 		</settings>
 		<EDA>
 			<tool>
 				<name>Xilinx Vivado</name>
-				<dir/>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
 				<version>2019.1</version>
 			</tool>
 		</EDA>
@@ -27,7 +27,7 @@
 		<header>
 			<compName>numOf1sInByte</compName>
 			<title>Register the number of asserted bits in a byte</title>
-			<description>Registers the number of asserted bits in dIn byte.  &amp;#10;Result is 0 to 8 as std_logic_vector(3:0) signal, i.e, “0000” to “1000”&amp;#10;Process NSDecode_p uses a variable VarNSNumOf1sInByte and loop to combinationally generate the number of asserted bits in dIn byte, and generates NSNumOf1sInByte signal. &amp;#10;Process synch_p registers NSNumOf1sInByte as CSNumOf1sInByte </description>
+			<description>Registers the number of asserted bits in dIn byte.  &amp;#10;Result is 0 to 8 as std_logic_vector(3:0) signal, i.e, Process NSDecode_p uses a variable VarNSNumOf1sInByte and loop to combinationally generate the number of asserted bits in dIn byte, and generates NSNumOf1sInByte signal. &amp;#10;Process synch_p registers NSNumOf1sInByte as CSNumOf1sInByte </description>
 			<authors>Fearghal Morgan</authors>
 			<company>NUI Galway </company>
 			<email>fearghal.morgan@nuigalway.ie</email>

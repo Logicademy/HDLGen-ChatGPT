@@ -1,6 +1,7 @@
 import os
 from xml.dom import minidom
 from PySide2.QtWidgets import *
+import subprocess
 import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
@@ -10,6 +11,9 @@ class Generator(QWidget):
 
     def __init__(self):
         super().__init__()
+
+        self.entity_name = ""
+        self.tcl_path = ""
 
 
     def generate_folders(self):
@@ -250,6 +254,48 @@ class Generator(QWidget):
             f.write(vhdl_code)
 
         print("VHDL Model successfully generated at ", vhdl_file_path)
+
+        self.entity_name = entity_name
+
+    def create_tcl_file(self):
+
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        vhdl_path = proj_path + "\\VHDL\\model\\" + self.entity_name + ".vhd"
+        self.tcl_path = proj_path + "\\VHDL\\AMDPrj\\" + self.entity_name + ".tcl"
+        tcl_database_path = "./Generator/HDL_Database/tcl_database.xml"
+
+        tcl_database = minidom.parse(tcl_database_path)
+        tcl_root = tcl_database.documentElement
+
+        tcl_file_template = tcl_root.getElementsByTagName("vivado_vhdl_tcl")[0]
+        print(tcl_file_template)
+        tcl_file_template = tcl_file_template.firstChild.data
+        print(tcl_file_template)
+
+        tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
+        tcl_vivado_code = tcl_vivado_code.replace("$comp_name", self.entity_name)
+        tcl_vivado_code = tcl_vivado_code.replace("$proj_name", proj_name)
+        tcl_vivado_code = tcl_vivado_code.replace("$proj_dir", proj_path)
+        tcl_vivado_code = tcl_vivado_code.replace("$vhdl_path", vhdl_path)
+
+        # Writing xml file
+        with open(self.tcl_path, "w") as f:
+            f.write(tcl_vivado_code)
+
+        print("TCL file successfully generated at ", self.tcl_path)
+
+
+        return 1
+
+    def run_tcl_file(self):
+
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        subprocess.Popen("cd " + proj_path, shell=True)
+        vivado_bat_file_path = ProjectManager.get_vivado_bat_path()
+        start_vivado_cmd = vivado_bat_file_path + " -source " + self.tcl_path
+        subprocess.Popen(start_vivado_cmd, shell=True)
 
 
 
