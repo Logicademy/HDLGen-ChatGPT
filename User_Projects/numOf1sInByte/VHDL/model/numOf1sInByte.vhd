@@ -28,7 +28,7 @@ end entity numOf1sInByte;
 architecture RTL of numOf1sInByte is
 
 -- Internal Signals
-signal NSNumOf1sInByte : std_logic_vector;
+signal NSNumOf1sInByte : std_logic_vector(3 downto 0);
 
 
 begin

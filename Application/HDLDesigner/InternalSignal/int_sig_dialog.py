@@ -8,12 +8,16 @@ from ProjectManager.project_manager import ProjectManager
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-class AddIntSignal(QDialog):
+class IntSignalDialog(QDialog):
 
-    def __init__(self):
+    def __init__(self, add_or_edit, intSig_data=None):
         super().__init__()
 
-        self.setWindowTitle("New Internal Signal")
+        if add_or_edit == "add":
+            self.setWindowTitle("New Internal Signal")
+        elif add_or_edit == "edit":
+            self.setWindowTitle("Edit Internal Signal")
+
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -75,6 +79,8 @@ class AddIntSignal(QDialog):
 
         self.setup_ui()
 
+        if add_or_edit == "edit":
+            self.load_sig_data(intSig_data)
 
     def setup_ui(self):
 
@@ -105,6 +111,13 @@ class AddIntSignal(QDialog):
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
+
+    def load_sig_data(self, intSig_data):
+
+        self.intSig_name_input.setText(intSig_data[0])
+        self.sig_type_combo.setCurrentText(intSig_data[1])
+        self.sig_size_input.setText(intSig_data[2])
+        self.sig_desc_input.setText(intSig_data[3])
 
     def get_data(self):
         data = []

@@ -63,8 +63,8 @@
 		<internalSignals>
 			<signal>
 				<name>NSNumOf1sInByte</name>
-				<type>std_logic_vector</type>
-				<description>unregistered number of asserted bits (1s) in byte</description>
+				<type>std_logic_vector(3 downto 0)</type>
+				<description>4</description>
 			</signal>
 		</internalSignals>
 		<architecture>

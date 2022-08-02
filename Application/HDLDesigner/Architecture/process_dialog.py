@@ -15,7 +15,11 @@ class ProcessDialog(QDialog):
     def __init__(self, add_or_edit, process_data = None):
         super().__init__()
 
-        self.setWindowTitle("New Process")
+        if add_or_edit == "add":
+            self.setWindowTitle("New Process")
+        elif add_or_edit == "edit":
+            self.setWindowTitle("Edit Process")
+
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)

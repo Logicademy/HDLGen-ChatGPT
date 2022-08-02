@@ -26,7 +26,7 @@
 
         start_gui
 
-        create_project  SReg4  ../VHDL/AMDprj -part xc7z020clg400-1 -force
+        create_project  SReg4  ./VHDL/AMDprj -part xc7z020clg400-1 -force
 
         set_property target_language VHDL [current_project]
 
@@ -36,4 +36,8 @@
 
         set_property SOURCE_SET sources_1 [get_filesets sim_1]
 
-        
+        add_files -fileset sim_1 -norecurse ./VHDL/testbench/SReg4_tb.vhd
+
+        update_compile_order -fileset sim_1
+
+    

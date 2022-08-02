@@ -86,14 +86,9 @@
 		</entityIOPorts>
 		<internalSignals>
 			<signal>
-				<name>NS</name>
-				<type>std_logic_vector</type>
-				<description>next state</description>
-			</signal>
-			<signal>
-				<name>CS</name>
-				<type>std_logic_vector</type>
-				<description>current state</description>
+				<name>test3</name>
+				<type>std_logic_vector(11 downto 0)</type>
+				<description>12</description>
 			</signal>
 		</internalSignals>
 		<architecture>

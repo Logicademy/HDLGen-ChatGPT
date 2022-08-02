@@ -3,10 +3,11 @@ import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+import qtawesome as qta
 
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
-from HDLDesigner.InternalSignal.add_int_sig import AddIntSignal
+from HDLDesigner.InternalSignal.int_sig_dialog import IntSignalDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -80,9 +81,9 @@ class InternalSignal(QWidget):
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_intSignal)
 
-        self.name_label.setFixedWidth(150)
-        self.type_label.setFixedWidth(100)
-        self.size_label.setFixedWidth(110)
+        self.name_label.setFixedWidth(115)
+        self.type_label.setFixedWidth(105)
+        self.size_label.setFixedWidth(145)
 
         self.instSig_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
@@ -92,12 +93,13 @@ class InternalSignal(QWidget):
         self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
         self.intSig_list_layout.addWidget(self.list_div)
 
-        self.intSig_table.setColumnCount(4)
+        self.intSig_table.setColumnCount(5)
         self.intSig_table.setShowGrid(False)
-        self.intSig_table.setColumnWidth(0, 140)
+        self.intSig_table.setColumnWidth(0, 120)
         self.intSig_table.setColumnWidth(1, 110)
         self.intSig_table.setColumnWidth(2, 50)
-        self.intSig_table.setColumnWidth(3, 5)
+        self.intSig_table.setColumnWidth(3, 1)
+        self.intSig_table.setColumnWidth(4, 1)
         self.intSig_table.horizontalScrollMode()
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.intSig_table.horizontalScrollBar().hide()
@@ -133,7 +135,7 @@ class InternalSignal(QWidget):
         self.setLayout(self.mainLayout)
 
     def add_intSignal(self):
-        add_intSig = AddIntSignal()
+        add_intSig = IntSignalDialog("add")
         add_intSig.exec_()
 
         if not add_intSig.cancelled:
@@ -142,10 +144,14 @@ class InternalSignal(QWidget):
 
             print(intSignal_data)
             delete_btn = QPushButton()
-            #delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
-            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-            delete_btn.setFixedSize(45, 25)
+            delete_btn.setIcon(qta.icon("mdi.delete"))
+            delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
+
+            edit_btn = QPushButton()
+            edit_btn.setIcon(qta.icon("mdi.pencil"))
+            edit_btn.setFixedSize(35, 22)
+            edit_btn.clicked.connect(self.edit_intSign)
 
             row_position = self.intSig_table.rowCount()
             self.intSig_table.insertRow(row_position)
@@ -154,7 +160,44 @@ class InternalSignal(QWidget):
             self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
             self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
             self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
-            self.intSig_table.setCellWidget(row_position, 3, delete_btn)
+            self.intSig_table.setCellWidget(row_position, 3, edit_btn)
+            self.intSig_table.setCellWidget(row_position, 4, delete_btn)
+
+    def edit_intSign(self):
+        button = self.sender()
+        if button:
+            row = self.intSig_table.indexAt(button.pos()).row()
+            add_intSig = IntSignalDialog("edit", self.all_intSignals[row])
+            add_intSig.exec_()
+
+            if not add_intSig.cancelled:
+                intSignal_data = add_intSig.get_data()
+                self.intSig_table.removeRow(row)
+                self.all_intSignals.pop(row)
+
+                print(intSignal_data)
+                delete_btn = QPushButton()
+                delete_btn.setIcon(qta.icon("mdi.delete"))
+                delete_btn.setFixedSize(35, 22)
+                delete_btn.clicked.connect(self.delete_clicked)
+
+                edit_btn = QPushButton()
+                edit_btn.setIcon(qta.icon("mdi.pencil"))
+                edit_btn.setFixedSize(35, 22)
+                edit_btn.clicked.connect(self.edit_intSign)
+
+                self.all_intSignals.insert(row, intSignal_data)
+                row_position = self.intSig_table.rowCount()
+                self.intSig_table.insertRow(row_position)
+                self.intSig_table.setRowHeight(row_position, 5)
+
+                self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
+                self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
+                self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
+                self.intSig_table.setCellWidget(row_position, 3, edit_btn)
+                self.intSig_table.setCellWidget(row_position, 4, delete_btn)
+
+
 
     def delete_clicked(self):
         button = self.sender()

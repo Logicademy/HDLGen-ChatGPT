@@ -73,6 +73,7 @@ class Home(QMainWindow):
         self.generator.generate_folders()
         self.generator.create_vhdl_file()
         self.generator.create_tcl_file()
+        self.generator.create_testbench_file()
 
     def start_vivado_btn_clicked(self):
 

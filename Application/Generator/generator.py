@@ -263,7 +263,7 @@ class Generator(QWidget):
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         vhdl_path = proj_path + "\\VHDL\\model\\" + self.entity_name + ".vhd"
         self.tcl_path = proj_path + "\\VHDL\\AMDPrj\\" + self.entity_name + ".tcl"
-        tcl_database_path = "./Generator/HDL_Database/tcl_database.xml"
+        tcl_database_path = "./Generator/TCL_Database/tcl_database.xml"
 
         tcl_database = minidom.parse(tcl_database_path)
         tcl_root = tcl_database.documentElement
@@ -273,8 +273,10 @@ class Generator(QWidget):
         tcl_file_template = tcl_file_template.firstChild.data
         print(tcl_file_template)
 
+        tb_file_name = self.entity_name + "_tb"
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", self.entity_name)
+        tcl_vivado_code = tcl_vivado_code.replace("$tb_name", tb_file_name)
         tcl_vivado_code = tcl_vivado_code.replace("$proj_name", proj_name)
         tcl_vivado_code = tcl_vivado_code.replace("$proj_dir", proj_path)
         tcl_vivado_code = tcl_vivado_code.replace("$vhdl_path", vhdl_path)
@@ -284,7 +286,6 @@ class Generator(QWidget):
             f.write(tcl_vivado_code)
 
         print("TCL file successfully generated at ", self.tcl_path)
-
 
         return 1
 
@@ -296,6 +297,35 @@ class Generator(QWidget):
         vivado_bat_file_path = ProjectManager.get_vivado_bat_path()
         start_vivado_cmd = vivado_bat_file_path + " -source " + self.tcl_path
         subprocess.Popen(start_vivado_cmd, shell=True)
+
+    def create_vhdl_testbench_code(self):
+
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        tb_database_path = "./Generator/TB_Database/vhdl_tb_database.xml"
+
+        tb_database = minidom.parse(tb_database_path)
+        tb_root = tb_database.documentElement
+
+        tb_code = ""
+
+        return tb_code, proj_path
+
+    def create_testbench_file(self):
+
+        vhdl_tb_code, proj_path = self.create_vhdl_testbench_code()
+
+        vhdl_tb_path = proj_path + "\\VHDL\\testbench\\" + self.entity_name + "_tb.vhd"
+
+        # Writing xml file
+        with open(vhdl_tb_path, "w") as f:
+            f.write(vhdl_tb_code)
+
+        print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
+
+
+
+
 
 
 
