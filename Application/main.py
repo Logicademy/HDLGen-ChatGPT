@@ -37,10 +37,10 @@ class HDLGen(QMainWindow):
 
         self.open_btn = QPushButton("Open Existing project")
         self.new_btn = QPushButton("Create New project")
-        self.help_btn = QPushButton()
+        self.help_btn = QPushButton("Help")
 
-        self.help_btn.setIcon(qta.icon("mdi.help"))
-        self.help_btn.setFixedSize(25, 25)
+        # self.help_btn.setIcon(qta.icon("mdi.help"))
+        self.help_btn.setFixedSize(35, 25)
         self.help_btn.clicked.connect(self.help_window)
 
         self.hdlgen_logo = QLabel("HDLGen")

@@ -1,0 +1,31 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Tue Aug  2 19:36:22 2022
+# Process ID: 7228
+# Current directory: E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/Application
+# Command line: vivado.exe -source E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User_Projects/CB4CLED\VHDL\AMDPrj\cb4cled.tcl
+# Log file: E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/Application/vivado.log
+# Journal file: E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/Application\vivado.jou
+#-----------------------------------------------------------
+start_gui
+source {E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User_Projects/CB4CLED\VHDL\AMDPrj\cb4cled.tcl}
+# cd E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User_Projects/CB4CLED 
+# start_gui
+# create_project  CB4CLED  ./VHDL/AMDprj -part xc7z020clg400-1 -force
+INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
+Current project path is 'E:/BE_Project/Project/Project_files/HDLGen_files/HDLGen/User_Projects/CB4CLED/VHDL/AMDprj'
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+create_project: Time (s): cpu = 00:00:18 ; elapsed = 00:00:14 . Memory (MB): peak = 836.203 ; gain = 216.316
+# set_property target_language VHDL [current_project]
+# add_files -norecurse  ./VHDL/model/cb4cled.vhd
+# update_compile_order -fileset sources_1
+# set_property SOURCE_SET sources_1 [get_filesets sim_1]
+# add_files -fileset sim_1 -norecurse ./VHDL/testbench/cb4cled_tb.vhd
+# update_compile_order -fileset sim_1
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Tue Aug  2 19:39:26 2022...

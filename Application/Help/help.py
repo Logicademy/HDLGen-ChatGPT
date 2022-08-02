@@ -22,7 +22,8 @@ class Help(QWidget):
 
         # self.webEngineView = QWebEngineView()
 
-        self.markdown_view = QTextEdit(readOnly=True)
+        self.markdown_view = QTextBrowser(readOnly=True)
+        self.markdown_view.setOpenExternalLinks(True)
         self.mainLayout = QVBoxLayout()
 
         self.setup_ui()
@@ -49,7 +50,9 @@ class HelpDialog(QDialog):
         self.setWindowTitle("New IO Port")
         # self.webEngineView = QWebEngineView()
 
-        self.markdown_view = QTextEdit(readOnly=True)
+        self.markdown_view = QTextBrowser(readOnly=True)
+        self.markdown_view.setOpenExternalLinks(True)
+
         self.mainLayout = QVBoxLayout()
         self.setFixedSize(700, 500)
         self.setup_ui()

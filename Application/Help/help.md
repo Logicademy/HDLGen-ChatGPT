@@ -23,12 +23,12 @@ Abishek Bupathi and Fearghal Morgan
 - [vicilogic.com](https://www.vicilogic.com)
 
 ## HDLGen download and installation
-- [Download python3](https://www.python.com)
+- [Download python3](https://www.python.org)
 - [HDLGen github repository](https://github.com/abishek-bupathi/HDLGen)
 
 Created by Abishek Bupathi and Fearghal Morgan
 
-## <a href="mailto:fearghal.morgan@nuigalway.ie?subject=HDLGen email" target="_top">Contact us</a> with comments/suggestions
+## [Contact Us](mailto:fearghal.morgan@nuigalway.ie?subject=HDLGen email) with comments/suggestions
 
 ## EDA toolsuite download links
 
