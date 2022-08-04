@@ -258,7 +258,9 @@ class InternalSignal(QWidget):
 
         for i in range(0, len(signal_nodes)):
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
-            type = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
+            signal = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
+            type = signal[0:signal.index("(")] if signal.endswith(")") else signal
+
             if len(signal_nodes[i].getElementsByTagName('description')) != 1:
                 desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
             else:
@@ -267,14 +269,21 @@ class InternalSignal(QWidget):
             loaded_sig_data = [
                 name,
                 type,
+                "1" if type != "std_logic_vector" else str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1),
                 desc
             ]
 
+            self.all_intSignals.append(loaded_sig_data)
+
             delete_btn = QPushButton()
-            delete_btn.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-            # delete_btn.setStyleSheet("background-color: white; border-style: plain;")
-            delete_btn.setFixedSize(45, 25)
+            delete_btn.setIcon(qta.icon("mdi.delete"))
+            delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
+
+            edit_btn = QPushButton()
+            edit_btn.setIcon(qta.icon("mdi.pencil"))
+            edit_btn.setFixedSize(35, 22)
+            edit_btn.clicked.connect(self.edit_intSign)
 
             self.intSig_table.insertRow(i)
             self.intSig_table.setRowHeight(i, 5)
@@ -282,5 +291,5 @@ class InternalSignal(QWidget):
             self.intSig_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
             self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             self.intSig_table.setItem(i, 2, QTableWidgetItem(loaded_sig_data[2]))
-            self.intSig_table.setCellWidget(i, 3, delete_btn)
-            self.all_intSignals.append(loaded_sig_data)
+            self.intSig_table.setCellWidget(i, 3, edit_btn)
+            self.intSig_table.setCellWidget(i, 4, delete_btn)

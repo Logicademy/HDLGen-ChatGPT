@@ -68,8 +68,8 @@
 			</signal>
 			<signal>
 				<name>test2</name>
-				<type>std_logic_vector(127 downto 0)</type>
-				<description>128</description>
+				<type>std_logic_vector(31 downto 0)</type>
+				<description>32</description>
 			</signal>
 		</internalSignals>
 		<architecture>

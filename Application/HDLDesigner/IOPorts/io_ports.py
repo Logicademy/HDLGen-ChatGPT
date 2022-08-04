@@ -290,7 +290,7 @@ class IOPorts(QWidget):
                 name,
                 "Input" if mode == "in" else "Output",
                 type,
-                "1" if type != "std_logic_vector" else port[port.index("(") + 1:port.index(" downto")],
+                "1" if type != "std_logic_vector" else str(int(port[port.index("(") + 1:port.index(" downto")]) + 1),
                 desc
             ]
 
