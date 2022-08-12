@@ -47,7 +47,7 @@ class HelpDialog(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("New IO Port")
+        self.setWindowTitle("HDLGen Help")
         # self.webEngineView = QWebEngineView()
 
         self.markdown_view = QTextBrowser(readOnly=True)
