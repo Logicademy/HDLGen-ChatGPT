@@ -270,7 +270,7 @@ class ProjectManager(QWidget):
             # Getting project location from the text field
             ProjectManager.proj_dir = self.proj_folder_input.text() + "/"
 
-            ProjectManager.xml_data_path = self.proj_dir + self.proj_name + "\\" + "HDLGenPrj" + "\\" + self.proj_name + ".hdlgen"
+            ProjectManager.xml_data_path = self.proj_dir + self.proj_name + "/" + "HDLGenPrj" + "/" + self.proj_name + ".hdlgen"
 
             self.proj_save_btn.setEnabled(True)
         else:
@@ -294,7 +294,7 @@ class ProjectManager(QWidget):
         self.proj_folder_input.setText(self.proj_dir)
 
     def set_vivado_bat_path(self):
-        ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:\\", filter="Batch (*.bat)")
+        ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")
         ProjectManager.vivado_bat_path = ProjectManager.vivado_bat_path[0]
         self.vivado_dir_input.setText(ProjectManager.vivado_bat_path)
 
@@ -303,7 +303,7 @@ class ProjectManager(QWidget):
         return ProjectManager.vivado_bat_path
 
     def get_intel_dir(self):
-        self.intel_dir = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:\\", filter="EXE (*.exe)")
+        self.intel_dir = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
         self.intel_dir_input.setText(self.intel_dir[0])
 
     def create_xml(self):
@@ -314,7 +314,7 @@ class ProjectManager(QWidget):
         xml_data_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj")
         print("Saving project details at ", xml_data_dir)
 
-        temp_xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
+        temp_xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
 
         # Creating XML doc
         root = minidom.Document()
@@ -389,8 +389,8 @@ class ProjectManager(QWidget):
         # and the vhdl language detail is written into hdl element
         if self.vhdl_check.isChecked():
             vhdl_dir = root.createElement('vhdl_folder')
-            vhdl_model_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\model')
-            vhdl_testbench_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\testbench')
+            vhdl_model_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/model')
+            vhdl_testbench_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/testbench')
 
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
@@ -403,13 +403,13 @@ class ProjectManager(QWidget):
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
-                vhdl_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\AMDprj')
+                vhdl_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/AMDprj')
                 vhdl_folders.append(vhdl_xlnxprj_dir)
                 no_of_folders = no_of_folders + 1
 
             # If intel is chosen then the intelxprj folder is added
             if self.intel_check.isChecked():
-                vhdl_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\VHDL\\intelprj')
+                vhdl_intel_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/intelprj')
                 vhdl_folders.append(vhdl_intel_dir)
                 no_of_folders = no_of_folders + 1
 
@@ -423,8 +423,8 @@ class ProjectManager(QWidget):
         # and the verliog language detail is written into hdl element
         if self.verilog_check.isChecked():
             verilog_dir = root.createElement('verilog_folder')
-            verilog_model_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\model')
-            verilog_tstbnch_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\testbench')
+            verilog_model_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/model')
+            verilog_tstbnch_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/testbench')
 
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
@@ -437,13 +437,13 @@ class ProjectManager(QWidget):
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
-                verilog_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\AMDprj')
+                verilog_xlnxprj_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/AMDprj')
                 verilog_folders.append(verilog_xlnxprj_dir)
                 no_of_folders = no_of_folders + 1
 
             # If intel is chosen then the intelxprj folder is added
             if self.intel_check.isChecked():
-                verilog_intel_dir = root.createTextNode(ProjectManager.proj_name + '\\Verilog\\intelprj')
+                verilog_intel_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/intelprj')
                 verilog_folders.append(verilog_intel_dir)
                 no_of_folders = no_of_folders + 1
 
@@ -502,7 +502,7 @@ class ProjectManager(QWidget):
             # converting the doc into a string in xml format
             xml_str = root.toprettyxml(indent="\t")
 
-            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
+            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
 
             # Writing xml file
             with open(ProjectManager.xml_data_path, "w") as f:
@@ -521,13 +521,13 @@ class ProjectManager(QWidget):
             xml_str = data.toprettyxml()
             xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
 
-            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
+            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
 
             # Writing xml file
             with open(ProjectManager.xml_data_path, "w") as f:
                 f.write(xml_str)
 
-        ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "\\" + "HDLGenPrj" + "\\" + ProjectManager.proj_name + ".hdlgen"
+        ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
 
         print("Successfully saved!")
 

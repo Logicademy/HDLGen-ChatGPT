@@ -261,8 +261,8 @@ class Generator(QWidget):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        vhdl_path = proj_path + "\\VHDL\\model\\" + self.entity_name + ".vhd"
-        self.tcl_path = proj_path + "\\VHDL\\AMDPrj\\" + self.entity_name + ".tcl"
+        vhdl_path = proj_path + "/VHDL/model/" + self.entity_name + ".vhd"
+        self.tcl_path = proj_path + "/VHDL/AMDPrj/" + self.entity_name + ".tcl"
         tcl_database_path = "./Generator/TCL_Database/tcl_database.xml"
 
         tcl_database = minidom.parse(tcl_database_path)
@@ -315,7 +315,7 @@ class Generator(QWidget):
 
         vhdl_tb_code, proj_path = self.create_vhdl_testbench_code()
 
-        vhdl_tb_path = proj_path + "\\VHDL\\testbench\\" + self.entity_name + "_tb.vhd"
+        vhdl_tb_path = proj_path + "/VHDL/testbench/" + self.entity_name + "_tb.vhd"
 
         # Writing xml file
         with open(vhdl_tb_path, "w") as f:
