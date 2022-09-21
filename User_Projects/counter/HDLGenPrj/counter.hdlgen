@@ -8,7 +8,7 @@
 	<projectManager>
 		<settings>
 			<name>counter</name>
-			<location>E:\BE_Project\Project\Project_files\HDLGen_files\HDLGen\User_Projects</location>
+			<location>C:/Users/johnp/Documents/5thYear/mastersProject/HDLGen/User_Projects</location>
 		</settings>
 		<EDA>
 			<tool>
@@ -39,7 +39,7 @@
 				<name>in1</name>
 				<mode>in</mode>
 				<type>std_logic_vector(3 downto 0)</type>
-				<description/>
+				<description>null<description/>
 			</signal>
 			<signal>
 				<name>out1</name>
