@@ -606,5 +606,3 @@ class ProjectManager(QWidget):
                 self.verilog_check.setChecked(True)
 
         print("Project successfully loaded!")
-
-
