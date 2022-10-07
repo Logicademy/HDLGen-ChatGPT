@@ -13,12 +13,12 @@ class Home(QMainWindow):
 
         super().__init__()
 
-        self.setWindowTitle("HDLGen")
+        self.setWindowTitle("HDLGen V2022.0.1")
 
         self.cornerWidget = QWidget()
-        self.generate_btn = QPushButton("Generate HDL Model and TCL")
+        self.generate_btn = QPushButton("Generate model and TB HDL")
         self.generate_btn.setFixedHeight(20)
-        self.start_vivado_btn = QPushButton("Generate Vivado Project")
+        self.start_vivado_btn = QPushButton("Generate/Open Vivado")
         self.start_vivado_btn.setFixedHeight(20)
         self.cornerWidgetLayout = QHBoxLayout()
         self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)

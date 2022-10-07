@@ -1,0 +1,30 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Tue Oct  4 14:02:46 2022
+# Process ID: 19272
+# Current directory: C:/Users/johnp/Documents/5thYear/mastersProject/HDLGen/Application
+# Command line: vivado.exe -source C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects/mux21_1/VHDL/AMDPrj/mux21_1.tcl
+# Log file: C:/Users/johnp/Documents/5thYear/mastersProject/HDLGen/Application/vivado.log
+# Journal file: C:/Users/johnp/Documents/5thYear/mastersProject/HDLGen/Application\vivado.jou
+#-----------------------------------------------------------
+start_gui
+source {C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects/mux21_1/VHDL/AMDPrj/mux21_1.tcl}
+# cd {C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects/mux21_1} 
+# start_gui
+# create_project  mux21_1  ./VHDL/AMDprj -part xc7z020clg400-1 -force
+INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
+Current project path is 'C:/Users/johnp/Documents/5thYear/mastersProject/HDLGen/User_Projects/mux21_1/VHDL/AMDprj'
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+# set_property target_language VHDL [current_project]
+# add_files -norecurse  ./VHDL/model/mux21_1.vhd
+# update_compile_order -fileset sources_1
+# set_property SOURCE_SET sources_1 [get_filesets sim_1]
+# add_files -fileset sim_1 -norecurse ./VHDL/testbench/mux21_1_tb.vhd
+# update_compile_order -fileset sim_1
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Tue Oct  4 14:03:30 2022...

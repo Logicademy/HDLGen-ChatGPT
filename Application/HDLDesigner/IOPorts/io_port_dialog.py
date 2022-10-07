@@ -115,12 +115,14 @@ class IOPortDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def get_signals(self):
-
+        signalDescription = self.sig_description_input.text()
+        if signalDescription == "":
+            signalDescription = "to be completed"
         sig_details = [self.sig_name_input.text(),
                        self.sig_mode_input.currentText(),
                        self.sig_type_input.currentText(),
                        self.sig_size_input.text(),
-                       self.sig_description_input.text()
+                       signalDescription
                        ]
         self.cancelled = False
         self.close()

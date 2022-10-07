@@ -8,7 +8,6 @@ import qtawesome as qta
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.InternalSignal.int_sig_dialog import IntSignalDialog
-
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 ICONS_DIR = "../../Resources/icons/"
@@ -230,7 +229,7 @@ class InternalSignal(QWidget):
             signal_node.appendChild(type_node)
 
             desc_node = root.createElement('description')
-            desc_node.appendChild(root.createTextNode(signal[2]))
+            desc_node.appendChild(root.createTextNode(signal[3]))
             signal_node.appendChild(desc_node)
 
             new_intSigs.appendChild(signal_node)
@@ -260,11 +259,11 @@ class InternalSignal(QWidget):
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
             signal = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
             type = signal[0:signal.index("(")] if signal.endswith(")") else signal
-
-            if len(signal_nodes[i].getElementsByTagName('description')) != 1:
-                desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            else:
-                desc = ""
+            desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            #if len(signal_nodes[i].getElementsByTagName('description')) != 1:
+                #desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            #else:
+              #  desc = ""
 
             loaded_sig_data = [
                 name,

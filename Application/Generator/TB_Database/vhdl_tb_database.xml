@@ -12,5 +12,25 @@
 -->
 
 <vhdl_tb>
+    <libraries>
+        <library>library ieee;</library>
+        <library>use ieee.std_logic_1164.all;</library>
+        <library>use ieee.numeric_std.all;</library>
+    </libraries>
 
+    <entity>entity $comp_name_TB is end entity $comp_name_TB;</entity>
+
+    <signalDeclaration>$sig_name : $mode $type;</signalDeclaration>
+
+    <IOSignalDeclaration>signal $sig_name : $type;</IOSignalDeclaration>
+
+    <architecture>architecture behave of $comp_name_TB is&#10;&#10;$component_declarations&#10;component $comp_name is &#10;Port(&#10;$port &#10;&#x9;);&#10;end component;&#10;&#10;$tbSignalDeclaration &#10;begin&#10;&#10;$arch_elements&#10;end process; &#10;end behave;</architecture>
+
+    <intSigDeclaration>signal $int_sig_name : $int_sig_type;</intSigDeclaration>
+
+    <portMap>$sig_name => $sig_name, </portMap>
+
+    <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
+
+    <concurrentstmt>$concurrentstmt_label: $statement</concurrentstmt>
 </vhdl_tb>

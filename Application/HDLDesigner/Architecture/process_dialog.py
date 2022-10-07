@@ -287,6 +287,7 @@ class ProcessDialog(QDialog):
         out_sigs = []
         default_vals = []
         for out_sig in process_data[3]:
+
             temp = out_sig.split(',')
             out_sigs.append(temp[0])
             default_vals.append(temp[1])
