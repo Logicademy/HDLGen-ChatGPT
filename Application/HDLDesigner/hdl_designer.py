@@ -45,9 +45,9 @@ class HDLDesigner(QWidget):
         self.preview_pane_layout.addWidget(self.preview_label)
         self.preview_pane_layout.addWidget(self.preview_window)
 
-        self.tabs.addTab(self.compDetails, "Component Details")
+        self.tabs.addTab(self.compDetails, "Component")
         # self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
-        self.tabs.addTab(ioPorts, "Component I/O Ports")
+        self.tabs.addTab(ioPorts, "Ports")
         self.tabs.addTab(internalSignal, "Internal Signals")
         self.tabs.addTab(architecture, "Architecture")
 

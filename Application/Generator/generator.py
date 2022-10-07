@@ -274,7 +274,8 @@ class Generator(QWidget):
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
 
-        print(vhdl_code)
+        #print(vhdl_code)
+        print("Hi")
 
         # Writing xml file
         with open(vhdl_file_path, "w") as f:
@@ -384,18 +385,19 @@ class Generator(QWidget):
                                                                             signal.getElementsByTagName('type')[
                                                                                 0].firstChild.data)
                 if signal.getElementsByTagName('mode')[0].firstChild.data == "in":
-                    inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
                     if signal.getElementsByTagName('type')[0].firstChild.data == "std_logic":
-                        inputsToZero += "\t"+ signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
+                        inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
+                        inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
                     else:
-                        inputsToZero += "\t"+ signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\';\n"
+                        inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
                     0].firstChild.data + "\t" + signal_description + "\n"
                 gen_signals += "\t" + signal_declare_syntax + "\n"
                 io_port_map += "\t" + io_port_map_syntax + "\n"
-                io_signals += io_signal_declare_syntax + "\n"
+                if signal.getElementsByTagName('name')[0].firstChild.data != "clk" and signal.getElementsByTagName('name')[0].firstChild.data != "rst" :
+                    io_signals += io_signal_declare_syntax + "\n"
             io_port_map = io_port_map.rstrip()
             io_port_map = io_port_map[0:-1]
             io_signals = io_signals.rstrip()
@@ -414,12 +416,6 @@ class Generator(QWidget):
             entity_syntax = vhdl_root.getElementsByTagName("entity")
             gen_entity = "-- entity declaration\n"
             gen_entity += entity_syntax[0].firstChild.data
-
-
-            #entity_port = gen_entity.replace("$signals", gen_signals)
-
-            # gen_vhdl += gen_entity + "\n\n"
-            # gen_vhdl += entity_signal_description + "\n\n"
 
             # Internal signals
             gen_int_sig = ""
@@ -455,10 +451,7 @@ class Generator(QWidget):
                 gen_header += "-- Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
                 gen_header += "-- Title          : " + (title if title != "null" else "") + "\n"
-                #desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
-                #desc = desc.replace("&#10;", "\n-- ")
                 gen_header += "-- Description    : refer to component hdl model fro function description and signal dictionary\n"
-                #gen_header += (desc if desc != "null" else "") + "\n"
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
@@ -495,7 +488,7 @@ class Generator(QWidget):
                 # Entity declaration
                 gen_entity = gen_entity.replace("$comp_name", entity_name)
                 tb_code += gen_entity +"\n\n"
-                tbSignalDeclaration = io_signals + gen_int_sig +"\n" + other_signals
+                tbSignalDeclaration = io_signals +"\n" + other_signals
                 # Architecture section
 
                 # Process
@@ -553,7 +546,6 @@ class Generator(QWidget):
                     if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
                         arch_name = arch_name_node[0].firstChild.data
 
-                    #gen_arch = arch_syntax.replace("$arch_name", arch_name)
                     gen_arch = arch_syntax.replace("$comp_name", entity_name)
                     gen_arch = gen_arch.replace("$component_declarations", "-- unit under test (UUT) component declaration. Identical to component entity, with 'entity' replaced with 'component'")
                     gen_arch = gen_arch.replace("$port", gen_signals)

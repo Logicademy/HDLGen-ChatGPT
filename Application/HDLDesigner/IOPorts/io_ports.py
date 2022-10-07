@@ -8,6 +8,7 @@ import qtawesome as qta
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.IOPorts.io_port_dialog import IOPortDialog
+from HDLDesigner.IOPorts.sequential_dialog import seqDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -33,23 +34,27 @@ class IOPorts(QWidget):
 
         self.mainLayout = QVBoxLayout()
 
-        self.io_list_label = QLabel("Input/Output Ports")
+        self.io_list_label = QLabel("Ports")
         self.io_list_label.setFont(title_font)
         self.io_list_label.setStyleSheet(WHITE_COLOR)
-
+        self.seqSytle_checkBox = QCheckBox("RTL")
+        self.seqSytle_checkBox.setStyleSheet(WHITE_COLOR)
+        self.seqSytle_editbtn = QPushButton("Set up clk/rst")
+        self.seqSytle_editbtn.setFixedSize(80, 25)
+        self.seqSytle_editbtn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
         self.add_btn = QPushButton("Add Signal")
         self.add_btn.setFixedSize(80, 25)
         self.add_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
-
         self.save_signal_btn = QPushButton("Save")
         self.save_signal_btn.setFixedSize(60, 30)
         self.save_signal_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-
 
         # Port list layout widgets
         self.name_label = QLabel("Name")
@@ -81,7 +86,12 @@ class IOPorts(QWidget):
 
         # Port List section
         self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
+        self.port_heading_layout.addWidget(self.seqSytle_checkBox, alignment=Qt.AlignCenter)
+        self.port_heading_layout.addWidget(self.seqSytle_editbtn)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
+        self.seqSytle_editbtn.setVisible(False)
+        self.seqSytle_checkBox.clicked.connect(self.checkBox_clicked)
+        self.seqSytle_editbtn.clicked.connect(self.edit_RTL)
         self.add_btn.clicked.connect(self.add_signal)
 
         self.name_label.setFixedWidth(95)
@@ -142,6 +152,11 @@ class IOPorts(QWidget):
 
         self.setLayout(self.mainLayout)
 
+    def update_clk_rst_btn(self):
+        self.seqSytle_editbtn.setText("Edit clk/rst")
+    def edit_RTL(self):
+        seq_dialog = seqDialog()
+        seq_dialog.exec_()
 
     def add_signal(self):
 
@@ -181,8 +196,13 @@ class IOPorts(QWidget):
             row = self.port_table.indexAt(button.pos()).row()
             self.port_table.removeRow(row)
             self.all_signals.pop(row)
-
-
+    def checkBox_clicked(self):
+        print("checkBox clicked")
+        button = self.sender()
+        if button.isChecked():
+            self.seqSytle_editbtn.setVisible(True)
+        else:
+            self.seqSytle_editbtn.setVisible(False)
     def edit_io_port(self):
 
         button = self.sender()
@@ -281,10 +301,13 @@ class IOPorts(QWidget):
             mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
             port = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
             type = port[0:port.index("(")] if port.endswith(")") else port
-            if len(signal_nodes[i].getElementsByTagName('description')) != 1:
-                desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            else:
-                desc = ""
+
+            desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            #if len(signal_nodes[i].getElementsByTagName('description')) != 1:
+             #   desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            #else:
+            if desc == "":
+                desc = "To be Completed"
 
             loaded_sig_data = [
                 name,

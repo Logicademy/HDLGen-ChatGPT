@@ -33,7 +33,10 @@ class Architecture(QWidget):
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
 
-        self.arch_name_input = QLineEdit()
+        #self.arch_name_input = QLineEdit()
+        self.arch_types = ["RTL", "Combinational"]
+        self.arch_name_input = QComboBox()
+        self.arch_name_input.addItems(self.arch_types)
         self.arch_name_label = QLabel("Architecture Name*")
         self.arch_name_label.setStyleSheet(WHITE_COLOR)
 
@@ -89,10 +92,11 @@ class Architecture(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-
+        self.enable_save_btn()
         self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
         self.top_layout.addWidget(self.arch_name_input, 1, 0, 1, 3)
-        self.arch_name_input.textChanged.connect(self.enable_save_btn);
+        #self.arch_name_input.currentTextChanged.connect(self.enable_save_btn)
+        #self.arch_name_input.textChanged.connect(self.enable_save_btn);
         self.top_layout.addWidget(self.new_proc_btn, 2, 0, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
         self.top_layout.addWidget(self.new_conc_btn, 2, 1, 1, 2)
@@ -314,7 +318,7 @@ class Architecture(QWidget):
         new_arch_node = root.createElement("architecture")
 
         arch_name = root.createElement("archName")
-        arch_name.appendChild(root.createTextNode(self.arch_name_input.text()))
+        arch_name.appendChild(root.createTextNode(self.arch_name_input.currentText()))
         new_arch_node.appendChild(arch_name)
 
 
@@ -371,7 +375,11 @@ class Architecture(QWidget):
         arch_name_node = hdlDesign[0].getElementsByTagName("archName")
 
         if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
-            self.arch_name_input.setText(arch_name_node[0].firstChild.data)
+            if arch_name_node[0].firstChild.data == "Combinational":
+            #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
+                self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
+            else:
+                self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
 
         if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
@@ -473,10 +481,12 @@ class Architecture(QWidget):
                     self.proc_table.setCellWidget(row_position, 3, edit_btn)
                     self.proc_table.setCellWidget(row_position, 4, delete_btn)
 
-                child = next
 
+                child = next
+                print(self.all_data)
     def enable_save_btn(self):
-        if self.arch_name_input.text() != "":
+        #if self.arch_name_input.text() != "":
+        if self.arch_name_input.currentText() != "":
             self.save_btn.setEnabled(True)
         else:
             self.save_btn.setEnabled(False)
