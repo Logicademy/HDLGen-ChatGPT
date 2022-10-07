@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>mux21_1/VHDL/model</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>mux21_1</name>
+			<location>C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>mux21_1</compName>
+			<title>To be Completedkhlerjkllkerj</title>
+			<description>To be Completedoed&amp;#10;dhildclkh</description>
+			<authors>jp</authors>
+			<company>ug</company>
+			<email>lkhlklk</email>
+			<date>04/10/2022</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>select</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>jkrlkj</description>
+			</signal>
+			<signal>
+				<name>jkfeckjl</name>
+				<mode>out</mode>
+				<type>std_logic</type>
+				<description>to be completed</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals/>
+		<architecture>
+			<archName>Combinational</archName>
+			<process>
+				<label>jkrfj</label>
+				<inputSignal>select</inputSignal>
+				<defaultOutput>jkfeckjl,select</defaultOutput>
+			</process>
+		</architecture>
+	</hdlDesign>
+</HDLGen>
