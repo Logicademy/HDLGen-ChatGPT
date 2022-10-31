@@ -355,6 +355,7 @@ class Architecture(QWidget):
 
                 new_arch_node.appendChild(conc_node)
 
+
         hdlDesign[0].replaceChild(new_arch_node, hdlDesign[0].getElementsByTagName("architecture")[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
