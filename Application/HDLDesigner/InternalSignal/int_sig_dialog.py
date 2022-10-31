@@ -1,4 +1,5 @@
-from xml.dom import minidom
+#This is a change
+#from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import qtawesome as qta
@@ -39,17 +40,21 @@ class IntSignalDialog(QDialog):
         self.intSig_name_label.setStyleSheet(WHITE_COLOR)
         self.intSig_name_input = QLineEdit()
         self.CS_name_label = QLabel("CS name")
-        self.CS_NS_help_label = QLabel("Leave blank for default CS, NS")
+        #self.CS_NS_help_label = QLabel("Leave blank for default CS, NS")
         self.CS_name_label.setStyleSheet(WHITE_COLOR)
         self.CS_name_input = QLineEdit()
         self.CS_name_label.setVisible(False)
         self.CS_name_input.setVisible(False)
+        self.CS_name_input.setEnabled(False)
         self.NS_name_label = QLabel("NS name")
         self.NS_name_label.setStyleSheet(WHITE_COLOR)
         self.NS_name_input = QLineEdit()
         self.NS_name_label.setVisible(False)
         self.NS_name_input.setVisible(False)
-        self.CS_NS_help_label.setVisible(False)
+        self.NS_name_input.setEnabled(False)
+        self.NS_name_input.setText("NS")
+        self.CS_name_input.setText("CS")
+        #self.CS_NS_help_label.setVisible(False)
 
         self.sig_type_label = QLabel("Signal Type")
         self.sig_type_label.setStyleSheet(WHITE_COLOR)
@@ -96,10 +101,10 @@ class IntSignalDialog(QDialog):
         self.stateNames_table = QTableWidget()
         self.stateNames_table.setColumnCount(4)
         self.stateNames_table.setShowGrid(False)
-        self.stateNames_table.setColumnWidth(0, 50)
+        self.stateNames_table.setColumnWidth(0, 150)
         self.stateNames_table.setColumnWidth(1, 25)
         self.stateNames_table.setColumnWidth(2, 25)
-        self.stateNames_table.setColumnWidth(2, 25)
+        self.stateNames_table.setColumnWidth(3, 100)
         self.stateNames_table.setVisible(False)
         self.stateNames_table.horizontalScrollBar().hide()
         self.header0_label = QLabel("state name")
@@ -123,7 +128,7 @@ class IntSignalDialog(QDialog):
 
 
         self.ok_btn = QPushButton("Ok")
-        self.ok_btn.setEnabled(False)
+        #self.ok_btn.setEnabled(False)
         self.ok_btn.setFixedSize(60, 25)
         self.ok_btn.setStyleSheet(
             "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
@@ -141,12 +146,12 @@ class IntSignalDialog(QDialog):
 
     def setup_ui(self):
 
-        self.input_layout.addWidget(self.intSig_name_label, 0, 0, 1, 3)
-        self.input_layout.addWidget(self.intSig_name_input, 1, 0, 1, 3)
+        self.input_layout.addWidget(self.intSig_name_label, 0, 0)#, 1, 3)
+        self.input_layout.addWidget(self.intSig_name_input, 1, 0)#, 1, 3)
 
-        self.input_layout.addWidget(self.CS_name_label, 0, 0)
-        self.input_layout.addWidget(self.CS_name_input, 1, 0)
-        self.input_layout.addWidget(self.CS_NS_help_label, 0,1)
+        self.input_layout.addWidget(self.CS_name_label, 0, 1)
+        self.input_layout.addWidget(self.CS_name_input, 1, 1)
+        #self.input_layout.addWidget(self.CS_NS_help_label, 0,1)
 
         self.input_layout.addWidget(self.NS_name_label, 0, 2)
         self.input_layout.addWidget(self.NS_name_input, 1, 2)
@@ -160,14 +165,14 @@ class IntSignalDialog(QDialog):
         self.input_layout.addWidget(self.sig_size_label, 4, 2, 1, 1)
         self.input_layout.addWidget(self.sig_size_input, 5, 2, 1, 1)
 
-        self.input_layout.addWidget(self.stateNames_table, 6, 0, 2, 2)
+        self.input_layout.addWidget(self.stateNames_table, 6, 0, 2, 3)
 
         self.input_layout.addWidget(self.csOnRstAssertion_label, 6, 0, 1, 1)
         self.input_layout.addWidget(self.csOnRstAssertion_combo, 7, 0, 1, 2)
-        self.input_layout.addWidget(self.binaryBitSize_label, 6, 2, 1, 1)
-        self.input_layout.addWidget(self.binaryBitSize_input, 7, 2, 1, 1)
+        #self.input_layout.addWidget(self.binaryBitSize_label, 6, 2, 1, 1)
+        #self.input_layout.addWidget(self.binaryBitSize_input, 7, 2, 1, 1)
 
-        self.input_layout.addWidget(self.add_btn, 6, 2, 1, 1)
+        self.input_layout.addWidget(self.add_btn, 5, 2, 1, 1)
 
         self.input_layout.addItem(QSpacerItem(0, 20), 7, 0, 1, 3)
         self.input_layout.addWidget(self.cancel_btn, 8, 1, 1, 1, alignment=Qt.AlignRight)
@@ -176,12 +181,12 @@ class IntSignalDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(400, 250)
+        self.input_frame.setFixedSize(400, 400)
         self.input_frame.setLayout(self.input_layout)
         
-        self.intSig_name_input.textChanged.connect(self.enable_ok_btn)
+        #self.intSig_name_input.textChanged.connect(self.enable_ok_btn)
         self.sig_type_combo.currentTextChanged.connect(self.sig_type_options)
-        self.CS_name_input.textChanged.connect(self.updateNS)
+        self.intSig_name_input.textChanged.connect(self.updateCSAndNS)
         self.sig_desc_input.setVisible(True)
         self.sig_desc_label.setVisible(True)
         self.stateNames_table.setVisible(False)
@@ -201,8 +206,21 @@ class IntSignalDialog(QDialog):
         self.sig_size_input.setText(intSig_data[2])
         self.sig_desc_input.setText(intSig_data[3])
 
+    def makeIdeal(self):
+        for i in range(self.stateNames_table.rowCount()):
+            print(i)
+            if self.stateNames_table.cellWidget(i, 3).checkState() == Qt.Checked:
+                self.all_stateNames.insert(0, self.all_stateNames[i])
+                self.all_stateNames.pop(i+1)
+        print(self.all_stateNames)
+    def get_stateTypes(self):
+        data = []
+        data = self.all_stateNames
+        return data
     def get_data(self):
         data = []
+        #if self.sig_type_combo.currentText() == "std_logic_vector state signals":
+
         intSignalDescription = self.sig_desc_input.text()
         if intSignalDescription == "":
             intSignalDescription = "to be completed"
@@ -210,6 +228,7 @@ class IntSignalDialog(QDialog):
         data.append(self.sig_type_combo.currentText())
         data.append(self.sig_size_input.text())
         data.append(intSignalDescription)
+
         self.cancelled = False
         self.close()
         return data
@@ -248,7 +267,7 @@ class IntSignalDialog(QDialog):
 
             row_position = self.stateNames_table.rowCount()
             self.stateNames_table.insertRow(row_position)
-            self.stateNames_table.setRowHeight(row_position, 3)
+            self.stateNames_table.setRowHeight(row_position, 1)
 
             self.stateNames_table.setItem(row_position, 0, QTableWidgetItem(stateName_data[0]))
             self.stateNames_table.setCellWidget(row_position, 1, edit_btn)
@@ -279,23 +298,25 @@ class IntSignalDialog(QDialog):
                 edit_btn.setFixedSize(35, 22)
                 edit_btn.clicked.connect(self.edit_stateName)
 
+                idle_tickbox = QCheckBox("Make Idle")
+                idle_tickbox.setStyleSheet(BLACK_COLOR)
+
                 self.all_stateNames.insert(row, stateName_data)
                 row_position = self.stateNames_table.rowCount()
                 self.stateNames_table.insertRow(row_position)
-                self.stateNames_table.setRowHeight(row_position, 3)
+                self.stateNames_table.setRowHeight(row_position, 1)
 
                 self.stateNames_table.setItem(row_position, 0, QTableWidgetItem(stateName_data[0]))
                 self.stateNames_table.setCellWidget(row_position, 1, edit_btn)
                 self.stateNames_table.setCellWidget(row_position, 2, delete_btn)
+                self.stateNames_table.setCellWidget(row_position, 3, idle_tickbox)
 
 
     def sig_type_options(self):
         if self.sig_type_combo.currentText() == "std_logic_vector":
-            self.intSig_name_label.setVisible(True)
-            self.intSig_name_input.setVisible(True)
             self.CS_name_label.setVisible(False)
             self.CS_name_input.setVisible(False)
-            self.CS_NS_help_label.setVisible(False)
+            #self.CS_NS_help_label.setVisible(False)
             self.NS_name_label.setVisible(False)
             self.NS_name_input.setVisible(False)
             self.sig_size_label.setVisible(True)
@@ -306,52 +327,40 @@ class IntSignalDialog(QDialog):
             self.add_btn.setVisible(False)
             self.csOnRstAssertion_label.setVisible(False)
             self.csOnRstAssertion_combo.setVisible(False)
-            self.binaryBitSize_label.setVisible(False)
-            self.binaryBitSize_input.setVisible(False)
 
         elif self.sig_type_combo.currentText() == "std_logic" :
-            self.intSig_name_label.setVisible(True)
-            self.intSig_name_input.setVisible(True)
             self.CS_name_label.setVisible(False)
             self.CS_name_input.setVisible(False)
-            self.CS_NS_help_label.setVisible(False)
+            #self.CS_NS_help_label.setVisible(False)
             self.NS_name_label.setVisible(False)
             self.NS_name_input.setVisible(False)
             self.stateNames_table.setVisible(False)
             self.add_btn.setVisible(False)
             self.csOnRstAssertion_label.setVisible(False)
             self.csOnRstAssertion_combo.setVisible(False)
-            self.binaryBitSize_label.setVisible(False)
-            self.binaryBitSize_input.setVisible(False)
             self.sig_size_label.setVisible(True)
             self.sig_size_input.setVisible(True)
             self.sig_size_input.setEnabled(False)
             self.sig_size_input.setText("1")
 
         elif self.sig_type_combo.currentText() == "Enumerated type state signals":
-            self.intSig_name_label.setVisible(False)
-            self.intSig_name_input.setVisible(False)
             self.CS_name_label.setVisible(True)
             self.CS_name_input.setVisible(True)
-            self.CS_NS_help_label.setVisible(True)
+            #self.CS_NS_help_label.setVisible(True)
             self.NS_name_label.setVisible(True)
             self.NS_name_input.setVisible(True)
             self.stateNames_table.setVisible(True)
             self.add_btn.setVisible(True)
             self.csOnRstAssertion_label.setVisible(False)
             self.csOnRstAssertion_combo.setVisible(False)
-            self.binaryBitSize_label.setVisible(False)
-            self.binaryBitSize_input.setVisible(False)
             self.sig_size_label.setVisible(False)
             self.sig_size_input.setVisible(False)
             self.sig_size_input.setEnabled(False)
 
         elif self.sig_type_combo.currentText() == "std_logic_vector state signals":
-            self.intSig_name_label.setVisible(False)
-            self.intSig_name_input.setVisible(False)
             self.CS_name_label.setVisible(True)
             self.CS_name_input.setVisible(True)
-            self.CS_NS_help_label.setVisible(True)
+            #self.CS_NS_help_label.setVisible(True)
             self.NS_name_label.setVisible(True)
             self.NS_name_input.setVisible(True)
             self.add_btn.setVisible(False)
@@ -359,11 +368,10 @@ class IntSignalDialog(QDialog):
             self.add_btn.setVisible(False)
             self.csOnRstAssertion_label.setVisible(True)
             self.csOnRstAssertion_combo.setVisible(True)
-            self.binaryBitSize_label.setVisible(True)
-            self.binaryBitSize_input.setVisible(True)
-            self.sig_size_label.setVisible(False)
-            self.sig_size_input.setVisible(False)
-            self.sig_size_input.setEnabled(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
 
     def delete_clicked(self):
         button = self.sender()
@@ -372,5 +380,6 @@ class IntSignalDialog(QDialog):
             self.stateNames_table.removeRow(row)
             self.all_stateNames.pop(row)
 
-    def updateNS(self):
-        self.NS_name_input.setText(self.CS_name_input.text())
+    def updateCSAndNS(self):
+        self.NS_name_input.setText("NS"+self.intSig_name_input.text())
+        self.CS_name_input.setText("CS"+self.intSig_name_input.text())

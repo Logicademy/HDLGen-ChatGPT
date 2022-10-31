@@ -26,6 +26,8 @@ class IOPorts(QWidget):
         bold_font.setBold(True)
 
         self.all_signals = []
+        self.all_signals_names = []
+        self.clkAndRst = []
 
         self.port_heading_layout = QHBoxLayout()
         self.port_action_layout = QVBoxLayout()
@@ -158,6 +160,61 @@ class IOPorts(QWidget):
         seq_dialog = seqDialog()
         seq_dialog.exec_()
 
+        if not seq_dialog.cancelled:
+            if self.seqSytle_editbtn.text() == "Edit clk/rst":
+                print("test")
+                self.clkAndRst = []
+            print(self.all_signals_names)
+            if "clk" in self.all_signals_names:
+                print("here in clk")
+                self.port_table.removeRow(self.all_signals_names.index("clk"))
+                self.all_signals.pop(self.all_signals_names.index("clk"))
+                self.all_signals_names.pop(self.all_signals_names.index("clk"))
+            if "rst" in self.all_signals_names:
+                print("here")
+                self.port_table.removeRow(self.all_signals_names.index("rst"))
+                self.all_signals.pop(self.all_signals_names.index("rst"))
+                self.all_signals_names.pop(self.all_signals_names.index("rst"))
+            clkAndRst_data = seq_dialog.get_clkAndRst()
+            self.clkAndRst.append(clkAndRst_data)
+            clk_details = ["clk","Input","std_logic","1","clk signal"]
+            self.all_signals.append(clk_details)
+            self.all_signals_names.append(("clk"))
+            row_position = self.port_table.rowCount()
+            delete_btn = QPushButton()
+            delete_btn.setIcon(qta.icon("mdi.delete"))
+            delete_btn.setFixedSize(35, 22)
+            delete_btn.clicked.connect(self.delete_clicked)
+
+            edit_btn = QPushButton()
+            edit_btn.setIcon(qta.icon("mdi.pencil"))
+            edit_btn.setFixedSize(35, 22)
+            edit_btn.clicked.connect(self.edit_io_port)
+
+            self.port_table.insertRow(row_position)
+            self.port_table.setRowHeight(row_position, 5)
+
+            self.port_table.setItem(row_position, 0, QTableWidgetItem("clk"))
+            self.port_table.setItem(row_position, 1, QTableWidgetItem("Input"))
+            self.port_table.setItem(row_position, 2, QTableWidgetItem("std_logic"))
+            self.port_table.setItem(row_position, 3, QTableWidgetItem("1"))
+
+            if clkAndRst_data[1] == "Yes":
+                row_position = self.port_table.rowCount()
+                self.port_table.insertRow(row_position)
+                self.port_table.setRowHeight(row_position, 5)
+
+                self.port_table.setItem(row_position, 0, QTableWidgetItem("rst"))
+                self.port_table.setItem(row_position, 1, QTableWidgetItem("Input"))
+                self.port_table.setItem(row_position, 2, QTableWidgetItem("std_logic"))
+                self.port_table.setItem(row_position, 3, QTableWidgetItem("1"))
+                rst_details = ["rst", "Input", "std_logic", "1", "rst signal"]
+                self.all_signals.append(rst_details)
+                self.all_signals_names.append(("rst"))
+            self.update_clk_rst_btn()
+
+
+
     def add_signal(self):
 
         io_dialog = IOPortDialog("add")
@@ -197,14 +254,24 @@ class IOPorts(QWidget):
             self.port_table.removeRow(row)
             self.all_signals.pop(row)
     def checkBox_clicked(self):
-        print("checkBox clicked")
         button = self.sender()
         if button.isChecked():
             self.seqSytle_editbtn.setVisible(True)
         else:
+            self.seqSytle_editbtn.setText("Set up clk/rst")
+            if "clk" in self.all_signals_names:
+                self.port_table.removeRow(self.all_signals_names.index("clk"))
+                self.all_signals.pop(self.all_signals_names.index("clk"))
+                self.all_signals_names.pop(self.all_signals_names.index("clk"))
+            if "rst" in self.all_signals_names:
+                self.port_table.removeRow(self.all_signals_names.index("rst"))
+                self.all_signals.pop(self.all_signals_names.index("rst"))
+                self.all_signals_names.pop(self.all_signals_names.index("rst"))
             self.seqSytle_editbtn.setVisible(False)
-    def edit_io_port(self):
+            self.clkAndRst = []
 
+
+    def edit_io_port(self):
         button = self.sender()
         if button:
             row = self.port_table.indexAt(button.pos()).row()
@@ -249,9 +316,13 @@ class IOPorts(QWidget):
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement
+        new_Clk_rst = root.createElement('clkAndRst')
+        clk_and_rst = root.createElement('clkAndRst')
+
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
         new_io_ports = root.createElement('entityIOPorts')
+
         for signal in self.all_signals:
             signal_node = root.createElement('signal')
 
@@ -278,6 +349,25 @@ class IOPorts(QWidget):
 
         hdlDesign[0].replaceChild(new_io_ports, hdlDesign[0].getElementsByTagName('entityIOPorts')[0])
 
+        for clkRst in self.clkAndRst:
+            activeClkEdge_node = root.createElement('activeClkEdge')
+            activeClkEdge_node.appendChild(root.createTextNode(str(clkRst[0])))
+            clk_and_rst.appendChild(activeClkEdge_node)
+
+            rst_node = root.createElement('rst')
+            rst_node.appendChild(root.createTextNode(str(clkRst[1])))
+            clk_and_rst.appendChild(rst_node)
+
+            if len(clkRst) == 4:
+                rstType_node = root.createElement('RstType')
+                rstType_node.appendChild(root.createTextNode(str(clkRst[2])))
+                clk_and_rst.appendChild(rstType_node)
+
+                activeRstLvl_node = root.createElement('ActiveRstLvl')
+                activeRstLvl_node.appendChild(root.createTextNode(str(clkRst[3])))
+                clk_and_rst.appendChild(activeRstLvl_node)
+            new_Clk_rst.appendChild(clk_and_rst)
+        hdlDesign[0].replaceChild(new_Clk_rst, hdlDesign[0].getElementsByTagName('clkAndRst')[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
         xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
@@ -295,17 +385,17 @@ class IOPorts(QWidget):
 
         io_ports = hdlDesign[0].getElementsByTagName('entityIOPorts')
         signal_nodes = io_ports[0].getElementsByTagName('signal')
-
+        clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
+        if len(clkAndRst) != 0:
+            self.seqSytle_checkBox.setCheckState(Qt.Checked)
+            self.seqSytle_editbtn.setVisible(True)
         for i in range(0, len(signal_nodes)):
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
             mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
             port = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
             type = port[0:port.index("(")] if port.endswith(")") else port
-
+            self.all_signals_names.append(name)
             desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            #if len(signal_nodes[i].getElementsByTagName('description')) != 1:
-             #   desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            #else:
             if desc == "":
                 desc = "To be Completed"
 

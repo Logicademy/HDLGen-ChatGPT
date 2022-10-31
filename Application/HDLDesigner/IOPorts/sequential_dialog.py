@@ -111,67 +111,32 @@ class seqDialog(QDialog):
         self.input_frame.setLayout(self.input_layout)
 
         #self.enable_size_option
-        self.ok_btn.clicked.connect(self.save)
+        self.ok_btn.clicked.connect(self.get_clkAndRst)
         self.cancel_btn.clicked.connect(self.cancel_selected)
         self.rst_input.currentTextChanged.connect(self.rst_options)
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
-    def save(self):
-        print("changed")
-
-    def save_signals(self):
-        xml_data_path = ProjectManager.get_xml_data_path()
-        root = minidom.parse(xml_data_path)
-        HDLGen = root.documentElement
-        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-
-        new_io_ports = root.createElement('entityIOPorts')
-        for signal in self.all_signals:
-            signal_node = root.createElement('signal')
-
-            name_node = root.createElement('name')
-            name_node.appendChild(root.createTextNode(signal[0]))
-            signal_node.appendChild(name_node)
-
-            mode_node = root.createElement('mode')
-            sig_mode = "in" if signal[1] == "Input" else "out"
-            mode_node.appendChild(root.createTextNode(sig_mode))
-            signal_node.appendChild(mode_node)
-
-            type_node = root.createElement('type')
-            sig_size = ("(" + str(int(signal[3])-1) + " downto 0)") if signal[2] == "std_logic_vector" else ""
-            sig_type = signal[2] + sig_size
-            type_node.appendChild(root.createTextNode(sig_type))
-            signal_node.appendChild(type_node)
-
-            desc_node = root.createElement('description')
-            desc_node.appendChild(root.createTextNode(signal[4]))
-            signal_node.appendChild(desc_node)
-
-            new_io_ports.appendChild(signal_node)
-
-        hdlDesign[0].replaceChild(new_io_ports, hdlDesign[0].getElementsByTagName('entityIOPorts')[0])
-
-        # converting the doc into a string in xml format
-        xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
-        # Writing xml file
-        with open(xml_data_path, "w") as f:
-            f.write(xml_str)
-
-        print("Successfully saved all the signals!")
-
-    def load_signal_data(self, signal_data):
-        self.sig_mode_input.setCurrentText(signal_data[0])
-        self.sig_type_input.setCurrentText(signal_data[1])
-        self.sig_size_input.setText(signal_data[2])
-        self.sig_description_input.setText(signal_data[3])
-
+    def get_clkAndRst(self):
+        if self.rst_input.currentText() == "Yes":
+            clkAndRst_details = [self.activeClkEdge_input.currentText(),
+                                   self.rst_input.currentText(),
+                                   self.rstType_input.currentText(),
+                                   self.activeRstLvlEq1_input.currentText()
+                                ]
+        else:
+            clkAndRst_details = [self.activeClkEdge_input.currentText(),
+                                 self.rst_input.currentText()
+                                 ]
+        self.cancelled = False
+        self.close()
+        return clkAndRst_details
     def cancel_selected(self):
         self.cancelled = True
         self.close()
+
+
 
     def rst_options(self):
         if self.rst_input.currentText() == "Yes":

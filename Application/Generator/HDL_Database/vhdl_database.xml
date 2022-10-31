@@ -26,7 +26,13 @@
 
     <intSigDeclaration>signal $int_sig_name : $int_sig_type;</intSigDeclaration>
 
+    <stateNamesDeclarations>type stateType is ($stateNamesList);</stateNamesDeclarations>
+
     <process>$process_label: process($input_signals)&#10;begin&#10;&#x9;-- Complete the process&#10;$default_assignments&#10;end process;</process>
+    <clkIfStatement>if $edge(clk) then&#10;$default_assignments&#10;&#x9;end if;</clkIfStatement>
+    <ifStatement>if $assignment &lt;= '$value' then&#10;$default_assignments&#10;&#x9;$else &#x9;end if;</ifStatement>
+    <elseStatement>else &#10;&#x9;$default_assignments&#10;</elseStatement>
+    <elsifStatement>elsif $edge(clk) then&#10;&#x9;$default_assignments&#10;</elsifStatement>
 
     <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
 

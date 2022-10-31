@@ -79,6 +79,7 @@ class Generator(QWidget):
         io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
         gen_entity = ""
 
+        stateReg_i = False
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
@@ -115,6 +116,16 @@ class Generator(QWidget):
             gen_int_sig = "-- Internal signal declarations"
             int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
             if int_sig_node[0].firstChild is not None:
+                stateTypesList = ""
+                for stateType in int_sig_node[0].getElementsByTagName("stateTypes"):
+                    stateTypesList += stateType.firstChild.data +", "
+                stateTypesList = stateTypesList[:-2]
+
+                print(stateTypesList)
+                stateType_syntax = vhdl_root.getElementsByTagName("stateNamesDeclarations")[0].firstChild.data
+                stateType_syntax = stateType_syntax.replace("$stateNamesList",stateTypesList)
+                gen_int_sig += "\n" + stateType_syntax
+                stateReg_i = True
                 for signal in int_sig_node[0].getElementsByTagName("signal"):
                     int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name",
@@ -127,7 +138,9 @@ class Generator(QWidget):
                     gen_int_sig += "\n" + int_sig_syntax
                     gen_internal_signal_result += "-- " + signal.getElementsByTagName('name')[
                                 0].firstChild.data + "\t" +int_signal_description + "\n"
+
                 gen_int_sig.rstrip()
+
             else:
                 gen_internal_signal_result = "-- None\n"
 
@@ -188,7 +201,7 @@ class Generator(QWidget):
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
-
+                clkAndRst = hdl_design[0].getElementsByTagName('clkAndRst')
                 if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
                     child = arch_node[0].firstChild
@@ -213,17 +226,62 @@ class Generator(QWidget):
                             gen_in_sig = gen_in_sig[:-1]
 
                             process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
-
-                            gen_defaults = ""
+                            gen_defaults = "\t"
+                            clkgen_defaults = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
                                 assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                 signals = default_out.firstChild.data.split(",")
+                                #stateNames = stateTypesList.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
-                                assign_syntax = assign_syntax.replace("$value", signals[1])
+                                value=signals[1]
+                                if value == "Idle":
+                                    stateNames = stateTypesList.split(",")
+                                    value = stateNames[0]
+                                elif value == "all zeros":
+                                    value = "(others => '0')"
+                                elif value == "all ones":
+                                    value = "(others => '1')"
 
-                                gen_defaults += "\t" + assign_syntax + "\n"
-
-                            process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
+                                assign_syntax = assign_syntax.replace("$value", value)
+                                gen_defaults += "\t" + assign_syntax + "\n\t"
+                                if len(signals) == 3:
+                                    clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                    clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
+                                    clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
+                                    clkgen_defaults += "\t" + clkAssign_syntax + "\n\t"
+                            if gen_defaults != "":
+                                if clkgen_defaults != "":
+                                    for clkRst in clkAndRst[0].getElementsByTagName("clkAndRst"):
+                                        clkEdge = "rising_edge"
+                                        if clkRst.getElementsByTagName('activeClkEdge')[0].firstChild.data == "H-L":
+                                            clkEdge = "falling_edge"
+                                        clkif_syntax = vhdl_root.getElementsByTagName("clkIfStatement")[0].firstChild.data
+                                        clkif_syntax = clkif_syntax.replace("$edge", clkEdge)
+                                        if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
+                                            if_syntax = vhdl_root.getElementsByTagName("ifStatement")[0].firstChild.data
+                                            if_syntax = if_syntax.replace("$assignment", "rst")
+                                            if_syntax = if_syntax.replace("$value", clkRst.getElementsByTagName('ActiveRstLvl')[0].firstChild.data)
+                                            if_syntax = if_syntax.replace("$default_assignments", gen_defaults )
+                                            gen_defaults = "\t" + if_syntax + "\n"
+                                            if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
+                                                elsif_syntax = vhdl_root.getElementsByTagName("elsifStatement")[0].firstChild.data
+                                                elsif_syntax = elsif_syntax.replace("$edge", clkEdge)
+                                                elsif_syntax = elsif_syntax.replace("$default_assignments",clkgen_defaults)
+                                                if_syntax = if_syntax.replace("$else", elsif_syntax)
+                                                clkgen_defaults = "\t" + if_syntax + "\n"
+                                            else:
+                                                else_syntax = vhdl_root.getElementsByTagName("elseStatement")[0].firstChild.data
+                                                else_syntax = else_syntax.replace("$default_assignments", clkgen_defaults )
+                                                if_syntax = if_syntax.replace("$else", else_syntax)
+                                                clkgen_defaults = "\t" + if_syntax + "\n"
+                                                clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
+                                                clkgen_defaults = "\t" + clkif_syntax + "\n"
+                                        else:
+                                            clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
+                                            clkgen_defaults = "\t" + clkif_syntax + "\n"
+                                    process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
+                                else:
+                                    process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
                             gen_process += process_syntax + "\n\n"
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
@@ -246,8 +304,8 @@ class Generator(QWidget):
                             conc_syntax = conc_syntax.replace("$statement", gen_stmts)
                             gen_process += conc_syntax + "\n"
 
-                        child = next
 
+                        child = next
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
                     arch_name_node = arch_node[0].getElementsByTagName("archName")
 
