@@ -4,7 +4,7 @@
 1. Install Python v3.9
 2. Clone the repository
 ``
-git clone https://github.com/abishek-bupathi/HDLGen.git
+git clone https://github.com/JP-Byrne/HDLGen.git
 ``
 3. Open the project in IntelliJ PyCharm or VSCode
 4. Install required libraries
