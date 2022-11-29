@@ -123,7 +123,7 @@ class Architecture(QWidget):
         self.proc_table.setShowGrid(False)
         self.proc_table.setColumnWidth(0, 100)
         self.proc_table.setColumnWidth(1, 75)
-        self.proc_table.setColumnWidth(2, 108)
+        self.proc_table.setColumnWidth(2, 75)
         self.proc_table.setColumnWidth(3, 1)
         self.proc_table.setColumnWidth(4, 1)
         self.proc_table.horizontalScrollMode()
@@ -143,12 +143,12 @@ class Architecture(QWidget):
         self.list_frame.setLayout(self.list_layout)
 
         self.arch_action_layout.addItem(QSpacerItem(10, 5))
-        self.arch_action_layout.addWidget(self.list_frame)
+        self.arch_action_layout.addWidget(self.list_frame, alignment=Qt.AlignCenter)
         self.arch_action_layout.addItem(QSpacerItem(10, 15))
         self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
         self.save_btn.clicked.connect(self.save_data)
 
-        self.mainLayout.addWidget(self.main_frame)
+        self.mainLayout.addWidget(self.main_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
@@ -267,7 +267,7 @@ class Architecture(QWidget):
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
 
     def edit_concurrentstmt(self):
-
+        print("edit conc")
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
@@ -468,7 +468,7 @@ class Architecture(QWidget):
                     edit_btn = QPushButton()
                     edit_btn.setIcon(qta.icon("mdi.pencil"))
                     edit_btn.setFixedSize(35, 22)
-                    edit_btn.clicked.connect(self.edit_proc)
+                    edit_btn.clicked.connect(self.edit_concurrentstmt)
 
                     row_position = self.proc_table.rowCount()
                     self.proc_table.insertRow(row_position)

@@ -80,7 +80,7 @@ class IOPorts(QWidget):
 
 
         self.setup_ui()
-
+        self.proj_dir_value = proj_dir
         if proj_dir != None:
             self.load_data(proj_dir)
 
@@ -96,17 +96,17 @@ class IOPorts(QWidget):
         self.seqSytle_editbtn.clicked.connect(self.edit_RTL)
         self.add_btn.clicked.connect(self.add_signal)
 
-        self.name_label.setFixedWidth(95)
-        self.mode_label.setFixedWidth(30)
-        self.type_label.setFixedWidth(30)
-        self.size_label.setFixedWidth(30)
+        #self.name_label.setFixedWidth(95)
+        self.name_label.setFixedWidth(50)
+        self.mode_label.setFixedWidth(50)
+        self.type_label.setFixedWidth(50)
+        self.size_label.setFixedWidth(40)
 
         self.port_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.port_list_title_layout.addWidget(self.mode_label, alignment=Qt.AlignLeft)
         self.port_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addSpacerItem(QSpacerItem(45, 1))
         self.port_list_title_layout.addWidget(self.size_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addSpacerItem(QSpacerItem(70, 1))
+        self.port_list_title_layout.addSpacerItem(QSpacerItem(80, 1))
 
         self.port_list_layout.setAlignment(Qt.AlignTop)
         self.port_list_layout.addLayout(self.port_list_title_layout)
@@ -114,12 +114,14 @@ class IOPorts(QWidget):
 
         self.port_table.setColumnCount(6)
         self.port_table.setShowGrid(False)
-        self.port_table.setColumnWidth(0, 100)
+        #self.port_table.setColumnWidth(0, 100)
+        self.port_table.setColumnWidth(0, 65)
         self.port_table.setColumnWidth(1, 50)
-        self.port_table.setColumnWidth(2, 95)
-        self.port_table.setColumnWidth(3, 1)
-        self.port_table.setColumnWidth(4, 1)
-        self.port_table.setColumnWidth(5, 1)
+        #self.port_table.setColumnWidth(2, 95)
+        self.port_table.setColumnWidth(2, 100)
+        self.port_table.setColumnWidth(3, 10)
+        self.port_table.setColumnWidth(4, 10)
+        self.port_table.setColumnWidth(5, 10)
         self.port_table.horizontalScrollMode()
         self.port_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.port_table.horizontalScrollBar().hide()
@@ -133,7 +135,7 @@ class IOPorts(QWidget):
 
         self.port_list_frame.setFrameShape(QFrame.StyledPanel)
         self.port_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.port_list_frame.setFixedSize(380, 295)
+        self.port_list_frame.setFixedSize(380, 300)
         self.port_list_frame.setLayout(self.port_list_layout)
 
         self.port_action_layout.addLayout(self.port_heading_layout)
@@ -146,7 +148,7 @@ class IOPorts(QWidget):
 
         self.port_action_frame.setFrameShape(QFrame.StyledPanel)
         self.port_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.port_action_frame.setFixedSize(400, 400)
+        self.port_action_frame.setFixedSize(410, 400)
         self.port_action_frame.setLayout(self.port_action_layout)
 
 
@@ -157,13 +159,14 @@ class IOPorts(QWidget):
     def update_clk_rst_btn(self):
         self.seqSytle_editbtn.setText("Edit clk/rst")
     def edit_RTL(self):
-        seq_dialog = seqDialog()
+        seq_dialog = seqDialog(self.proj_dir_value)
         seq_dialog.exec_()
 
         if not seq_dialog.cancelled:
+            self.clkAndRst = []
             if self.seqSytle_editbtn.text() == "Edit clk/rst":
-                print("test")
-                self.clkAndRst = []
+                #self.clkAndRst = []
+                print(self.clkAndRst)
             print(self.all_signals_names)
             if "clk" in self.all_signals_names:
                 print("here in clk")
@@ -256,6 +259,7 @@ class IOPorts(QWidget):
     def checkBox_clicked(self):
         button = self.sender()
         if button.isChecked():
+            self.clkAndRst = []
             self.seqSytle_editbtn.setVisible(True)
         else:
             self.seqSytle_editbtn.setText("Set up clk/rst")
@@ -268,7 +272,7 @@ class IOPorts(QWidget):
                 self.all_signals.pop(self.all_signals_names.index("rst"))
                 self.all_signals_names.pop(self.all_signals_names.index("rst"))
             self.seqSytle_editbtn.setVisible(False)
-            self.clkAndRst = []
+            #self.clkAndRst = []
 
 
     def edit_io_port(self):
@@ -348,8 +352,9 @@ class IOPorts(QWidget):
             new_io_ports.appendChild(signal_node)
 
         hdlDesign[0].replaceChild(new_io_ports, hdlDesign[0].getElementsByTagName('entityIOPorts')[0])
-
+        print(self.clkAndRst)
         for clkRst in self.clkAndRst:
+            print("saving inclkAndRst")
             activeClkEdge_node = root.createElement('activeClkEdge')
             activeClkEdge_node.appendChild(root.createTextNode(str(clkRst[0])))
             clk_and_rst.appendChild(activeClkEdge_node)
@@ -367,6 +372,7 @@ class IOPorts(QWidget):
                 activeRstLvl_node.appendChild(root.createTextNode(str(clkRst[3])))
                 clk_and_rst.appendChild(activeRstLvl_node)
             new_Clk_rst.appendChild(clk_and_rst)
+        print("replacing")
         hdlDesign[0].replaceChild(new_Clk_rst, hdlDesign[0].getElementsByTagName('clkAndRst')[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
@@ -386,9 +392,23 @@ class IOPorts(QWidget):
         io_ports = hdlDesign[0].getElementsByTagName('entityIOPorts')
         signal_nodes = io_ports[0].getElementsByTagName('signal')
         clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
-        if len(clkAndRst) != 0:
+        self.clkAndRst = []
+        if len(clkAndRst) != 1:
+            self.update_clk_rst_btn()
             self.seqSytle_checkBox.setCheckState(Qt.Checked)
             self.seqSytle_editbtn.setVisible(True)
+            for i in range(0, len(clkAndRst)):
+                if clkAndRst[i].getElementsByTagName('rst')[0].firstChild.data == "Yes":
+                    clkAndRst_details = [clkAndRst[i].getElementsByTagName('activeClkEdge')[0].firstChild.data,
+                                         clkAndRst[i].getElementsByTagName('rst')[0].firstChild.data,
+                                         clkAndRst[i].getElementsByTagName('RstType')[0].firstChild.data,
+                                         clkAndRst[i].getElementsByTagName('ActiveRstLvl')[0].firstChild.data
+                                         ]
+                else:
+                    clkAndRst_details = [clkAndRst[i].getElementsByTagName('activeClkEdge')[0].firstChild.data,
+                                         clkAndRst[i].getElementsByTagName('rst')[0].firstChild.data
+                                         ]
+            self.clkAndRst.append(clkAndRst_details)
         for i in range(0, len(signal_nodes)):
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
             mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data

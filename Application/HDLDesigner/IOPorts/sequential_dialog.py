@@ -15,7 +15,7 @@ WHITE_COLOR = "color: white"
 
 class seqDialog(QDialog):
 
-    def __init__(self, signal_data = None):
+    def __init__(self, proj_dir):#signal_data = None):
         super().__init__()
 
         self.input_layout = QGridLayout()
@@ -87,9 +87,8 @@ class seqDialog(QDialog):
 
         self.setup_ui()
 
-        if signal_data != None:
-            self.load_signal_data(signal_data)
-
+        if proj_dir != None:
+            self.load_data(proj_dir)
     def setup_ui(self):
         self.input_layout.addWidget(self.activeClkEdge_label, 0, 0, 1, 1, alignment=Qt.AlignTop)
         self.input_layout.addWidget(self.activeClkEdge_input, 1, 0, 1, 1, alignment=Qt.AlignTop)
@@ -157,3 +156,23 @@ class seqDialog(QDialog):
         else:
             self.sig_size_input.setEnabled(False)
             self.sig_size_input.setText("1")
+
+    def load_data(self, proj_dir):
+
+        root = minidom.parse(proj_dir[0])
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+
+        clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
+        if clkAndRst[0].firstChild is not None:
+            for i in range(0, len(clkAndRst)):
+                print("loading seq")
+                clkEdgeValue = clkAndRst[i].getElementsByTagName('activeClkEdge')[0].firstChild.data
+                rstValue = clkAndRst[i].getElementsByTagName('rst')[0].firstChild.data
+                self.activeClkEdge_input.setCurrentText(clkEdgeValue)
+                self.rst_input.setCurrentText(rstValue)
+                if rstValue == "Yes":
+                    rstTypeValue = clkAndRst[i].getElementsByTagName('RstType')[0].firstChild.data
+                    rstLvlValue = clkAndRst[i].getElementsByTagName('ActiveRstLvl')[0].firstChild.data
+                    self.rstType_input.setCurrentText(rstTypeValue)
+                    self.activeRstLvlEq1_input.setCurrentText(rstLvlValue)

@@ -8,7 +8,7 @@
 	<projectManager>
 		<settings>
 			<name>mux21_1</name>
-			<location>C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects</location>
+			<location>C:/Users/johnp/Documents/5thYear/mastersProject/HDLGen/User_Projects</location>
 		</settings>
 		<EDA>
 			<tool>
@@ -26,35 +26,49 @@
 	<hdlDesign>
 		<header>
 			<compName>mux21_1</compName>
-			<title>To be Completedkhlerjkllkerj</title>
-			<description>To be Completedoed&amp;#10;dhildclkh</description>
-			<authors>jp</authors>
-			<company>ug</company>
-			<email>lkhlklk</email>
-			<date>04/10/2022</date>
+			<title>2-to-1 mux, 1-bit data</title>
+			<description>sel is datapath control signal&amp;#10;muxOut = muxIn0 when sel  = 0&amp;#10;muxOut = muxIn1 when sel  = 1 </description>
+			<authors>JP Byrne</authors>
+			<company>UG</company>
+			<email>j.byrne34@nuigalway.ie</email>
+			<date>27/11/2022</date>
 		</header>
 		<clkAndRst/>
 		<entityIOPorts>
 			<signal>
-				<name>select</name>
+				<name>sel</name>
 				<mode>in</mode>
 				<type>std_logic</type>
-				<description>jkrlkj</description>
+				<description>datapath control signal</description>
 			</signal>
 			<signal>
-				<name>jkfeckjl</name>
+				<name>muxIn1</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>datapath 1 input signal</description>
+			</signal>
+			<signal>
+				<name>muxIn0</name>
+				<mode>in</mode>
+				<type>std_logic</type>
+				<description>datapath 0 input signal</description>
+			</signal>
+			<signal>
+				<name>muxOut</name>
 				<mode>out</mode>
 				<type>std_logic</type>
-				<description>to be completed</description>
+				<description>data out signal</description>
 			</signal>
 		</entityIOPorts>
 		<internalSignals/>
 		<architecture>
 			<archName>Combinational</archName>
 			<process>
-				<label>jkrfj</label>
-				<inputSignal>select</inputSignal>
-				<defaultOutput>jkfeckjl,select</defaultOutput>
+				<label>muxOut_p</label>
+				<inputSignal>sel</inputSignal>
+				<inputSignal>muxIn1</inputSignal>
+				<inputSignal>muxIn0</inputSignal>
+				<defaultOutput>muxOut,muxIn1</defaultOutput>
 			</process>
 		</architecture>
 	</hdlDesign>

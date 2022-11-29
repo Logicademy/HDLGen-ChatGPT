@@ -39,12 +39,16 @@ class ConcurrentStmtDialog(QDialog):
         self.out_sig_label = QLabel("Output Signal")
         self.out_sig_label.setStyleSheet(WHITE_COLOR)
         self.out_sig_label.setFixedWidth(100)
-        self.val_label = QLabel("Value")
+        self.options_sig_label = QLabel("Options")
+        self.options_sig_label.setStyleSheet(WHITE_COLOR)
+        self.options_sig_label.setFixedWidth(100)
+        self.val_label = QLabel("Binary Value")
         self.val_label.setStyleSheet(WHITE_COLOR)
         self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in the IO Ports")
         self.out_sig_empty_info.setFixedSize(400, 300)
 
         self.out_signals_combo = QComboBox()
+        self.options_signals_combo = QComboBox()
         self.out_val_input = QLineEdit()
 
         self.out_sig_layout = QHBoxLayout()
@@ -78,15 +82,17 @@ class ConcurrentStmtDialog(QDialog):
 
     def setup_ui(self):
 
-        self.input_layout.addWidget(self.conc_name_label, 0, 0, 1, 1)
-        self.input_layout.addWidget(self.conc_name_input, 1, 0, 2, 5)
-        self.input_layout.addWidget(self.out_sig_label, 3, 0, 1, 1)
-        self.input_layout.addWidget(self.out_signals_combo, 4, 0, 1, 1)
-        self.input_layout.addWidget(self.val_label, 3, 1, 1, 1)
-        self.input_layout.addWidget(self.out_val_input, 4, 1, 1, 4)
+        self.input_layout.addWidget(self.conc_name_label, 0, 0, 1, 4)
+        self.input_layout.addWidget(self.conc_name_input, 1, 0, 2, 4)
+        self.input_layout.addWidget(self.out_sig_label, 3, 0, 1, 2)
+        self.input_layout.addWidget(self.out_signals_combo, 4, 0, 1, 2)
+        self.input_layout.addWidget(self.options_sig_label,3,2,1,1)
+        self.input_layout.addWidget(self.options_signals_combo, 4, 2, 1, 1)
+        self.input_layout.addWidget(self.val_label, 3, 3, 1, 1)
+        self.input_layout.addWidget(self.out_val_input, 4, 3, 1, 1)
         self.input_layout.addItem(QSpacerItem(0, 10), 5, 0, 1, 3)
-        self.input_layout.addWidget(self.cancel_btn, 6, 3, 1, 1, alignment=Qt.AlignRight)
-        self.input_layout.addWidget(self.ok_btn, 6, 4, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.cancel_btn, 6, 2, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.ok_btn, 6, 3, 1, 1, alignment=Qt.AlignRight)
 
         self.conc_name_input.textChanged.connect(self.enable_ok_btn);
         self.input_frame.setFrameShape(QFrame.StyledPanel)
@@ -94,7 +100,7 @@ class ConcurrentStmtDialog(QDialog):
         self.input_frame.setContentsMargins(10, 10, 10, 10)
         self.input_frame.setFixedSize(400, 175)
         self.input_frame.setLayout(self.input_layout)
-
+        self.out_signals_combo.currentIndexChanged.connect(self.setName)
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
@@ -123,6 +129,8 @@ class ConcurrentStmtDialog(QDialog):
 
                     if mode == "out":
                         self.output_signals.append(name)
+                    else:
+                        self.input_signals.append(name)
 
                 for i in range(0, len(intSignal_nodes)):
                     internal_signal = intSignal_nodes[i].getElementsByTagName('name')[0].firstChild.data
@@ -131,8 +139,12 @@ class ConcurrentStmtDialog(QDialog):
                 if len(self.output_signals) != 0 or len(self.internal_signals) != 0:
 
                     self.output_signals.insert(0, "Please select")
-                    self.out_signals_combo.addItems(self.output_signals + self.internal_signals)
+                    self.out_signals_combo.addItems(self.output_signals)
                     self.output_signals.pop(0)
+
+                    self.options_signals_combo.addItem("Custom")
+                    self.options_signals_combo.addItems(self.internal_signals + self.input_signals)
+                    self.options_signals_combo.currentTextChanged.connect(self.disable_custom_input)
 
                 else:
                     self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
@@ -149,7 +161,12 @@ class ConcurrentStmtDialog(QDialog):
             out_sig = temp[0]
             out_val = temp[1]
             self.out_signals_combo.setCurrentText(out_sig)
-            self.out_val_input.setText(out_val)
+            if out_val not in self.input_signals and  out_val not in self.internal_signals:
+                self.out_val_input.setText(out_val)
+                self.options_signals_combo.setCurrentText("Custom")
+            else:
+                self.options_signals_combo.setCurrentText(out_val)
+                self.out_val_input.setEnabled(False)
 
 
     def get_data(self):
@@ -159,7 +176,10 @@ class ConcurrentStmtDialog(QDialog):
 
         if (self.out_signals_combo.currentText() != "Please select"):
             output = self.out_signals_combo.currentText()
-            value = self.out_val_input.text()
+            if self.options_signals_combo.currentText() == "Custom":
+                value = self.out_val_input.text()
+            else:
+                value = self.options_signals_combo.currentText()
             out_sig.append(output + "," + value)
 
         data.append(out_sig)
@@ -171,9 +191,23 @@ class ConcurrentStmtDialog(QDialog):
     def cancel_selected(self):
         self.cancelled = True
         self.close()
-
+    def setName(self):
+        self.conc_name_input.setText("asgn_")
+        if self.out_signals_combo.currentText() != "Please select":
+            self.conc_name_input.setText("asgn_"+self.out_signals_combo.currentText())
     def enable_ok_btn(self):
         if self.conc_name_input.text() != "":
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)
+
+    def disable_custom_input(self):
+        combo = self.sender()
+        if combo:
+            if combo.currentText() == "Custom":
+                self.out_val_input.setEnabled(True)
+                self.out_val_input.setPlaceholderText("Eg. 1")
+            else:
+                self.out_val_input.clear()
+                self.out_val_input.setPlaceholderText("")
+                self.out_val_input.setEnabled(False)
