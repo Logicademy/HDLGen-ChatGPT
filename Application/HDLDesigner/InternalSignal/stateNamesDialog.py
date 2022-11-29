@@ -81,12 +81,13 @@ class state_Name_Dialog(QDialog):
 
 
     def load_sig_data(self, stateName_data):
-        self.state_name_input.setText(stateName_data[0])
+        self.state_name_input.setText(stateName_data)
 
     def get_data(self):
-        data = []
+        #data = []
         state_name = self.state_name_input.text()
-        data.append(state_name)
+        data = state_name
+        #data.append(state_name)
         self.cancelled = False
         self.close()
         return data

@@ -68,7 +68,7 @@ class Generator(QWidget):
         vhdl_root = vhdl_database.documentElement
 
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
-
+        stateTypesList = ""
         entity_name = ""
         gen_int_sig = ""
         gen_internal_signal_result = ""
@@ -78,8 +78,8 @@ class Generator(QWidget):
         entity_signal_description = ""
         io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
         gen_entity = ""
+        gen_arrays=""
 
-        stateReg_i = False
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
@@ -106,38 +106,54 @@ class Generator(QWidget):
             gen_entity = "-- entity declaration\n"
             gen_entity += entity_syntax[0].firstChild.data
 
-            #gen_entity = gen_entity.replace("$comp_name", entity_name)
             gen_entity = gen_entity.replace("$signals", gen_signals)
 
-        #gen_vhdl += gen_entity + "\n\n"
-        #gen_vhdl += entity_signal_description + "\n\n"
 
             # Internal signals
             gen_int_sig = "-- Internal signal declarations"
+
             int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
             if int_sig_node[0].firstChild is not None:
-                stateTypesList = ""
-                for stateType in int_sig_node[0].getElementsByTagName("stateTypes"):
-                    stateTypesList += stateType.firstChild.data +", "
-                stateTypesList = stateTypesList[:-2]
+                stateTypesString = ""
 
-                print(stateTypesList)
-                stateType_syntax = vhdl_root.getElementsByTagName("stateNamesDeclarations")[0].firstChild.data
-                stateType_syntax = stateType_syntax.replace("$stateNamesList",stateTypesList)
-                gen_int_sig += "\n" + stateType_syntax
-                stateReg_i = True
+                stateTypesList = int_sig_node[0].getElementsByTagName("stateTypes")
+                for stateType in int_sig_node[0].getElementsByTagName("stateTypes"): #stateTypesList:
+                    stateTypesString += stateType.firstChild.data +", "
+                stateTypesString = stateTypesString[:-2]
+
+                print(stateTypesString)
+                if stateTypesString != "":
+                    stateType_syntax = vhdl_root.getElementsByTagName("stateNamesDeclarations")[0].firstChild.data
+                    stateType_syntax = stateType_syntax.replace("$stateNamesList",stateTypesString)
+                    gen_int_sig += "\n" + stateType_syntax
                 for signal in int_sig_node[0].getElementsByTagName("signal"):
-                    int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
-                    int_sig_syntax = int_sig_syntax.replace("$int_sig_name",
-                                                            signal.getElementsByTagName('name')[0].firstChild.data)
-                    int_sig_syntax = int_sig_syntax.replace("$int_sig_type",
-                                                            signal.getElementsByTagName('type')[0].firstChild.data)
-                    int_signal_description = signal.getElementsByTagName('description')[
-                        0].firstChild.data
+                    name = signal.getElementsByTagName('name')[0].firstChild.data
+                    type = signal.getElementsByTagName('type')[0].firstChild.data
+                    if type[0:5] == "array":
+                        print("do something else")
+                        type=type.split(",")
+                        type[1]=str(int(type[1])-1)
+                        type[2]=str(int(type[2])-1)
+                        gen_arrayType_syntax = vhdl_root.getElementsByTagName("arrayType")[0].firstChild.data
+                        gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayName", name)
+                        gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", type[1])
+                        gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", type[2])
+                        gen_arrays += gen_arrayType_syntax
 
-                    gen_int_sig += "\n" + int_sig_syntax
-                    gen_internal_signal_result += "-- " + signal.getElementsByTagName('name')[
-                                0].firstChild.data + "\t" +int_signal_description + "\n"
+                    else:
+                        if type == "Enumerated type state signals":
+                            type = "stateType"
+                        int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
+                        int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
+                                                                #signal.getElementsByTagName('name')[0].firstChild.data)
+                        int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)
+                                                                #signal.getElementsByTagName('type')[0].firstChild.data)
+                        int_signal_description = signal.getElementsByTagName('description')[
+                            0].firstChild.data
+
+                        gen_int_sig += "\n" + int_sig_syntax
+                        gen_internal_signal_result += "-- " + signal.getElementsByTagName('name')[
+                                    0].firstChild.data + "\t" +int_signal_description + "\n"
 
                 gen_int_sig.rstrip()
 
@@ -183,6 +199,11 @@ class Generator(QWidget):
                 gen_internal_signal_result = gen_internal_signal_result +"\n"
                 gen_internal_signal += gen_internal_signal_result
                 gen_vhdl += gen_internal_signal
+                # arrayPackage
+                if gen_arrays != "":
+                    gen_arrayPackage = vhdl_root.getElementsByTagName("arrayPackage")[0].firstChild.data
+                    gen_arrayPackage = gen_arrayPackage.replace("$arrays", gen_arrays)
+                    gen_vhdl += gen_arrayPackage
                 # Libraries Section
 
                 libraries_node = vhdl_root.getElementsByTagName("libraries")
@@ -192,10 +213,13 @@ class Generator(QWidget):
                 for library in libraries:
                     gen_library += library.firstChild.data + "\n"
 
-                gen_library += "\n"
+                #gen_library += "\n"
                 gen_vhdl += gen_library
+                if gen_arrays != "":
+                    gen_vhdl += "use work.arrayPackage.all;"
+
                 # Entity Section placement
-                gen_vhdl += gen_entity + "\n\n"
+                gen_vhdl += "\n\n" + gen_entity + "\n\n"
                 # Architecture section
 
                 # Process
@@ -234,13 +258,20 @@ class Generator(QWidget):
                                 #stateNames = stateTypesList.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value=signals[1]
+
                                 if value == "Idle":
-                                    stateNames = stateTypesList.split(",")
-                                    value = stateNames[0]
+                                    if stateTypesList != "":
+                                        stateNames = stateTypesString.split(",")
+                                        value = stateNames[0]
                                 elif value == "all zeros":
                                     value = "(others => '0')"
                                 elif value == "all ones":
                                     value = "(others => '1')"
+                                elif value.isdigit():
+                                    if value == "1" or value == "0":
+                                        value = "'" + value + "'"
+                                    else:
+                                        value = '"'+value+'"'
 
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 gen_defaults += "\t" + assign_syntax + "\n\t"
@@ -297,7 +328,13 @@ class Generator(QWidget):
                                 assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                 signals = statement.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
-                                assign_syntax = assign_syntax.replace("$value", signals[1])
+                                value=signals[1]
+                                if value.isdigit():
+                                    if value == "1" or value == "0":
+                                        value = "'" + value + "'"
+                                    else:
+                                        value = '"' + value + '"'
+                                assign_syntax = assign_syntax.replace("$value", value)
 
                                 gen_stmts += assign_syntax + "\n"
 

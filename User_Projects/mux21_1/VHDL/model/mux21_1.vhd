@@ -1,19 +1,22 @@
 -- Header Section
 -- Component Name : mux21_1
--- Title          : To be Completedkhlerjkllkerj
+-- Title          : 2-to-1 mux, 1-bit data
 
 -- Description
--- To be Completedoed
--- dhildclkh
+-- sel is datapath control signal
+-- muxOut = muxIn0 when sel  = 0
+-- muxOut = muxIn1 when sel  = 1 
 
--- Author(s)      : jp
--- Company        : ug
--- Email          : lkhlklk
--- Date           : 04/10/2022
+-- Author(s)      : JP Byrne
+-- Company        : UG
+-- Email          : j.byrne34@nuigalway.ie
+-- Date           : 27/11/2022
 
 -- entity signal dictionary
--- select	jkrlkj
--- jkfeckjl	to be completed
+-- sel	datapath control signal
+-- muxIn1	datapath 1 input signal
+-- muxIn0	datapath 0 input signal
+-- muxOut	data out signal
 
 -- internal signal dictionary
 -- None
@@ -26,8 +29,10 @@ use ieee.numeric_std.all;
 -- entity declaration
 entity mux21_1 is 
 Port(
-	select : in std_logic;
-	jkfeckjl : out std_logic
+	sel : in std_logic;
+	muxIn1 : in std_logic;
+	muxIn0 : in std_logic;
+	muxOut : out std_logic
 );
 end entity mux21_1;
 
@@ -38,11 +43,11 @@ architecture Combinational of mux21_1 is
 
 begin
 
-jkrfj: process(select)
+muxOut_p: process(sel,muxIn1,muxIn0)
 begin
 	-- Complete the process
-	jkfeckjl <= select;
-
+		muxOut <= muxIn1;
+	
 end process;
 
 end Combinational;
