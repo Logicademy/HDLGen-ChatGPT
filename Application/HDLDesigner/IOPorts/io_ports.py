@@ -272,7 +272,7 @@ class IOPorts(QWidget):
                 self.all_signals.pop(self.all_signals_names.index("rst"))
                 self.all_signals_names.pop(self.all_signals_names.index("rst"))
             self.seqSytle_editbtn.setVisible(False)
-            #self.clkAndRst = []
+            self.clkAndRst = []
 
 
     def edit_io_port(self):
