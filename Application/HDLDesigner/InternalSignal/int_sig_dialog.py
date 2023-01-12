@@ -324,7 +324,7 @@ class IntSignalDialog(QDialog):
             edit_btn.setFixedSize(35, 22)
             edit_btn.clicked.connect(self.edit_stateName)
 
-            idle_tickbox = QCheckBox("Make Idle")
+            idle_tickbox = QCheckBox("rst state")
             idle_tickbox.setStyleSheet(BLACK_COLOR)
 
             row_position = self.stateNames_table.rowCount()

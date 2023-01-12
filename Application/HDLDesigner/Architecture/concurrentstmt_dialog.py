@@ -143,6 +143,7 @@ class ConcurrentStmtDialog(QDialog):
                     self.output_signals.pop(0)
 
                     self.options_signals_combo.addItem("Custom")
+                    self.options_signals_combo.addItem("all zeros")
                     self.options_signals_combo.addItems(self.internal_signals + self.input_signals)
                     self.options_signals_combo.currentTextChanged.connect(self.disable_custom_input)
 

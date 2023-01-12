@@ -135,7 +135,7 @@ class IOPorts(QWidget):
 
         self.port_list_frame.setFrameShape(QFrame.StyledPanel)
         self.port_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.port_list_frame.setFixedSize(380, 300)
+        self.port_list_frame.setFixedSize(420, 300)#380
         self.port_list_frame.setLayout(self.port_list_layout)
 
         self.port_action_layout.addLayout(self.port_heading_layout)
@@ -148,7 +148,7 @@ class IOPorts(QWidget):
 
         self.port_action_frame.setFrameShape(QFrame.StyledPanel)
         self.port_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.port_action_frame.setFixedSize(410, 400)
+        self.port_action_frame.setFixedSize(500, 400)#410
         self.port_action_frame.setLayout(self.port_action_layout)
 
 
@@ -354,7 +354,7 @@ class IOPorts(QWidget):
         hdlDesign[0].replaceChild(new_io_ports, hdlDesign[0].getElementsByTagName('entityIOPorts')[0])
         print(self.clkAndRst)
         for clkRst in self.clkAndRst:
-            print("saving inclkAndRst")
+            print("saving in clkAndRst")
             activeClkEdge_node = root.createElement('activeClkEdge')
             activeClkEdge_node.appendChild(root.createTextNode(str(clkRst[0])))
             clk_and_rst.appendChild(activeClkEdge_node)

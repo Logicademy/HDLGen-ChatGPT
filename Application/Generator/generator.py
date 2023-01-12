@@ -79,7 +79,7 @@ class Generator(QWidget):
         io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
         gen_entity = ""
         gen_arrays=""
-
+        stateTypeSig = False
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
@@ -113,6 +113,7 @@ class Generator(QWidget):
             gen_int_sig = "-- Internal signal declarations"
 
             int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
+
             if int_sig_node[0].firstChild is not None:
                 stateTypesString = ""
 
@@ -141,8 +142,12 @@ class Generator(QWidget):
                         gen_arrays += gen_arrayType_syntax
 
                     else:
+
                         if type == "Enumerated type state signals":
                             type = "stateType"
+                            if name[0:2] == "CS":
+                                stateTypeSig = True
+                                CSState=name
                         int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                         int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                                                                 #signal.getElementsByTagName('name')[0].firstChild.data)
@@ -251,7 +256,9 @@ class Generator(QWidget):
 
                             process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
                             gen_defaults = "\t"
+                            if_gen_defaults = "\t"
                             clkgen_defaults = ""
+                            caseEmpty=True
                             for default_out in child.getElementsByTagName("defaultOutput"):
                                 assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                 signals = default_out.firstChild.data.split(",")
@@ -267,19 +274,31 @@ class Generator(QWidget):
                                     value = "(others => '0')"
                                 elif value == "all ones":
                                     value = "(others => '1')"
-                                elif value.isdigit():
+                                elif stateTypeSig == True:
+                                    if value == CSState:
+                                        caseEmpty = False
+                                        print("in CS State")
+                                        case_syntax = vhdl_root.getElementsByTagName("case")[0].firstChild.data
+                                        case_syntax = case_syntax.replace("$stateType", value)
+                                        stateNames = stateTypesString.split(",")
+                                        whenCase=""
+                                        for states in stateNames:
+                                            whenCase +="\n\t\twhen "+ states + "=>"
+                                        case_syntax = case_syntax.replace("$whenCase", whenCase)
+                                if value.isdigit():
                                     if value == "1" or value == "0":
                                         value = "'" + value + "'"
                                     else:
                                         value = '"'+value+'"'
 
                                 assign_syntax = assign_syntax.replace("$value", value)
-                                gen_defaults += "\t" + assign_syntax + "\n\t"
+                                if_gen_defaults += "\t" + assign_syntax + "\n\t"
+                                gen_defaults +=  assign_syntax + "\n\t"
                                 if len(signals) == 3:
                                     clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
                                     clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
-                                    clkgen_defaults += "\t" + clkAssign_syntax + "\n\t"
+                                    clkgen_defaults += "\t\t" + clkAssign_syntax + "\n"
                             if gen_defaults != "":
                                 if clkgen_defaults != "":
                                     for clkRst in clkAndRst[0].getElementsByTagName("clkAndRst"):
@@ -292,8 +311,8 @@ class Generator(QWidget):
                                             if_syntax = vhdl_root.getElementsByTagName("ifStatement")[0].firstChild.data
                                             if_syntax = if_syntax.replace("$assignment", "rst")
                                             if_syntax = if_syntax.replace("$value", clkRst.getElementsByTagName('ActiveRstLvl')[0].firstChild.data)
-                                            if_syntax = if_syntax.replace("$default_assignments", gen_defaults )
-                                            gen_defaults = "\t" + if_syntax + "\n"
+                                            if_syntax = if_syntax.replace("$default_assignments", if_gen_defaults)#gen_defaults )
+                                            if_gen_defaults = "\t" + if_syntax + "\n"
                                             if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
                                                 elsif_syntax = vhdl_root.getElementsByTagName("elsifStatement")[0].firstChild.data
                                                 elsif_syntax = elsif_syntax.replace("$edge", clkEdge)
@@ -312,8 +331,15 @@ class Generator(QWidget):
                                             clkgen_defaults = "\t" + clkif_syntax + "\n"
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
                                 else:
+                                    if caseEmpty == False:
+                                        gen_defaults += "\n" + case_syntax
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
+                            #if caseEmpty == False:
+                            #    process_syntax = process_syntax.replace("$case", case_syntax)
+                            #else:
+                            #    process_syntax = process_syntax.replace("$case", "")
                             gen_process += process_syntax + "\n\n"
+
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
 
@@ -334,6 +360,8 @@ class Generator(QWidget):
                                         value = "'" + value + "'"
                                     else:
                                         value = '"' + value + '"'
+                                elif value == "all zeros":
+                                    value = "(others => '0')"
                                 assign_syntax = assign_syntax.replace("$value", value)
 
                                 gen_stmts += assign_syntax + "\n"

@@ -13,7 +13,7 @@ from Help.help import HelpDialog
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-APP_AUTHORS = "Abishek Bupathi & JP Byrne & Fearghal Morgan"
+APP_AUTHORS = "Abishek Bupathi, JP Byrne & Fearghal Morgan"
 APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
 
@@ -134,4 +134,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
