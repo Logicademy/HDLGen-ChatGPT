@@ -283,7 +283,7 @@ class Generator(QWidget):
                                         stateNames = stateTypesString.split(",")
                                         whenCase=""
                                         for states in stateNames:
-                                            whenCase +="\n\t\twhen "+ states + "=>"
+                                            whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
                                         case_syntax = case_syntax.replace("$whenCase", whenCase)
                                 if value.isdigit():
                                     if value == "1" or value == "0":

@@ -352,6 +352,7 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.insert(0, "Custom")
+                        out_val_options.insert(1, "all zeros")
                         out_val_combo.addItems(out_val_options)
                         out_val_options.pop(0)
 
@@ -455,7 +456,7 @@ class ProcessDialog(QDialog):
                 print("there is a 3rd index")
 
 
-        for i in range(self.out_sig_table.rowCount()):
+        for i in range(0, self.out_sig_table.rowCount()):
 
             if self.out_sig_table.item(i, 1).text() in out_sigs:
                 if not clk_default_vals:
