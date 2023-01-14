@@ -10,6 +10,8 @@ from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.IOPorts.io_port_dialog import IOPortDialog
 from HDLDesigner.IOPorts.sequential_dialog import seqDialog
 
+from HDLDesigner.Architecture.architecture import Architecture
+
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 ICONS_DIR = "../../Resources/icons/"
@@ -39,6 +41,8 @@ class IOPorts(QWidget):
         self.io_list_label = QLabel("Ports")
         self.io_list_label.setFont(title_font)
         self.io_list_label.setStyleSheet(WHITE_COLOR)
+        self.comb_checkBox = QCheckBox("Combinational")
+        self.comb_checkBox.setStyleSheet(WHITE_COLOR)
         self.seqSytle_checkBox = QCheckBox("RTL")
         self.seqSytle_checkBox.setStyleSheet(WHITE_COLOR)
         self.seqSytle_editbtn = QPushButton("Set up clk/rst")
@@ -83,15 +87,19 @@ class IOPorts(QWidget):
         self.proj_dir_value = proj_dir
         if proj_dir != None:
             self.load_data(proj_dir)
+        else:
+            self.comb_checkBox.setChecked(True)
 
     def setup_ui(self):
 
         # Port List section
         self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
+        self.port_heading_layout.addWidget(self.comb_checkBox, alignment=Qt.AlignLeft)
         self.port_heading_layout.addWidget(self.seqSytle_checkBox, alignment=Qt.AlignCenter)
         self.port_heading_layout.addWidget(self.seqSytle_editbtn)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.seqSytle_editbtn.setVisible(False)
+        self.comb_checkBox.clicked.connect(self.checkBox_clicked)
         self.seqSytle_checkBox.clicked.connect(self.checkBox_clicked)
         self.seqSytle_editbtn.clicked.connect(self.edit_RTL)
         self.add_btn.clicked.connect(self.add_signal)
@@ -145,7 +153,6 @@ class IOPorts(QWidget):
         self.port_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
         self.save_signal_btn.clicked.connect(self.save_signals)
-
         self.port_action_frame.setFrameShape(QFrame.StyledPanel)
         self.port_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.port_action_frame.setFixedSize(500, 400)#410
@@ -215,6 +222,7 @@ class IOPorts(QWidget):
                 self.all_signals.append(rst_details)
                 self.all_signals_names.append(("rst"))
             self.update_clk_rst_btn()
+            self.save_signals()
 
 
 
@@ -248,7 +256,7 @@ class IOPorts(QWidget):
             self.port_table.setItem(row_position, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
             self.port_table.setCellWidget(row_position, 4, edit_btn)
             self.port_table.setCellWidget(row_position, 5, delete_btn)
-
+            self.save_signals()
 
     def delete_clicked(self):
         button = self.sender()
@@ -256,23 +264,48 @@ class IOPorts(QWidget):
             row = self.port_table.indexAt(button.pos()).row()
             self.port_table.removeRow(row)
             self.all_signals.pop(row)
+            self.save_signals()
+
     def checkBox_clicked(self):
+        #architecture = Architecture(self.proj_dir_value)
         button = self.sender()
-        if button.isChecked():
-            self.clkAndRst = []
-            self.seqSytle_editbtn.setVisible(True)
+        if button == self.seqSytle_checkBox:
+            if button.isChecked():
+                self.clkAndRst = []
+                self.seqSytle_editbtn.setVisible(True)
+                self.comb_checkBox.setChecked(False)
+            else:
+                self.comb_checkBox.setChecked(True)
+                self.seqSytle_editbtn.setText("Set up clk/rst")
+                if "clk" in self.all_signals_names:
+                    self.port_table.removeRow(self.all_signals_names.index("clk"))
+                    self.all_signals.pop(self.all_signals_names.index("clk"))
+                    self.all_signals_names.pop(self.all_signals_names.index("clk"))
+                if "rst" in self.all_signals_names:
+                    self.port_table.removeRow(self.all_signals_names.index("rst"))
+                    self.all_signals.pop(self.all_signals_names.index("rst"))
+                    self.all_signals_names.pop(self.all_signals_names.index("rst"))
+                self.seqSytle_editbtn.setVisible(False)
+                self.clkAndRst = []
         else:
-            self.seqSytle_editbtn.setText("Set up clk/rst")
-            if "clk" in self.all_signals_names:
-                self.port_table.removeRow(self.all_signals_names.index("clk"))
-                self.all_signals.pop(self.all_signals_names.index("clk"))
-                self.all_signals_names.pop(self.all_signals_names.index("clk"))
-            if "rst" in self.all_signals_names:
-                self.port_table.removeRow(self.all_signals_names.index("rst"))
-                self.all_signals.pop(self.all_signals_names.index("rst"))
-                self.all_signals_names.pop(self.all_signals_names.index("rst"))
-            self.seqSytle_editbtn.setVisible(False)
-            self.clkAndRst = []
+            if button.isChecked():
+                self.seqSytle_checkBox.setChecked(False)
+                self.seqSytle_editbtn.setText("Set up clk/rst")
+                if "clk" in self.all_signals_names:
+                    self.port_table.removeRow(self.all_signals_names.index("clk"))
+                    self.all_signals.pop(self.all_signals_names.index("clk"))
+                    self.all_signals_names.pop(self.all_signals_names.index("clk"))
+                if "rst" in self.all_signals_names:
+                    self.port_table.removeRow(self.all_signals_names.index("rst"))
+                    self.all_signals.pop(self.all_signals_names.index("rst"))
+                    self.all_signals_names.pop(self.all_signals_names.index("rst"))
+                self.seqSytle_editbtn.setVisible(False)
+                self.clkAndRst = []
+            else:
+                self.clkAndRst = []
+                self.seqSytle_editbtn.setVisible(True)
+                self.seqSytle_checkBox.setChecked(True)
+
 
 
     def edit_io_port(self):
@@ -310,12 +343,13 @@ class IOPorts(QWidget):
                 self.port_table.setItem(row, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
                 self.port_table.setCellWidget(row, 4, edit_btn)
                 self.port_table.setCellWidget(row, 5, delete_btn)
+                self.save_signals()
 
 
 
 
     def save_signals(self):
-
+        print("in save signals")
         xml_data_path = ProjectManager.get_xml_data_path()
 
         root = minidom.parse(xml_data_path)
@@ -382,7 +416,8 @@ class IOPorts(QWidget):
             f.write(xml_str)
 
         print("Successfully saved all the signals!")
-
+        #architecture = Architecture(self.proj_dir_value)
+        #architecture.arch_name_input.setText("yo")
     def load_data(self, proj_dir):
 
         root = minidom.parse(proj_dir[0])
@@ -409,6 +444,9 @@ class IOPorts(QWidget):
                                          clkAndRst[i].getElementsByTagName('rst')[0].firstChild.data
                                          ]
             self.clkAndRst.append(clkAndRst_details)
+        else:
+            print("COMB should be")
+            self.comb_checkBox.setCheckState(Qt.Checked)
         for i in range(0, len(signal_nodes)):
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
             mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data

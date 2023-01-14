@@ -142,12 +142,11 @@ class Generator(QWidget):
                         gen_arrays += gen_arrayType_syntax
 
                     else:
-
                         if type == "Enumerated type state signals":
                             type = "stateType"
                             if name[0:2] == "CS":
                                 stateTypeSig = True
-                                CSState=name
+                                CSState = name
                         int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                         int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                                                                 #signal.getElementsByTagName('name')[0].firstChild.data)
@@ -163,6 +162,7 @@ class Generator(QWidget):
                 gen_int_sig.rstrip()
 
             else:
+                gen_int_sig += "\n-- None"
                 gen_internal_signal_result = "-- None\n"
 
 

@@ -9,6 +9,7 @@ from HDLDesigner.IOPorts.io_ports import IOPorts
 from HDLDesigner.Architecture.architecture import Architecture
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from Generator.generator import Generator
+from ProjectManager.project_manager import ProjectManager
 
 
 class HDLDesigner(QWidget):
@@ -35,10 +36,10 @@ class HDLDesigner(QWidget):
             self.update_preview()
 
     def setup_ui(self):
-
+        print("in set up")
         self.compDetails = CompDetails(self.proj_dir)
         ioPorts = IOPorts(self.proj_dir)
-        architecture = Architecture(self.proj_dir)
+        self.architecture = Architecture(self.proj_dir)
         internalSignal = InternalSignal(self.proj_dir)
 
         self.preview_window.setReadOnly(True)
@@ -49,7 +50,7 @@ class HDLDesigner(QWidget):
         # self.tabs.addTab(ClkRst(self.proj_dir), "Clock and Reset")
         self.tabs.addTab(ioPorts, "Ports")
         self.tabs.addTab(internalSignal, "Internal Signals")
-        self.tabs.addTab(architecture, "Architecture")
+        self.tabs.addTab(self.architecture, "Architecture")
 
         self.mainLayout.addWidget(self.tabs)
         self.mainLayout.addLayout(self.preview_pane_layout)
@@ -57,14 +58,22 @@ class HDLDesigner(QWidget):
 
         self.compDetails.save_btn.clicked.connect(self.update_preview)
         ioPorts.save_signal_btn.clicked.connect(self.update_preview)
-        architecture.save_btn.clicked.connect(self.update_preview)
+        ioPorts.save_signal_btn.clicked.connect(self.update_arch)
+        self.architecture.save_btn.clicked.connect(self.update_preview)
         internalSignal.save_signal_btn.clicked.connect(self.update_preview)
 
     def update_preview(self):
         entity_name, vhdl = Generator.generate_vhdl()
         self.preview_window.setText(vhdl)
+    def update_arch(self):
+        xml_data_path = ProjectManager.get_xml_data_path()
+        print(xml_data_path)
+        #print(self.proj_dir)
+        self.architecture.updateProcessName(xml_data_path)
+        #self.architecture.updateProcessName(self.proj_dir)#load_data(self.proj_dir)
 
 class TabBar(QTabBar):
+
     def tabSizeHint(self, index):
         s = QTabBar.tabSizeHint(self, index)
         s.transpose()
@@ -73,7 +82,6 @@ class TabBar(QTabBar):
     def paintEvent(self, event):
         painter = QStylePainter(self)
         opt = QStyleOptionTab()
-
         for i in range(self.count()):
             self.initStyleOption(opt, i)
             painter.drawControl(QStyle.CE_TabBarTabShape, opt)
@@ -92,8 +100,10 @@ class TabBar(QTabBar):
             painter.drawControl(QStyle.CE_TabBarTabLabel, opt)
             painter.restore()
 
+
 class VerticalTabWidget(QTabWidget):
     def __init__(self, *args, **kwargs):
         QTabWidget.__init__(self, *args, **kwargs)
         self.setTabBar(TabBar())
         self.setTabPosition(QTabWidget.West)
+

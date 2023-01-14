@@ -27,7 +27,7 @@ class Architecture(QWidget):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
-
+        self.process = ""
         self.mainLayout = QVBoxLayout()
 
         self.top_layout = QGridLayout()
@@ -35,12 +35,14 @@ class Architecture(QWidget):
 
         #self.arch_name_input = QLineEdit()
         self.arch_types = ["RTL", "Combinational"]
-        self.arch_name_input = QComboBox()
-        self.arch_name_input.addItems(self.arch_types)
+        self.arch_name_input = QLabel("Combinational")
+        self.arch_name_input.setStyleSheet(WHITE_COLOR)
+        #self.arch_name_input = QComboBox()
+        #self.arch_name_input.addItems(self.arch_types)
         self.arch_name_label = QLabel("Architecture Name*")
         self.arch_name_label.setStyleSheet(WHITE_COLOR)
 
-        self.new_proc_btn = QPushButton("New process")
+        self.new_proc_btn = QPushButton("New Process")
         self.new_proc_btn.setFixedSize(100, 25)
         self.new_proc_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
@@ -85,12 +87,12 @@ class Architecture(QWidget):
 
         self.list_frame = QFrame()
         self.main_frame = QFrame()
-
+        print(self.process)
         self.setup_ui()
-
         if proj_dir != None:
             self.load_data(proj_dir)
-
+            print("after proj_dir")
+            print(self.process)
     def setup_ui(self):
         self.enable_save_btn()
         self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
@@ -309,7 +311,8 @@ class Architecture(QWidget):
             self.all_data.pop(row)
 
     def save_data(self):
-
+        print("in save data")
+        print(self.process)
         xml_data_path = ProjectManager.get_xml_data_path()
 
         root = minidom.parse(xml_data_path)
@@ -318,7 +321,9 @@ class Architecture(QWidget):
         new_arch_node = root.createElement("architecture")
 
         arch_name = root.createElement("archName")
-        arch_name.appendChild(root.createTextNode(self.arch_name_input.currentText()))
+        #arch_name.appendChild(root.createTextNode(self.arch_name_input.currentText()))
+        arch_name.appendChild(root.createTextNode(self.arch_name_input.text()))
+        #arch_name.appendChild(root.createTextNode(self.process))
         new_arch_node.appendChild(arch_name)
 
 
@@ -367,7 +372,7 @@ class Architecture(QWidget):
         print("Successfully saved all the signals!")
 
     def load_data(self, proj_dir):
-
+        print("This worked architecture ")
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -376,11 +381,27 @@ class Architecture(QWidget):
         arch_name_node = hdlDesign[0].getElementsByTagName("archName")
 
         if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
-            if arch_name_node[0].firstChild.data == "Combinational":
-            #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
-                self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
+            clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
+            if len(clkAndRst) != 1:
+                print("should be rtl")
+                #self.process = "RTL"
+                #self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
+                #self.arch_name_input.setText('RTL')
+                #print(self.process)
+                #print("should be rtl")
             else:
-                self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
+                print("should be comb")
+                #self.process = "Combin"
+                #self.arch_name_input.setText('Combinational')
+                #print(self.arch_name_input.text())
+                #print(self.process)
+                #print("should be comb")
+                #self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
+            #if arch_name_node[0].firstChild.data == "Combinational":
+            #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
+            #    self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
+            #else:
+            #    self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
 
         if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
@@ -485,9 +506,25 @@ class Architecture(QWidget):
 
                 child = next
                 print(self.all_data)
+            #self.save_data()
+            #self.updateProcess()
+    def updateProcessName(self, proj_dir):
+
+        #print(proj_dir[0])
+        root = minidom.parse(proj_dir)#[0])
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
+        if len(clkAndRst) != 1:
+            self.process = "RTL"
+            self.arch_name_input.setText('RTL')
+        else:
+            print("should be comb")
+            self.process = "Combin"
+            self.arch_name_input.setText('Combinational')
     def enable_save_btn(self):
         #if self.arch_name_input.text() != "":
-        if self.arch_name_input.currentText() != "":
+        if self.arch_name_input.text() != "":
             self.save_btn.setEnabled(True)
         else:
             self.save_btn.setEnabled(False)
