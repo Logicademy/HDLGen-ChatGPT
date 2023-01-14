@@ -222,7 +222,7 @@ class IOPorts(QWidget):
                 self.all_signals.append(rst_details)
                 self.all_signals_names.append(("rst"))
             self.update_clk_rst_btn()
-            self.save_signals()
+            #self.save_signals()
 
 
 
@@ -234,7 +234,7 @@ class IOPorts(QWidget):
         if not io_dialog.cancelled:
             signal_data = io_dialog.get_signals()
             self.all_signals.append(signal_data)
-
+            self.all_signals_names.append((signal_data[0]))
             print(signal_data)
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -256,7 +256,7 @@ class IOPorts(QWidget):
             self.port_table.setItem(row_position, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
             self.port_table.setCellWidget(row_position, 4, edit_btn)
             self.port_table.setCellWidget(row_position, 5, delete_btn)
-            self.save_signals()
+            #self.save_signals()
 
     def delete_clicked(self):
         button = self.sender()
@@ -264,10 +264,11 @@ class IOPorts(QWidget):
             row = self.port_table.indexAt(button.pos()).row()
             self.port_table.removeRow(row)
             self.all_signals.pop(row)
-            self.save_signals()
+            self.all_signals_names.pop(row)
+            print(self.all_signals)
+            #self.save_signals()
 
     def checkBox_clicked(self):
-        #architecture = Architecture(self.proj_dir_value)
         button = self.sender()
         if button == self.seqSytle_checkBox:
             if button.isChecked():
@@ -277,6 +278,8 @@ class IOPorts(QWidget):
             else:
                 self.comb_checkBox.setChecked(True)
                 self.seqSytle_editbtn.setText("Set up clk/rst")
+                print("rtl unchecked")
+                print(self.all_signals_names)
                 if "clk" in self.all_signals_names:
                     self.port_table.removeRow(self.all_signals_names.index("clk"))
                     self.all_signals.pop(self.all_signals_names.index("clk"))
@@ -286,7 +289,10 @@ class IOPorts(QWidget):
                     self.all_signals.pop(self.all_signals_names.index("rst"))
                     self.all_signals_names.pop(self.all_signals_names.index("rst"))
                 self.seqSytle_editbtn.setVisible(False)
+                print("after removing")
+                print(self.all_signals_names)
                 self.clkAndRst = []
+                #self.save_signals()
         else:
             if button.isChecked():
                 self.seqSytle_checkBox.setChecked(False)
@@ -301,10 +307,12 @@ class IOPorts(QWidget):
                     self.all_signals_names.pop(self.all_signals_names.index("rst"))
                 self.seqSytle_editbtn.setVisible(False)
                 self.clkAndRst = []
+                #self.save_signals()
             else:
                 self.clkAndRst = []
                 self.seqSytle_editbtn.setVisible(True)
                 self.seqSytle_checkBox.setChecked(True)
+                #self.save_signals()
 
 
 
@@ -320,6 +328,7 @@ class IOPorts(QWidget):
                 signal_data = io_dialog.get_signals()
                 self.port_table.removeRow(row)
                 self.all_signals.pop(row)
+                self.all_signals_names.pop(row)
 
                 print(signal_data)
                 delete_btn = QPushButton()
@@ -333,7 +342,7 @@ class IOPorts(QWidget):
                 edit_btn.clicked.connect(self.edit_io_port)
 
                 self.all_signals.insert(row, signal_data)
-
+                self.all_signals_names.insert(row, signal_data[0])
                 self.port_table.insertRow(row)
                 self.port_table.setRowHeight(row, 5)
 
@@ -343,10 +352,7 @@ class IOPorts(QWidget):
                 self.port_table.setItem(row, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
                 self.port_table.setCellWidget(row, 4, edit_btn)
                 self.port_table.setCellWidget(row, 5, delete_btn)
-                self.save_signals()
-
-
-
+                #self.save_signals()
 
     def save_signals(self):
         print("in save signals")
