@@ -49,7 +49,7 @@ class ProcessDialog(QDialog):
         self.in_sig_layout = QVBoxLayout()
         self.in_sig_frame = QFrame()
         self.in_sig_list = QListWidget()
-        self.in_sig_empty_info = QLabel("No Input Signals found!\nPlease add signal in the IO Ports")
+        self.in_sig_empty_info = QLabel("No Input Signals found!\nPlease add signal in Ports")
 
 
         self.out_sig_header_layout = QHBoxLayout()
@@ -59,7 +59,7 @@ class ProcessDialog(QDialog):
         self.val_label.setFont(bold_font)
         self.Binval_label = QLabel("Binary Value")
         self.Binval_label.setFont(bold_font)
-        self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in the IO Ports")
+        self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in Ports")
         self.out_sig_empty_info.setFixedSize(400, 300)
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
@@ -76,7 +76,7 @@ class ProcessDialog(QDialog):
         self.onRst_label.setFont(bold_font)
         self.onClk_label = QLabel("on clk")
         self.onClk_label.setFont(bold_font)
-        self.CSNS_empty_info = QLabel("No CS NS Signals found!\nPlease add signals in internal signals")
+        self.CSNS_empty_info = QLabel("No CS NS Signals found!\nPlease add signals in Internal Signals")
         self.CSNS_empty_info.setFixedSize(400, 300)
         self.CSNS_table = QTableWidget()
         self.CSNS_layout = QVBoxLayout()
