@@ -75,7 +75,15 @@ class CompDetails(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-
+        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
+        vivadoPath = settings.readline()
+        author = settings.readline()
+        email = settings.readline()
+        company = settings.readline()
+        settings.close()
+        self.comp_author_input.setText(author)
+        self.comp_email_input.setText(email)
+        self.comp_company_input.setText(company)
         self.input_layout.addWidget(self.comp_name_label, 0, 0)
         self.input_layout.addWidget(self.comp_name_input, 1, 0, 1, 2)
         self.comp_name_input.setText(ProjectManager.get_proj_name())

@@ -67,6 +67,7 @@ class ProjectManager(QWidget):
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QCheckBox("Verilog")
         self.verilog_check.setStyleSheet(BLACK_COLOR)
+        self.verilog_check.setEnabled(False)
         self.sverilog_check = QCheckBox("System Verilog")
         self.sverilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check.setEnabled(False)
@@ -77,6 +78,7 @@ class ProjectManager(QWidget):
         self.intel_check = QCheckBox("Intel Quartus")
         self.intel_check.setFont(bold_font)
         self.intel_check.setStyleSheet(BLACK_COLOR)
+        self.intel_check.setEnabled(False)
         self.intel_ver_label = QLabel("Version")
         self.intel_ver_label.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo = QComboBox()
@@ -251,6 +253,11 @@ class ProjectManager(QWidget):
         self.proj_close_btn.clicked.connect(self.close_project)
         self.proj_save_btn.clicked.connect(self.create_xml)
 
+        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
+        vivadoPath = settings.readline()
+        settings.close()
+        self.vivado_dir_input.setText(vivadoPath)
+        ProjectManager.vivado_bat_path = vivadoPath
 
     def fill_default_proj_details(self):
 

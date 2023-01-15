@@ -409,7 +409,7 @@ class Generator(QWidget):
         self.entity_name = entity_name
 
     def create_tcl_file(self):
-
+        print("creating tcl")
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
 
