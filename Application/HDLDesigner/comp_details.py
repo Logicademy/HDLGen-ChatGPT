@@ -200,6 +200,7 @@ class CompDetails(QWidget):
         comp_name = header[0].getElementsByTagName('compName')[0].firstChild.data
         comp_title = header[0].getElementsByTagName('title')[0].firstChild.data
         comp_description = header[0].getElementsByTagName('description')[0].firstChild.data
+        comp_description = comp_description.replace("&#10;", "\n")
         comp_authors = header[0].getElementsByTagName('authors')[0].firstChild.data
         comp_company = header[0].getElementsByTagName('company')[0].firstChild.data
         comp_email = header[0].getElementsByTagName('email')[0].firstChild.data
@@ -207,6 +208,7 @@ class CompDetails(QWidget):
 
         if comp_name != "null":
             self.comp_name_input.setText(comp_name)
+            self.enable_save_btn()
 
         if comp_title != "null":
             self.comp_title_input.setText(comp_title)
