@@ -453,7 +453,7 @@ class Generator(QWidget):
 
     def create_vhdl_testbench_code(self):
         tb_code = ""
-
+        clkrst = 0
         xml_data_path = ProjectManager.get_xml_data_path()
 
         test_xml = os.path.join("../Resources", "SampleProject.xml")
@@ -481,8 +481,9 @@ class Generator(QWidget):
         entity_signal_description = ""
         io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
         gen_entity = ""
-        io_port_map =""
-        inputsToZero =""
+        io_port_map = ""
+        inputsToZero = ""
+        inputsToOne = ""
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
@@ -507,31 +508,40 @@ class Generator(QWidget):
                 io_signal_declare_syntax = io_signal_declare_syntax.replace("$type",
                                                                             signal.getElementsByTagName('type')[
                                                                                 0].firstChild.data)
+
                 if signal.getElementsByTagName('mode')[0].firstChild.data == "in":
-                    if signal.getElementsByTagName('type')[0].firstChild.data == "std_logic":
-                        inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
-                        inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
-                    else:
-                        inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
+                    if signal.getElementsByTagName('name')[0].firstChild.data != "clk" and signal.getElementsByTagName('name')[0].firstChild.data != "rst":
+                        if signal.getElementsByTagName('type')[0].firstChild.data == "std_logic":
+                            inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
+                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
+                            inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'1\';\n"
+                        else:
+                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
+                            inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'1\');\n"
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
                     0].firstChild.data + "\t" + signal_description + "\n"
                 gen_signals += "\t" + signal_declare_syntax + "\n"
                 io_port_map += "\t" + io_port_map_syntax + "\n"
-                if signal.getElementsByTagName('name')[0].firstChild.data != "clk" and signal.getElementsByTagName('name')[0].firstChild.data != "rst" :
+                if signal.getElementsByTagName('name')[0].firstChild.data == "clk" or signal.getElementsByTagName('name')[0].firstChild.data == "rst" :
+                    clkrst=clkrst+1
+                else:
                     io_signals += io_signal_declare_syntax + "\n"
             io_port_map = io_port_map.rstrip()
             io_port_map = io_port_map[0:-1]
             io_signals = io_signals.rstrip()
             #io_signals = io_signals[0:-1]
-            other_signals = "\n-- <delete (Start) If UUT is a combinational component>\n"
-            other_signals += "signal clk: std_logic := '1'; -- entity includes signal clk, so declare (and initialise) tetbench clk signal\n"
-            other_signals += "signal rst: std_logic;        -- entity may include signal rst (reset), so declare in testbench\n"
-            other_signals += "-- <delete (End)\n\n-- testbench control signal declarations\n"
-            other_signals += "signal endOfSim : boolean := false; -- assert at end of simulation to highlight simuation done. Stops clk signal generation.\n"
-            other_signals += "signal testNo: integer; -- aids locating test in simulation waveform\n\n"
-            other_signals += "constant period: time := 20 ns; -- Default simulation time. Use as simulation delay constant, or clk period if sequential model ((50MHz clk here)\n"
+            #other_signals = "\n-- <delete (Start) If UUT is a combinational component>\n"
+            other_signals = ""
+            if clkrst > 0:
+                other_signals = "signal clk: std_logic := '1';\n" #-- entity includes signal clk, so declare (and initialise) tetbench clk signal\n"
+            if clkrst == 2:
+                other_signals += "signal rst: std_logic;        \n"#-- entity may include signal rst (reset), so declare in testbench\n"
+            #other_signals += "-- <delete (End)\n\n-- testbench control signal declarations\n"
+            control_signals = "signal endOfSim : boolean := false; -- assert at end of simulation to highlight simuation done. Stops clk signal generation.\n"
+            control_signals += "signal testNo: integer; -- aids locating test in simulation waveform\n\n"
+            control_signals += "constant period: time := 20 ns; -- Default simulation time. Use as simulation delay constant, or clk period if sequential model ((50MHz clk here)\n"
 
             gen_signals = gen_signals.rstrip()
             gen_signals = gen_signals[0:-1]
@@ -611,24 +621,25 @@ class Generator(QWidget):
                 # Entity declaration
                 gen_entity = gen_entity.replace("$comp_name", entity_name)
                 tb_code += gen_entity +"\n\n"
-                tbSignalDeclaration = io_signals +"\n" + other_signals
+                tbSignalDeclaration = io_signals +"\n" + other_signals + "\n" + control_signals
                 # Architecture section
 
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
-
-                gen_process = "-- <delete (Start) If UUT is a combinational component>\n"
-                gen_process += "-- Generate clk signal, if sequential component, and endOfSim is FALSE.\n"
-                gen_process += "clkStim: clk <= not clk after period/2 when endOfSim = false else '0';\n"
-                gen_process += "-- <delete (End)\n\n"
+                gen_process = ""
+                if clkrst > 0:
+                    #gen_process += "-- <delete (Start) If UUT is a combinational component>\n"
+                    gen_process += "-- Generate clk signal, if sequential component, and endOfSim is FALSE.\n"
+                    gen_process += "clkStim: clk <= not clk after period/2 when endOfSim = false else '0';\n"
+                    #gen_process += "-- <delete (End)\n\n"
                 gen_process += "-- instantiate unit under test (UUT)\n"
                 gen_process += "UUT: "+entity_name+ "-- map component internal sigs => testbench signals\n"
                 gen_process += "port map\n\t(\n"
                 gen_process += io_port_map+"\n\t);\n\n"
                 gen_process += "-- Signal stimulus process\n"
                 gen_process += "stim_p: process -- process sensitivity list is empty, so process automatically executes at start of simulation. Suspend process at the wait; statement\n"
-                gen_process += "-- <delete (Start) if note using variables\n"
-                gen_process += "variable stimVec : std_logic_vector(" + str(len(inputArray)-1)+" downto 0);\n"
+                #gen_process += "-- <delete (Start) if note using variables\n"
+                #gen_process += "variable stimVec : std_logic_vector(" + str(len(inputArray)-1)+" downto 0);\n"
                 gen_process += "begin\n"
                 gen_process += "\t-- Apply default INPUT signal values. Do not assign output signals (generated by the UUT) in this stim_p process\n"
                 gen_process += "\t-- Each stimulus signal change occurs 0.2*period after the active low-to-high clk edge\n"
@@ -640,22 +651,22 @@ class Generator(QWidget):
                 gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                 gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t-- <delete (End)\n\n"
                 gen_process += "\t-- individual tests. Generate input signal combinations and wait for period.\n"
-                gen_process += "\ttestNo <= 1;\n\twait for period;\n\n"
-                gen_process += "\t-- include testbench stimulus sequence here. USe new testNo for each test set\n\n"
-                gen_process += "\t-- <delete (Start) if note using variables\n"
-                gen_process += "\tfor i in 0 to " + str(pow(2,len(inputArray))-1) + " loop\n"
-                gen_process += "\t\tstimVec := std_logic_vector( to_unsigned(i," + str(len(inputArray)) +") );\n"
-                indexOfArray = len(inputArray)
-                for x in inputArray:
-                    indexOfArray = indexOfArray-1
-                    gen_process += "\t\t"+ x + " <= stimVec("+str(indexOfArray)+");\n"
-                gen_process += "\t\twait for period;\n"
-                gen_process += "\tend loop;\n"
-                gen_process += "\t-- <delete (End)\n\n"
-                gen_process += "\t-- <delete (Start) if not required\n"
-                gen_process += inputsToZero
-                gen_process += "\twait for period;\n"
-                gen_process += "\t-- <delete (End)\n\n"
+                gen_process += "\ttestNo <= 1;\n"
+                #gen_process += "\t-- <delete (Start) if note using variables\n"
+                #gen_process += "\tfor i in 0 to " + str(pow(2,len(inputArray))-1) + " loop\n"
+                #gen_process += "\t\tstimVec := std_logic_vector( to_unsigned(i," + str(len(inputArray)) +") );\n"
+                #indexOfArray = len(inputArray)
+                #for x in inputArray:
+                #    indexOfArray = indexOfArray-1
+                #    gen_process += "\t\t"+ x + " <= stimVec("+str(indexOfArray)+");\n"
+                #gen_process += "\t\twait for period;\n"
+                #gen_process += "\tend loop;\n"
+                #gen_process += "\t-- <delete (End)\n\n"
+                #gen_process += "\t-- <delete (Start) if not required\n"
+                gen_process += inputsToOne
+                gen_process += "\twait for 3*period;\n"
+                gen_process += "\n\t-- include testbench stimulus sequence here. USe new testNo for each test set\n\n"
+                #gen_process += "\t-- <delete (End)\n\n"
                 gen_process += "\treport \"%N Simulation done\";\n"
                 gen_process += "\tendOfSim <= TRUE; -- assert flag to stop clk signal generation\n\n"
                 gen_process += "\twait; -- wait forever\n"
@@ -664,7 +675,7 @@ class Generator(QWidget):
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
                     arch_name_node = arch_node[0].getElementsByTagName("archName")
 
-                    arch_name = "comb"
+                    #arch_name = "comb"
 
                     if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
                         arch_name = arch_name_node[0].firstChild.data
