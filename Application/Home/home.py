@@ -74,7 +74,15 @@ class Home(QMainWindow):
         self.generator.create_vhdl_file()
         self.generator.create_tcl_file()
         self.generator.create_testbench_file()
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Alert")
+        msgBox.setText("VHDL and Testbench Generated")
+        msgBox.exec_()
 
     def start_vivado_btn_clicked(self):
-
         self.generator.run_tcl_file()
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Alert")
+        msgBox.setText("Starting EDA tool  \nPlease wait!")
+        msgBox.exec_()
+
