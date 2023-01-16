@@ -3,6 +3,7 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 import subprocess
 import sys
+from textwrap import indent
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 
@@ -324,6 +325,7 @@ class Generator(QWidget):
                                                 else_syntax = else_syntax.replace("$default_assignments", clkgen_defaults )
                                                 if_syntax = if_syntax.replace("$else", else_syntax)
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
+                                                clkgen_defaults = indent(clkgen_defaults,'    ')
                                                 clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
                                                 clkgen_defaults = "\t" + clkif_syntax + "\n"
                                         else:

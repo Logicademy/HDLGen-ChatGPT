@@ -31,8 +31,8 @@
     <arrayType>type $arrayName is array($arraySize downto 0) of std_logic_vector($arrayLength downto 0);&#10;</arrayType>
     <process>$process_label: process($input_signals)&#10;begin&#10;&#x9;-- Complete the process&#10;$default_assignments&#10;end process;</process>
     <clkIfStatement>if $edge(clk) then&#10;$default_assignments&#x9;end if;</clkIfStatement>
-    <ifStatement>if $assignment &lt;= '$value' then&#10;$default_assignments$else&#x9;end if;</ifStatement>
-    <elseStatement>else &#10;&#x9;$default_assignments</elseStatement>
+    <ifStatement>if $assignment = '$value' then&#10;$default_assignments$else&#x9;end if;</ifStatement>
+    <elseStatement>else &#10;$default_assignments</elseStatement>
     <elsifStatement>elsif $edge(clk) then&#10;$default_assignments</elsifStatement>
     <case>&#x9;case $stateType is$whenCase&#10;&#x9;&#x9;when others =>&#10;&#x9;&#x9;&#x9;null;&#10;&#x9;end case;</case>
     <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
