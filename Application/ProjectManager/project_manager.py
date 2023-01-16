@@ -146,7 +146,11 @@ class ProjectManager(QWidget):
         self.langLayout = QGridLayout()
 
         self.proj_action_layout = QHBoxLayout()
-
+        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
+        vivadoPath = settings.readline()
+        settings.close()
+        vivadoPath=vivadoPath.strip()
+        self.vivado_dir_input.setText(vivadoPath)
         self.setup_ui()
 
         if proj_dir != None:
@@ -253,11 +257,6 @@ class ProjectManager(QWidget):
         self.proj_close_btn.clicked.connect(self.close_project)
         self.proj_save_btn.clicked.connect(self.create_xml)
 
-        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
-        vivadoPath = settings.readline()
-        settings.close()
-        self.vivado_dir_input.setText(vivadoPath)
-        ProjectManager.vivado_bat_path = vivadoPath
 
     def fill_default_proj_details(self):
 
@@ -314,7 +313,7 @@ class ProjectManager(QWidget):
         self.intel_dir_input.setText(self.intel_dir[0])
 
     def create_xml(self):
-
+        ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
 
