@@ -295,6 +295,7 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.insert(0, "Custom")
+                        out_val_options.insert(1, "all zeros")
                         out_val_combo.addItems(out_val_options)
                         out_val_options.pop(0)
 
