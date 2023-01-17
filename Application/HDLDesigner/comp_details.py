@@ -77,9 +77,9 @@ class CompDetails(QWidget):
     def setup_ui(self):
         settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
         vivadoPath = settings.readline()
-        author = settings.readline()
-        email = settings.readline()
-        company = settings.readline()
+        author = settings.readline().strip()
+        email = settings.readline().strip()
+        company = settings.readline().strip()
         settings.close()
         self.comp_author_input.setText(author)
         self.comp_email_input.setText(email)
