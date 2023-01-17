@@ -14,6 +14,7 @@ class Generator(QWidget):
         super().__init__()
 
         self.entity_name = ""
+        self.arrayPackage = ""
         self.tcl_path = ""
 
 
@@ -54,6 +55,7 @@ class Generator(QWidget):
     def generate_vhdl():
 
         gen_vhdl = ""
+        gen_array_vhdl = ""
 
         xml_data_path = ProjectManager.get_xml_data_path()
 
@@ -207,9 +209,9 @@ class Generator(QWidget):
                 gen_vhdl += gen_internal_signal
                 # arrayPackage
                 if gen_arrays != "":
-                    gen_arrayPackage = vhdl_root.getElementsByTagName("arrayPackage")[0].firstChild.data
-                    gen_arrayPackage = gen_arrayPackage.replace("$arrays", gen_arrays)
-                    gen_vhdl += gen_arrayPackage
+                    gen_array_vhdl = vhdl_root.getElementsByTagName("arrayPackage")[0].firstChild.data
+                    gen_array_vhdl = gen_array_vhdl.replace("$arrays", gen_arrays)
+                    #gen_vhdl += gen_arrayPackage
                 # Libraries Section
 
                 libraries_node = vhdl_root.getElementsByTagName("libraries")
@@ -389,18 +391,18 @@ class Generator(QWidget):
 
                     gen_vhdl += gen_arch
 
-        return entity_name, gen_vhdl
+
+        return entity_name, gen_vhdl, gen_array_vhdl
 
     def create_vhdl_file(self):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        entity_name, vhdl_code = self.generate_vhdl()
+        entity_name, vhdl_code, array_vhdl_code = self.generate_vhdl()
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
 
-        #print(vhdl_code)
-        print("Hi")
+
 
         # Writing xml file
         with open(vhdl_file_path, "w") as f:
@@ -409,7 +411,13 @@ class Generator(QWidget):
         print("VHDL Model successfully generated at ", vhdl_file_path)
 
         self.entity_name = entity_name
-
+        self.arrayPackage = array_vhdl_code
+        #Creating arrayPackage file
+        if array_vhdl_code != "":
+            array_vhdl_file_path = os.path.join(proj_path, "VHDL", "model", "arrayPackage.vhd")
+            #Write array code to file
+            with open(array_vhdl_file_path, "w") as f:
+                f.write(array_vhdl_code)
     def create_tcl_file(self):
         print("creating tcl")
         proj_name = ProjectManager.get_proj_name()
@@ -430,6 +438,10 @@ class Generator(QWidget):
         tb_file_name = self.entity_name + "_tb"
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", self.entity_name)
+        if self.arrayPackage != "":
+            tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","add_files -norecurse  ./VHDL/model/arrayPackage.vhd ")
+        else:
+            tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","")
         tcl_vivado_code = tcl_vivado_code.replace("$tb_name", tb_file_name)
         tcl_vivado_code = tcl_vivado_code.replace("$proj_name", proj_name)
         proj_path = "{" + proj_path + "}"

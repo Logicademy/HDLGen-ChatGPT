@@ -63,7 +63,7 @@ class HDLDesigner(QWidget):
         internalSignal.save_signal_btn.clicked.connect(self.update_preview)
 
     def update_preview(self):
-        entity_name, vhdl = Generator.generate_vhdl()
+        entity_name, vhdl, array_array = Generator.generate_vhdl()
         self.preview_window.setText(vhdl)
     def update_arch(self):
         xml_data_path = ProjectManager.get_xml_data_path()
