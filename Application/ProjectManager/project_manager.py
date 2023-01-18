@@ -20,7 +20,8 @@ class ProjectManager(QWidget):
 
     def __init__(self, proj_dir, MainWindow):
         super().__init__()
-
+        print("directory\n")
+        print(os.getcwd())
         ProjectManager.proj_dir = None
         ProjectManager.proj_name = None
         ProjectManager.vivado_bat_path = None
@@ -146,7 +147,9 @@ class ProjectManager(QWidget):
         self.langLayout = QGridLayout()
 
         self.proj_action_layout = QHBoxLayout()
-        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
+        settingsDir=os.getcwd() + "\Settings\settings.txt"
+        #settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
+        settings = open(settingsDir, "r")
         vivadoPath = settings.readline()
         settings.close()
         vivadoPath=vivadoPath.strip()

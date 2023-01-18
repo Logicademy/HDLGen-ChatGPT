@@ -75,7 +75,8 @@ class CompDetails(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
+        settingsDir = os.getcwd() + "\Settings\settings.txt"
+        settings = open(settingsDir, "r")
         vivadoPath = settings.readline()
         author = settings.readline().strip()
         email = settings.readline().strip()

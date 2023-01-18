@@ -2,6 +2,7 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys
+import os
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 
@@ -66,7 +67,8 @@ class settingsDialog(QDialog):
 
         self.setup_ui()
     def setup_ui(self):
-        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt" , "r")
+        settingsDir = os.getcwd() + "\Settings\settings.txt"
+        settings = open(settingsDir, "r")
         vivadoPath=settings.readline()
         author=settings.readline()
         email=settings.readline()
@@ -118,7 +120,9 @@ class settingsDialog(QDialog):
             self.ok_btn.setEnabled(False)
 
     def save(self):
-        settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "w")
+        settingsDir = os.getcwd() + "\Settings\settings.txt"
+        settings = open(settingsDir, "w")
+        #settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "w")
         lines = [self.vivado_input.text() +"\n",self.author_input.text() +"\n", self.email_input.text() +"\n",self.company_input.text() +"\n"]
         settings.writelines(lines)
         settings.close()
