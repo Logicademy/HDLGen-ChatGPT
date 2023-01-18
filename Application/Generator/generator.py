@@ -488,6 +488,7 @@ class Generator(QWidget):
         gen_internal_signal_result = ""
         # Entity Section
         inputArray = []
+        arrayPackage=False
         gen_signals = ""
         io_signals = "-- testbench signal declarations\n"
         io_signals += "-- Typically use the same signal names as in the VHDL entity, with keyword signal added, and without in/out mode keyword\n"
@@ -529,9 +530,12 @@ class Generator(QWidget):
                             inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'1\';\n"
-                        else:
+                        elif signal.getElementsByTagName('type')[0].firstChild.data == "std_logic_vector":
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'1\');\n"
+                        else:
+                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
+                            arrayPackage=True
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
@@ -626,10 +630,10 @@ class Generator(QWidget):
                 libraries_node = vhdl_root.getElementsByTagName("libraries")
                 libraries = libraries_node[0].getElementsByTagName("library")
                 gen_library = "-- library declarations\n"
-
                 for library in libraries:
                     gen_library += library.firstChild.data + "\n"
-
+                if arrayPackage == True:
+                    gen_library += "use work.arrayPackage.all;"
                 gen_library += "\n"
                 tb_code += gen_library
 
