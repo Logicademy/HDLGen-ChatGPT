@@ -75,10 +75,10 @@ class settingsDialog(QDialog):
         company=settings.readline()
         settings.close()
 
-        self.vivado_input.setText(vivadoPath)
-        self.author_input.setText(author)
-        self.email_input.setText(email)
-        self.company_input.setText(company)
+        self.vivado_input.setText(vivadoPath.strip())
+        self.author_input.setText(author.strip())
+        self.email_input.setText(email.strip())
+        self.company_input.setText(company.strip())
         self.input_layout.addWidget(self.author_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.author_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.email_label, 0, 1, 1, 1)
@@ -123,8 +123,24 @@ class settingsDialog(QDialog):
         settingsDir = os.getcwd() + "\Settings\settings.txt"
         settings = open(settingsDir, "w")
         #settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "w")
-        lines = [self.vivado_input.text() +"\n",self.author_input.text() +"\n", self.email_input.text() +"\n",self.company_input.text() +"\n"]
-        settings.writelines(lines)
+
+        if self.vivado_input.text().strip() == "":
+            self.vivado_input.setText("To be completed")
+        if self.author_input.text().strip() == "":
+            print("author is empty")
+            self.author_input.setText("To be completed")
+        if self.email_input.text().strip() == "":
+            print("email is empty")
+            self.email_input.setText("To be completed")
+            print(self.email_input.text())
+        if self.company_input.text().strip() == "":
+            print("company")
+            self.company_input.setText("To be completed")
+        #lines = [self.vivado_input.text(),self.author_input.text(), self.email_input.text(),self.company_input.text()]
+        settings.write(self.vivado_input.text()+"\n")
+        settings.write(self.author_input.text()+"\n")
+        settings.write(self.email_input.text()+"\n")
+        settings.write(self.company_input.text()+"\n")
         settings.close()
         self.cancelled = False
         self.close()
