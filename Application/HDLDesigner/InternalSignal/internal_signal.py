@@ -305,8 +305,8 @@ class InternalSignal(QWidget):
                 sig_type = "std_logic"
             elif signal[1] == "Enumerated type state signals":
                 sig_type = "Enumerated type state signals"
-            elif signal[1] == "array":
-                sig_type = signal[2]
+            #elif signal[1] == "array":
+            #    sig_type = signal[2]
             else:
                 sig_size = ("(" + str(int(signal[2]) - 1) + " downto 0)")
                 sig_type = "std_logic_vector" + sig_size
@@ -367,11 +367,11 @@ class InternalSignal(QWidget):
                 if name[:2] == "NS":
                     self.intSig_table.removeCellWidget(i, 3)
                     self.intSig_table.removeCellWidget(i, 4)
-            elif signal[0:5] == "array":
-                type=signal.split(",")
-                print(type)
-                value = type[0]+","+type[1] + "," + type[2]
-                type=type[0]
+            #elif signal[0:5] == "array":
+                #type=signal.split(",")
+                #print(type)
+                #value = type[0]+","+type[1] + "," + type[2]
+                #type=type[0]
             else:
                 type = signal[0:signal.index("(")] if signal.endswith(")") else signal
             desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
@@ -397,14 +397,6 @@ class InternalSignal(QWidget):
             ]
 
             self.all_intSignals.append(loaded_sig_data)
-
-
-
-
-
             self.intSig_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
             self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             self.intSig_table.setItem(i, 2, QTableWidgetItem(str(loaded_sig_data[2])))
-
-            #self.intSig_table.setCellWidget(i, 3, edit_btn)
-            #self.intSig_table.setCellWidget(i, 4, delete_btn)
