@@ -305,11 +305,16 @@ class InternalSignal(QWidget):
                 sig_type = "std_logic"
             elif signal[1] == "Enumerated type state signals":
                 sig_type = "Enumerated type state signals"
-            #elif signal[1] == "array":
-            #    sig_type = signal[2]
+            elif signal[1] == "integer":
+                sig_type = "integer range 0 to " + signal[2]
             else:
                 sig_size = ("(" + str(int(signal[2]) - 1) + " downto 0)")
-                sig_type = "std_logic_vector" + sig_size
+                if signal[1] == "signed":
+                    sig_type = "signed" + sig_size
+                elif signal[1] == "unsigned":
+                    sig_type = "unsigned" + sig_size
+                else:
+                    sig_type = "std_logic_vector" + sig_size
             type_node.appendChild(root.createTextNode(sig_type))
             signal_node.appendChild(type_node)
 
@@ -364,6 +369,11 @@ class InternalSignal(QWidget):
             value = "1"
             if signal == "Enumerated type state signals":
                 type = signal
+                stateTypesList = []
+                for stateType in io_ports[0].getElementsByTagName("stateTypes"):
+                    stateTypesList.append(stateType.firstChild.data)
+                self.stateTypes_names = stateTypesList
+                value = ' '.join(stateTypesList)
                 if name[:2] == "NS":
                     self.intSig_table.removeCellWidget(i, 3)
                     self.intSig_table.removeCellWidget(i, 4)
@@ -373,20 +383,33 @@ class InternalSignal(QWidget):
                 #value = type[0]+","+type[1] + "," + type[2]
                 #type=type[0]
             else:
-                type = signal[0:signal.index("(")] if signal.endswith(")") else signal
+                #type = signal[0:signal.index("(")] if signal.endswith(")") else signal
+                if signal.endswith(")"):
+                    type = signal[0:signal.index("(")]
+                    if type == "std_logic_vector" or type == "signed" or type == "unsigned":
+                        value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
+                else:
+                    print(signal)
+                    signal=signal.split(" ")
+                    type = signal[0]
+                    value = signal[4]
+
+            #desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+                #if type == "std_logic_vector" or type == "signed" or type == "unsigned":
+                    #value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
             desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            if type == "std_logic_vector":
-                value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
             #elif type == "array":
             #    value = type[1]+","+type[2]
             #    print("this is array value")
              #   print(value)
-            elif type == "Enumerated type state signals":
-                stateTypesList = []
-                for stateType in io_ports[0].getElementsByTagName("stateTypes"):
-                    stateTypesList.append(stateType.firstChild.data)
-                self.stateTypes_names = stateTypesList
-                value = ' '.join(stateTypesList)
+            #elif type == "integers":
+            #    value = str(int(signal[signal.index(" range") + 1:signal.index(" downto")]) + 1)
+            #elif type == "Enumerated type state signals":
+            #    stateTypesList = []
+            #    for stateType in io_ports[0].getElementsByTagName("stateTypes"):
+            #        stateTypesList.append(stateType.firstChild.data)
+            #    self.stateTypes_names = stateTypesList
+            #    value = ' '.join(stateTypesList)
 
             loaded_sig_data = [
                 name,

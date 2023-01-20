@@ -30,7 +30,7 @@ class IntSignalDialog(QDialog):
         bold_font.setBold(True)
 
         #self.sig_types = ["std_logic", "std_logic_vector"]
-        self.sig_types = ["std_logic", "std_logic_vector", "std_logic_vector state signals", "Enumerated type state signals"]
+        self.sig_types = ["std_logic", "std_logic_vector", "signed", "unsigned", "std_logic_vector state signals", "Enumerated type state signals", "integer"]
         self.FSM_types = ["Enumerated", "Binary"]
         self.rst_types = ["0", "1"]
 
@@ -461,25 +461,51 @@ class IntSignalDialog(QDialog):
             #self.arrayLength_label.setVisible(False)
             self.sig_size_input.clear()
 
-        #elif self.sig_type_combo.currentText() == "array":
-            #self.sig_size_input.clear()
-            #self.ok_btn.setEnabled(False)
-            #self.sig_desc_label.setVisible(False)
-            #self.sig_desc_input.setVisible(False)
-            #self.arraySize_input.setVisible(True)
-            #self.arraySize_label.setVisible(True)
-            #self.arrayLength_input.setVisible(True)
-            #self.arrayLength_label.setVisible(True)
-            #self.CS_name_label.setVisible(False)
-            #self.CS_name_input.setVisible(False)
-            #self.NS_name_label.setVisible(False)
-            #self.NS_name_input.setVisible(False)
-            #self.add_btn.setVisible(False)
-            #self.stateNames_table.setVisible(False)
-            #self.add_btn.setVisible(False)
-            #self.sig_size_label.setVisible(False)
-            #self.sig_size_input.setVisible(False)
-            #self.sig_size_input.setEnabled(False)
+        elif self.sig_type_combo.currentText() == "signed":
+            self.ok_btn.setEnabled(False)
+            self.sig_desc_label.setVisible(True)
+            self.sig_desc_input.setVisible(True)
+            self.CS_name_label.setVisible(False)
+            self.CS_name_input.setVisible(False)
+            self.NS_name_label.setVisible(False)
+            self.NS_name_input.setVisible(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
+
+        elif self.sig_type_combo.currentText() == "unsigned":
+            self.ok_btn.setEnabled(False)
+            self.sig_desc_label.setVisible(True)
+            self.sig_desc_input.setVisible(True)
+            self.CS_name_label.setVisible(False)
+            self.CS_name_input.setVisible(False)
+            self.NS_name_label.setVisible(False)
+            self.NS_name_input.setVisible(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
+
+        elif self.sig_type_combo.currentText() == "integer":
+            self.ok_btn.setEnabled(False)
+            self.sig_desc_label.setVisible(True)
+            self.sig_desc_input.setVisible(True)
+            self.CS_name_label.setVisible(False)
+            self.CS_name_input.setVisible(False)
+            #self.CS_NS_help_label.setVisible(False)
+            self.NS_name_label.setVisible(False)
+            self.NS_name_input.setVisible(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
 
     def delete_clicked(self):
         button = self.sender()
