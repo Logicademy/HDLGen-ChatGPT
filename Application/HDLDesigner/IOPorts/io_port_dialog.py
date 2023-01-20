@@ -87,22 +87,23 @@ class IOPortDialog(QDialog):
         self.input_frame = QFrame()
 
         self.cancelled = True
-        self.internal_signals=[]
+        #self.internal_signals=[]
+        self.arrays=[]
         self.setup_ui()
-        root = minidom.parse(ProjectManager.get_xml_data_path())
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+
+        root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-        intSignals = hdlDesign[0].getElementsByTagName('internalSignals')
-        intSignal_nodes = intSignals[0].getElementsByTagName('signal')
-        if len(intSignal_nodes) != 0:
-            for i in range(0, len(intSignal_nodes)):
-                internal_signal = intSignal_nodes[i].getElementsByTagName('type')[0].firstChild.data
-                print(internal_signal)
-                if internal_signal[:5] == "array":
-                    internal_signal = intSignal_nodes[i].getElementsByTagName('name')[0].firstChild.data
-                    self.internal_signals.append(internal_signal)
-        print("hello")
-        self.arrayName_input.addItems(self.internal_signals)
+        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
+        array_nodes = mainPackage[0].getElementsByTagName('array')
+
+
+        if len(array_nodes) != 0:
+            for i in range(0, len(array_nodes)):
+                array_name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                self.arrays.append(array_name)
+        self.arrayName_input.addItems(self.arrays)
 
         if add_or_edit == "edit" and signal_data != None:
             self.load_signal_data(signal_data)
@@ -168,7 +169,7 @@ class IOPortDialog(QDialog):
         sig_type=signal_data[2]
         if sig_type != "std_logic_vector" and signal_data[2] != "std_logic":
             sig_type = "array"
-            self.arrayName_input.setText(signal_data[2])
+            self.arrayName_input.setCurrentText(signal_data[2])
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
         self.sig_description_input.setText(signal_data[4])
