@@ -85,6 +85,8 @@ class Package(QWidget):
         self.package_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.package_list_title_layout.addWidget(self.depth_label, alignment=Qt.AlignLeft)
         self.package_list_title_layout.addWidget(self.width_label, alignment=Qt.AlignLeft)
+        self.package_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
+        self.package_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.package_list_layout.setAlignment(Qt.AlignTop)
         self.package_list_layout.addLayout(self.package_list_title_layout)
@@ -92,9 +94,9 @@ class Package(QWidget):
 
         self.package_table.setColumnCount(5)
         self.package_table.setShowGrid(False)
-        self.package_table.setColumnWidth(0, 100)
-        self.package_table.setColumnWidth(1, 100)
-        self.package_table.setColumnWidth(2, 100)
+        self.package_table.setColumnWidth(0, 110)
+        self.package_table.setColumnWidth(1, 110)
+        self.package_table.setColumnWidth(2, 50)
         self.package_table.setColumnWidth(3, 50)
         self.package_table.setColumnWidth(4, 50)
         self.package_table.horizontalScrollMode()
@@ -194,7 +196,6 @@ class Package(QWidget):
     def delete_clicked(self):
         button = self.sender()
         if button:
-            print("deleting")
             row = self.package_table.indexAt(button.pos()).row()
             self.package_table.removeRow(row)
             self.arrays.pop(row)

@@ -103,16 +103,17 @@ class IOPorts(QWidget):
         self.seqSytle_checkBox.clicked.connect(self.checkBox_clicked)
         self.seqSytle_editbtn.clicked.connect(self.edit_RTL)
         self.add_btn.clicked.connect(self.add_signal)
-        self.name_label.setFixedWidth(50)
-        self.mode_label.setFixedWidth(50)
-        self.type_label.setFixedWidth(50)
-        self.size_label.setFixedWidth(40)
+        #self.name_label.setFixedWidth(50)
+        #self.mode_label.setFixedWidth(50)
+        #self.type_label.setFixedWidth(50)
+        #self.size_label.setFixedWidth(40)
 
-        self.port_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.mode_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.size_label, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addSpacerItem(QSpacerItem(80, 1))
+        self.port_list_title_layout.addWidget(self.name_label, 2, alignment=Qt.AlignLeft)
+        self.port_list_title_layout.addWidget(self.mode_label, 2, alignment=Qt.AlignLeft)
+        self.port_list_title_layout.addWidget(self.type_label, 2, alignment=Qt.AlignLeft)
+        self.port_list_title_layout.addWidget(self.size_label, 2, alignment=Qt.AlignLeft)
+        self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
+        self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.port_list_layout.setAlignment(Qt.AlignTop)
         self.port_list_layout.addLayout(self.port_list_title_layout)
@@ -120,9 +121,9 @@ class IOPorts(QWidget):
 
         self.port_table.setColumnCount(6)
         self.port_table.setShowGrid(False)
-        self.port_table.setColumnWidth(0, 65)
-        self.port_table.setColumnWidth(1, 50)
-        self.port_table.setColumnWidth(2, 100)
+        self.port_table.setColumnWidth(0, 80)
+        self.port_table.setColumnWidth(1, 80)
+        self.port_table.setColumnWidth(2, 80)
         self.port_table.setColumnWidth(3, 10)
         self.port_table.setColumnWidth(4, 10)
         self.port_table.setColumnWidth(5, 10)
@@ -139,7 +140,7 @@ class IOPorts(QWidget):
 
         self.port_list_frame.setFrameShape(QFrame.StyledPanel)
         self.port_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.port_list_frame.setFixedSize(420, 300)#380
+        self.port_list_frame.setFixedSize(420, 300)
         self.port_list_frame.setLayout(self.port_list_layout)
 
         self.port_action_layout.addLayout(self.port_heading_layout)

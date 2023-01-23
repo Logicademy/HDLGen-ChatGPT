@@ -122,7 +122,7 @@ class CompDetails(QWidget):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(30, 30, 30, 25)
-        self.input_frame.setFixedSize(400, 400)
+        self.input_frame.setFixedSize(500, 400)
         self.input_frame.setLayout(self.input_layout)
 
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)

@@ -35,9 +35,12 @@ class Architecture(QWidget):
 
         self.arch_types = ["RTL", "Combinational"]
         self.arch_name_input = QLabel("Combinational")
+        self.arch_name_input.setFont(title_font)
         self.arch_name_input.setStyleSheet(WHITE_COLOR)
-        self.arch_name_label = QLabel("Architecture Name*")
-        self.arch_name_label.setStyleSheet(WHITE_COLOR)
+        #self.arch_name_label = QLabel("Architecture")
+        #self.arch_name_label.setFont(title_font)
+        #self.arch_name_label.setStyleSheet(WHITE_COLOR)
+
 
         self.new_proc_btn = QPushButton("New Process")
         self.new_proc_btn.setFixedSize(100, 25)
@@ -59,7 +62,7 @@ class Architecture(QWidget):
 
         self.save_btn = QPushButton("Save")
         self.save_btn.setEnabled(False)
-        self.save_btn.setFixedSize(100, 25)
+        self.save_btn.setFixedSize(60, 30)
         self.save_btn.setStyleSheet(
             "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
@@ -89,18 +92,19 @@ class Architecture(QWidget):
             self.load_data(proj_dir)
     def setup_ui(self):
         self.enable_save_btn()
-        self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
-        self.top_layout.addWidget(self.arch_name_input, 1, 0, 1, 3)
-        self.top_layout.addWidget(self.new_proc_btn, 2, 0, 1, 1)
+        #self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
+        self.top_layout.addWidget(self.arch_name_input, 0, 0, 1, 1)
+        self.top_layout.addWidget(self.new_proc_btn, 0, 1, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
-        self.top_layout.addWidget(self.new_conc_btn, 2, 1, 1, 2)
+        self.top_layout.addWidget(self.new_conc_btn, 0, 2, 1, 1)
         self.new_conc_btn.clicked.connect(self.add_concurrentstmt)
 
         self.arch_action_layout.addLayout(self.top_layout)
 
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.main_frame.setFixedSize(400, 400)
+        self.main_frame.setFixedSize(500, 400)
+
         self.main_frame.setLayout(self.arch_action_layout)
 
         self.name_label.setFixedWidth(97)
@@ -132,14 +136,15 @@ class Architecture(QWidget):
 
         self.list_frame.setFrameShape(QFrame.StyledPanel)
         self.list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.list_frame.setFixedSize(380, 245)
+        self.list_frame.setFixedSize(420, 300)
         self.list_frame.setLayout(self.list_layout)
 
-        self.arch_action_layout.addItem(QSpacerItem(10, 5))
+        self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.arch_action_layout.addWidget(self.list_frame, alignment=Qt.AlignCenter)
-        self.arch_action_layout.addItem(QSpacerItem(10, 15))
+        self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
         self.save_btn.clicked.connect(self.save_data)
+
 
         self.mainLayout.addWidget(self.main_frame, alignment=Qt.AlignCenter)
 
@@ -364,27 +369,6 @@ class Architecture(QWidget):
         arch_node = hdlDesign[0].getElementsByTagName('architecture')
         arch_name_node = hdlDesign[0].getElementsByTagName("archName")
 
-        #if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
-           # clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
-            #if len(clkAndRst) != 1:
-                #self.process = "RTL"
-                #self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
-                #self.arch_name_input.setText('RTL')
-                #print(self.process)
-                #print("should be rtl")
-            #else:
-                #print("should be comb")
-                #self.process = "Combin"
-                #self.arch_name_input.setText('Combinational')
-                #print(self.arch_name_input.text())
-                #print(self.process)
-                #print("should be comb")
-                #self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
-            #if arch_name_node[0].firstChild.data == "Combinational":
-            #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
-            #    self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
-            #else:
-            #    self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
 
         if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 

@@ -123,12 +123,12 @@ class ProcessDialog(QDialog):
         self.in_sig_frame.setFixedWidth(175)
 
 
-        self.out_sig_label.setFixedWidth(80)
+        #self.out_sig_label.setFixedWidth(80)
         self.out_sig_header_layout.addWidget(self.out_sig_label,alignment=Qt.AlignRight)
-        self.val_label.setFixedWidth(80)
+        #self.val_label.setFixedWidth(80)
         self.out_sig_header_layout.addWidget(self.val_label,alignment=Qt.AlignRight)
-        self.Binval_label.setFixedWidth(80)
-        self.out_sig_header_layout.addWidget(self.Binval_label)
+        #self.Binval_label.setFixedWidth(80)
+        self.out_sig_header_layout.addWidget(self.Binval_label,alignment=Qt.AlignRight)
 
         self.out_sig_layout.addLayout(self.out_sig_header_layout)
         self.out_sig_layout.addWidget(self.list_div)
@@ -138,7 +138,7 @@ class ProcessDialog(QDialog):
         self.out_sig_table.setColumnWidth(0, 1)
         self.out_sig_table.setColumnWidth(1, 80)
         self.out_sig_table.setColumnWidth(2, 90)
-        self.out_sig_table.setColumnWidth(3, 80)
+        self.out_sig_table.setColumnWidth(3, 90)
         self.out_sig_table.horizontalScrollMode()
         self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.out_sig_table.horizontalScrollBar().hide()
@@ -371,8 +371,6 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
                         if signal[0:2] != "NS":
-                            print("not NS")
-                            print(signal)
                             CScheckbox = QCheckBox()
                             CScheckbox.setFixedWidth(45)
 
@@ -454,7 +452,6 @@ class ProcessDialog(QDialog):
             default_vals.append(temp[1])
             if len(temp) == 3:
                 clk_default_vals.append(temp[2])
-                print("there is a 3rd index")
 
 
         for i in range(0, self.out_sig_table.rowCount()):

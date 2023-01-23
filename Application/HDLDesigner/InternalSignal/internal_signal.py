@@ -81,13 +81,15 @@ class InternalSignal(QWidget):
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_intSignal)
 
-        self.name_label.setFixedWidth(115)
-        self.type_label.setFixedWidth(105)
-        self.size_label.setFixedWidth(145)
+        #self.name_label.setFixedWidth(115)
+        #self.type_label.setFixedWidth(105)
+        #self.size_label.setFixedWidth(145)
 
         self.instSig_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.size_label, alignment=Qt.AlignLeft)
+        self.instSig_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
+        self.instSig_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.intSig_list_layout.setAlignment(Qt.AlignTop)
         self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
@@ -95,12 +97,12 @@ class InternalSignal(QWidget):
 
         self.intSig_table.setColumnCount(5)
         self.intSig_table.setShowGrid(False)
-        self.intSig_table.setColumnWidth(0, 100)
+        self.intSig_table.setColumnWidth(0, 110)
         self.intSig_table.setColumnWidth(1, 110)
         self.intSig_table.setColumnWidth(2, 50)
         self.intSig_table.setColumnWidth(3, 1)
         self.intSig_table.setColumnWidth(4, 1)
-        self.intSig_table.horizontalScrollMode()
+        #self.intSig_table.horizontalScrollMode()
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.intSig_table.horizontalScrollBar().hide()
         header = self.intSig_table.horizontalHeader()
@@ -127,6 +129,7 @@ class InternalSignal(QWidget):
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.intSig_action_frame.setFixedSize(500, 400)#400, 400
+
         self.intSig_action_frame.setLayout(self.intSig_action_layout)
 
 

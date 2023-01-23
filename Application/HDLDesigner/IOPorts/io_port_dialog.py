@@ -193,10 +193,11 @@ class IOPortDialog(QDialog):
             self.sig_size_input.setText("1")
     def sig_type_options(self):
         if self.sig_type_input.currentText() == "array":
-            self.sig_size_input.setVisible(False)
-            self.sig_size_label.setVisible(False)
             self.arrayName_label.setVisible(True)
             self.arrayName_input.setVisible(True)
+            self.sig_size_input.setVisible(False)
+            self.sig_size_label.setVisible(False)
+
         else:
             self.sig_size_input.setVisible(True)
             self.sig_size_label.setVisible(True)
