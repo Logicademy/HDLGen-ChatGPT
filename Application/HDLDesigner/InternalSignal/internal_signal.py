@@ -147,7 +147,6 @@ class InternalSignal(QWidget):
                 i = 2
             else:
                 i = 1
-            print("Entering while loop " + str(self.all_intSignals))
             while i > 0:
                 delete_btn = QPushButton()
                 delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -165,14 +164,7 @@ class InternalSignal(QWidget):
 
                 self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
                 if type(intSignal_data[2]) is list:
-                    print("test3")
-                    print(type(intSignal_data[2]))
                     intSignal_data[2] = str(intSignal_data[2])
-                    #intSignal_data[2] = ""
-                    #for state in intSignal_data[2]:
-                    #    print("test2")
-                    #    intSignal_data[2] = state
-                print(intSignal_data[2])
                 self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
@@ -209,12 +201,10 @@ class InternalSignal(QWidget):
 
             if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
                 i = 2
-                print("NS row removed")
                 self.intSig_table.removeRow(rowBefore)
                 self.all_intSignals.pop(rowBefore)
             else:
                 i = 1
-            print("Entering while loop " + str(self.all_intSignals))
             while i > 0:
                 delete_btn = QPushButton()
                 delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -232,10 +222,7 @@ class InternalSignal(QWidget):
 
                 self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
                 if type(intSignal_data[2]) is list:
-                    print("test3")
-                    print(type(intSignal_data[2]))
                     intSignal_data[2] = str(intSignal_data[2])
-                print(intSignal_data[2])
                 self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
@@ -265,18 +252,15 @@ class InternalSignal(QWidget):
         if button:
             row = self.intSig_table.indexAt(button.pos()).row()
             rowBefore = row -1
-            print("deleting")
             if str(self.all_intSignals[row][1]) == "Enumerated type state signals":
                 self.stateTypes_names = []
             if str(self.all_intSignals[row][1]) == "Enumerated type state signals" or str(self.all_intSignals[row][1]) == "std_logic_vector state signals":
-                print("deleting row before")
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
                 self.all_intSignals.pop(rowBefore)
                 self.intSig_table.removeRow(rowBefore)
 
             else:
-                print("deleting row")
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
 
@@ -389,7 +373,6 @@ class InternalSignal(QWidget):
                     if type == "std_logic_vector" or type == "signed" or type == "unsigned":
                         value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
                 else:
-                    print(signal)
                     signal=signal.split(" ")
                     type = signal[0]
                     value = signal[4]

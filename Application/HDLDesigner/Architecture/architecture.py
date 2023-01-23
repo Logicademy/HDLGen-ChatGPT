@@ -33,12 +33,9 @@ class Architecture(QWidget):
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
 
-        #self.arch_name_input = QLineEdit()
         self.arch_types = ["RTL", "Combinational"]
         self.arch_name_input = QLabel("Combinational")
         self.arch_name_input.setStyleSheet(WHITE_COLOR)
-        #self.arch_name_input = QComboBox()
-        #self.arch_name_input.addItems(self.arch_types)
         self.arch_name_label = QLabel("Architecture Name*")
         self.arch_name_label.setStyleSheet(WHITE_COLOR)
 
@@ -87,23 +84,17 @@ class Architecture(QWidget):
 
         self.list_frame = QFrame()
         self.main_frame = QFrame()
-        print(self.process)
         self.setup_ui()
         if proj_dir != None:
             self.load_data(proj_dir)
-            print("after proj_dir")
-            print(self.process)
     def setup_ui(self):
         self.enable_save_btn()
         self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
         self.top_layout.addWidget(self.arch_name_input, 1, 0, 1, 3)
-        #self.arch_name_input.currentTextChanged.connect(self.enable_save_btn)
-        #self.arch_name_input.textChanged.connect(self.enable_save_btn);
         self.top_layout.addWidget(self.new_proc_btn, 2, 0, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
         self.top_layout.addWidget(self.new_conc_btn, 2, 1, 1, 2)
         self.new_conc_btn.clicked.connect(self.add_concurrentstmt)
-        # self.top_layout.addWidget(self.new_strg_btn, 2, 1)
 
         self.arch_action_layout.addLayout(self.top_layout)
 
@@ -162,10 +153,8 @@ class Architecture(QWidget):
             data = add_proc.get_data()
             data.insert(0, "process")
             self.all_data.append(data)
-            print(data)
 
             delete_btn = QPushButton()
-            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
             delete_btn.setIcon(qta.icon("mdi.delete"))
             delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
@@ -243,10 +232,8 @@ class Architecture(QWidget):
             data = add_concurrentstmt.get_data()
             data.insert(0, "concurrentStmt")
             self.all_data.append(data)
-            print(data)
 
             delete_btn = QPushButton()
-            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
             delete_btn.setIcon(qta.icon("mdi.delete"))
             delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
@@ -269,7 +256,6 @@ class Architecture(QWidget):
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
 
     def edit_concurrentstmt(self):
-        print("edit conc")
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
@@ -282,7 +268,6 @@ class Architecture(QWidget):
                 data.insert(0, "concurrentStmt")
                 self.proc_table.removeRow(row)
                 self.all_data.pop(row)
-                print(data)
 
                 delete_btn = QPushButton()
                 # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
@@ -311,8 +296,8 @@ class Architecture(QWidget):
             self.all_data.pop(row)
 
     def save_data(self):
-        print("in save data")
-        print(self.process)
+        #print("in save data")
+        #print(self.process)
         xml_data_path = ProjectManager.get_xml_data_path()
 
         root = minidom.parse(xml_data_path)
@@ -372,7 +357,6 @@ class Architecture(QWidget):
         print("Successfully saved all the signals!")
 
     def load_data(self, proj_dir):
-        print("This worked architecture ")
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -380,17 +364,16 @@ class Architecture(QWidget):
         arch_node = hdlDesign[0].getElementsByTagName('architecture')
         arch_name_node = hdlDesign[0].getElementsByTagName("archName")
 
-        if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
-            clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
-            if len(clkAndRst) != 1:
-                print("should be rtl")
+        #if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
+           # clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
+            #if len(clkAndRst) != 1:
                 #self.process = "RTL"
                 #self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
                 #self.arch_name_input.setText('RTL')
                 #print(self.process)
                 #print("should be rtl")
-            else:
-                print("should be comb")
+            #else:
+                #print("should be comb")
                 #self.process = "Combin"
                 #self.arch_name_input.setText('Combinational')
                 #print(self.arch_name_input.text())
@@ -505,13 +488,12 @@ class Architecture(QWidget):
 
 
                 child = next
-                print(self.all_data)
+                #print(self.all_data)
             #self.save_data()
             #self.updateProcess()
     def updateProcessName(self, proj_dir):
 
-        #print(proj_dir[0])
-        root = minidom.parse(proj_dir)#[0])
+        root = minidom.parse(proj_dir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
@@ -519,7 +501,6 @@ class Architecture(QWidget):
             self.process = "RTL"
             self.arch_name_input.setText('RTL')
         else:
-            print("should be comb")
             self.process = "Combin"
             self.arch_name_input.setText('Combinational')
     def enable_save_btn(self):
