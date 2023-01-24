@@ -28,7 +28,7 @@ class PackageDialog(QDialog):
         bold_font.setBold(True)
 
         self.mainLayout = QVBoxLayout()
-
+        self.sig_types = [ "std_logic_vector", "signed", "unsigned"]
         self.array_name_label = QLabel("Array Name*")
         self.array_name_label.setStyleSheet(WHITE_COLOR)
         self.array_name_input = QLineEdit()
@@ -40,6 +40,14 @@ class PackageDialog(QDialog):
         self.arrayLength_label = QLabel("Array Width")
         self.arrayLength_label.setStyleSheet(WHITE_COLOR)
         self.arrayLength_input = QLineEdit()
+
+        self.sig_type_label = QLabel("Signal Type")
+        self.sig_type_label.setStyleSheet(WHITE_COLOR)
+        self.sig_type_combo = QComboBox()
+        pal = self.sig_type_combo.palette()
+        pal.setColor(QPalette.Button, QColor(255, 255, 255))
+        self.sig_type_combo.setPalette(pal)
+        self.sig_type_combo.addItems(self.sig_types)
 
         self.onlyInt = QIntValidator()
         self.arraySize_input.setValidator(self.onlyInt)
@@ -77,6 +85,9 @@ class PackageDialog(QDialog):
         self.input_layout.addWidget(self.array_name_label, 0, 0)  # , 1, 3)
         self.input_layout.addWidget(self.array_name_input, 1, 0)  # , 1, 3)
 
+        self.input_layout.addWidget(self.sig_type_label, 0, 1)
+        self.input_layout.addWidget(self.sig_type_combo, 1, 1)
+
         self.input_layout.addWidget(self.arraySize_label, 2, 0, 1, 1)
         self.input_layout.addWidget(self.arraySize_input, 3, 0, 1, 1)
 
@@ -109,12 +120,14 @@ class PackageDialog(QDialog):
         self.array_name_input.setText(array_data[0])
         self.arraySize_input.setText(array_data[1])
         self.arrayLength_input.setText(array_data[2])
+        self.sig_type_combo.setCurrentText(array_data[3])
 
     def get_data(self):
-        data = [self.array_name_input.text(), self.arraySize_input.text(), self.arrayLength_input.text()]
+        data = [self.array_name_input.text(), self.arraySize_input.text(), self.arrayLength_input.text(), self.sig_type_combo.currentText()]
         print(data)
         self.cancelled = False
         self.close()
+
         return data
 
     def cancel_selected(self):

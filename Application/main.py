@@ -135,7 +135,7 @@ class HDLGen(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     window = HDLGen()
-    window.setFixedSize(600, 300)
+    window.setFixedSize(600, 350)
     window.show()
     app.setStyle('windowsvista')
     app.exec_()

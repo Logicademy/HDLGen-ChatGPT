@@ -59,6 +59,8 @@ class Package(QWidget):
         self.depth_label.setFont(bold_font)
         self.width_label = QLabel("Width")
         self.width_label.setFont(bold_font)
+        self.type_label = QLabel("Type")
+        self.type_label.setFont(bold_font)
 
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
@@ -79,27 +81,30 @@ class Package(QWidget):
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_package)
 
-        self.name_label.setFixedWidth(100)
-        self.depth_label.setFixedWidth(100)
-        self.width_label.setFixedWidth(100)
+        #self.name_label.setFixedWidth(50)
+        #self.depth_label.setFixedWidth(40)
+        #self.width_label.setFixedWidth(40)
+        #self.type_label.setFixedWidth(100)
 
         self.package_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.package_list_title_layout.addWidget(self.depth_label, alignment=Qt.AlignLeft)
         self.package_list_title_layout.addWidget(self.width_label, alignment=Qt.AlignLeft)
-        self.package_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
-        self.package_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
+        self.package_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
+        self.package_list_title_layout.addSpacerItem(QSpacerItem(30, 1))
+        self.package_list_title_layout.addSpacerItem(QSpacerItem(30, 1))
 
         self.package_list_layout.setAlignment(Qt.AlignTop)
         self.package_list_layout.addLayout(self.package_list_title_layout)
         self.package_list_layout.addWidget(self.list_div)
 
-        self.package_table.setColumnCount(5)
+        self.package_table.setColumnCount(6)
         self.package_table.setShowGrid(False)
         self.package_table.setColumnWidth(0, 110)
-        self.package_table.setColumnWidth(1, 110)
+        self.package_table.setColumnWidth(1, 50)
         self.package_table.setColumnWidth(2, 50)
-        self.package_table.setColumnWidth(3, 50)
+        self.package_table.setColumnWidth(3, 110)
         self.package_table.setColumnWidth(4, 50)
+        self.package_table.setColumnWidth(5, 50)
         self.package_table.horizontalScrollMode()
         self.package_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.package_table.horizontalScrollBar().hide()
@@ -158,8 +163,9 @@ class Package(QWidget):
             self.package_table.setItem(row_position, 0, QTableWidgetItem(array_data[0]))
             self.package_table.setItem(row_position, 1, QTableWidgetItem(array_data[1]))
             self.package_table.setItem(row_position, 2, QTableWidgetItem(array_data[2]))
-            self.package_table.setCellWidget(row_position, 3, edit_btn)
-            self.package_table.setCellWidget(row_position, 4, delete_btn)
+            self.package_table.setItem(row_position, 3, QTableWidgetItem(array_data[3]))
+            self.package_table.setCellWidget(row_position, 4, edit_btn)
+            self.package_table.setCellWidget(row_position, 5, delete_btn)
 
     def edit_package(self):
         button = self.sender()
@@ -170,7 +176,7 @@ class Package(QWidget):
 
             if not add_pack.cancelled:
                 array_data = add_pack.get_data()
-                self.port_table.removeRow(row)
+                self.package_table.removeRow(row)
                 self.arrays.pop(row)
                 self.arrays_names.pop(row)
 
@@ -182,18 +188,19 @@ class Package(QWidget):
                 edit_btn = QPushButton()
                 edit_btn.setIcon(qta.icon("mdi.pencil"))
                 edit_btn.setFixedSize(35, 22)
-                edit_btn.clicked.connect(self.edit_io_port)
+                edit_btn.clicked.connect(self.edit_package)
 
                 self.arrays.insert(row, array_data)
                 self.arrays_names.insert(row, array_data[0])
-                self.port_table.insertRow(row)
-                self.port_table.setRowHeight(row, 5)
+                self.package_table.insertRow(row)
+                self.package_table.setRowHeight(row, 5)
 
-                self.port_table.setItem(row, 0, QTableWidgetItem(array_data[0]))
-                self.port_table.setItem(row, 1, QTableWidgetItem(array_data[1]))
-                self.port_table.setItem(row, 2, QTableWidgetItem(array_data[2]))
-                self.port_table.setCellWidget(row, 3, edit_btn)
-                self.port_table.setCellWidget(row, 4, delete_btn)
+                self.package_table.setItem(row, 0, QTableWidgetItem(array_data[0]))
+                self.package_table.setItem(row, 1, QTableWidgetItem(array_data[1]))
+                self.package_table.setItem(row, 2, QTableWidgetItem(array_data[2]))
+                self.package_table.setItem(row, 3, QTableWidgetItem(array_data[3]))
+                self.package_table.setCellWidget(row, 4, edit_btn)
+                self.package_table.setCellWidget(row, 5, delete_btn)
 
     def delete_clicked(self):
         button = self.sender()
@@ -226,6 +233,11 @@ class Package(QWidget):
             width_node.appendChild(root.createTextNode(array[2]))
             array_node.appendChild(width_node)
             mainPackage.appendChild(array_node)
+
+            sigType_node = root.createElement('signalType')
+            sigType_node.appendChild(root.createTextNode(array[3]))
+            array_node.appendChild(sigType_node)
+            mainPackage.appendChild(array_node)
         hdlDesign[0].replaceChild(mainPackage, hdlDesign[0].getElementsByTagName('mainPackage')[0])
 
         # converting the doc into a string in xml format
@@ -249,12 +261,14 @@ class Package(QWidget):
             name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+            sigType = array_nodes[i].getElementsByTagName('signalType')[0].firstChild.data
             self.arrays_names.append(name)
 
             loaded_array_data = [
                 name,
                 depth,
-                width
+                width,
+                sigType
             ]
 
             delete_btn = QPushButton()
@@ -273,6 +287,7 @@ class Package(QWidget):
             self.package_table.setItem(i, 0, QTableWidgetItem(loaded_array_data[0]))
             self.package_table.setItem(i, 1, QTableWidgetItem(loaded_array_data[1]))
             self.package_table.setItem(i, 2, QTableWidgetItem(loaded_array_data[2]))
-            self.package_table.setCellWidget(i, 3, edit_btn)
-            self.package_table.setCellWidget(i, 4, delete_btn)
+            self.package_table.setItem(i, 3, QTableWidgetItem(loaded_array_data[3]))
+            self.package_table.setCellWidget(i, 4, edit_btn)
+            self.package_table.setCellWidget(i, 5, delete_btn)
             self.arrays.append(loaded_array_data)

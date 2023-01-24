@@ -738,9 +738,11 @@ class Generator(QWidget):
             name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+            sigType = array_nodes[i].getElementsByTagName('signalType')[0].firstChild.data
 
             gen_arrayType_syntax = vhdl_root.getElementsByTagName("arrayType")[0].firstChild.data
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayName", name)
+            gen_arrayType_syntax = gen_arrayType_syntax.replace("$signalType", sigType)
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", depth)
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", width)
             gen_arrays += gen_arrayType_syntax
