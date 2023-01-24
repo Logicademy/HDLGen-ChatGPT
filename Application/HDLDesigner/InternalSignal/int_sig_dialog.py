@@ -30,7 +30,7 @@ class IntSignalDialog(QDialog):
         bold_font.setBold(True)
 
         #self.sig_types = ["std_logic", "std_logic_vector"]
-        self.sig_types = ["std_logic", "std_logic_vector", "signed", "unsigned", "std_logic_vector state signals", "Enumerated type state signals", "integer"]
+        self.sig_types = ["std_logic", "std_logic_vector", "signed", "unsigned", "Non enumerated type state signals", "Enumerated type state signals", "integer"]
         self.FSM_types = ["Enumerated", "Binary"]
         self.rst_types = ["0", "1"]
 
@@ -217,7 +217,7 @@ class IntSignalDialog(QDialog):
             #    self.arrayLength_input.setText(arrayDim[2])
             #else:
             self.sig_size_input.setText(intSig_data[2])
-            if intSig_data[1] == "std_logic_vector state signals":
+            if intSig_data[1] == "Non enumerated type state signals":
                 self.intSig_name_input.setText(intSig_data[0][2:])
             else:
                 self.intSig_name_input.setText(intSig_data[0])
@@ -270,7 +270,7 @@ class IntSignalDialog(QDialog):
         return data
     def get_data(self):
         data = []
-        #if self.sig_type_combo.currentText() == "std_logic_vector state signals":
+        #if self.sig_type_combo.currentText() == "Non enumerated type state signals":
 
         intSignalDescription = self.sig_desc_input.text()
         if intSignalDescription == "":
@@ -295,7 +295,7 @@ class IntSignalDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.sig_type_combo.currentText() == "std_logic_vector state signals":
+        if self.sig_type_combo.currentText() == "Non enumerated type state signals":
             if self.sig_size_input.text() != "":
                 self.ok_btn.setEnabled(True)
             else:
@@ -438,7 +438,7 @@ class IntSignalDialog(QDialog):
             #self.arrayLength_input.setVisible(False)
             #self.arrayLength_label.setVisible(False)
 
-        elif self.sig_type_combo.currentText() == "std_logic_vector state signals":
+        elif self.sig_type_combo.currentText() == "Non enumerated type state signals":
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
