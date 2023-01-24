@@ -8,6 +8,7 @@ import qtawesome as qta
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Package.package_dialog import PackageDialog
+from Generator.generator import Generator
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -35,11 +36,11 @@ class Package(QWidget):
 
         self.mainLayout = QVBoxLayout()
 
-        self.io_list_label = QLabel("Default packages")
-        self.io_list_label.setFont(title_font)
-        self.io_list_label.setStyleSheet(WHITE_COLOR)
+        self.package_label = QLabel("mainPackage.vhd")
+        self.package_label.setFont(title_font)
+        self.package_label.setStyleSheet(WHITE_COLOR)
 
-        self.add_btn = QPushButton("Add Package")
+        self.add_btn = QPushButton("Add type")
         self.add_btn.setFixedSize(80, 25)
         self.add_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
@@ -67,14 +68,14 @@ class Package(QWidget):
 
         self.package_list_frame = QFrame()
         self.package_action_frame = QFrame()
-
+        self.generator = Generator()
         self.setup_ui()
         self.load_data()
 
     def setup_ui(self):
 
         # Port List section
-        self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
+        self.port_heading_layout.addWidget(self.package_label, alignment=Qt.AlignLeft)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_package)
 
@@ -130,6 +131,7 @@ class Package(QWidget):
         self.mainLayout.addWidget(self.package_action_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
+
 
     def add_package(self):
         add_pack = PackageDialog("add")
@@ -232,6 +234,7 @@ class Package(QWidget):
         # Writing xml file
         with open(mainPackageDir, "w") as f:
             f.write(xml_str)
+        self.generator.generate_mainPackage()
 
     def load_data(self):
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"

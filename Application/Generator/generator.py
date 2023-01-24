@@ -15,6 +15,7 @@ class Generator(QWidget):
 
         self.entity_name = ""
         self.arrayPackage = ""
+        self.includeArrays = False
         self.tcl_path = ""
 
 
@@ -51,8 +52,8 @@ class Generator(QWidget):
 
         # print("All project folders have been successfully generated at ", self.proj_dir)
 
-    @staticmethod
-    def generate_vhdl():
+    #@staticmethod
+    def generate_vhdl(self):
 
         gen_vhdl = ""
         gen_array_vhdl = ""
@@ -77,13 +78,13 @@ class Generator(QWidget):
         gen_internal_signal_result = ""
         arrayList=[]
         # Entity Section
-
         gen_signals = ""
         entity_signal_description = ""
         io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
         gen_entity = ""
+        self.includeArrays = False
         gen_arrays=""
-        includeArrays = False
+
         stateTypeSig = False
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
@@ -91,7 +92,7 @@ class Generator(QWidget):
                 name = signal.getElementsByTagName('name')[0].firstChild.data
                 type = signal.getElementsByTagName('type')[0].firstChild.data
                 if type[0:5] == "array":
-                    includeArrays = True
+                    self.includeArrays = True
                     arrayList.append(name)
                 signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
@@ -214,7 +215,8 @@ class Generator(QWidget):
 
                 #gen_library += "\n"
                 gen_vhdl += gen_library
-                if includeArrays == True:
+                if self.includeArrays == True:
+
                     gen_vhdl += "use work.arrayPackage.all;"
 
                 # Entity Section placement
@@ -385,39 +387,18 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     gen_vhdl += gen_arch
-        if includeArrays == True:
-            mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-            root = minidom.parse(mainPackageDir)
-            HDLGen = root.documentElement
-            hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-            mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
-            array_nodes = mainPackage[0].getElementsByTagName('array')
-            for i in range(0, len(array_nodes)):
-                name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
-                depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
-                width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+        #if includeArrays == True:
 
-                gen_arrayType_syntax = vhdl_root.getElementsByTagName("arrayType")[0].firstChild.data
-                gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayName", name)
-                gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", depth)
-                gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", width)
-                gen_arrays += gen_arrayType_syntax
-                # arrayPackage
-            if gen_arrays != "":
-                gen_array_vhdl = vhdl_root.getElementsByTagName("arrayPackage")[0].firstChild.data
-                gen_array_vhdl = gen_array_vhdl.replace("$arrays", gen_arrays)
 
-        return entity_name, gen_vhdl, gen_array_vhdl
+        return entity_name, gen_vhdl#, gen_array_vhdl
 
     def create_vhdl_file(self):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        entity_name, vhdl_code, array_vhdl_code = self.generate_vhdl()
+        entity_name, vhdl_code = self.generate_vhdl()
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
-
-
 
         # Writing xml file
         with open(vhdl_file_path, "w") as f:
@@ -427,14 +408,7 @@ class Generator(QWidget):
 
         self.entity_name = entity_name
 
-        self.arrayPackage = array_vhdl_code
-        #Creating arrayPackage file
-        if array_vhdl_code != "":
-            array_vhdl_file_path = os.getcwd() + "\HDLDesigner\Package\mainPackage.vhd"
-            #array_vhdl_file_path = os.path.join(proj_path, "VHDL", "model", "arrayPackage.vhd")
-            #Write array code to file
-            with open(array_vhdl_file_path, "w") as f:
-                f.write(array_vhdl_code)
+
     def create_tcl_file(self):
         print("creating tcl")
         proj_name = ProjectManager.get_proj_name()
@@ -459,7 +433,7 @@ class Generator(QWidget):
         wd = os.getcwd()
         wd = wd.replace("\\","/")
         mainPackagePath = "add_files -norecurse  "+ wd +"/HDLDesigner/Package/mainPackage.vhd"
-        if self.arrayPackage != "":
+        if self.includeArrays == True:
             tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","")
@@ -747,3 +721,36 @@ class Generator(QWidget):
             f.write(vhdl_tb_code)
 
         print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
+
+    def generate_mainPackage(self):
+        gen_arrays =""
+        vhdl_database_path = "./Generator/HDL_Database/vhdl_database.xml"
+        # Parsing the xml file
+        vhdl_database = minidom.parse(vhdl_database_path)
+        vhdl_root = vhdl_database.documentElement
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        root = minidom.parse(mainPackageDir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
+        array_nodes = mainPackage[0].getElementsByTagName('array')
+        for i in range(0, len(array_nodes)):
+            name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
+            depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
+            width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+
+            gen_arrayType_syntax = vhdl_root.getElementsByTagName("arrayType")[0].firstChild.data
+            gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayName", name)
+            gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", depth)
+            gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", width)
+            gen_arrays += gen_arrayType_syntax
+            # arrayPackage
+        # if gen_arrays != "":
+        array_vhdl_code = vhdl_root.getElementsByTagName("arrayPackage")[0].firstChild.data
+        array_vhdl_code = array_vhdl_code.replace("$arrays", gen_arrays)
+        # Creating arrayPackage file
+        array_vhdl_file_path = os.getcwd() + "\HDLDesigner\Package\mainPackage.vhd"
+        # array_vhdl_file_path = os.path.join(proj_path, "VHDL", "model", "arrayPackage.vhd")
+        # Write array code to file
+        with open(array_vhdl_file_path, "w") as f:
+            f.write(array_vhdl_code)
