@@ -383,7 +383,7 @@ class Generator(QWidget):
                     gen_arch = arch_syntax.replace("$arch_name", arch_name)
                     gen_arch = gen_arch.replace("$comp_name", entity_name)
                     gen_arch = gen_arch.replace("$int_sig_declaration", gen_int_sig)
-                    gen_arch = gen_arch.replace("$component_declarations", "-- Component declarations")
+                    #gen_arch = gen_arch.replace("$component_declarations", "-- Component declarations")
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     gen_vhdl += gen_arch

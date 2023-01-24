@@ -146,7 +146,7 @@ class InternalSignal(QWidget):
             CSIntSignal_data = add_intSig.get_data()
             CSIntSignal_data[0] = "CS" + CSIntSignal_data[0]
 
-            if intSignal_data[1] == "Non enumerated type state signals" or intSignal_data[1] == "Enumerated type state signals":
+            if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
                 i = 2
             else:
                 i = 1
@@ -171,7 +171,7 @@ class InternalSignal(QWidget):
                 self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
-                if intSignal_data[1] == "Non enumerated type state signals" or intSignal_data[1] == "Enumerated type state signals":
+                if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
                     if (i == 2) :
                         self.intSig_table.removeCellWidget(row_position, 3)
                         self.intSig_table.removeCellWidget(row_position, 4)
@@ -202,7 +202,7 @@ class InternalSignal(QWidget):
             self.all_intSignals.pop(row)
             CSIntSignal_data[0] = "CS" + CSIntSignal_data[0]
 
-            if intSignal_data[1] == "Non enumerated type state signals" or intSignal_data[1] == "Enumerated type state signals":
+            if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
                 i = 2
                 self.intSig_table.removeRow(rowBefore)
                 self.all_intSignals.pop(rowBefore)
@@ -229,7 +229,7 @@ class InternalSignal(QWidget):
                 self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
-                if intSignal_data[1] == "Non enumerated type state signals" or intSignal_data[1] == "Enumerated type state signals":
+                if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
                     if (i == 2) :
                         self.intSig_table.removeCellWidget(row_position, 3)
                         self.intSig_table.removeCellWidget(row_position, 4)
@@ -257,7 +257,7 @@ class InternalSignal(QWidget):
             rowBefore = row -1
             if str(self.all_intSignals[row][1]) == "Enumerated type state signals":
                 self.stateTypes_names = []
-            if str(self.all_intSignals[row][1]) == "Enumerated type state signals" or str(self.all_intSignals[row][1]) == "Non enumerated type state signals":
+            if str(self.all_intSignals[row][1]) == "Enumerated type state signals" or str(self.all_intSignals[row][1]) == "std_logic_vector state signals":
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
                 self.all_intSignals.pop(rowBefore)
@@ -353,8 +353,10 @@ class InternalSignal(QWidget):
             self.intSig_table.setCellWidget(i, 4, delete_btn)
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
             signal = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
-            value = "1"
-            if signal == "Enumerated type state signals":
+            if signal == "std_logic":
+                type = signal
+                value = "1"
+            elif signal == "Enumerated type state signals":
                 type = signal
                 stateTypesList = []
                 for stateType in io_ports[0].getElementsByTagName("stateTypes"):
