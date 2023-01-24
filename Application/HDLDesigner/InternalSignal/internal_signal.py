@@ -293,7 +293,7 @@ class InternalSignal(QWidget):
             elif signal[1] == "Enumerated type state signals":
                 sig_type = "Enumerated type state signals"
             elif signal[1] == "integer":
-                sig_type = "integer range 0 to " + signal[2]
+                sig_type = "integer range 0 to " + str(int(signal[2]) - 1)
             else:
                 sig_size = ("(" + str(int(signal[2]) - 1) + " downto 0)")
                 if signal[1] == "signed":
