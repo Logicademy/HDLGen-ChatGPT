@@ -5,7 +5,7 @@
 2. Open Command Prompt/Terminal
 3. Clone the repository
 ``
-git clone https://github.com/JP-Byrne/HDLGen.git
+git clone https://github.com/abishek-bupathi/HDLGen.git
 ``
 3. cd to HDLGen/Application
 4. Install required libraries
