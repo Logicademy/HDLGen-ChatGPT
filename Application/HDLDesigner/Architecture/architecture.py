@@ -33,7 +33,10 @@ class Architecture(QWidget):
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
 
-        self.arch_name_input = QLineEdit()
+        #self.arch_name_input = QLineEdit()
+        self.arch_types = ["RTL", "Combinational"]
+        self.arch_name_input = QComboBox()
+        self.arch_name_input.addItems(self.arch_types)
         self.arch_name_label = QLabel("Architecture Name*")
         self.arch_name_label.setStyleSheet(WHITE_COLOR)
 
@@ -89,10 +92,11 @@ class Architecture(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-
+        self.enable_save_btn()
         self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
         self.top_layout.addWidget(self.arch_name_input, 1, 0, 1, 3)
-        self.arch_name_input.textChanged.connect(self.enable_save_btn);
+        #self.arch_name_input.currentTextChanged.connect(self.enable_save_btn)
+        #self.arch_name_input.textChanged.connect(self.enable_save_btn);
         self.top_layout.addWidget(self.new_proc_btn, 2, 0, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
         self.top_layout.addWidget(self.new_conc_btn, 2, 1, 1, 2)
@@ -119,7 +123,7 @@ class Architecture(QWidget):
         self.proc_table.setShowGrid(False)
         self.proc_table.setColumnWidth(0, 100)
         self.proc_table.setColumnWidth(1, 75)
-        self.proc_table.setColumnWidth(2, 108)
+        self.proc_table.setColumnWidth(2, 75)
         self.proc_table.setColumnWidth(3, 1)
         self.proc_table.setColumnWidth(4, 1)
         self.proc_table.horizontalScrollMode()
@@ -139,12 +143,12 @@ class Architecture(QWidget):
         self.list_frame.setLayout(self.list_layout)
 
         self.arch_action_layout.addItem(QSpacerItem(10, 5))
-        self.arch_action_layout.addWidget(self.list_frame)
+        self.arch_action_layout.addWidget(self.list_frame, alignment=Qt.AlignCenter)
         self.arch_action_layout.addItem(QSpacerItem(10, 15))
         self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
         self.save_btn.clicked.connect(self.save_data)
 
-        self.mainLayout.addWidget(self.main_frame)
+        self.mainLayout.addWidget(self.main_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
@@ -263,7 +267,7 @@ class Architecture(QWidget):
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
 
     def edit_concurrentstmt(self):
-
+        print("edit conc")
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
@@ -314,7 +318,7 @@ class Architecture(QWidget):
         new_arch_node = root.createElement("architecture")
 
         arch_name = root.createElement("archName")
-        arch_name.appendChild(root.createTextNode(self.arch_name_input.text()))
+        arch_name.appendChild(root.createTextNode(self.arch_name_input.currentText()))
         new_arch_node.appendChild(arch_name)
 
 
@@ -351,6 +355,7 @@ class Architecture(QWidget):
 
                 new_arch_node.appendChild(conc_node)
 
+
         hdlDesign[0].replaceChild(new_arch_node, hdlDesign[0].getElementsByTagName("architecture")[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
@@ -371,7 +376,11 @@ class Architecture(QWidget):
         arch_name_node = hdlDesign[0].getElementsByTagName("archName")
 
         if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
-            self.arch_name_input.setText(arch_name_node[0].firstChild.data)
+            if arch_name_node[0].firstChild.data == "Combinational":
+            #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
+                self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
+            else:
+                self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
 
         if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
@@ -459,7 +468,7 @@ class Architecture(QWidget):
                     edit_btn = QPushButton()
                     edit_btn.setIcon(qta.icon("mdi.pencil"))
                     edit_btn.setFixedSize(35, 22)
-                    edit_btn.clicked.connect(self.edit_proc)
+                    edit_btn.clicked.connect(self.edit_concurrentstmt)
 
                     row_position = self.proc_table.rowCount()
                     self.proc_table.insertRow(row_position)
@@ -473,10 +482,12 @@ class Architecture(QWidget):
                     self.proc_table.setCellWidget(row_position, 3, edit_btn)
                     self.proc_table.setCellWidget(row_position, 4, delete_btn)
 
-                child = next
 
+                child = next
+                print(self.all_data)
     def enable_save_btn(self):
-        if self.arch_name_input.text() != "":
+        #if self.arch_name_input.text() != "":
+        if self.arch_name_input.currentText() != "":
             self.save_btn.setEnabled(True)
         else:
             self.save_btn.setEnabled(False)
