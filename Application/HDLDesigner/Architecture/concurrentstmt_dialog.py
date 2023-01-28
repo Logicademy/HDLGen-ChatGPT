@@ -36,7 +36,7 @@ class ConcurrentStmtDialog(QDialog):
         self.conc_name_input = QLineEdit()
 
         self.out_sig_header_layout = QHBoxLayout()
-        self.out_sig_label = QLabel("Output Signal")
+        self.out_sig_label = QLabel("Assign Signal")
         self.out_sig_label.setStyleSheet(WHITE_COLOR)
         self.out_sig_label.setFixedWidth(100)
         self.options_sig_label = QLabel("Options")
@@ -130,7 +130,8 @@ class ConcurrentStmtDialog(QDialog):
                     if mode == "out":
                         self.output_signals.append(name)
                     else:
-                        self.input_signals.append(name)
+                        if name != "clk" and name != "rst":
+                            self.input_signals.append(name)
 
                 for i in range(0, len(intSignal_nodes)):
                     internal_signal = intSignal_nodes[i].getElementsByTagName('name')[0].firstChild.data
@@ -139,10 +140,11 @@ class ConcurrentStmtDialog(QDialog):
                 if len(self.output_signals) != 0 or len(self.internal_signals) != 0:
 
                     self.output_signals.insert(0, "Please select")
-                    self.out_signals_combo.addItems(self.output_signals)
+                    self.out_signals_combo.addItems(self.output_signals + self.input_signals + self.internal_signals )
                     self.output_signals.pop(0)
 
                     self.options_signals_combo.addItem("Custom")
+                    self.options_signals_combo.addItem("all zeros")
                     self.options_signals_combo.addItems(self.internal_signals + self.input_signals)
                     self.options_signals_combo.currentTextChanged.connect(self.disable_custom_input)
 

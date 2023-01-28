@@ -49,7 +49,7 @@ class ProcessDialog(QDialog):
         self.in_sig_layout = QVBoxLayout()
         self.in_sig_frame = QFrame()
         self.in_sig_list = QListWidget()
-        self.in_sig_empty_info = QLabel("No Input Signals found!\nPlease add signal in the IO Ports")
+        self.in_sig_empty_info = QLabel("No Input Signals found!\nPlease add signal in Ports")
 
 
         self.out_sig_header_layout = QHBoxLayout()
@@ -59,7 +59,7 @@ class ProcessDialog(QDialog):
         self.val_label.setFont(bold_font)
         self.Binval_label = QLabel("Binary Value")
         self.Binval_label.setFont(bold_font)
-        self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in the IO Ports")
+        self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in Ports")
         self.out_sig_empty_info.setFixedSize(400, 300)
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
@@ -76,7 +76,7 @@ class ProcessDialog(QDialog):
         self.onRst_label.setFont(bold_font)
         self.onClk_label = QLabel("on clk")
         self.onClk_label.setFont(bold_font)
-        self.CSNS_empty_info = QLabel("No CS NS Signals found!\nPlease add signals in internal signals")
+        self.CSNS_empty_info = QLabel("No CS NS Signals found!\nPlease add signals in Internal Signals")
         self.CSNS_empty_info.setFixedSize(400, 300)
         self.CSNS_table = QTableWidget()
         self.CSNS_layout = QVBoxLayout()
@@ -123,12 +123,12 @@ class ProcessDialog(QDialog):
         self.in_sig_frame.setFixedWidth(175)
 
 
-        self.out_sig_label.setFixedWidth(80)
+        #self.out_sig_label.setFixedWidth(80)
         self.out_sig_header_layout.addWidget(self.out_sig_label,alignment=Qt.AlignRight)
-        self.val_label.setFixedWidth(80)
+        #self.val_label.setFixedWidth(80)
         self.out_sig_header_layout.addWidget(self.val_label,alignment=Qt.AlignRight)
-        self.Binval_label.setFixedWidth(80)
-        self.out_sig_header_layout.addWidget(self.Binval_label)
+        #self.Binval_label.setFixedWidth(80)
+        self.out_sig_header_layout.addWidget(self.Binval_label,alignment=Qt.AlignRight)
 
         self.out_sig_layout.addLayout(self.out_sig_header_layout)
         self.out_sig_layout.addWidget(self.list_div)
@@ -138,7 +138,7 @@ class ProcessDialog(QDialog):
         self.out_sig_table.setColumnWidth(0, 1)
         self.out_sig_table.setColumnWidth(1, 80)
         self.out_sig_table.setColumnWidth(2, 90)
-        self.out_sig_table.setColumnWidth(3, 80)
+        self.out_sig_table.setColumnWidth(3, 90)
         self.out_sig_table.horizontalScrollMode()
         self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.out_sig_table.horizontalScrollBar().hide()
@@ -295,6 +295,7 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.insert(0, "Custom")
+                        out_val_options.insert(1, "all zeros")
                         out_val_combo.addItems(out_val_options)
                         out_val_options.pop(0)
 
@@ -352,6 +353,7 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.insert(0, "Custom")
+                        out_val_options.insert(1, "all zeros")
                         out_val_combo.addItems(out_val_options)
                         out_val_options.pop(0)
 
@@ -369,8 +371,6 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
                         if signal[0:2] != "NS":
-                            print("not NS")
-                            print(signal)
                             CScheckbox = QCheckBox()
                             CScheckbox.setFixedWidth(45)
 
@@ -452,10 +452,9 @@ class ProcessDialog(QDialog):
             default_vals.append(temp[1])
             if len(temp) == 3:
                 clk_default_vals.append(temp[2])
-                print("there is a 3rd index")
 
 
-        for i in range(self.out_sig_table.rowCount()):
+        for i in range(0, self.out_sig_table.rowCount()):
 
             if self.out_sig_table.item(i, 1).text() in out_sigs:
                 if not clk_default_vals:

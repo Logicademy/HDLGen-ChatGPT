@@ -27,20 +27,22 @@ class Architecture(QWidget):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
-
+        self.process = ""
         self.mainLayout = QVBoxLayout()
 
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
 
-        #self.arch_name_input = QLineEdit()
         self.arch_types = ["RTL", "Combinational"]
-        self.arch_name_input = QComboBox()
-        self.arch_name_input.addItems(self.arch_types)
-        self.arch_name_label = QLabel("Architecture Name*")
-        self.arch_name_label.setStyleSheet(WHITE_COLOR)
+        self.arch_name_input = QLabel("Combinational")
+        self.arch_name_input.setFont(title_font)
+        self.arch_name_input.setStyleSheet(WHITE_COLOR)
+        #self.arch_name_label = QLabel("Architecture")
+        #self.arch_name_label.setFont(title_font)
+        #self.arch_name_label.setStyleSheet(WHITE_COLOR)
 
-        self.new_proc_btn = QPushButton("New process")
+
+        self.new_proc_btn = QPushButton("New Process")
         self.new_proc_btn.setFixedSize(100, 25)
         self.new_proc_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
@@ -60,7 +62,7 @@ class Architecture(QWidget):
 
         self.save_btn = QPushButton("Save")
         self.save_btn.setEnabled(False)
-        self.save_btn.setFixedSize(100, 25)
+        self.save_btn.setFixedSize(60, 30)
         self.save_btn.setStyleSheet(
             "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
@@ -85,29 +87,24 @@ class Architecture(QWidget):
 
         self.list_frame = QFrame()
         self.main_frame = QFrame()
-
         self.setup_ui()
-
         if proj_dir != None:
             self.load_data(proj_dir)
-
     def setup_ui(self):
         self.enable_save_btn()
-        self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
-        self.top_layout.addWidget(self.arch_name_input, 1, 0, 1, 3)
-        #self.arch_name_input.currentTextChanged.connect(self.enable_save_btn)
-        #self.arch_name_input.textChanged.connect(self.enable_save_btn);
-        self.top_layout.addWidget(self.new_proc_btn, 2, 0, 1, 1)
+        #self.top_layout.addWidget(self.arch_name_label, 0, 0, alignment=Qt.AlignLeft)
+        self.top_layout.addWidget(self.arch_name_input, 0, 0, 1, 1)
+        self.top_layout.addWidget(self.new_proc_btn, 0, 1, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
-        self.top_layout.addWidget(self.new_conc_btn, 2, 1, 1, 2)
+        self.top_layout.addWidget(self.new_conc_btn, 0, 2, 1, 1)
         self.new_conc_btn.clicked.connect(self.add_concurrentstmt)
-        # self.top_layout.addWidget(self.new_strg_btn, 2, 1)
 
         self.arch_action_layout.addLayout(self.top_layout)
 
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.main_frame.setFixedSize(400, 400)
+        self.main_frame.setFixedSize(500, 400)
+
         self.main_frame.setLayout(self.arch_action_layout)
 
         self.name_label.setFixedWidth(97)
@@ -139,14 +136,15 @@ class Architecture(QWidget):
 
         self.list_frame.setFrameShape(QFrame.StyledPanel)
         self.list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.list_frame.setFixedSize(380, 245)
+        self.list_frame.setFixedSize(420, 300)
         self.list_frame.setLayout(self.list_layout)
 
-        self.arch_action_layout.addItem(QSpacerItem(10, 5))
+        self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.arch_action_layout.addWidget(self.list_frame, alignment=Qt.AlignCenter)
-        self.arch_action_layout.addItem(QSpacerItem(10, 15))
+        self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
         self.save_btn.clicked.connect(self.save_data)
+
 
         self.mainLayout.addWidget(self.main_frame, alignment=Qt.AlignCenter)
 
@@ -160,10 +158,8 @@ class Architecture(QWidget):
             data = add_proc.get_data()
             data.insert(0, "process")
             self.all_data.append(data)
-            print(data)
 
             delete_btn = QPushButton()
-            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
             delete_btn.setIcon(qta.icon("mdi.delete"))
             delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
@@ -241,10 +237,8 @@ class Architecture(QWidget):
             data = add_concurrentstmt.get_data()
             data.insert(0, "concurrentStmt")
             self.all_data.append(data)
-            print(data)
 
             delete_btn = QPushButton()
-            # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
             delete_btn.setIcon(qta.icon("mdi.delete"))
             delete_btn.setFixedSize(35, 22)
             delete_btn.clicked.connect(self.delete_clicked)
@@ -267,7 +261,6 @@ class Architecture(QWidget):
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
 
     def edit_concurrentstmt(self):
-        print("edit conc")
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
@@ -280,7 +273,6 @@ class Architecture(QWidget):
                 data.insert(0, "concurrentStmt")
                 self.proc_table.removeRow(row)
                 self.all_data.pop(row)
-                print(data)
 
                 delete_btn = QPushButton()
                 # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
@@ -309,7 +301,8 @@ class Architecture(QWidget):
             self.all_data.pop(row)
 
     def save_data(self):
-
+        #print("in save data")
+        #print(self.process)
         xml_data_path = ProjectManager.get_xml_data_path()
 
         root = minidom.parse(xml_data_path)
@@ -318,7 +311,9 @@ class Architecture(QWidget):
         new_arch_node = root.createElement("architecture")
 
         arch_name = root.createElement("archName")
-        arch_name.appendChild(root.createTextNode(self.arch_name_input.currentText()))
+        #arch_name.appendChild(root.createTextNode(self.arch_name_input.currentText()))
+        arch_name.appendChild(root.createTextNode(self.arch_name_input.text()))
+        #arch_name.appendChild(root.createTextNode(self.process))
         new_arch_node.appendChild(arch_name)
 
 
@@ -367,7 +362,6 @@ class Architecture(QWidget):
         print("Successfully saved all the signals!")
 
     def load_data(self, proj_dir):
-
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -375,12 +369,6 @@ class Architecture(QWidget):
         arch_node = hdlDesign[0].getElementsByTagName('architecture')
         arch_name_node = hdlDesign[0].getElementsByTagName("archName")
 
-        if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
-            if arch_name_node[0].firstChild.data == "Combinational":
-            #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
-                self.arch_name_input.setCurrentIndex(self.arch_types.index('Combinational'))
-            else:
-                self.arch_name_input.setCurrentIndex(self.arch_types.index('RTL'))
 
         if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
@@ -484,10 +472,24 @@ class Architecture(QWidget):
 
 
                 child = next
-                print(self.all_data)
+                #print(self.all_data)
+            #self.save_data()
+            #self.updateProcess()
+    def updateProcessName(self, proj_dir):
+
+        root = minidom.parse(proj_dir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
+        if len(clkAndRst) != 1:
+            self.process = "RTL"
+            self.arch_name_input.setText('RTL')
+        else:
+            self.process = "Combin"
+            self.arch_name_input.setText('Combinational')
     def enable_save_btn(self):
         #if self.arch_name_input.text() != "":
-        if self.arch_name_input.currentText() != "":
+        if self.arch_name_input.text() != "":
             self.save_btn.setEnabled(True)
         else:
             self.save_btn.setEnabled(False)

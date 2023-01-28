@@ -20,7 +20,8 @@ class ProjectManager(QWidget):
 
     def __init__(self, proj_dir, MainWindow):
         super().__init__()
-
+        print("directory\n")
+        print(os.getcwd())
         ProjectManager.proj_dir = None
         ProjectManager.proj_name = None
         ProjectManager.vivado_bat_path = None
@@ -67,6 +68,7 @@ class ProjectManager(QWidget):
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QCheckBox("Verilog")
         self.verilog_check.setStyleSheet(BLACK_COLOR)
+        self.verilog_check.setEnabled(False)
         self.sverilog_check = QCheckBox("System Verilog")
         self.sverilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check.setEnabled(False)
@@ -77,6 +79,7 @@ class ProjectManager(QWidget):
         self.intel_check = QCheckBox("Intel Quartus")
         self.intel_check.setFont(bold_font)
         self.intel_check.setStyleSheet(BLACK_COLOR)
+        self.intel_check.setEnabled(False)
         self.intel_ver_label = QLabel("Version")
         self.intel_ver_label.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo = QComboBox()
@@ -144,7 +147,13 @@ class ProjectManager(QWidget):
         self.langLayout = QGridLayout()
 
         self.proj_action_layout = QHBoxLayout()
-
+        settingsDir=os.getcwd() + "\Settings\settings.txt"
+        #settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
+        settings = open(settingsDir, "r")
+        vivadoPath = settings.readline()
+        settings.close()
+        vivadoPath=vivadoPath.strip()
+        self.vivado_dir_input.setText(vivadoPath)
         self.setup_ui()
 
         if proj_dir != None:
@@ -307,7 +316,7 @@ class ProjectManager(QWidget):
         self.intel_dir_input.setText(self.intel_dir[0])
 
     def create_xml(self):
-
+        ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
 

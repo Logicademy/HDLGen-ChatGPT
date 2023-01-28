@@ -75,7 +75,16 @@ class CompDetails(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-
+        settingsDir = os.getcwd() + "\Settings\settings.txt"
+        settings = open(settingsDir, "r")
+        vivadoPath = settings.readline()
+        author = settings.readline().strip()
+        email = settings.readline().strip()
+        company = settings.readline().strip()
+        settings.close()
+        self.comp_author_input.setText(author)
+        self.comp_email_input.setText(email)
+        self.comp_company_input.setText(company)
         self.input_layout.addWidget(self.comp_name_label, 0, 0)
         self.input_layout.addWidget(self.comp_name_input, 1, 0, 1, 2)
         self.comp_name_input.setText(ProjectManager.get_proj_name())
@@ -113,7 +122,7 @@ class CompDetails(QWidget):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(30, 30, 30, 25)
-        self.input_frame.setFixedSize(400, 400)
+        self.input_frame.setFixedSize(500, 400)
         self.input_frame.setLayout(self.input_layout)
 
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
@@ -200,6 +209,7 @@ class CompDetails(QWidget):
         comp_name = header[0].getElementsByTagName('compName')[0].firstChild.data
         comp_title = header[0].getElementsByTagName('title')[0].firstChild.data
         comp_description = header[0].getElementsByTagName('description')[0].firstChild.data
+        comp_description = comp_description.replace("&#10;", "\n")
         comp_authors = header[0].getElementsByTagName('authors')[0].firstChild.data
         comp_company = header[0].getElementsByTagName('company')[0].firstChild.data
         comp_email = header[0].getElementsByTagName('email')[0].firstChild.data
@@ -207,6 +217,7 @@ class CompDetails(QWidget):
 
         if comp_name != "null":
             self.comp_name_input.setText(comp_name)
+            self.enable_save_btn()
 
         if comp_title != "null":
             self.comp_title_input.setText(comp_title)

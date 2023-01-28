@@ -30,7 +30,7 @@ class IntSignalDialog(QDialog):
         bold_font.setBold(True)
 
         #self.sig_types = ["std_logic", "std_logic_vector"]
-        self.sig_types = ["std_logic", "std_logic_vector", "std_logic_vector state signals", "Enumerated type state signals", "array"]
+        self.sig_types = ["std_logic", "std_logic_vector", "signed", "unsigned", "Non enumerated type state signals", "Enumerated type state signals", "integer"]
         self.FSM_types = ["Enumerated", "Binary"]
         self.rst_types = ["0", "1"]
 
@@ -70,23 +70,23 @@ class IntSignalDialog(QDialog):
         self.sig_size_input.setText("1")
         self.sig_size_input.setEnabled(False)
 
-        self.arraySize_label = QLabel("Array Depth")
-        self.arraySize_label.setStyleSheet(WHITE_COLOR)
-        self.arraySize_input = QLineEdit()
-        self.arraySize_input.setVisible(False)
-        self.arraySize_label.setVisible(False)
+        #self.arraySize_label = QLabel("Array Depth")
+        #self.arraySize_label.setStyleSheet(WHITE_COLOR)
+        #self.arraySize_input = QLineEdit()
+        #self.arraySize_input.setVisible(False)
+        #self.arraySize_label.setVisible(False)
 
-        self.arrayLength_label = QLabel("Array Width")
-        self.arrayLength_label.setStyleSheet(WHITE_COLOR)
-        self.arrayLength_input = QLineEdit()
-        self.arrayLength_input.setVisible(False)
-        self.arrayLength_label.setVisible(False)
+        #self.arrayLength_label = QLabel("Array Width")
+        #self.arrayLength_label.setStyleSheet(WHITE_COLOR)
+        #self.arrayLength_input = QLineEdit()
+        #self.arrayLength_input.setVisible(False)
+        #self.arrayLength_label.setVisible(False)
 
 
         self.onlyInt = QIntValidator()
         self.sig_size_input.setValidator(self.onlyInt)
-        self.arraySize_input.setValidator(self.onlyInt)
-        self.arrayLength_input.setValidator(self.onlyInt)
+        #self.arraySize_input.setValidator(self.onlyInt)
+        #self.arrayLength_input.setValidator(self.onlyInt)
         self.binaryBitSize_label = QLabel("Bits")
         self.binaryBitSize_label.setStyleSheet(WHITE_COLOR)
         self.binaryBitSize_input = QLineEdit()
@@ -169,11 +169,11 @@ class IntSignalDialog(QDialog):
         self.input_layout.addWidget(self.sig_size_label, 4, 2, 1, 1)
         self.input_layout.addWidget(self.sig_size_input, 5, 2, 1, 1)
 
-        self.input_layout.addWidget(self.arraySize_label, 2, 0, 1, 1)
-        self.input_layout.addWidget(self.arraySize_input, 3, 0, 1, 1)
+        #self.input_layout.addWidget(self.arraySize_label, 2, 0, 1, 1)
+        #self.input_layout.addWidget(self.arraySize_input, 3, 0, 1, 1)
 
-        self.input_layout.addWidget(self.arrayLength_label, 2, 1, 1, 1)
-        self.input_layout.addWidget(self.arrayLength_input, 3, 1, 1, 1)
+        #self.input_layout.addWidget(self.arrayLength_label, 2, 1, 1, 1)
+        #self.input_layout.addWidget(self.arrayLength_input, 3, 1, 1, 1)
 
         self.input_layout.addWidget(self.stateNames_table, 6, 0, 2, 3)
 
@@ -202,8 +202,8 @@ class IntSignalDialog(QDialog):
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
-        self.arraySize_input.textChanged.connect(self.enable_ok_btn)
-        self.arrayLength_input.textChanged.connect(self.enable_ok_btn)
+        #self.arraySize_input.textChanged.connect(self.enable_ok_btn)
+        #self.arrayLength_input.textChanged.connect(self.enable_ok_btn)
         self.sig_size_input.textChanged.connect(self.enable_ok_btn)
         self.intSig_name_input.textChanged.connect(self.enable_ok_btn)
         self.setLayout(self.mainLayout)
@@ -211,13 +211,13 @@ class IntSignalDialog(QDialog):
     def load_sig_data(self, intSig_data):
         self.sig_type_combo.setCurrentText(intSig_data[1])
         if intSig_data[1] != "Enumerated type state signals":
-            if intSig_data[1] == "array":
-                arrayDim=intSig_data[2].split(",")
-                self.arraySize_input.setText(arrayDim[1])
-                self.arrayLength_input.setText(arrayDim[2])
-            else:
-                self.sig_size_input.setText(intSig_data[2])
-            if intSig_data[1] == "std_logic_vector state signals":
+            #if intSig_data[1] == "array":
+            #    arrayDim=intSig_data[2].split(",")
+            #    self.arraySize_input.setText(arrayDim[1])
+            #    self.arrayLength_input.setText(arrayDim[2])
+            #else:
+            self.sig_size_input.setText(intSig_data[2])
+            if intSig_data[1] == "Non enumerated type state signals":
                 self.intSig_name_input.setText(intSig_data[0][2:])
             else:
                 self.intSig_name_input.setText(intSig_data[0])
@@ -270,7 +270,7 @@ class IntSignalDialog(QDialog):
         return data
     def get_data(self):
         data = []
-        #if self.sig_type_combo.currentText() == "std_logic_vector state signals":
+        #if self.sig_type_combo.currentText() == "Non enumerated type state signals":
 
         intSignalDescription = self.sig_desc_input.text()
         if intSignalDescription == "":
@@ -278,10 +278,10 @@ class IntSignalDialog(QDialog):
         data.append(self.intSig_name_input.text())
         data.append(self.sig_type_combo.currentText())
         if self.sig_type_combo.currentText() != "Enumerated type state signals":
-            if self.sig_type_combo.currentText() == "array":
-                data.append("array,"+self.arraySize_input.text()+","+self.arrayLength_input.text())
-            else:
-                data.append(self.sig_size_input.text())
+            #if self.sig_type_combo.currentText() == "array":
+            #    data.append("array,"+self.arraySize_input.text()+","+self.arrayLength_input.text())
+            #else:
+            data.append(self.sig_size_input.text())
         else:
             data.append(self.all_stateNames)
         data.append(intSignalDescription)
@@ -295,13 +295,13 @@ class IntSignalDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.sig_type_combo.currentText() == "std_logic_vector state signals":
+        if self.sig_type_combo.currentText() == "Non enumerated type state signals":
             if self.sig_size_input.text() != "":
                 self.ok_btn.setEnabled(True)
             else:
                 self.ok_btn.setEnabled(False)
         else:
-            if self.intSig_name_input.text() != "" and (self.sig_size_input.text() != "" or (self.arraySize_input.text() != "" and self.arrayLength_input.text() != "")):
+            if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "" :
                 self.ok_btn.setEnabled(True)
             else:
                 self.ok_btn.setEnabled(False)
@@ -324,7 +324,7 @@ class IntSignalDialog(QDialog):
             edit_btn.setFixedSize(35, 22)
             edit_btn.clicked.connect(self.edit_stateName)
 
-            idle_tickbox = QCheckBox("Make Idle")
+            idle_tickbox = QCheckBox("rst state")
             idle_tickbox.setStyleSheet(BLACK_COLOR)
 
             row_position = self.stateNames_table.rowCount()
@@ -390,10 +390,10 @@ class IntSignalDialog(QDialog):
             self.sig_size_input.clear()
             self.stateNames_table.setVisible(False)
             self.add_btn.setVisible(False)
-            self.arraySize_input.setVisible(False)
-            self.arraySize_label.setVisible(False)
-            self.arrayLength_input.setVisible(False)
-            self.arrayLength_label.setVisible(False)
+            #self.arraySize_input.setVisible(False)
+            #self.arraySize_label.setVisible(False)
+            #self.arrayLength_input.setVisible(False)
+            #self.arrayLength_label.setVisible(False)
 
         elif self.sig_type_combo.currentText() == "std_logic" :
             self.ok_btn.setEnabled(False)
@@ -412,10 +412,10 @@ class IntSignalDialog(QDialog):
             self.sig_size_input.setVisible(True)
             self.sig_size_input.setEnabled(False)
             self.sig_size_input.setText("1")
-            self.arraySize_input.setVisible(False)
-            self.arraySize_label.setVisible(False)
-            self.arrayLength_input.setVisible(False)
-            self.arrayLength_label.setVisible(False)
+            #self.arraySize_input.setVisible(False)
+            #self.arraySize_label.setVisible(False)
+            #self.arrayLength_input.setVisible(False)
+            #self.arrayLength_label.setVisible(False)
 
         elif self.sig_type_combo.currentText() == "Enumerated type state signals":
             self.ok_btn.setEnabled(True)
@@ -433,12 +433,12 @@ class IntSignalDialog(QDialog):
             self.sig_size_label.setVisible(False)
             self.sig_size_input.setVisible(False)
             self.sig_size_input.setEnabled(False)
-            self.arraySize_input.setVisible(False)
-            self.arraySize_label.setVisible(False)
-            self.arrayLength_input.setVisible(False)
-            self.arrayLength_label.setVisible(False)
+            #self.arraySize_input.setVisible(False)
+            #self.arraySize_label.setVisible(False)
+            #self.arrayLength_input.setVisible(False)
+            #self.arrayLength_label.setVisible(False)
 
-        elif self.sig_type_combo.currentText() == "std_logic_vector state signals":
+        elif self.sig_type_combo.currentText() == "Non enumerated type state signals":
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
@@ -455,31 +455,57 @@ class IntSignalDialog(QDialog):
             self.sig_size_label.setVisible(True)
             self.sig_size_input.setVisible(True)
             self.sig_size_input.setEnabled(True)
-            self.arraySize_input.setVisible(False)
-            self.arraySize_label.setVisible(False)
-            self.arrayLength_input.setVisible(False)
-            self.arrayLength_label.setVisible(False)
+            #self.arraySize_input.setVisible(False)
+            #self.arraySize_label.setVisible(False)
+            #self.arrayLength_input.setVisible(False)
+            #self.arrayLength_label.setVisible(False)
             self.sig_size_input.clear()
 
-        elif self.sig_type_combo.currentText() == "array":
-            self.sig_size_input.clear()
+        elif self.sig_type_combo.currentText() == "signed":
             self.ok_btn.setEnabled(False)
-            self.sig_desc_label.setVisible(False)
-            self.sig_desc_input.setVisible(False)
-            self.arraySize_input.setVisible(True)
-            self.arraySize_label.setVisible(True)
-            self.arrayLength_input.setVisible(True)
-            self.arrayLength_label.setVisible(True)
+            self.sig_desc_label.setVisible(True)
+            self.sig_desc_input.setVisible(True)
             self.CS_name_label.setVisible(False)
             self.CS_name_input.setVisible(False)
             self.NS_name_label.setVisible(False)
             self.NS_name_input.setVisible(False)
-            self.add_btn.setVisible(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
             self.stateNames_table.setVisible(False)
             self.add_btn.setVisible(False)
-            self.sig_size_label.setVisible(False)
-            self.sig_size_input.setVisible(False)
-            self.sig_size_input.setEnabled(False)
+
+        elif self.sig_type_combo.currentText() == "unsigned":
+            self.ok_btn.setEnabled(False)
+            self.sig_desc_label.setVisible(True)
+            self.sig_desc_input.setVisible(True)
+            self.CS_name_label.setVisible(False)
+            self.CS_name_input.setVisible(False)
+            self.NS_name_label.setVisible(False)
+            self.NS_name_input.setVisible(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
+
+        elif self.sig_type_combo.currentText() == "integer":
+            self.ok_btn.setEnabled(False)
+            self.sig_desc_label.setVisible(True)
+            self.sig_desc_input.setVisible(True)
+            self.CS_name_label.setVisible(False)
+            self.CS_name_input.setVisible(False)
+            #self.CS_NS_help_label.setVisible(False)
+            self.NS_name_label.setVisible(False)
+            self.NS_name_input.setVisible(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
 
     def delete_clicked(self):
         button = self.sender()

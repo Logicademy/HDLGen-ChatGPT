@@ -81,13 +81,15 @@ class InternalSignal(QWidget):
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_intSignal)
 
-        self.name_label.setFixedWidth(115)
-        self.type_label.setFixedWidth(105)
-        self.size_label.setFixedWidth(145)
+        #self.name_label.setFixedWidth(115)
+        #self.type_label.setFixedWidth(105)
+        #self.size_label.setFixedWidth(145)
 
         self.instSig_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.size_label, alignment=Qt.AlignLeft)
+        self.instSig_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
+        self.instSig_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.intSig_list_layout.setAlignment(Qt.AlignTop)
         self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
@@ -95,12 +97,12 @@ class InternalSignal(QWidget):
 
         self.intSig_table.setColumnCount(5)
         self.intSig_table.setShowGrid(False)
-        self.intSig_table.setColumnWidth(0, 100)
+        self.intSig_table.setColumnWidth(0, 110)
         self.intSig_table.setColumnWidth(1, 110)
         self.intSig_table.setColumnWidth(2, 50)
         self.intSig_table.setColumnWidth(3, 1)
         self.intSig_table.setColumnWidth(4, 1)
-        self.intSig_table.horizontalScrollMode()
+        #self.intSig_table.horizontalScrollMode()
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.intSig_table.horizontalScrollBar().hide()
         header = self.intSig_table.horizontalHeader()
@@ -113,7 +115,7 @@ class InternalSignal(QWidget):
 
         self.intSig_list_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.intSig_list_frame.setFixedSize(380, 295)
+        self.intSig_list_frame.setFixedSize(420, 300)#380, 295)
         self.intSig_list_frame.setLayout(self.intSig_list_layout)
 
         self.intSig_action_layout.addLayout(self.port_heading_layout)
@@ -126,7 +128,8 @@ class InternalSignal(QWidget):
 
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.intSig_action_frame.setFixedSize(400, 400)
+        self.intSig_action_frame.setFixedSize(500, 400)#400, 400
+
         self.intSig_action_frame.setLayout(self.intSig_action_layout)
 
 
@@ -147,7 +150,6 @@ class InternalSignal(QWidget):
                 i = 2
             else:
                 i = 1
-            print("Entering while loop " + str(self.all_intSignals))
             while i > 0:
                 delete_btn = QPushButton()
                 delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -165,14 +167,7 @@ class InternalSignal(QWidget):
 
                 self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
                 if type(intSignal_data[2]) is list:
-                    print("test3")
-                    print(type(intSignal_data[2]))
                     intSignal_data[2] = str(intSignal_data[2])
-                    #intSignal_data[2] = ""
-                    #for state in intSignal_data[2]:
-                    #    print("test2")
-                    #    intSignal_data[2] = state
-                print(intSignal_data[2])
                 self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
@@ -209,12 +204,10 @@ class InternalSignal(QWidget):
 
             if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
                 i = 2
-                print("NS row removed")
                 self.intSig_table.removeRow(rowBefore)
                 self.all_intSignals.pop(rowBefore)
             else:
                 i = 1
-            print("Entering while loop " + str(self.all_intSignals))
             while i > 0:
                 delete_btn = QPushButton()
                 delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -232,10 +225,7 @@ class InternalSignal(QWidget):
 
                 self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
                 if type(intSignal_data[2]) is list:
-                    print("test3")
-                    print(type(intSignal_data[2]))
                     intSignal_data[2] = str(intSignal_data[2])
-                print(intSignal_data[2])
                 self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
@@ -265,18 +255,15 @@ class InternalSignal(QWidget):
         if button:
             row = self.intSig_table.indexAt(button.pos()).row()
             rowBefore = row -1
-            print("deleting")
             if str(self.all_intSignals[row][1]) == "Enumerated type state signals":
                 self.stateTypes_names = []
             if str(self.all_intSignals[row][1]) == "Enumerated type state signals" or str(self.all_intSignals[row][1]) == "std_logic_vector state signals":
-                print("deleting row before")
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
                 self.all_intSignals.pop(rowBefore)
                 self.intSig_table.removeRow(rowBefore)
 
             else:
-                print("deleting row")
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
 
@@ -305,11 +292,16 @@ class InternalSignal(QWidget):
                 sig_type = "std_logic"
             elif signal[1] == "Enumerated type state signals":
                 sig_type = "Enumerated type state signals"
-            elif signal[1] == "array":
-                sig_type = signal[2]
+            elif signal[1] == "integer":
+                sig_type = "integer range 0 to " + str(int(signal[2]) - 1)
             else:
                 sig_size = ("(" + str(int(signal[2]) - 1) + " downto 0)")
-                sig_type = "std_logic_vector" + sig_size
+                if signal[1] == "signed":
+                    sig_type = "signed" + sig_size
+                elif signal[1] == "unsigned":
+                    sig_type = "unsigned" + sig_size
+                else:
+                    sig_type = "std_logic_vector" + sig_size
             type_node.appendChild(root.createTextNode(sig_type))
             signal_node.appendChild(type_node)
 
@@ -361,32 +353,51 @@ class InternalSignal(QWidget):
             self.intSig_table.setCellWidget(i, 4, delete_btn)
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
             signal = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
-            value = "1"
-            if signal == "Enumerated type state signals":
+            if signal == "std_logic":
                 type = signal
-                if name[:2] == "NS":
-                    self.intSig_table.removeCellWidget(i, 3)
-                    self.intSig_table.removeCellWidget(i, 4)
-            elif signal[0:5] == "array":
-                type=signal.split(",")
-                print(type)
-                value = type[0]+","+type[1] + "," + type[2]
-                type=type[0]
-            else:
-                type = signal[0:signal.index("(")] if signal.endswith(")") else signal
-            desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            if type == "std_logic_vector":
-                value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
-            #elif type == "array":
-            #    value = type[1]+","+type[2]
-            #    print("this is array value")
-             #   print(value)
-            elif type == "Enumerated type state signals":
+                value = "1"
+            elif signal == "Enumerated type state signals":
+                type = signal
                 stateTypesList = []
                 for stateType in io_ports[0].getElementsByTagName("stateTypes"):
                     stateTypesList.append(stateType.firstChild.data)
                 self.stateTypes_names = stateTypesList
                 value = ' '.join(stateTypesList)
+                if name[:2] == "NS":
+                    self.intSig_table.removeCellWidget(i, 3)
+                    self.intSig_table.removeCellWidget(i, 4)
+            #elif signal[0:5] == "array":
+                #type=signal.split(",")
+                #print(type)
+                #value = type[0]+","+type[1] + "," + type[2]
+                #type=type[0]
+            else:
+                #type = signal[0:signal.index("(")] if signal.endswith(")") else signal
+                if signal.endswith(")"):
+                    type = signal[0:signal.index("(")]
+                    if type == "std_logic_vector" or type == "signed" or type == "unsigned":
+                        value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
+                else:
+                    signal=signal.split(" ")
+                    type = signal[0]
+                    value = signal[4]
+
+            #desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+                #if type == "std_logic_vector" or type == "signed" or type == "unsigned":
+                    #value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
+            desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            #elif type == "array":
+            #    value = type[1]+","+type[2]
+            #    print("this is array value")
+             #   print(value)
+            #elif type == "integers":
+            #    value = str(int(signal[signal.index(" range") + 1:signal.index(" downto")]) + 1)
+            #elif type == "Enumerated type state signals":
+            #    stateTypesList = []
+            #    for stateType in io_ports[0].getElementsByTagName("stateTypes"):
+            #        stateTypesList.append(stateType.firstChild.data)
+            #    self.stateTypes_names = stateTypesList
+            #    value = ' '.join(stateTypesList)
 
             loaded_sig_data = [
                 name,
@@ -397,14 +408,6 @@ class InternalSignal(QWidget):
             ]
 
             self.all_intSignals.append(loaded_sig_data)
-
-
-
-
-
             self.intSig_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
             self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             self.intSig_table.setItem(i, 2, QTableWidgetItem(str(loaded_sig_data[2])))
-
-            #self.intSig_table.setCellWidget(i, 3, edit_btn)
-            #self.intSig_table.setCellWidget(i, 4, delete_btn)

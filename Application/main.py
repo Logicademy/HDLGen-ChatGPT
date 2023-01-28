@@ -8,12 +8,12 @@ import sys
 sys.path.append(".")
 from Home.home import Home
 from Help.help import HelpDialog
-
+from Settings.settings import settingsDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-APP_AUTHORS = "Abishek Bupathi & JP Byrne & Fearghal Morgan"
+APP_AUTHORS = "Abishek Bupathi, JP Byrne & Fearghal Morgan"
 APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
 
@@ -39,10 +39,14 @@ class HDLGen(QMainWindow):
         self.open_btn = QPushButton("Open Existing project")
         self.new_btn = QPushButton("Create New project")
         self.help_btn = QPushButton("Help")
+        self.settings_btn = QPushButton("Settings")
 
         # self.help_btn.setIcon(qta.icon("mdi.help"))
         self.help_btn.setFixedSize(35, 25)
         self.help_btn.clicked.connect(self.help_window)
+
+        self.settings_btn.setFixedSize(60, 25)
+        self.settings_btn.clicked.connect(self.settings_window)
 
         self.hdlgen_logo = QLabel("HDLGen")
         self.hdlgen_logo.setFont(title_font)
@@ -92,7 +96,9 @@ class HDLGen(QMainWindow):
 
         self.mainLayout.addLayout(self.button_layout)
         self.mainLayout.addLayout(self.info_layout)
+        self.mainLayout.addWidget(self.settings_btn, alignment=Qt.AlignTop)
         self.mainLayout.addWidget(self.help_btn, alignment=Qt.AlignTop)
+
 
         self.setLayout(self.mainLayout)
 
@@ -122,11 +128,14 @@ class HDLGen(QMainWindow):
 
     def link(self, url_str):
         QDesktopServices.openUrl(QUrl(url_str))
+    def settings_window(self):
+        settings_dialog = settingsDialog()
+        settings_dialog.exec_()
 
 def main():
     app = QApplication(sys.argv)
     window = HDLGen()
-    window.setFixedSize(600, 300)
+    window.setFixedSize(600, 350)
     window.show()
     app.setStyle('windowsvista')
     app.exec_()
@@ -134,4 +143,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
