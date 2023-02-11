@@ -77,6 +77,7 @@ class Generator(QWidget):
         gen_int_sig = ""
         gen_internal_signal_result = ""
         arrayList=[]
+        std_logicList=[]
         # Entity Section
         gen_signals = ""
         entity_signal_description = ""
@@ -94,6 +95,8 @@ class Generator(QWidget):
                 if type[0:5] == "array":
                     self.includeArrays = True
                     arrayList.append(name)
+                elif type == "std_logic":
+                    std_logicList.append(name)
                 signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
                 signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
@@ -146,6 +149,8 @@ class Generator(QWidget):
                         if name[0:2] == "CS":
                             stateTypeSig = True
                             CSState = name
+                    elif type == "std_logic":
+                        std_logicList.append(name)
                     int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                     # signal.getElementsByTagName('name')[0].firstChild.data)
@@ -265,9 +270,12 @@ class Generator(QWidget):
                                     if stateTypesList != "":
                                         stateNames = stateTypesString.split(",")
                                         value = stateNames[0]
+
                                 elif value == "all zeros":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
+                                    elif signals[0] in std_logicList:
+                                        value = '0'
                                     else:
                                         value = "(others => '0')"
                                 elif value == "all ones":
@@ -290,7 +298,7 @@ class Generator(QWidget):
 
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
-                                gen_defaults +=  assign_syntax + "\n\t"
+                                gen_defaults +=  assign_syntax + "-- default\n\t"
                                 if len(signals) == 3:
                                     clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
