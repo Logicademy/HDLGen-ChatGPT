@@ -98,7 +98,7 @@ class IntSignalDialog(QDialog):
         self.sig_desc_label = QLabel("Signal Description")
         self.sig_desc_label.setStyleSheet(WHITE_COLOR)
         #self.sig_desc_label.setFixedWidth(120)
-        self.sig_desc_input = QLineEdit()
+        self.sig_desc_input = QPlainTextEdit()#QLineEdit()
 
         #self.sig_layout = QHBoxLayout()
         self.stateNames_table = QTableWidget()
@@ -257,7 +257,8 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setCellWidget(row_position, 2, delete_btn)
                 self.stateNames_table.setCellWidget(row_position, 3, idle_tickbox)
                 i=i+1
-        self.sig_desc_input.setText(intSig_data[3])
+        intSig_data[3] = intSig_data[3].replace("&#10;", "\n")
+        self.sig_desc_input.setPlainText(intSig_data[3])
 
     def makeIdeal(self):
         for i in range(self.stateNames_table.rowCount()):
@@ -272,7 +273,8 @@ class IntSignalDialog(QDialog):
         data = []
         #if self.sig_type_combo.currentText() == "Non enumerated type state signals":
 
-        intSignalDescription = self.sig_desc_input.text()
+        intSignalDescription = self.sig_desc_input.toPlainText()#text()
+        intSignalDescription = intSignalDescription.replace("\n", "&#10;")
         if intSignalDescription == "":
             intSignalDescription = "to be completed"
         data.append(self.intSig_name_input.text())

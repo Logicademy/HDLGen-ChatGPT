@@ -67,7 +67,7 @@ class IOPortDialog(QDialog):
 
         self.sig_description_label = QLabel("Signal Description")
         self.sig_description_label.setStyleSheet(WHITE_COLOR)
-        self.sig_description_input = QLineEdit()
+        self.sig_description_input = QPlainTextEdit()#QLineEdit()
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setFixedSize(60, 25)
@@ -144,7 +144,8 @@ class IOPortDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def get_signals(self):
-        signalDescription = self.sig_description_input.text()
+        signalDescription = self.sig_description_input.toPlainText()#text()
+        signalDescription = signalDescription.replace("\n", "&#10;")
         if signalDescription == "":
             signalDescription = "to be completed"
         if self.sig_type_input.currentText() == "array":
@@ -172,7 +173,8 @@ class IOPortDialog(QDialog):
             self.arrayName_input.setCurrentText(signal_data[2])
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
-        self.sig_description_input.setText(signal_data[4])
+        signal_data[4] = signal_data[4].replace("&#10;", "\n")
+        self.sig_description_input.setPlainText(signal_data[4])#setText(signal_data[4])
 
     def cancel_selected(self):
         self.cancelled = True

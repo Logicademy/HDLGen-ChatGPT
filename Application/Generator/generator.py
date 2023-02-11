@@ -110,6 +110,7 @@ class Generator(QWidget):
                                                                           0].firstChild.data)
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
+                signal_description = signal_description.replace("&#10;", "\n-- ")
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
                     0].firstChild.data + "\t" + signal_description + "\n"
                 gen_signals += "\t" + signal_declare_syntax + "\n"
@@ -158,6 +159,7 @@ class Generator(QWidget):
                     # signal.getElementsByTagName('type')[0].firstChild.data)
                     int_signal_description = signal.getElementsByTagName('description')[
                         0].firstChild.data
+                    int_signal_description = int_signal_description.replace("&#10;", "\n-- ")
 
                     gen_int_sig += "\n" + int_sig_syntax
                     gen_internal_signal_result += "-- " + signal.getElementsByTagName('name')[
