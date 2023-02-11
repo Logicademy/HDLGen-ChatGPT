@@ -525,10 +525,11 @@ class Generator(QWidget):
                             inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'1\';\n"
-                        elif signal.getElementsByTagName('type')[0].firstChild.data == "std_logic_vector":
+                        elif signal.getElementsByTagName('type')[0].firstChild.data[0:16] == "std_logic_vector":
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'1\');\n"
                         else:
+                            print("std_logic_vector is"+ signal.getElementsByTagName('type')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
                             arrayPackage=True
                 signal_description = signal.getElementsByTagName('description')[
