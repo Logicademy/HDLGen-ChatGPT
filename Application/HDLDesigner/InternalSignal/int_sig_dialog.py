@@ -1,5 +1,7 @@
 #This is a change
 #from xml.dom import minidom
+import os
+
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import qtawesome as qta
@@ -258,6 +260,11 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setCellWidget(row_position, 3, idle_tickbox)
                 i=i+1
         intSig_data[3] = intSig_data[3].replace("&#10;", "\n")
+        #intSig_data[3].strip()
+        intSig_data[3] = os.linesep.join([
+            line for line in intSig_data[3].splitlines()
+            if line.strip() != '' #and line.strip() != "&amp;#10;" and line.strip() != "&#10;" and line.strip() != "\n"
+        ])
         self.sig_desc_input.setPlainText(intSig_data[3])
 
     def makeIdeal(self):
@@ -275,6 +282,11 @@ class IntSignalDialog(QDialog):
 
         intSignalDescription = self.sig_desc_input.toPlainText()#text()
         intSignalDescription = intSignalDescription.replace("\n", "&#10;")
+        #intSignalDescription.strip()
+        intSignalDescription = os.linesep.join([
+            line for line in intSignalDescription.splitlines()
+            if line.strip() != '' #and line.strip() != "&amp;#10;" and line.strip() != "&#10;" and line.strip() != "\n"
+        ])
         if intSignalDescription == "":
             intSignalDescription = "to be completed"
         data.append(self.intSig_name_input.text())
@@ -378,6 +390,7 @@ class IntSignalDialog(QDialog):
 
     def sig_type_options(self):
         if self.sig_type_combo.currentText() == "std_logic_vector":
+            self.intSig_name_label.setText("Internal Signal Name*")
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
@@ -398,6 +411,7 @@ class IntSignalDialog(QDialog):
             #self.arrayLength_label.setVisible(False)
 
         elif self.sig_type_combo.currentText() == "std_logic" :
+            self.intSig_name_label.setText("Internal Signal Name*")
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
@@ -420,6 +434,7 @@ class IntSignalDialog(QDialog):
             #self.arrayLength_label.setVisible(False)
 
         elif self.sig_type_combo.currentText() == "Enumerated type state signals":
+            self.intSig_name_label.setText("Suffix eg_abc")
             self.ok_btn.setEnabled(True)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
@@ -441,6 +456,7 @@ class IntSignalDialog(QDialog):
             #self.arrayLength_label.setVisible(False)
 
         elif self.sig_type_combo.currentText() == "Non enumerated type state signals":
+            self.intSig_name_label.setText("Suffix eg_abc")
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
@@ -464,6 +480,7 @@ class IntSignalDialog(QDialog):
             self.sig_size_input.clear()
 
         elif self.sig_type_combo.currentText() == "signed":
+            self.intSig_name_label.setText("Internal Signal Name*")
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
@@ -494,6 +511,7 @@ class IntSignalDialog(QDialog):
             self.add_btn.setVisible(False)
 
         elif self.sig_type_combo.currentText() == "integer":
+            self.intSig_name_label.setText("Internal Signal Name*")
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)

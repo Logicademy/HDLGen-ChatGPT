@@ -129,7 +129,7 @@ class IOPortDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(400, 250)
+        self.input_frame.setFixedSize(400, 400)
         self.input_frame.setLayout(self.input_layout)
 
         self.sig_name_input.textChanged.connect(self.enable_ok_btn);
@@ -146,6 +146,11 @@ class IOPortDialog(QDialog):
     def get_signals(self):
         signalDescription = self.sig_description_input.toPlainText()#text()
         signalDescription = signalDescription.replace("\n", "&#10;")
+        signalDescription.strip()
+        signalDescription = os.linesep.join([
+            line for line in signalDescription.splitlines()
+            if line.strip() != '' #and line.strip() != "&amp;#10;" and line.strip() != "&#10;" and line.strip() != "\n"
+        ])
         if signalDescription == "":
             signalDescription = "to be completed"
         if self.sig_type_input.currentText() == "array":
@@ -166,7 +171,6 @@ class IOPortDialog(QDialog):
     def load_signal_data(self, signal_data):
         self.sig_name_input.setText(signal_data[0])
         self.sig_mode_input.setCurrentText(signal_data[1])
-        print(signal_data[2])
         sig_type=signal_data[2]
         if sig_type != "std_logic_vector" and signal_data[2] != "std_logic":
             sig_type = "array"
@@ -174,6 +178,11 @@ class IOPortDialog(QDialog):
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
         signal_data[4] = signal_data[4].replace("&#10;", "\n")
+        signal_data[4].strip()
+        signal_data[4] = os.linesep.join([
+            line for line in signal_data[4].splitlines()
+            if line.strip() != '' #and line.strip() != "&amp;#10;" and line.strip() != "&#10;" and line.strip() != "\n"
+        ])
         self.sig_description_input.setPlainText(signal_data[4])#setText(signal_data[4])
 
     def cancel_selected(self):
