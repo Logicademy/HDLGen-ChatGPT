@@ -36,6 +36,7 @@ class Home(QMainWindow):
 
         self.proj_dir = proj_dir
         self.generator = Generator()
+        self.project_manager = ProjectManager(self.proj_dir, self)
 
         self.setup_ui()
 
@@ -46,11 +47,11 @@ class Home(QMainWindow):
 
         if self.proj_dir is not None:
             load_data = True
-        project_manager = ProjectManager(self.proj_dir, self)
+        #project_manager = ProjectManager(self.proj_dir, self)
         hdl_designer = HDLDesigner(self.proj_dir, load_data)
 
         print("Setting up UI")
-        self.tabs.addTab(project_manager, "Project Manager")
+        self.tabs.addTab(self.project_manager, "Project Manager")
         self.tabs.addTab(hdl_designer, "HDL Designer")
         self.tabs.addTab(Help(), "Help")
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
@@ -80,9 +81,12 @@ class Home(QMainWindow):
         msgBox.exec_()
 
     def start_vivado_btn_clicked(self):
-        self.generator.run_tcl_file()
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Alert")
-        msgBox.setText("Starting EDA tool  \nPlease wait!")
+        if self.project_manager.vivado_dir_input.text()[-10:] == "vivado.bat":
+            msgBox.setText("Starting EDA tool  \nPlease wait!")
+            self.generator.run_tcl_file()
+        else:
+            msgBox.setText("No vivado.bat path set")
         msgBox.exec_()
 
