@@ -155,6 +155,11 @@ class Generator(QWidget):
                             CSState = name
                     elif type == "std_logic":
                         std_logicList.append(name)
+                    elif type[0:5] == "array":
+                        self.includeArrays = True
+                        arrayList.append(name)
+                    elif type[0:16] == "std_logic_vector":
+                        std_logic_vectorList.append(name)
                     int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                     # signal.getElementsByTagName('name')[0].firstChild.data)
@@ -414,13 +419,16 @@ class Generator(QWidget):
         entity_name, vhdl_code = self.generate_vhdl()
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
-
+        #vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
         # Writing xml file
         with open(vhdl_file_path, "w") as f:
             f.write(vhdl_code)
 
         print("VHDL Model successfully generated at ", vhdl_file_path)
+        #with open(vhdl_file_path, "w") as f:
+       #     f.write(vhdl_code)
 
+        #print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
         self.entity_name = entity_name
 
 
@@ -729,15 +737,16 @@ class Generator(QWidget):
         entity_name, vhdl_tb_code = self.create_vhdl_testbench_code()
 
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_tb.vhd")
-
-        #print(vhdl_tb_code)
+        #vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_tb_HDLGen.vhd")
 
         # Writing xml file
         with open(vhdl_tb_path, "w") as f:
             f.write(vhdl_tb_code)
 
         print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
-
+        #with open(vhdl_tb_HDLGen_path, "w") as f:
+        #    f.write(vhdl_tb_code)
+        #print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
     def generate_mainPackage(self):
         gen_arrays =""
         vhdl_database_path = "./Generator/HDL_Database/vhdl_database.xml"
