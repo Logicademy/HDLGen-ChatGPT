@@ -65,6 +65,7 @@ class ProjectManager(QWidget):
         self.lang_label.setFont(bold_font)
         self.lang_label.setStyleSheet(BLACK_COLOR)
         self.vhdl_check = QCheckBox("VHDL")
+        self.vhdl_check.setChecked(True)
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QCheckBox("Verilog")
         self.verilog_check.setStyleSheet(BLACK_COLOR)
@@ -94,6 +95,7 @@ class ProjectManager(QWidget):
         self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
+        self.vivado_check.setChecked(True)
         self.vivado_check.setFont(bold_font)
         self.vivado_check.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_label = QLabel("Version")
