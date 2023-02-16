@@ -261,7 +261,9 @@ class ProcessDialog(QDialog):
                         self.in_sig_list.addItem(item)
 
                         self.in_sig_layout.addWidget(self.in_sig_list)
+                        self.seq_checkBox.setVisible(False)
                     if self.clkState == True:
+                        self.seq_checkBox.setVisible(True)
                         self.in_sig_list.item(self.input_signals.index("clk")).setHidden(True)
                         if self.rstState == True:
                             self.in_sig_list.item(self.input_signals.index("rst")).setHidden(True)
