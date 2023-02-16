@@ -78,6 +78,7 @@ class Generator(QWidget):
         gen_internal_signal_result = ""
         arrayList=[]
         std_logicList=[]
+        std_logic_vectorList=[]
         # Entity Section
         gen_signals = ""
         entity_signal_description = ""
@@ -97,6 +98,8 @@ class Generator(QWidget):
                     arrayList.append(name)
                 elif type == "std_logic":
                     std_logicList.append(name)
+                elif type[0:16] == "std_logic_vector":
+                    std_logic_vectorList.append(name)
                 signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
                 signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
@@ -273,14 +276,16 @@ class Generator(QWidget):
                                         stateNames = stateTypesString.split(",")
                                         value = stateNames[0]
 
-                                elif value == "all zeros":
+                                elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
                                     elif signals[0] in std_logicList:
-                                        value = '0'
-                                    else:
+                                        value = "'" + '0' + "'"
+                                    elif signals[0] in std_logic_vectorList:
                                         value = "(others => '0')"
-                                elif value == "all ones":
+                                    else:
+                                        value = str(0)
+                                elif value == "one":
                                     value = "(others => '1')"
                                 elif stateTypeSig == True:
                                     if value == CSState:
@@ -292,7 +297,7 @@ class Generator(QWidget):
                                         for states in stateNames:
                                             whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
                                         case_syntax = case_syntax.replace("$whenCase", whenCase)
-                                if value.isdigit():
+                                elif value.isdigit():
                                     if value == "1" or value == "0":
                                         value = "'" + value + "'"
                                     else:
@@ -368,7 +373,7 @@ class Generator(QWidget):
                                         value = "'" + value + "'"
                                     else:
                                         value = '"' + value + '"'
-                                elif value == "all zeros":
+                                elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
                                     else:
