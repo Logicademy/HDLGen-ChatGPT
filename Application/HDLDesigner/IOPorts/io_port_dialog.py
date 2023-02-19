@@ -53,7 +53,6 @@ class IOPortDialog(QDialog):
 
         self.arrayName_label = QLabel("Arrays")
         self.arrayName_label.setStyleSheet(WHITE_COLOR)
-        #self.arrayName_input = QLineEdit()
         self.arrayName_input = QComboBox()
         pal = self.arrayName_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
@@ -87,7 +86,6 @@ class IOPortDialog(QDialog):
         self.input_frame = QFrame()
 
         self.cancelled = True
-        #self.internal_signals=[]
         self.arrays=[]
         self.setup_ui()
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
@@ -109,7 +107,6 @@ class IOPortDialog(QDialog):
             self.load_signal_data(signal_data)
 
     def setup_ui(self):
-        #self.sig_size_input.setFixedWidth(80)
         self.input_layout.addWidget(self.sig_name_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.sig_name_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.sig_mode_label, 0, 1, 1, 1)
@@ -149,7 +146,7 @@ class IOPortDialog(QDialog):
         signalDescription.strip()
         signalDescription = os.linesep.join([
             line for line in signalDescription.splitlines()
-            if line.strip() != '' #and line.strip() != "&amp;#10;" and line.strip() != "&#10;" and line.strip() != "\n"
+            if line.strip() != ''
         ])
         if signalDescription == "":
             signalDescription = "to be completed"
@@ -160,7 +157,6 @@ class IOPortDialog(QDialog):
         sig_details = [self.sig_name_input.text(),
                        self.sig_mode_input.currentText(),
                        typeValue,
-                       #self.sig_type_input.currentText(),
                        self.sig_size_input.text(),
                        signalDescription
                        ]
@@ -181,9 +177,9 @@ class IOPortDialog(QDialog):
         signal_data[4].strip()
         signal_data[4] = os.linesep.join([
             line for line in signal_data[4].splitlines()
-            if line.strip() != '' #and line.strip() != "&amp;#10;" and line.strip() != "&#10;" and line.strip() != "\n"
+            if line.strip() != ''
         ])
-        self.sig_description_input.setPlainText(signal_data[4])#setText(signal_data[4])
+        self.sig_description_input.setPlainText(signal_data[4])
 
     def cancel_selected(self):
         self.cancelled = True

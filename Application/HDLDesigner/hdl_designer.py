@@ -70,9 +70,7 @@ class HDLDesigner(QWidget):
     def update_arch(self):
         xml_data_path = ProjectManager.get_xml_data_path()
         print(xml_data_path)
-        #print(self.proj_dir)
         self.architecture.updateProcessName(xml_data_path)
-        #self.architecture.updateProcessName(self.proj_dir)#load_data(self.proj_dir)
 
 class TabBar(QTabBar):
 

@@ -54,13 +54,13 @@ class settingsDialog(QDialog):
 
 
         self.ok_btn = QPushButton("Ok")
-        self.ok_btn.setEnabled(False)
+        #self.ok_btn.setEnabled(False)
         self.ok_btn.setFixedSize(60, 25)
         self.ok_btn.setStyleSheet(
             "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
             "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
-        self.enable_ok_btn()
+        #self.enable_ok_btn()
         self.input_frame = QFrame()
 
         self.cancelled = True
@@ -90,7 +90,7 @@ class settingsDialog(QDialog):
         self.input_layout.addWidget(self.browse_btn, 3, 3, 1, 1)
         self.input_layout.addWidget(self.cancel_btn, 4, 2, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 4, 3, 1, 1, alignment=Qt.AlignRight)
-        self.vivado_input.textChanged.connect(self.enable_ok_btn)
+        #self.vivado_input.textChanged.connect(self.enable_ok_btn)
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)

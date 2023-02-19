@@ -77,7 +77,7 @@ class CompDetails(QWidget):
     def setup_ui(self):
         settingsDir = os.getcwd() + "\Settings\settings.txt"
         settings = open(settingsDir, "r")
-        vivadoPath = settings.readline()
+        vivado = settings.readline().strip()
         author = settings.readline().strip()
         email = settings.readline().strip()
         company = settings.readline().strip()

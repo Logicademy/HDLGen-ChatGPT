@@ -47,7 +47,6 @@ class Home(QMainWindow):
 
         if self.proj_dir is not None:
             load_data = True
-        #project_manager = ProjectManager(self.proj_dir, self)
         hdl_designer = HDLDesigner(self.proj_dir, load_data)
 
         print("Setting up UI")

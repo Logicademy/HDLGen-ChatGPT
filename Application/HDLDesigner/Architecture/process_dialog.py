@@ -117,17 +117,12 @@ class ProcessDialog(QDialog):
         self.in_sig_layout.addWidget(self.in_sig_label, alignment=Qt.AlignTop)
         self.in_sig_layout.addItem(QSpacerItem(1, 10))
         self.in_sig_list.setFrameStyle(QFrame.NoFrame)
-        # self.in_sig_layout.addWidget(self.in_sig_list)
         self.in_sig_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
         self.in_sig_frame.setLayout(self.in_sig_layout)
         self.in_sig_frame.setFixedWidth(175)
 
-
-        #self.out_sig_label.setFixedWidth(80)
         self.out_sig_header_layout.addWidget(self.out_sig_label,alignment=Qt.AlignRight)
-        #self.val_label.setFixedWidth(80)
         self.out_sig_header_layout.addWidget(self.val_label,alignment=Qt.AlignRight)
-        #self.Binval_label.setFixedWidth(80)
         self.out_sig_header_layout.addWidget(self.Binval_label,alignment=Qt.AlignRight)
 
         self.out_sig_layout.addLayout(self.out_sig_header_layout)
@@ -152,13 +147,10 @@ class ProcessDialog(QDialog):
         self.out_sig_frame.setLayout(self.out_sig_layout)
         self.out_sig_frame.setFixedSize(325, 275)
 
-        #self.CSNS_header_layout.addItem(QSpacerItem(40, 1))
         self.CSNS_header_layout.addWidget(self.CSNS_label)
         self.CSNS_header_layout.addItem(QSpacerItem(50, 1))
         self.CSNS_header_layout.addWidget(self.onClk_label)
         self.CSNS_header_layout.addWidget(self.onRst_label)
-
-        #self.CSNS_header_layout.addItem(QSpacerItem(80, 1))
 
         self.CSNS_layout.addLayout(self.CSNS_header_layout)
         self.CSNS_layout.addWidget(self.CSlist_div)
@@ -231,10 +223,6 @@ class ProcessDialog(QDialog):
                 if clkAndRst[0].getElementsByTagName('rst')[0].firstChild.data == "Yes":
                     print("in")
                     self.rstState = True
-
-            intSignal_nodes = intSignals[0].getElementsByTagName('signal')
-
-
 
             if len(signal_nodes) != 0 or len(intSignal_nodes) != 0:
                 for i in range(0, len(signal_nodes)):
@@ -493,7 +481,11 @@ class ProcessDialog(QDialog):
         in_sigs = []
         out_sigs = []
         CSNS_sigs = []
-        data.append(self.proc_name_input.text())
+        processName = self.proc_name_input.text()
+        print(processName[-2:])
+        if processName[-2:] != "_p":
+            processName=processName+"_p"
+        data.append(processName)#self.proc_name_input.text())
         rstBoolean = False
 
         for i in range(self.in_sig_list.count()):

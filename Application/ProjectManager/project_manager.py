@@ -53,8 +53,6 @@ class ProjectManager(QWidget):
         self.proj_folder_input = QLineEdit()
         self.proj_name_input = QLineEdit()
         self.proj_folder_btn = QPushButton("Browse")
-        # self.proj_folder_btn.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        # self.proj_folder_btn.setStyleSheet("background-color: white; border-style: plain;")
         self.proj_folder_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
@@ -90,8 +88,6 @@ class ProjectManager(QWidget):
         self.intel_dir_label.setStyleSheet(BLACK_COLOR)
         self.intel_dir_input = QLineEdit()
         self.intel_select_dir = QPushButton("Browse")
-        # self.intel_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        # self.intel_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
@@ -107,8 +103,6 @@ class ProjectManager(QWidget):
         self.vivado_dir_label.setStyleSheet(BLACK_COLOR)
         self.vivado_dir_input = QLineEdit()
         self.vivado_select_dir = QPushButton("Browse")
-        # self.vivado_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        # self.vivado_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.vivado_select_dir.setFixedSize(60, 26)
 
         self.note_label = QLabel("Save the project before moving to other tabs")
@@ -150,7 +144,6 @@ class ProjectManager(QWidget):
 
         self.proj_action_layout = QHBoxLayout()
         settingsDir=os.getcwd() + "\Settings\settings.txt"
-        #settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
         settings = open(settingsDir, "r")
         vivadoPath = settings.readline()
         settings.close()
@@ -299,7 +292,6 @@ class ProjectManager(QWidget):
     def get_proj_dir():
         return ProjectManager.proj_dir
 
-    # get_dir() opens up folder chooser and gets selected folder directory
     def set_proj_dir(self):
         ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         self.proj_folder_input.setText(self.proj_dir)

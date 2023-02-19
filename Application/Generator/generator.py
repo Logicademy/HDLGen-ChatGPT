@@ -79,6 +79,8 @@ class Generator(QWidget):
         arrayList=[]
         std_logicList=[]
         std_logic_vectorList=[]
+        unsignedList=[]
+        signedList=[]
         # Entity Section
         gen_signals = ""
         entity_signal_description = ""
@@ -100,6 +102,11 @@ class Generator(QWidget):
                     std_logicList.append(name)
                 elif type[0:16] == "std_logic_vector":
                     std_logic_vectorList.append(name)
+                elif type[0:8] == "unsigned":
+                    unsignedList.append(name)
+                elif type[0:6] == "signed":
+                    signedList.append(name)
+
                 signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
                 signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
@@ -160,11 +167,13 @@ class Generator(QWidget):
                         arrayList.append(name)
                     elif type[0:16] == "std_logic_vector":
                         std_logic_vectorList.append(name)
+                    elif type[0:8] == "unsigned":
+                        unsignedList.append(name)
+                    elif type[0:6] == "signed":
+                        signedList.append(name)
                     int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
-                    # signal.getElementsByTagName('name')[0].firstChild.data)
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)
-                    # signal.getElementsByTagName('type')[0].firstChild.data)
                     int_signal_description = signal.getElementsByTagName('description')[
                         0].firstChild.data
                     int_signal_description = int_signal_description.replace("&#10;", "\n-- ")
@@ -172,7 +181,6 @@ class Generator(QWidget):
                     gen_int_sig += "\n" + int_sig_syntax
                     gen_internal_signal_result += "-- " + signal.getElementsByTagName('name')[
                         0].firstChild.data + "\t" + int_signal_description + "\n"
-
 
                 gen_int_sig.rstrip()
 
@@ -286,7 +294,7 @@ class Generator(QWidget):
                                         value = "(others =>(others => '0'))"
                                     elif signals[0] in std_logicList:
                                         value = "'" + '0' + "'"
-                                    elif signals[0] in std_logic_vectorList:
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[0] in unsignedList:
                                         value = "(others => '0')"
                                     else:
                                         value = str(0)
@@ -352,10 +360,6 @@ class Generator(QWidget):
                                     if caseEmpty == False:
                                         gen_defaults += "\n" + case_syntax
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
-                            #if caseEmpty == False:
-                            #    process_syntax = process_syntax.replace("$case", case_syntax)
-                            #else:
-                            #    process_syntax = process_syntax.replace("$case", "")
                             gen_process += process_syntax + "\n\n"
 
 
@@ -407,10 +411,9 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     gen_vhdl += gen_arch
-        #if includeArrays == True:
 
 
-        return entity_name, gen_vhdl#, gen_array_vhdl
+        return entity_name, gen_vhdl
 
     def create_vhdl_file(self):
 
@@ -445,14 +448,11 @@ class Generator(QWidget):
         tcl_root = tcl_database.documentElement
 
         tcl_file_template = tcl_root.getElementsByTagName("vivado_vhdl_tcl")[0]
-        #print(tcl_file_template)
         tcl_file_template = tcl_file_template.firstChild.data
-        #print(tcl_file_template)
 
         tb_file_name = self.entity_name + "_tb"
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", self.entity_name)
-        #add_files -norecurse C:/Users/User/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd
         wd = os.getcwd()
         wd = wd.replace("\\","/")
         mainPackagePath = "add_files -norecurse  "+ wd +"/HDLDesigner/Package/mainPackage.vhd"
@@ -568,14 +568,11 @@ class Generator(QWidget):
             io_port_map = io_port_map.rstrip()
             io_port_map = io_port_map[0:-1]
             io_signals = io_signals.rstrip()
-            #io_signals = io_signals[0:-1]
-            #other_signals = "\n-- <delete (Start) If UUT is a combinational component>\n"
             other_signals = ""
             if clkrst > 0:
-                other_signals = "signal clk: std_logic := '1';\n" #-- entity includes signal clk, so declare (and initialise) tetbench clk signal\n"
+                other_signals = "signal clk: std_logic := '1';\n"
             if clkrst == 2:
-                other_signals += "signal rst: std_logic;        \n"#-- entity may include signal rst (reset), so declare in testbench\n"
-            #other_signals += "-- <delete (End)\n\n-- testbench control signal declarations\n"
+                other_signals += "signal rst: std_logic;        \n"
             control_signals = "signal endOfSim : boolean := false; -- assert at end of simulation to highlight simuation done. Stops clk signal generation.\n"
             control_signals += "signal testNo: integer; -- aids locating test in simulation waveform\n\n"
             control_signals += "constant period: time := 20 ns; -- Default simulation time. Use as simulation delay constant, or clk period if sequential model ((50MHz clk here)\n"
@@ -637,13 +634,11 @@ class Generator(QWidget):
                 # entity signal dictionary
                 gen_entity_signal = "-- entity signal dictionary\n"
                 gen_entity_signal += entity_signal_description + "\n"
-                #tb_code += gen_entity_signal
 
                 # internal signal dictionary
                 gen_internal_signal = "-- internal signal dictionary\n"
                 gen_internal_signal_result = gen_internal_signal_result + "\n"
                 gen_internal_signal += gen_internal_signal_result
-                #tb_code += gen_internal_signal
                 # Libraries Section
 
                 libraries_node = vhdl_root.getElementsByTagName("libraries")
@@ -666,18 +661,14 @@ class Generator(QWidget):
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
                 if clkrst > 0:
-                    #gen_process += "-- <delete (Start) If UUT is a combinational component>\n"
                     gen_process += "-- Generate clk signal, if sequential component, and endOfSim is FALSE.\n"
                     gen_process += "clkStim: clk <= not clk after period/2 when endOfSim = false else '0';\n"
-                    #gen_process += "-- <delete (End)\n\n"
                 gen_process += "-- instantiate unit under test (UUT)\n"
                 gen_process += "UUT: "+entity_name+ "-- map component internal sigs => testbench signals\n"
                 gen_process += "port map\n\t(\n"
                 gen_process += io_port_map+"\n\t);\n\n"
                 gen_process += "-- Signal stimulus process\n"
                 gen_process += "stim_p: process -- process sensitivity list is empty, so process automatically executes at start of simulation. Suspend process at the wait; statement\n"
-                #gen_process += "-- <delete (Start) if note using variables\n"
-                #gen_process += "variable stimVec : std_logic_vector(" + str(len(inputArray)-1)+" downto 0);\n"
                 gen_process += "begin\n"
                 gen_process += "\t-- Apply default INPUT signal values. Do not assign output signals (generated by the UUT) in this stim_p process\n"
                 gen_process += "\t-- Each stimulus signal change occurs 0.2*period after the active low-to-high clk edge\n"
@@ -685,38 +676,20 @@ class Generator(QWidget):
                 gen_process += inputsToZero
                 gen_process += "\treport \"%N Simulation start\";\n\n"
                 if clkrst == 2:
-                    #gen_process += "\t-- <delete (Start) If UUT is a combinational component>\n"
                     gen_process += "\treport \"Assert and toggle rst\";\n\ttestNo <= 0;\n\trst    <= '1';\n"
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                     gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"#-- <delete (End)\n\n"
                 gen_process += "-- include testbench stimulus sequence here. USe new testNo for each test set"
                 gen_process += "\t-- individual tests. Generate input signal combinations and wait for period.\n"
                 gen_process += "\ttestNo <= 1;\n"
-                #gen_process += "\t-- <delete (Start) if note using variables\n"
-                #gen_process += "\tfor i in 0 to " + str(pow(2,len(inputArray))-1) + " loop\n"
-                #gen_process += "\t\tstimVec := std_logic_vector( to_unsigned(i," + str(len(inputArray)) +") );\n"
-                #indexOfArray = len(inputArray)
-                #for x in inputArray:
-                #    indexOfArray = indexOfArray-1
-                #    gen_process += "\t\t"+ x + " <= stimVec("+str(indexOfArray)+");\n"
-                #gen_process += "\t\twait for period;\n"
-                #gen_process += "\tend loop;\n"
-                #gen_process += "\t-- <delete (End)\n\n"
-                #gen_process += "\t-- <delete (Start) if not required\n"
-                #gen_process += inputsToOne
                 gen_process += "\twait for 3*period;\n"
                 gen_process += "\n\t-- include testbench stimulus sequence here. USe new testNo for each test set\n\n"
-                #gen_process += "\t-- <delete (End)\n\n"
                 gen_process += "\treport \"%N Simulation done\";\n"
                 gen_process += "\tendOfSim <= TRUE; -- assert flag to stop clk signal generation\n\n"
                 gen_process += "\twait; -- wait forever\n"
                 if len(arch_node) != 0 and arch_node[0].firstChild is not None:
-
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
                     arch_name_node = arch_node[0].getElementsByTagName("archName")
-
-                    #arch_name = "comb"
-
                     if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
                         arch_name = arch_name_node[0].firstChild.data
 
@@ -771,13 +744,10 @@ class Generator(QWidget):
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", depth)
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", width)
             gen_arrays += gen_arrayType_syntax
-            # arrayPackage
-        # if gen_arrays != "":
         array_vhdl_code = vhdl_root.getElementsByTagName("arrayPackage")[0].firstChild.data
         array_vhdl_code = array_vhdl_code.replace("$arrays", gen_arrays)
         # Creating arrayPackage file
         array_vhdl_file_path = os.getcwd() + "\HDLDesigner\Package\mainPackage.vhd"
-        # array_vhdl_file_path = os.path.join(proj_path, "VHDL", "model", "arrayPackage.vhd")
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
             f.write(array_vhdl_code)
