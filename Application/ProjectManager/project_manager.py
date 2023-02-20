@@ -4,6 +4,8 @@ from xml.dom import minidom
 from pathlib import Path
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+import qtawesome as qta
+from ProjectManager.vivado_help import VivadoHelpDialog
 
 SMALL_SPACING = 10
 LARGE_SPACING = 30
@@ -105,6 +107,10 @@ class ProjectManager(QWidget):
         self.vivado_select_dir = QPushButton("Browse")
         self.vivado_select_dir.setFixedSize(60, 26)
 
+        self.vivado_info_btn = QPushButton()
+        self.vivado_info_btn.setIcon(qta.icon("mdi.help"))
+        self.vivado_info_btn.setFixedSize(25, 25)
+        self.vivado_info_btn.clicked.connect(self.vivado_help_window)
         self.note_label = QLabel("Save the project before moving to other tabs")
 
         self.proj_close_btn = QPushButton("Close Project")
@@ -183,6 +189,7 @@ class ProjectManager(QWidget):
         self.vivadoToolLayout.addWidget(self.vivado_ver_combo, 0, 3, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_label, 1, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_input, 2, 0, 1, 3)
+        self.vivadoToolLayout.addWidget(self.vivado_info_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolLayout.addWidget(self.vivado_select_dir, 2, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolFrame.setLayout(self.vivadoToolLayout)
         self.vivadoToolFrame.setStyleSheet(
@@ -609,3 +616,7 @@ class ProjectManager(QWidget):
                 self.verilog_check.setChecked(True)
 
         print("Project successfully loaded!")
+
+    def vivado_help_window(self):
+        vivado_help_dialog = VivadoHelpDialog()
+        vivado_help_dialog.exec_()

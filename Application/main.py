@@ -1,4 +1,3 @@
-#this is a test comment
 import sys
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
@@ -41,7 +40,6 @@ class HDLGen(QMainWindow):
         self.help_btn = QPushButton("Help")
         self.settings_btn = QPushButton("Settings")
 
-        # self.help_btn.setIcon(qta.icon("mdi.help"))
         self.help_btn.setFixedSize(35, 25)
         self.help_btn.clicked.connect(self.help_window)
 
