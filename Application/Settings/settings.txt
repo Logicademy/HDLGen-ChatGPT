@@ -1,4 +1,0 @@
-C:/Xilinx/Vivado/2019.1/bin/vivado.bat
-To be completed
-j.byrne34@nuigalway.ie
-University of Galway

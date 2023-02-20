@@ -5,6 +5,7 @@ from pathlib import Path
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import qtawesome as qta
+import configparser
 from ProjectManager.vivado_help import VivadoHelpDialog
 
 SMALL_SPACING = 10
@@ -149,10 +150,12 @@ class ProjectManager(QWidget):
         self.langLayout = QGridLayout()
 
         self.proj_action_layout = QHBoxLayout()
-        settingsDir=os.getcwd() + "\Settings\settings.txt"
-        settings = open(settingsDir, "r")
-        vivadoPath = settings.readline()
-        settings.close()
+        #settingsDir=os.getcwd() + "\Settings\settings.txt"
+        #settings = open(settingsDir, "r")
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        vivadoPath = config.get('user', 'vivado.bat')
+        #settings.close()
         vivadoPath=vivadoPath.strip()
         self.vivado_dir_input.setText(vivadoPath)
         self.setup_ui()

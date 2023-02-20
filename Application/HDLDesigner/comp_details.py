@@ -5,6 +5,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 import sys
+import configparser
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 
@@ -75,13 +76,11 @@ class CompDetails(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-        settingsDir = os.getcwd() + "\Settings\settings.txt"
-        settings = open(settingsDir, "r")
-        vivado = settings.readline().strip()
-        author = settings.readline().strip()
-        email = settings.readline().strip()
-        company = settings.readline().strip()
-        settings.close()
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        author = config.get('user', 'author').strip()
+        email = config.get('user', 'email').strip()
+        company = config.get('user', 'company').strip()
         self.comp_author_input.setText(author)
         self.comp_email_input.setText(email)
         self.comp_company_input.setText(company)
