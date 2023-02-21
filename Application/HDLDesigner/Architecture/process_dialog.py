@@ -43,14 +43,21 @@ class ProcessDialog(QDialog):
         self.in_sig_label = QLabel("Sensitivity List")
         self.in_sig_label.setFont(title_font)
 
-        self.seq_checkBox = QCheckBox("Sequential")
-        self.seq_checkBox.setStyleSheet(WHITE_COLOR)
+        self.seq_checkBox = QCheckBox()
+        self.seq_label = QLabel("Sequential")
+        self.seq_label.setStyleSheet(WHITE_COLOR)
 
         self.in_sig_layout = QVBoxLayout()
         self.in_sig_frame = QFrame()
         self.in_sig_list = QListWidget()
         self.in_sig_empty_info = QLabel("No Input Signals found!\nPlease add signal in Ports")
 
+        self.suffix_label = QLabel("Suffix")
+        self.suffix_label.setStyleSheet(WHITE_COLOR)
+        self.suffix_input = QLineEdit()
+        self.suffix_input.setFixedWidth(20)
+        self.suffix_input.setEnabled(False)
+        self.suffix_input.setText("_p")
 
         self.out_sig_header_layout = QHBoxLayout()
         self.out_sig_label = QLabel("Output Signals")
@@ -177,14 +184,17 @@ class ProcessDialog(QDialog):
 
         self.input_layout.addWidget(self.proc_name_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.proc_name_input, 1, 0, 2, 1)
-        self.input_layout.addWidget(self.seq_checkBox, 0, 1)
-        self.input_layout.addWidget(self.in_sig_frame, 0, 2, 7, 2)
+        self.input_layout.addWidget(self.suffix_label, 0, 1, 1, 1)
+        self.input_layout.addWidget(self.suffix_input, 1, 1, 2, 1)
+        self.input_layout.addWidget(self.seq_label, 0, 2, 1, 1)
+        self.input_layout.addWidget(self.seq_checkBox, 1, 2, 1, 1, Qt.AlignCenter)
+        self.input_layout.addWidget(self.in_sig_frame, 0, 3, 7, 2)
         self.input_layout.addWidget(self.out_sig_frame, 3, 0, 4, 2)
         self.input_layout.addWidget(self.CSNS_frame, 3, 0, 4, 2)
 
         self.input_layout.addItem(QSpacerItem(0, 50), 6, 0, 1, 3)
-        self.input_layout.addWidget(self.cancel_btn, 7, 2, 1, 1, alignment=Qt.AlignRight)
-        self.input_layout.addWidget(self.ok_btn, 7, 3, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.cancel_btn, 7, 3, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.ok_btn, 7, 4, 1, 1, alignment=Qt.AlignRight)
 
         self.proc_name_input.textChanged.connect(self.enable_ok_btn);
         self.input_frame.setFrameShape(QFrame.StyledPanel)
