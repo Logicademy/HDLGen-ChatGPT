@@ -283,12 +283,10 @@ class Generator(QWidget):
                                 signals = default_out.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value=signals[1]
-
                                 if value == "rst state":
                                     if stateTypesList != "":
                                         stateNames = stateTypesString.split(",")
                                         value = stateNames[0]
-
                                 elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
@@ -308,21 +306,22 @@ class Generator(QWidget):
                                         value = "(others => '1')"
                                     else:
                                         value = str(1)
-                                elif stateTypeSig == True:
-                                    if value == CSState:
-                                        caseEmpty = False
-                                        case_syntax = vhdl_root.getElementsByTagName("case")[0].firstChild.data
-                                        case_syntax = case_syntax.replace("$stateType", value)
-                                        stateNames = stateTypesString.split(",")
-                                        whenCase=""
-                                        for states in stateNames:
-                                            whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
-                                        case_syntax = case_syntax.replace("$whenCase", whenCase)
                                 elif value.isdigit():
                                     if value == "1" or value == "0":
                                         value = "'" + value + "'"
                                     else:
                                         value = '"'+value+'"'
+
+                                elif stateTypeSig == True and value == CSState:
+                                    #if value == CSState:
+                                    caseEmpty = False
+                                    case_syntax = vhdl_root.getElementsByTagName("case")[0].firstChild.data
+                                    case_syntax = case_syntax.replace("$stateType", value)
+                                    stateNames = stateTypesString.split(",")
+                                    whenCase=""
+                                    for states in stateNames:
+                                        whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
+                                    case_syntax = case_syntax.replace("$whenCase", whenCase)
 
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
