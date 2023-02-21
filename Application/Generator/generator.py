@@ -299,7 +299,15 @@ class Generator(QWidget):
                                     else:
                                         value = str(0)
                                 elif value == "one":
-                                    value = "(others => '1')"
+                                    if signals[0] in arrayList:
+                                        value = "(others =>(others => '1'))"
+                                    elif signals[0] in std_logicList:
+                                        value = "'" + '1' + "'"
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                        0] in unsignedList:
+                                        value = "(others => '1')"
+                                    else:
+                                        value = str(1)
                                 elif stateTypeSig == True:
                                     if value == CSState:
                                         caseEmpty = False
