@@ -150,13 +150,13 @@ class ProjectManager(QWidget):
         self.langLayout = QGridLayout()
 
         self.proj_action_layout = QHBoxLayout()
-        #settingsDir=os.getcwd() + "\Settings\settings.txt"
-        #settings = open(settingsDir, "r")
+        # settingsDir=os.getcwd() + "\Settings\settings.txt"
+        # settings = open(settingsDir, "r")
         config = configparser.ConfigParser()
         config.read('config.ini')
         vivadoPath = config.get('user', 'vivado.bat')
-        #settings.close()
-        vivadoPath=vivadoPath.strip()
+        # settings.close()
+        vivadoPath = vivadoPath.strip()
         self.vivado_dir_input.setText(vivadoPath)
         self.setup_ui()
 
@@ -256,7 +256,6 @@ class ProjectManager(QWidget):
 
         self.setLayout(self.mainLayout)
 
-
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
         self.vivado_select_dir.clicked.connect(self.set_vivado_bat_path)
@@ -340,14 +339,9 @@ class ProjectManager(QWidget):
 
         # Creating and adding projectManager Element
         projectManager_data = root.createElement('projectManager')
-
-
-
         # Creating main project folder
         os.makedirs(xml_data_dir, exist_ok=True)
-
         # Set project name and location details
-
         # Adding Setting Element
         settings_data = root.createElement('settings')
         projectManager_data.appendChild(settings_data)
