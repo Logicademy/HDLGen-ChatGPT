@@ -12,7 +12,7 @@ from Settings.settings import settingsDialog
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-APP_AUTHORS = "Abishek Bupathi, JP Byrne & Fearghal Morgan"
+APP_AUTHORS = "Fearghal Morgan, Abishek Bupathi & JP Byrne"
 APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
 
@@ -21,7 +21,7 @@ class HDLGen(QMainWindow):
     def __init__(self):
 
         super().__init__()
-        self.setWindowTitle("HDLGen")
+        self.setWindowTitle("HDLGen V.1")
 
         title_font = QFont()
         title_font.setPointSize(30)
