@@ -209,10 +209,10 @@ class IntSignalDialog(QDialog):
                 edit_btn.setFixedSize(35, 22)
                 edit_btn.clicked.connect(self.edit_stateName)
 
-                idle_tickbox = QCheckBox("Make Idle")
-                idle_tickbox.setStyleSheet(BLACK_COLOR)
+                rst_state_tickbox = QCheckBox("Make rst state")
+                rst_state_tickbox.setStyleSheet(BLACK_COLOR)
                 if i==0:
-                    idle_tickbox.setCheckState(Qt.Checked)
+                    rst_state_tickbox.setCheckState(Qt.Checked)
                 row_position = self.stateNames_table.rowCount()
                 self.stateNames_table.insertRow(row_position)
                 self.stateNames_table.setRowHeight(row_position, 1)
@@ -220,7 +220,7 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setItem(row_position, 0, QTableWidgetItem(state))
                 self.stateNames_table.setCellWidget(row_position, 1, edit_btn)
                 self.stateNames_table.setCellWidget(row_position, 2, delete_btn)
-                self.stateNames_table.setCellWidget(row_position, 3, idle_tickbox)
+                self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
                 i=i+1
         intSig_data[3] = intSig_data[3].replace("&#10;", "\n")
         intSig_data[3] = os.linesep.join([
@@ -294,8 +294,8 @@ class IntSignalDialog(QDialog):
             edit_btn.setFixedSize(35, 22)
             edit_btn.clicked.connect(self.edit_stateName)
 
-            idle_tickbox = QCheckBox("rst state")
-            idle_tickbox.setStyleSheet(BLACK_COLOR)
+            rst_state_tickbox = QCheckBox("Make rst state")
+            rst_state_tickbox.setStyleSheet(BLACK_COLOR)
 
             row_position = self.stateNames_table.rowCount()
             self.stateNames_table.insertRow(row_position)
@@ -304,7 +304,7 @@ class IntSignalDialog(QDialog):
             self.stateNames_table.setItem(row_position, 0, QTableWidgetItem(stateName_data))
             self.stateNames_table.setCellWidget(row_position, 1, edit_btn)
             self.stateNames_table.setCellWidget(row_position, 2, delete_btn)
-            self.stateNames_table.setCellWidget(row_position, 3, idle_tickbox)
+            self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
 
 
 
@@ -330,8 +330,8 @@ class IntSignalDialog(QDialog):
                 edit_btn.setFixedSize(35, 22)
                 edit_btn.clicked.connect(self.edit_stateName)
 
-                idle_tickbox = QCheckBox("Make Idle")
-                idle_tickbox.setStyleSheet(BLACK_COLOR)
+                rst_state_tickbox = QCheckBox("Make rst state")
+                rst_state_tickbox.setStyleSheet(BLACK_COLOR)
 
                 self.all_stateNames.insert(row, stateName_data)
                 row_position = self.stateNames_table.rowCount()
@@ -341,7 +341,7 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setItem(row_position, 0, QTableWidgetItem(stateName_data))#[0]))
                 self.stateNames_table.setCellWidget(row_position, 1, edit_btn)
                 self.stateNames_table.setCellWidget(row_position, 2, delete_btn)
-                self.stateNames_table.setCellWidget(row_position, 3, idle_tickbox)
+                self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
 
 
     def sig_type_options(self):

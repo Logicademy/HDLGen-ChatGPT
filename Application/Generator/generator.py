@@ -284,7 +284,7 @@ class Generator(QWidget):
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value=signals[1]
 
-                                if value == "Idle":
+                                if value == "rst state":
                                     if stateTypesList != "":
                                         stateNames = stateTypesString.split(",")
                                         value = stateNames[0]

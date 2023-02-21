@@ -375,7 +375,7 @@ class ProcessDialog(QDialog):
 
                             onRst_val_combo = QComboBox()
                             onRst_val_options = self.input_signals + self.internal_signals
-                            onRst_val_options.insert(0, "Idle")
+                            onRst_val_options.insert(0, "rst state")
                             onRst_val_options.insert(0, "zero")
                             onRst_val_options.insert(0, "one")
                             onRst_val_options.insert(0, "Select")
