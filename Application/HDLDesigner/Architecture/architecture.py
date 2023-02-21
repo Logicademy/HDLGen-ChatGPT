@@ -107,7 +107,7 @@ class Architecture(QWidget):
         self.type_label.setFixedWidth(60)
         self.list_header_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
         self.list_header_layout.addWidget(self.in_sig_label, alignment=Qt.AlignLeft)
-        self.list_header_layout.addItem(QSpacerItem(100, 1))
+        self.list_header_layout.addItem(QSpacerItem(140, 1))
         self.list_layout.addLayout(self.list_header_layout)
         self.list_layout.addWidget(self.list_div)
 
@@ -115,7 +115,7 @@ class Architecture(QWidget):
         self.proc_table.setShowGrid(False)
         self.proc_table.setColumnWidth(0, 100)
         self.proc_table.setColumnWidth(1, 75)
-        self.proc_table.setColumnWidth(2, 75)
+        self.proc_table.setColumnWidth(2, 100)
         self.proc_table.setColumnWidth(3, 1)
         self.proc_table.setColumnWidth(4, 1)
         self.proc_table.horizontalScrollMode()
