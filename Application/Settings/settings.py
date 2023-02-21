@@ -37,7 +37,7 @@ class settingsDialog(QDialog):
         self.company_label.setStyleSheet(WHITE_COLOR)
         self.company_input = QLineEdit()
 
-        self.vivado_label = QLabel("Vivado.bin path")
+        self.vivado_label = QLabel("Vivado.bat path")
         self.vivado_label.setStyleSheet(WHITE_COLOR)
         self.vivado_input = QLineEdit()
 
