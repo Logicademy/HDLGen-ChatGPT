@@ -183,7 +183,7 @@ class IOPortDialog(QDialog):
             typeValue= self.arrayName_input.currentText()
         else:
             typeValue= self.sig_type_input.currentText()
-        sig_details = [self.sig_name_input.text(),
+        sig_details = [self.sig_name_input.text().strip(),
                        self.sig_mode_input.currentText(),
                        typeValue,
                        self.sig_size_input.text(),

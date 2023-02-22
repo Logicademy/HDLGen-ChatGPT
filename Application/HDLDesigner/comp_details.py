@@ -175,13 +175,13 @@ class CompDetails(QWidget):
         comp_description = lines#self.comp_description_input.toPlainText()
         if comp_description == "":
             comp_description = "null"
-        comp_authors = self.comp_author_input.text()
+        comp_authors = self.comp_author_input.text().strip()
         if comp_authors == "":
             comp_authors = "null"
-        comp_company = self.comp_company_input.text()
+        comp_company = self.comp_company_input.text().strip()
         if comp_company == "":
             comp_company = "null"
-        comp_email = self.comp_email_input.text()
+        comp_email = self.comp_email_input.text().strip()
         if comp_email == "":
             comp_email = "null"
         comp_date = self.comp_date_picker.text()
