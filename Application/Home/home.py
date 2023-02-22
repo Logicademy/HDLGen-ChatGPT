@@ -83,7 +83,7 @@ class Home(QMainWindow):
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Alert")
         if self.project_manager.vivado_dir_input.text()[-10:] == "vivado.bat":
-            msgBox.setText("Starting EDA tool  \nPlease wait!")
+            msgBox.setText("Starting EDA tool")
             self.generator.run_tcl_file()
         else:
             msgBox.setText("No vivado.bat path set")
