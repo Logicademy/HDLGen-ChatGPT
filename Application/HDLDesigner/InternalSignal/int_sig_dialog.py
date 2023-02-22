@@ -80,6 +80,7 @@ class IntSignalDialog(QDialog):
         self.sig_desc_label = QLabel("Signal Description")
         self.sig_desc_label.setStyleSheet(WHITE_COLOR)
         self.sig_desc_input = QPlainTextEdit()
+        self.sig_desc_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
 
         self.stateNames_table = QTableWidget()
         self.stateNames_table.setColumnCount(4)
@@ -239,8 +240,28 @@ class IntSignalDialog(QDialog):
         return data
     def get_data(self):
         data = []
-
-        intSignalDescription = self.sig_desc_input.toPlainText()#text()
+        cursor = self.sig_desc_input.textCursor()
+        doc = self.sig_desc_input.document()
+        lines = ""
+        line = ""
+        for i in range(doc.blockCount()):
+            block = doc.findBlockByNumber(i)
+            if block.isVisible():
+                print(block.layout().lineCount())
+                for j in range(block.layout().lineCount()):
+                    lineStart = block.position() + block.layout().lineAt(j).textStart()
+                    lineEnd = lineStart + block.layout().lineAt(j).textLength()
+                    cursor.setPosition(lineStart)
+                    cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
+                    line += cursor.selectedText()
+                    print(line)
+                    if lineEnd == cursor.position():
+                        print(line)
+                        lines += line + "\n"
+                        line = ""
+        lines = lines.strip()
+        intSignalDescription = lines
+        #intSignalDescription = self.sig_desc_input.toPlainText()#text()
         intSignalDescription = intSignalDescription.replace("\n", "&#10;")
         intSignalDescription = os.linesep.join([
             line for line in intSignalDescription.splitlines()

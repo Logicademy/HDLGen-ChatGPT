@@ -1,6 +1,9 @@
 import os
 import sys
 from xml.dom import minidom
+
+from PySide2 import QtWidgets
+from PySide2.QtCore import QSizeF
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
@@ -66,7 +69,15 @@ class IOPortDialog(QDialog):
 
         self.sig_description_label = QLabel("Signal Description")
         self.sig_description_label.setStyleSheet(WHITE_COLOR)
-        self.sig_description_input = QPlainTextEdit()#QLineEdit()
+        self.sig_description_input = QPlainTextEdit()#MyPlainTextEdit()#QPlainTextEdit()#QLineEdit()
+        self.sig_description_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
+
+        #self.sig_description_input.blockCountChanged.connect(self.wrapping)
+        #self.sig_description_input.setLineWrapMode(QPlainTextEdit.FixedColumnWidth)
+        #self.sig_description_input.setMaximumBlockCount(34)
+        #font_metrics = self.sig_description_input.fontMetrics()
+        #tab_stop_width = 34 * font_metrics.averageCharWidth()
+        #self.sig_description_input.setTabStopWidth(34)#tab_stop_width)
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setFixedSize(60, 25)
@@ -140,14 +151,32 @@ class IOPortDialog(QDialog):
 
         self.setLayout(self.mainLayout)
 
+    def wrapping(self):
+        print("wrap")
     def get_signals(self):
-        signalDescription = self.sig_description_input.toPlainText()#text()
+        cursor = self.sig_description_input.textCursor()
+        doc = self.sig_description_input.document()
+        lines = ""
+        line = ""
+        for i in range(doc.blockCount()):
+            block = doc.findBlockByNumber(i)
+            if block.isVisible():
+                print(block.layout().lineCount())
+                for j in range(block.layout().lineCount()):
+                    lineStart = block.position() + block.layout().lineAt(j).textStart()
+                    lineEnd = lineStart + block.layout().lineAt(j).textLength()
+                    cursor.setPosition(lineStart)
+                    cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
+                    line += cursor.selectedText()
+                    print(line)
+                    if lineEnd == cursor.position():
+                        print(line)
+                        lines += line+"\n"
+                        line = ""
+        lines=lines.strip()
+        signalDescription=lines
+        print(signalDescription)
         signalDescription = signalDescription.replace("\n", "&#10;")
-        signalDescription.strip()
-        signalDescription = os.linesep.join([
-            line for line in signalDescription.splitlines()
-            if line.strip() != ''
-        ])
         if signalDescription == "":
             signalDescription = "to be completed"
         if self.sig_type_input.currentText() == "array":
