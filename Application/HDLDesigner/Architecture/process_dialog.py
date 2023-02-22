@@ -43,9 +43,9 @@ class ProcessDialog(QDialog):
         self.in_sig_label = QLabel("Sensitivity List")
         self.in_sig_label.setFont(title_font)
 
-        self.seq_checkBox = QCheckBox()
-        self.seq_label = QLabel("Sequential")
-        self.seq_label.setStyleSheet(WHITE_COLOR)
+        self.seq_checkBox = QCheckBox("Sequential")
+        #self.seq_label = QLabel("Sequential")
+        self.seq_checkBox.setStyleSheet(WHITE_COLOR)
 
         self.in_sig_layout = QVBoxLayout()
         self.in_sig_frame = QFrame()
@@ -183,10 +183,10 @@ class ProcessDialog(QDialog):
         self.CSNS_frame.hide()
 
         self.input_layout.addWidget(self.proc_name_label, 0, 0, 1, 1)
-        self.input_layout.addWidget(self.proc_name_input, 1, 0, 2, 1)
+        self.input_layout.addWidget(self.proc_name_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.suffix_label, 0, 1, 1, 1)
-        self.input_layout.addWidget(self.suffix_input, 1, 1, 2, 1)
-        self.input_layout.addWidget(self.seq_label, 0, 2, 1, 1)
+        self.input_layout.addWidget(self.suffix_input, 1, 1, 1, 1)
+        #self.input_layout.addWidget(self.seq_label, 0, 2, 1, 1)
         self.input_layout.addWidget(self.seq_checkBox, 1, 2, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.in_sig_frame, 0, 3, 7, 2)
         self.input_layout.addWidget(self.out_sig_frame, 3, 0, 4, 2)
