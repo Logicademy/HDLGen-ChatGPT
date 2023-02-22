@@ -123,7 +123,7 @@ class PackageDialog(QDialog):
         self.sig_type_combo.setCurrentText(array_data[3])
 
     def get_data(self):
-        data = [self.array_name_input.text(), self.arraySize_input.text(), self.arrayLength_input.text(), self.sig_type_combo.currentText()]
+        data = [self.array_name_input.text().strip(), self.arraySize_input.text().strip(), self.arrayLength_input.text().strip(), self.sig_type_combo.currentText()]
         print(data)
         self.cancelled = False
         self.close()
