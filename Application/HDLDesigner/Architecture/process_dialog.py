@@ -227,11 +227,9 @@ class ProcessDialog(QDialog):
             intSignal_nodes = intSignals[0].getElementsByTagName('signal')
 
             clkAndRst = hdlDesign[0].getElementsByTagName('clkAndRst')
-            print(len(clkAndRst))
             if len(clkAndRst) != 1:
                 self.clkState = True
                 if clkAndRst[0].getElementsByTagName('rst')[0].firstChild.data == "Yes":
-                    print("in")
                     self.rstState = True
 
             if len(signal_nodes) != 0 or len(intSignal_nodes) != 0:
@@ -288,7 +286,6 @@ class ProcessDialog(QDialog):
                     outputList_flag = 1
 
                     for signal in self.output_signals:
-                        print(signal)
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
 
@@ -378,7 +375,6 @@ class ProcessDialog(QDialog):
 
                             CSout_val_combo = QComboBox()
                             CSout_val_options = self.input_signals + self.internal_signals
-                            print(CSout_val_options)
                             CSout_val_options.insert(0, "Select")
                             CSout_val_combo.addItems(CSout_val_options)
                             CSout_val_options.pop(0)
@@ -462,9 +458,7 @@ class ProcessDialog(QDialog):
                 if not clk_default_vals:
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Checked)
                     self.out_sig_table.cellWidget(i, 2).setCurrentText(default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
-                    print(default_vals)
                     if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
-                        print(i)
                         self.out_sig_table.cellWidget(i, 3).setText(default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
 
         for i in range(self.CSNS_table.rowCount()):
@@ -527,7 +521,6 @@ class ProcessDialog(QDialog):
 
         data.append(in_sigs)
         data.append(out_sigs)
-        print(CSNS_sigs)
         self.cancelled = False
         self.close()
         return data

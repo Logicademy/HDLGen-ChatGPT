@@ -193,7 +193,6 @@ class IntSignalDialog(QDialog):
             intSig_data[2] = str(intSig_data[2]).replace('[', '')
             intSig_data[2] = str(intSig_data[2]).replace(']', '')
             intSig_data[2] = str(intSig_data[2]).replace(',', '')
-            print(intSig_data[2])
             stateNames = intSig_data[2].split(" ")
             self.all_stateNames=stateNames
             i = 0
@@ -242,16 +241,13 @@ class IntSignalDialog(QDialog):
         for i in range(doc.blockCount()):
             block = doc.findBlockByNumber(i)
             if block.isVisible():
-                print(block.layout().lineCount())
                 for j in range(block.layout().lineCount()):
                     lineStart = block.position() + block.layout().lineAt(j).textStart()
                     lineEnd = lineStart + block.layout().lineAt(j).textLength()
                     cursor.setPosition(lineStart)
                     cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
                     line += cursor.selectedText()
-                    print(line)
                     if lineEnd == cursor.position():
-                        print(line)
                         lines += line + "\n"
                         line = ""
         lines = lines.strip()
@@ -299,7 +295,6 @@ class IntSignalDialog(QDialog):
         if not add_stateName.cancelled:
             stateName_data = add_stateName.get_data()
             self.all_stateNames.append(stateName_data)
-            print(self.all_stateNames)
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
             delete_btn.setFixedSize(35, 22)

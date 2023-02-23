@@ -109,7 +109,6 @@ class IOPortDialog(QDialog):
         self.arrayName_input.addItems(self.arrays)
 
         if add_or_edit == "edit" and signal_data != None:
-            print(signal_data)
             self.load_signal_data(signal_data)
 
     def setup_ui(self):
@@ -154,21 +153,17 @@ class IOPortDialog(QDialog):
         for i in range(doc.blockCount()):
             block = doc.findBlockByNumber(i)
             if block.isVisible():
-                print(block.layout().lineCount())
                 for j in range(block.layout().lineCount()):
                     lineStart = block.position() + block.layout().lineAt(j).textStart()
                     lineEnd = lineStart + block.layout().lineAt(j).textLength()
                     cursor.setPosition(lineStart)
                     cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
                     line += cursor.selectedText()
-                    print(line)
                     if lineEnd == cursor.position():
-                        print(line)
                         lines += line+"\n"
                         line = ""
         lines=lines.strip()
         signalDescription=lines
-        print(signalDescription)
         signalDescription = signalDescription.replace("\n", "&#10;")
         if signalDescription == "":
             signalDescription = "to be completed"

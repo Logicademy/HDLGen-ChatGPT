@@ -188,7 +188,6 @@ class InternalSignal(QWidget):
         if button:
             row = self.intSig_table.indexAt(button.pos()).row()
             rowBefore = row - 1
-            print(self.all_intSignals[row])
             add_intSig = IntSignalDialog("edit", self.all_intSignals[row])
             add_intSig.exec_()
         if not add_intSig.cancelled:

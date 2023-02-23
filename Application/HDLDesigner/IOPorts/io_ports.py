@@ -294,7 +294,6 @@ class IOPorts(QWidget):
         button = self.sender()
         if button:
             row = self.port_table.indexAt(button.pos()).row()
-            print(self.all_signals[row])
             io_dialog = IOPortDialog("edit", self.all_signals[row])
             io_dialog.exec_()
 
