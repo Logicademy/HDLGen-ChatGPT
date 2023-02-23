@@ -294,7 +294,7 @@ class IOPorts(QWidget):
         button = self.sender()
         if button:
             row = self.port_table.indexAt(button.pos()).row()
-
+            print(self.all_signals[row])
             io_dialog = IOPortDialog("edit", self.all_signals[row])
             io_dialog.exec_()
 
@@ -325,6 +325,8 @@ class IOPorts(QWidget):
                 self.port_table.setItem(row, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
                 self.port_table.setCellWidget(row, 4, edit_btn)
                 self.port_table.setCellWidget(row, 5, delete_btn)
+            else:
+                self.all_signals[row][4]=self.all_signals[row][4].replace("\n", "&#10;")
 
     def save_signals(self):
         xml_data_path = ProjectManager.get_xml_data_path()

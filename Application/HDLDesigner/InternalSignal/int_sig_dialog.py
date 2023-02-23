@@ -126,7 +126,6 @@ class IntSignalDialog(QDialog):
         self.setup_ui()
 
         if add_or_edit == "edit" and intSig_data != None:
-            print("editing")
             self.load_sig_data(intSig_data)
 
     def setup_ui(self):
@@ -224,10 +223,6 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
                 i=i+1
         intSig_data[3] = intSig_data[3].replace("&#10;", "\n")
-        intSig_data[3] = os.linesep.join([
-            line for line in intSig_data[3].splitlines()
-            if line.strip() != ''
-        ])
         self.sig_desc_input.setPlainText(intSig_data[3])
 
     def makeIdeal(self):

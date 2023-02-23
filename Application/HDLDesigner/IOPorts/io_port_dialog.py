@@ -109,6 +109,7 @@ class IOPortDialog(QDialog):
         self.arrayName_input.addItems(self.arrays)
 
         if add_or_edit == "edit" and signal_data != None:
+            print(signal_data)
             self.load_signal_data(signal_data)
 
     def setup_ui(self):
@@ -195,11 +196,6 @@ class IOPortDialog(QDialog):
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
         signal_data[4] = signal_data[4].replace("&#10;", "\n")
-        signal_data[4].strip()
-        signal_data[4] = os.linesep.join([
-            line for line in signal_data[4].splitlines()
-            if line.strip() != ''
-        ])
         self.sig_description_input.setPlainText(signal_data[4])
 
     def cancel_selected(self):
