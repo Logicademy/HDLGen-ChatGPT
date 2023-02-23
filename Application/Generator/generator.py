@@ -392,8 +392,17 @@ class Generator(QWidget):
                                 elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
-                                    else:
+                                    elif signals[0] in std_logicList:
+                                        value = "'" + '0' + "'"
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                        0] in unsignedList:
                                         value = "(others => '0')"
+                                    else:
+                                        value = str(0)
+                                    #if signals[0] in arrayList:
+                                     #   value = "(others =>(others => '0'))"
+                                    #else:
+                                       # value = "(others => '0')"
                                 assign_syntax = assign_syntax.replace("$value", value)
 
                                 gen_stmts += assign_syntax + "\n"
@@ -562,13 +571,16 @@ class Generator(QWidget):
                             print("std_logic_vector is"+ signal.getElementsByTagName('type')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
                             arrayPackage=True
+                else:
+                    if signal.getElementsByTagName('type')[0].firstChild.data != "std_logic" and signal.getElementsByTagName('type')[0].firstChild.data[0:16] != "std_logic_vector":
+                        arrayPackage = True
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
                     0].firstChild.data + "\t" + signal_description + "\n"
                 gen_signals += "\t" + signal_declare_syntax + "\n"
                 io_port_map += "\t" + io_port_map_syntax + "\n"
-                if signal.getElementsByTagName('name')[0].firstChild.data == "clk" or signal.getElementsByTagName('name')[0].firstChild.data == "rst" :
+                if signal.getElementsByTagName('name')[0].firstChild.data == "clk" or signal.getElementsByTagName('name')[0].firstChild.data == "rst":
                     clkrst=clkrst+1
                 else:
                     io_signals += io_signal_declare_syntax + "\n"

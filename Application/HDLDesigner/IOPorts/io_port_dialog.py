@@ -72,12 +72,6 @@ class IOPortDialog(QDialog):
         self.sig_description_input = QPlainTextEdit()#MyPlainTextEdit()#QPlainTextEdit()#QLineEdit()
         self.sig_description_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
 
-        #self.sig_description_input.blockCountChanged.connect(self.wrapping)
-        #self.sig_description_input.setLineWrapMode(QPlainTextEdit.FixedColumnWidth)
-        #self.sig_description_input.setMaximumBlockCount(34)
-        #font_metrics = self.sig_description_input.fontMetrics()
-        #tab_stop_width = 34 * font_metrics.averageCharWidth()
-        #self.sig_description_input.setTabStopWidth(34)#tab_stop_width)
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setFixedSize(60, 25)
@@ -151,8 +145,6 @@ class IOPortDialog(QDialog):
 
         self.setLayout(self.mainLayout)
 
-    def wrapping(self):
-        print("wrap")
     def get_signals(self):
         cursor = self.sig_description_input.textCursor()
         doc = self.sig_description_input.document()
@@ -183,7 +175,7 @@ class IOPortDialog(QDialog):
             typeValue= self.arrayName_input.currentText()
         else:
             typeValue= self.sig_type_input.currentText()
-        sig_details = [self.sig_name_input.text().strip(),
+        sig_details = [self.sig_name_input.text().strip().replace(" ", ""),
                        self.sig_mode_input.currentText(),
                        typeValue,
                        self.sig_size_input.text(),

@@ -82,7 +82,7 @@ class state_Name_Dialog(QDialog):
         self.state_name_input.setText(stateName_data)
 
     def get_data(self):
-        state_name = self.state_name_input.text().strip()
+        state_name = self.state_name_input.text().strip().replace(" ", "")
         data = state_name
         self.cancelled = False
         self.close()

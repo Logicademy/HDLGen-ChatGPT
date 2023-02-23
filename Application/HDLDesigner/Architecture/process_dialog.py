@@ -55,7 +55,7 @@ class ProcessDialog(QDialog):
         self.suffix_label = QLabel("Suffix")
         self.suffix_label.setStyleSheet(WHITE_COLOR)
         self.suffix_input = QLineEdit()
-        self.suffix_input.setFixedWidth(20)
+        self.suffix_input.setFixedWidth(40)
         self.suffix_input.setEnabled(False)
         self.suffix_input.setText("_p")
 
@@ -493,8 +493,7 @@ class ProcessDialog(QDialog):
         in_sigs = []
         out_sigs = []
         CSNS_sigs = []
-        processName = self.proc_name_input.text()
-        print(processName[-2:])
+        processName = self.proc_name_input.text().strip().replace(" ", "")
         if processName[-2:] != "_p":
             processName=processName+"_p"
         data.append(processName)#self.proc_name_input.text())

@@ -269,7 +269,7 @@ class IntSignalDialog(QDialog):
         ])
         if intSignalDescription == "":
             intSignalDescription = "to be completed"
-        data.append(self.intSig_name_input.text().strip())
+        data.append(self.intSig_name_input.text().strip().replace(" ", ""))
         data.append(self.sig_type_combo.currentText())
         if self.sig_type_combo.currentText() != "Enumerated type state signals":
             data.append(self.sig_size_input.text())

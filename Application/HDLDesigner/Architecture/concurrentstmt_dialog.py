@@ -53,6 +53,12 @@ class ConcurrentStmtDialog(QDialog):
 
         self.out_sig_layout = QHBoxLayout()
 
+        self.suffix_label = QLabel("Suffix")
+        self.suffix_label.setStyleSheet(WHITE_COLOR)
+        self.suffix_input = QLineEdit()
+        #self.suffix_input.setFixedWidth(20)
+        self.suffix_input.setEnabled(False)
+        self.suffix_input.setText("_c")
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setFixedSize(60, 25)
@@ -82,14 +88,16 @@ class ConcurrentStmtDialog(QDialog):
 
     def setup_ui(self):
 
-        self.input_layout.addWidget(self.conc_name_label, 0, 0, 1, 4)
-        self.input_layout.addWidget(self.conc_name_input, 1, 0, 2, 4)
-        self.input_layout.addWidget(self.out_sig_label, 3, 0, 1, 2)
-        self.input_layout.addWidget(self.out_signals_combo, 4, 0, 1, 2)
-        self.input_layout.addWidget(self.options_sig_label,3,2,1,1)
-        self.input_layout.addWidget(self.options_signals_combo, 4, 2, 1, 1)
-        self.input_layout.addWidget(self.val_label, 3, 3, 1, 1)
-        self.input_layout.addWidget(self.out_val_input, 4, 3, 1, 1)
+        self.input_layout.addWidget(self.conc_name_label, 0, 0, 1, 3)
+        self.input_layout.addWidget(self.conc_name_input, 1, 0, 1, 3)
+        self.input_layout.addWidget(self.suffix_label, 0, 3, 1, 1)
+        self.input_layout.addWidget(self.suffix_input, 1, 3, 1, 1)
+        self.input_layout.addWidget(self.out_sig_label, 3, 0, 1, 1)
+        self.input_layout.addWidget(self.out_signals_combo, 4, 0, 1, 1)
+        self.input_layout.addWidget(self.options_sig_label,3,1,1,1)
+        self.input_layout.addWidget(self.options_signals_combo, 4, 1, 1, 1)
+        self.input_layout.addWidget(self.val_label, 3, 2, 1, 2)
+        self.input_layout.addWidget(self.out_val_input, 4, 2, 1, 2)
         self.input_layout.addItem(QSpacerItem(0, 10), 5, 0, 1, 3)
         self.input_layout.addWidget(self.cancel_btn, 6, 2, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 6, 3, 1, 1, alignment=Qt.AlignRight)
@@ -100,7 +108,7 @@ class ConcurrentStmtDialog(QDialog):
         self.input_frame.setContentsMargins(10, 10, 10, 10)
         self.input_frame.setFixedSize(400, 175)
         self.input_frame.setLayout(self.input_layout)
-        self.out_signals_combo.currentIndexChanged.connect(self.setName)
+        #self.out_signals_combo.currentIndexChanged.connect(self.setName)
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
@@ -144,7 +152,7 @@ class ConcurrentStmtDialog(QDialog):
                     self.output_signals.pop(0)
 
                     self.options_signals_combo.addItem("Custom")
-                    self.options_signals_combo.addItem("all zeros")
+                    self.options_signals_combo.addItem("zero")
                     self.options_signals_combo.addItems(self.internal_signals + self.input_signals)
                     self.options_signals_combo.currentTextChanged.connect(self.disable_custom_input)
 
@@ -174,7 +182,10 @@ class ConcurrentStmtDialog(QDialog):
     def get_data(self):
         data = []
         out_sig = []
-        data.append(self.conc_name_input.text())
+        concurrentName = self.conc_name_input.text().strip().replace(" ", "")
+        if concurrentName[-2:] != "_c":
+            concurrentName=concurrentName+"_c"
+        data.append(concurrentName)
 
         if (self.out_signals_combo.currentText() != "Please select"):
             output = self.out_signals_combo.currentText()
