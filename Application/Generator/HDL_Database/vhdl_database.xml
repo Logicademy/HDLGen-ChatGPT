@@ -29,13 +29,13 @@
     <stateNamesDeclarations>type stateType is ($stateNamesList);</stateNamesDeclarations>
     <arrayPackage>-- Package&#10;library ieee;&#10;use ieee.std_logic_1164.all;&#10;package arrayPackage is&#10;$arraysend arrayPackage;&#10;package body arrayPackage is&#10;end arrayPackage;&#10;&#10;</arrayPackage>
     <arrayType>type $arrayName is array($arraySize downto 0) of $signalType($arrayLength downto 0);&#10;</arrayType>
-    <process>$process_label: process($input_signals)&#10;begin&#10;&#x9;-- Complete the process&#10;$default_assignments&#10;end process;</process>
+    <process>$process_label: process($input_signals)&#10;begin&#10;&#x9;-- Complete the process if required&#10;$default_assignments&#10;end process;</process>
     <clkIfStatement>if $edge(clk) then&#10;$default_assignments&#x9;end if;</clkIfStatement>
     <ifStatement>if $assignment = '$value' then&#10;$default_assignments$else&#x9;end if;</ifStatement>
     <elseStatement>else &#10;$default_assignments</elseStatement>
     <elsifStatement>elsif $edge(clk) then&#10;$default_assignments</elsifStatement>
     <case>&#x9;case $stateType is$whenCase&#10;&#x9;&#x9;when others =>&#10;&#x9;&#x9;&#x9;null;&#10;&#x9;end case;</case>
     <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
-    <concurrentstmt>$concurrentstmt_label: $statement</concurrentstmt>
+    <concurrentstmt>$concurrentstmt_label: $statement -- Complete the concurrent statement if required&#10;</concurrentstmt>
 
 </vhdl>

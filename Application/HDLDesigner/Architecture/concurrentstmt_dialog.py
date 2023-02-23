@@ -39,7 +39,7 @@ class ConcurrentStmtDialog(QDialog):
         self.out_sig_label = QLabel("Assign Signal")
         self.out_sig_label.setStyleSheet(WHITE_COLOR)
         self.out_sig_label.setFixedWidth(100)
-        self.options_sig_label = QLabel("Options")
+        self.options_sig_label = QLabel("Default Value")
         self.options_sig_label.setStyleSheet(WHITE_COLOR)
         self.options_sig_label.setFixedWidth(100)
         self.val_label = QLabel("Binary Value")
@@ -148,7 +148,7 @@ class ConcurrentStmtDialog(QDialog):
                 if len(self.output_signals) != 0 or len(self.internal_signals) != 0:
 
                     self.output_signals.insert(0, "Please select")
-                    self.out_signals_combo.addItems(self.output_signals + self.input_signals + self.internal_signals )
+                    self.out_signals_combo.addItems(self.output_signals + self.internal_signals )
                     self.output_signals.pop(0)
 
                     self.options_signals_combo.addItem("Custom")
@@ -171,7 +171,7 @@ class ConcurrentStmtDialog(QDialog):
             out_sig = temp[0]
             out_val = temp[1]
             self.out_signals_combo.setCurrentText(out_sig)
-            if out_val not in self.input_signals and  out_val not in self.internal_signals:
+            if out_val not in self.input_signals and out_val not in self.internal_signals and out_val != "zero":
                 self.out_val_input.setText(out_val)
                 self.options_signals_combo.setCurrentText("Custom")
             else:

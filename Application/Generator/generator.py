@@ -405,7 +405,7 @@ class Generator(QWidget):
                                        # value = "(others => '0')"
                                 assign_syntax = assign_syntax.replace("$value", value)
 
-                                gen_stmts += assign_syntax + "\n"
+                                gen_stmts += assign_syntax
 
                             conc_syntax = conc_syntax.replace("$statement", gen_stmts)
                             gen_process += conc_syntax + "\n"
