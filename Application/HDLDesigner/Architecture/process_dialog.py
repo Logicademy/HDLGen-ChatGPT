@@ -290,12 +290,14 @@ class ProcessDialog(QDialog):
                         checkbox.setFixedWidth(45)
 
                         out_val_combo = QComboBox()
-                        out_val_options = self.input_signals + self.internal_signals
+                        out_val_options = self.input_signals + self.internal_signals #+ "select"
+                        out_val_options.append("zero")
+                        #out_val_options.append("Custom")
                         out_val_options.insert(0, "Custom")
-                        out_val_options.insert(1, "zero")
-                        out_val_options.insert(2, "one")
+                        #out_val_options.insert(1, "zero")
+                        #out_val_options.insert(2, "one")
                         out_val_combo.addItems(out_val_options)
-                        out_val_options.pop(0)
+                        #out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
@@ -315,20 +317,25 @@ class ProcessDialog(QDialog):
                         CScheckbox.setFixedWidth(45)
 
                         CSout_val_combo = QComboBox()
-                        CSout_val_options = self.input_signals + self.internal_signals
+                        CSout_val_options = self.input_signals + self.internal_signals #+ "select"
+                        CSout_val_options.append("zero")
+                        #CSout_val_options.append("Select")
                         CSout_val_options.insert(0, "Select")
                         CSout_val_combo.addItems(CSout_val_options)
-                        CSout_val_options.pop(0)
+                        #CSout_val_options.pop(0)
 
                         CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
 
                         onRst_val_combo = QComboBox()
-                        onRst_val_options = self.internal_signals
+                        onRst_val_options = self.input_signals + self.internal_signals #+ "select" + "zero"
+                        onRst_val_options.append("zero")
+                        #onRst_val_options.append("Select")
                         onRst_val_options.insert(0, "Select")
+                        #onRst_val_options.insert(0, "zero")
                         onRst_val_combo.addItems(onRst_val_options)
-                        onRst_val_options.pop(0)
+                        #onRst_val_options.pop(0)
 
-                        onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                        #onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         row_positionCSNS = self.CSNS_table.rowCount()
                         self.CSNS_table.insertRow(row_positionCSNS)
                         self.CSNS_table.setRowHeight(row_positionCSNS, 5)
@@ -350,11 +357,13 @@ class ProcessDialog(QDialog):
 
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
-                        out_val_options.insert(0, "zero")
-                        out_val_options.insert(0, "one")
+                        out_val_options.append("zero")
+                        #out_val_options.append("Custom")
+                        #out_val_options.insert(0, "zero")
+                       # out_val_options.insert(0, "one")
                         out_val_options.insert(0, "Custom")
                         out_val_combo.addItems(out_val_options)
-                        out_val_options.pop(0)
+                        #out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
@@ -375,20 +384,24 @@ class ProcessDialog(QDialog):
 
                             CSout_val_combo = QComboBox()
                             CSout_val_options = self.input_signals + self.internal_signals
+                            CSout_val_options.append("zero")
+                            #CSout_val_options.append("Custom")
                             CSout_val_options.insert(0, "Select")
                             CSout_val_combo.addItems(CSout_val_options)
-                            CSout_val_options.pop(0)
+                            #CSout_val_options.pop(0)
 
                             CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
 
                             onRst_val_combo = QComboBox()
                             onRst_val_options = self.input_signals + self.internal_signals
-                            onRst_val_options.insert(0, "rst state")
-                            onRst_val_options.insert(0, "zero")
-                            onRst_val_options.insert(0, "one")
+                            onRst_val_options.append("zero")
+                            #onRst_val_options.append("Custom")
+                            #onRst_val_options.insert(0, "rst state")
+                            #onRst_val_options.insert(0, "zero")
+                            #onRst_val_options.insert(0, "one")
                             onRst_val_options.insert(0, "Select")
                             onRst_val_combo.addItems(onRst_val_options)
-                            onRst_val_options.pop(0)
+                            #onRst_val_options.pop(0)
 
                             onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
                             row_positionCSNS = self.CSNS_table.rowCount()
