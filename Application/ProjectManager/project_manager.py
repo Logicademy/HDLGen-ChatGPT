@@ -4,6 +4,9 @@ from xml.dom import minidom
 from pathlib import Path
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+import qtawesome as qta
+import configparser
+from ProjectManager.vivado_help import VivadoHelpDialog
 
 SMALL_SPACING = 10
 LARGE_SPACING = 30
@@ -53,8 +56,6 @@ class ProjectManager(QWidget):
         self.proj_folder_input = QLineEdit()
         self.proj_name_input = QLineEdit()
         self.proj_folder_btn = QPushButton("Browse")
-        # self.proj_folder_btn.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        # self.proj_folder_btn.setStyleSheet("background-color: white; border-style: plain;")
         self.proj_folder_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
@@ -65,6 +66,7 @@ class ProjectManager(QWidget):
         self.lang_label.setFont(bold_font)
         self.lang_label.setStyleSheet(BLACK_COLOR)
         self.vhdl_check = QCheckBox("VHDL")
+        self.vhdl_check.setChecked(True)
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QCheckBox("Verilog")
         self.verilog_check.setStyleSheet(BLACK_COLOR)
@@ -89,11 +91,10 @@ class ProjectManager(QWidget):
         self.intel_dir_label.setStyleSheet(BLACK_COLOR)
         self.intel_dir_input = QLineEdit()
         self.intel_select_dir = QPushButton("Browse")
-        # self.intel_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        # self.intel_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
+        self.vivado_check.setChecked(True)
         self.vivado_check.setFont(bold_font)
         self.vivado_check.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_label = QLabel("Version")
@@ -105,10 +106,12 @@ class ProjectManager(QWidget):
         self.vivado_dir_label.setStyleSheet(BLACK_COLOR)
         self.vivado_dir_input = QLineEdit()
         self.vivado_select_dir = QPushButton("Browse")
-        # self.vivado_select_dir.setIcon(QIcon(ICONS_DIR + "folder.svg"))
-        # self.vivado_select_dir.setStyleSheet("background-color: white; border-style: plain;")
         self.vivado_select_dir.setFixedSize(60, 26)
 
+        self.vivado_info_btn = QPushButton()
+        self.vivado_info_btn.setIcon(qta.icon("mdi.help"))
+        self.vivado_info_btn.setFixedSize(25, 25)
+        self.vivado_info_btn.clicked.connect(self.vivado_help_window)
         self.note_label = QLabel("Save the project before moving to other tabs")
 
         self.proj_close_btn = QPushButton("Close Project")
@@ -147,12 +150,13 @@ class ProjectManager(QWidget):
         self.langLayout = QGridLayout()
 
         self.proj_action_layout = QHBoxLayout()
-        settingsDir=os.getcwd() + "\Settings\settings.txt"
-        #settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "r")
-        settings = open(settingsDir, "r")
-        vivadoPath = settings.readline()
-        settings.close()
-        vivadoPath=vivadoPath.strip()
+        # settingsDir=os.getcwd() + "\Settings\settings.txt"
+        # settings = open(settingsDir, "r")
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        vivadoPath = config.get('user', 'vivado.bat')
+        # settings.close()
+        vivadoPath = vivadoPath.strip()
         self.vivado_dir_input.setText(vivadoPath)
         self.setup_ui()
 
@@ -188,6 +192,7 @@ class ProjectManager(QWidget):
         self.vivadoToolLayout.addWidget(self.vivado_ver_combo, 0, 3, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_label, 1, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_input, 2, 0, 1, 3)
+        self.vivadoToolLayout.addWidget(self.vivado_info_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolLayout.addWidget(self.vivado_select_dir, 2, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolFrame.setLayout(self.vivadoToolLayout)
         self.vivadoToolFrame.setStyleSheet(
@@ -251,7 +256,6 @@ class ProjectManager(QWidget):
 
         self.setLayout(self.mainLayout)
 
-
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
         self.vivado_select_dir.clicked.connect(self.set_vivado_bat_path)
@@ -297,7 +301,6 @@ class ProjectManager(QWidget):
     def get_proj_dir():
         return ProjectManager.proj_dir
 
-    # get_dir() opens up folder chooser and gets selected folder directory
     def set_proj_dir(self):
         ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         self.proj_folder_input.setText(self.proj_dir)
@@ -336,14 +339,9 @@ class ProjectManager(QWidget):
 
         # Creating and adding projectManager Element
         projectManager_data = root.createElement('projectManager')
-
-
-
         # Creating main project folder
         os.makedirs(xml_data_dir, exist_ok=True)
-
         # Set project name and location details
-
         # Adding Setting Element
         settings_data = root.createElement('settings')
         projectManager_data.appendChild(settings_data)
@@ -615,3 +613,7 @@ class ProjectManager(QWidget):
                 self.verilog_check.setChecked(True)
 
         print("Project successfully loaded!")
+
+    def vivado_help_window(self):
+        vivado_help_dialog = VivadoHelpDialog()
+        vivado_help_dialog.exec_()

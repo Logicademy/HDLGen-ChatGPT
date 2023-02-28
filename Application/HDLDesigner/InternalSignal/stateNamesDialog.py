@@ -30,7 +30,6 @@ class state_Name_Dialog(QDialog):
         self.state_name_label = QLabel("State Name")
         self.state_name_label.setStyleSheet(WHITE_COLOR)
         self.state_name_input = QLineEdit()
-        # self.intSig_name_input.setFixedWidth(120)
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setFixedSize(60, 25)
@@ -67,7 +66,6 @@ class state_Name_Dialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        #self.input_frame.setFixedSize(400, 250)
         self.input_frame.setLayout(self.input_layout)
 
         self.state_name_input.textChanged.connect(self.enable_ok_btn);
@@ -84,10 +82,8 @@ class state_Name_Dialog(QDialog):
         self.state_name_input.setText(stateName_data)
 
     def get_data(self):
-        #data = []
-        state_name = self.state_name_input.text()
+        state_name = self.state_name_input.text().strip().replace(" ", "")
         data = state_name
-        #data.append(state_name)
         self.cancelled = False
         self.close()
         return data

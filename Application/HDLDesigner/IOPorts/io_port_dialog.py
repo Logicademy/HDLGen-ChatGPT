@@ -1,6 +1,9 @@
 import os
 import sys
 from xml.dom import minidom
+
+from PySide2 import QtWidgets
+from PySide2.QtCore import QSizeF
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
@@ -53,7 +56,6 @@ class IOPortDialog(QDialog):
 
         self.arrayName_label = QLabel("Arrays")
         self.arrayName_label.setStyleSheet(WHITE_COLOR)
-        #self.arrayName_input = QLineEdit()
         self.arrayName_input = QComboBox()
         pal = self.arrayName_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
@@ -67,7 +69,9 @@ class IOPortDialog(QDialog):
 
         self.sig_description_label = QLabel("Signal Description")
         self.sig_description_label.setStyleSheet(WHITE_COLOR)
-        self.sig_description_input = QLineEdit()
+        self.sig_description_input = QPlainTextEdit()#MyPlainTextEdit()#QPlainTextEdit()#QLineEdit()
+        self.sig_description_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
+
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setFixedSize(60, 25)
@@ -87,7 +91,6 @@ class IOPortDialog(QDialog):
         self.input_frame = QFrame()
 
         self.cancelled = True
-        #self.internal_signals=[]
         self.arrays=[]
         self.setup_ui()
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
@@ -109,7 +112,6 @@ class IOPortDialog(QDialog):
             self.load_signal_data(signal_data)
 
     def setup_ui(self):
-        #self.sig_size_input.setFixedWidth(80)
         self.input_layout.addWidget(self.sig_name_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.sig_name_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.sig_mode_label, 0, 1, 1, 1)
@@ -129,7 +131,7 @@ class IOPortDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(400, 250)
+        self.input_frame.setFixedSize(400, 400)
         self.input_frame.setLayout(self.input_layout)
 
         self.sig_name_input.textChanged.connect(self.enable_ok_btn);
@@ -144,17 +146,34 @@ class IOPortDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def get_signals(self):
-        signalDescription = self.sig_description_input.text()
+        cursor = self.sig_description_input.textCursor()
+        doc = self.sig_description_input.document()
+        lines = ""
+        line = ""
+        for i in range(doc.blockCount()):
+            block = doc.findBlockByNumber(i)
+            if block.isVisible():
+                for j in range(block.layout().lineCount()):
+                    lineStart = block.position() + block.layout().lineAt(j).textStart()
+                    lineEnd = lineStart + block.layout().lineAt(j).textLength()
+                    cursor.setPosition(lineStart)
+                    cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
+                    line += cursor.selectedText()
+                    if lineEnd == cursor.position():
+                        lines += line+"\n"
+                        line = ""
+        lines=lines.strip()
+        signalDescription=lines
+        signalDescription = signalDescription.replace("\n", "&#10;")
         if signalDescription == "":
             signalDescription = "to be completed"
         if self.sig_type_input.currentText() == "array":
             typeValue= self.arrayName_input.currentText()
         else:
             typeValue= self.sig_type_input.currentText()
-        sig_details = [self.sig_name_input.text(),
+        sig_details = [self.sig_name_input.text().strip().replace(" ", ""),
                        self.sig_mode_input.currentText(),
                        typeValue,
-                       #self.sig_type_input.currentText(),
                        self.sig_size_input.text(),
                        signalDescription
                        ]
@@ -165,14 +184,14 @@ class IOPortDialog(QDialog):
     def load_signal_data(self, signal_data):
         self.sig_name_input.setText(signal_data[0])
         self.sig_mode_input.setCurrentText(signal_data[1])
-        print(signal_data[2])
         sig_type=signal_data[2]
         if sig_type != "std_logic_vector" and signal_data[2] != "std_logic":
             sig_type = "array"
             self.arrayName_input.setCurrentText(signal_data[2])
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
-        self.sig_description_input.setText(signal_data[4])
+        signal_data[4] = signal_data[4].replace("&#10;", "\n")
+        self.sig_description_input.setPlainText(signal_data[4])
 
     def cancel_selected(self):
         self.cancelled = True

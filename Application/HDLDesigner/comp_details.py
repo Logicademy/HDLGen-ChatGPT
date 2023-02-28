@@ -5,6 +5,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 import sys
+import configparser
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 
@@ -33,6 +34,7 @@ class CompDetails(QWidget):
         self.comp_description_label = QLabel("Component Description")
         self.comp_description_label.setStyleSheet(WHITE_COLOR)
         self.comp_description_input = QPlainTextEdit()
+        self.comp_description_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
 
         self.comp_author_label = QLabel("Authors")
         self.comp_author_label.setStyleSheet(WHITE_COLOR)
@@ -75,13 +77,11 @@ class CompDetails(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-        settingsDir = os.getcwd() + "\Settings\settings.txt"
-        settings = open(settingsDir, "r")
-        vivadoPath = settings.readline()
-        author = settings.readline().strip()
-        email = settings.readline().strip()
-        company = settings.readline().strip()
-        settings.close()
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        author = config.get('user', 'author').strip()
+        email = config.get('user', 'email').strip()
+        company = config.get('user', 'company').strip()
         self.comp_author_input.setText(author)
         self.comp_email_input.setText(email)
         self.comp_company_input.setText(company)
@@ -152,16 +152,36 @@ class CompDetails(QWidget):
         comp_title = self.comp_title_input.text()
         if comp_title == "":
             comp_title = "null"
-        comp_description = self.comp_description_input.toPlainText()
+        cursor = self.comp_description_input.textCursor()
+        doc = self.comp_description_input.document()
+        lines = ""
+        line = ""
+        for i in range(doc.blockCount()):
+            block = doc.findBlockByNumber(i)
+            if block.isVisible():
+                print(block.layout().lineCount())
+                for j in range(block.layout().lineCount()):
+                    lineStart = block.position() + block.layout().lineAt(j).textStart()
+                    lineEnd = lineStart + block.layout().lineAt(j).textLength()
+                    cursor.setPosition(lineStart)
+                    cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
+                    line += cursor.selectedText()
+                    print(line)
+                    if lineEnd == cursor.position():
+                        print(line)
+                        lines += line + "\n"
+                        line = ""
+        lines = lines.strip()
+        comp_description = lines#self.comp_description_input.toPlainText()
         if comp_description == "":
             comp_description = "null"
-        comp_authors = self.comp_author_input.text()
+        comp_authors = self.comp_author_input.text().strip()
         if comp_authors == "":
             comp_authors = "null"
-        comp_company = self.comp_company_input.text()
+        comp_company = self.comp_company_input.text().strip()
         if comp_company == "":
             comp_company = "null"
-        comp_email = self.comp_email_input.text()
+        comp_email = self.comp_email_input.text().strip()
         if comp_email == "":
             comp_email = "null"
         comp_date = self.comp_date_picker.text()

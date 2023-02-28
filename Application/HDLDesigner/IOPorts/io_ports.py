@@ -103,10 +103,6 @@ class IOPorts(QWidget):
         self.seqSytle_checkBox.clicked.connect(self.checkBox_clicked)
         self.seqSytle_editbtn.clicked.connect(self.edit_RTL)
         self.add_btn.clicked.connect(self.add_signal)
-        #self.name_label.setFixedWidth(50)
-        #self.mode_label.setFixedWidth(50)
-        #self.type_label.setFixedWidth(50)
-        #self.size_label.setFixedWidth(40)
 
         self.port_list_title_layout.addWidget(self.name_label, 2, alignment=Qt.AlignLeft)
         self.port_list_title_layout.addWidget(self.mode_label, 2, alignment=Qt.AlignLeft)
@@ -124,9 +120,9 @@ class IOPorts(QWidget):
         self.port_table.setColumnWidth(0, 80)
         self.port_table.setColumnWidth(1, 80)
         self.port_table.setColumnWidth(2, 80)
-        self.port_table.setColumnWidth(3, 10)
-        self.port_table.setColumnWidth(4, 10)
-        self.port_table.setColumnWidth(5, 10)
+        self.port_table.setColumnWidth(3, 5)
+        self.port_table.setColumnWidth(4, 5)
+        self.port_table.setColumnWidth(5, 5)
         self.port_table.horizontalScrollMode()
         self.port_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.port_table.horizontalScrollBar().hide()
@@ -213,8 +209,6 @@ class IOPorts(QWidget):
                 self.all_signals.append(rst_details)
                 self.all_signals_names.append(("rst"))
             self.update_clk_rst_btn()
-            #self.save_signals()
-
 
 
     def add_signal(self):
@@ -246,7 +240,6 @@ class IOPorts(QWidget):
             self.port_table.setItem(row_position, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
             self.port_table.setCellWidget(row_position, 4, edit_btn)
             self.port_table.setCellWidget(row_position, 5, delete_btn)
-            #self.save_signals()
 
     def delete_clicked(self):
         button = self.sender()
@@ -255,7 +248,6 @@ class IOPorts(QWidget):
             self.port_table.removeRow(row)
             self.all_signals.pop(row)
             self.all_signals_names.pop(row)
-            #self.save_signals()
 
     def checkBox_clicked(self):
         button = self.sender()
@@ -277,7 +269,6 @@ class IOPorts(QWidget):
                     self.all_signals_names.pop(self.all_signals_names.index("rst"))
                 self.seqSytle_editbtn.setVisible(False)
                 self.clkAndRst = []
-                #self.save_signals()
         else:
             if button.isChecked():
                 self.seqSytle_checkBox.setChecked(False)
@@ -292,12 +283,10 @@ class IOPorts(QWidget):
                     self.all_signals_names.pop(self.all_signals_names.index("rst"))
                 self.seqSytle_editbtn.setVisible(False)
                 self.clkAndRst = []
-                #self.save_signals()
             else:
                 self.clkAndRst = []
                 self.seqSytle_editbtn.setVisible(True)
                 self.seqSytle_checkBox.setChecked(True)
-                #self.save_signals()
 
 
 
@@ -305,7 +294,6 @@ class IOPorts(QWidget):
         button = self.sender()
         if button:
             row = self.port_table.indexAt(button.pos()).row()
-
             io_dialog = IOPortDialog("edit", self.all_signals[row])
             io_dialog.exec_()
 
@@ -336,7 +324,8 @@ class IOPorts(QWidget):
                 self.port_table.setItem(row, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
                 self.port_table.setCellWidget(row, 4, edit_btn)
                 self.port_table.setCellWidget(row, 5, delete_btn)
-                #self.save_signals()
+            else:
+                self.all_signals[row][4]=self.all_signals[row][4].replace("\n", "&#10;")
 
     def save_signals(self):
         xml_data_path = ProjectManager.get_xml_data_path()

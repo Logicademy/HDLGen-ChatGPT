@@ -1,4 +1,3 @@
-#this is a test comment
 import sys
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
@@ -13,7 +12,7 @@ from Settings.settings import settingsDialog
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 
-APP_AUTHORS = "Abishek Bupathi, JP Byrne & Fearghal Morgan"
+APP_AUTHORS = "Fearghal Morgan, Abishek Bupathi & JP Byrne"
 APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
 
@@ -22,7 +21,7 @@ class HDLGen(QMainWindow):
     def __init__(self):
 
         super().__init__()
-        self.setWindowTitle("HDLGen")
+        self.setWindowTitle("HDLGen V.1")
 
         title_font = QFont()
         title_font.setPointSize(30)
@@ -41,7 +40,6 @@ class HDLGen(QMainWindow):
         self.help_btn = QPushButton("Help")
         self.settings_btn = QPushButton("Settings")
 
-        # self.help_btn.setIcon(qta.icon("mdi.help"))
         self.help_btn.setFixedSize(35, 25)
         self.help_btn.clicked.connect(self.help_window)
 
@@ -112,7 +110,7 @@ class HDLGen(QMainWindow):
 
     def new_project(self):
         self.window = Home()
-        self.window.resize(1000, 500)
+        self.window.resize(1500, 500)#1000. 5000
         self.window.show()
         self.close()
 
@@ -122,7 +120,7 @@ class HDLGen(QMainWindow):
         print("Loading project from ", self.load_proj_dir[0])
 
         self.window = Home(self.load_proj_dir)
-        self.window.resize(1000, 500)
+        self.window.resize(1500, 500)#1000,500
         self.window.show()
         self.close()
 

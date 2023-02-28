@@ -15,16 +15,13 @@ WHITE_COLOR = "color: white"
 
 class seqDialog(QDialog):
 
-    def __init__(self, proj_dir):#signal_data = None):
+    def __init__(self, proj_dir):
         super().__init__()
 
         self.input_layout = QGridLayout()
         self.setWindowTitle("Set up clk/rst")
 
         self.mainLayout = QVBoxLayout()
-        #self.sig_name_label = QLabel("Signal Name *")
-        #self.sig_name_label.setStyleSheet(WHITE_COLOR)
-        #self.sig_name_input = QLineEdit()
 
 
         self.activeClkEdge_label = QLabel("Active Clk Edge")
@@ -109,7 +106,6 @@ class seqDialog(QDialog):
         self.input_frame.setFixedSize(300, 175)
         self.input_frame.setLayout(self.input_layout)
 
-        #self.enable_size_option
         self.ok_btn.clicked.connect(self.get_clkAndRst)
         self.cancel_btn.clicked.connect(self.cancel_selected)
         self.rst_input.currentTextChanged.connect(self.rst_options)

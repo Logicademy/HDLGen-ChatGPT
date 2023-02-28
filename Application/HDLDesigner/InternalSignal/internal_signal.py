@@ -81,10 +81,6 @@ class InternalSignal(QWidget):
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_intSignal)
 
-        #self.name_label.setFixedWidth(115)
-        #self.type_label.setFixedWidth(105)
-        #self.size_label.setFixedWidth(145)
-
         self.instSig_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
         self.instSig_list_title_layout.addWidget(self.size_label, alignment=Qt.AlignLeft)
@@ -102,7 +98,6 @@ class InternalSignal(QWidget):
         self.intSig_table.setColumnWidth(2, 50)
         self.intSig_table.setColumnWidth(3, 1)
         self.intSig_table.setColumnWidth(4, 1)
-        #self.intSig_table.horizontalScrollMode()
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.intSig_table.horizontalScrollBar().hide()
         header = self.intSig_table.horizontalHeader()
@@ -115,7 +110,7 @@ class InternalSignal(QWidget):
 
         self.intSig_list_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.intSig_list_frame.setFixedSize(420, 300)#380, 295)
+        self.intSig_list_frame.setFixedSize(420, 300)
         self.intSig_list_frame.setLayout(self.intSig_list_layout)
 
         self.intSig_action_layout.addLayout(self.port_heading_layout)
@@ -128,7 +123,7 @@ class InternalSignal(QWidget):
 
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.intSig_action_frame.setFixedSize(500, 400)#400, 400
+        self.intSig_action_frame.setFixedSize(500, 400)
 
         self.intSig_action_frame.setLayout(self.intSig_action_layout)
 
@@ -246,6 +241,8 @@ class InternalSignal(QWidget):
                     self.all_intSignals.append(intSignal_data)
                     self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                 i=i-1
+        else:
+            self.all_intSignals[row][3]=self.all_intSignals[row][3].replace("\n", "&#10;")
 
 
 
@@ -366,13 +363,7 @@ class InternalSignal(QWidget):
                 if name[:2] == "NS":
                     self.intSig_table.removeCellWidget(i, 3)
                     self.intSig_table.removeCellWidget(i, 4)
-            #elif signal[0:5] == "array":
-                #type=signal.split(",")
-                #print(type)
-                #value = type[0]+","+type[1] + "," + type[2]
-                #type=type[0]
             else:
-                #type = signal[0:signal.index("(")] if signal.endswith(")") else signal
                 if signal.endswith(")"):
                     type = signal[0:signal.index("(")]
                     if type == "std_logic_vector" or type == "signed" or type == "unsigned":
@@ -381,29 +372,12 @@ class InternalSignal(QWidget):
                     signal=signal.split(" ")
                     type = signal[0]
                     value = signal[4]
-
-            #desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-                #if type == "std_logic_vector" or type == "signed" or type == "unsigned":
-                    #value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
             desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            #elif type == "array":
-            #    value = type[1]+","+type[2]
-            #    print("this is array value")
-             #   print(value)
-            #elif type == "integers":
-            #    value = str(int(signal[signal.index(" range") + 1:signal.index(" downto")]) + 1)
-            #elif type == "Enumerated type state signals":
-            #    stateTypesList = []
-            #    for stateType in io_ports[0].getElementsByTagName("stateTypes"):
-            #        stateTypesList.append(stateType.firstChild.data)
-            #    self.stateTypes_names = stateTypesList
-            #    value = ' '.join(stateTypesList)
 
             loaded_sig_data = [
                 name,
                 type,
                 value,
-                #"1" if type != "std_logic_vector" else str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1),
                 desc
             ]
 

@@ -12,7 +12,7 @@ class Generator(QWidget):
 
     def __init__(self):
         super().__init__()
-
+        self.dirs = []
         self.entity_name = ""
         self.arrayPackage = ""
         self.includeArrays = False
@@ -77,6 +77,10 @@ class Generator(QWidget):
         gen_int_sig = ""
         gen_internal_signal_result = ""
         arrayList=[]
+        std_logicList=[]
+        std_logic_vectorList=[]
+        unsignedList=[]
+        signedList=[]
         # Entity Section
         gen_signals = ""
         entity_signal_description = ""
@@ -94,6 +98,15 @@ class Generator(QWidget):
                 if type[0:5] == "array":
                     self.includeArrays = True
                     arrayList.append(name)
+                elif type == "std_logic":
+                    std_logicList.append(name)
+                elif type[0:16] == "std_logic_vector":
+                    std_logic_vectorList.append(name)
+                elif type[0:8] == "unsigned":
+                    unsignedList.append(name)
+                elif type[0:6] == "signed":
+                    signedList.append(name)
+
                 signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
                 signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
@@ -107,6 +120,7 @@ class Generator(QWidget):
                                                                           0].firstChild.data)
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
+                signal_description = signal_description.replace("&#10;", "\n-- ")
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
                     0].firstChild.data + "\t" + signal_description + "\n"
                 gen_signals += "\t" + signal_declare_syntax + "\n"
@@ -146,18 +160,27 @@ class Generator(QWidget):
                         if name[0:2] == "CS":
                             stateTypeSig = True
                             CSState = name
+                    elif type == "std_logic":
+                        std_logicList.append(name)
+                    elif type[0:5] == "array":
+                        self.includeArrays = True
+                        arrayList.append(name)
+                    elif type[0:16] == "std_logic_vector":
+                        std_logic_vectorList.append(name)
+                    elif type[0:8] == "unsigned":
+                        unsignedList.append(name)
+                    elif type[0:6] == "signed":
+                        signedList.append(name)
                     int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
-                    # signal.getElementsByTagName('name')[0].firstChild.data)
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)
-                    # signal.getElementsByTagName('type')[0].firstChild.data)
                     int_signal_description = signal.getElementsByTagName('description')[
                         0].firstChild.data
+                    int_signal_description = int_signal_description.replace("&#10;", "\n-- ")
 
                     gen_int_sig += "\n" + int_sig_syntax
                     gen_internal_signal_result += "-- " + signal.getElementsByTagName('name')[
                         0].firstChild.data + "\t" + int_signal_description + "\n"
-
 
                 gen_int_sig.rstrip()
 
@@ -214,13 +237,12 @@ class Generator(QWidget):
                     gen_library += library.firstChild.data + "\n"
 
                 #gen_library += "\n"
-                gen_vhdl += gen_library
-                if self.includeArrays == True:
-
-                    gen_vhdl += "use work.arrayPackage.all;"
+              #  gen_vhdl += gen_library
+               # if self.includeArrays == True:
+               #     gen_vhdl += "use work.arrayPackage.all;"
 
                 # Entity Section placement
-                gen_vhdl += "\n\n" + gen_entity + "\n\n"
+              # gen_vhdl += "\n\n" + gen_entity + "\n\n"
                 # Architecture section
 
                 # Process
@@ -260,37 +282,49 @@ class Generator(QWidget):
                                 signals = default_out.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value=signals[1]
-
-                                if value == "Idle":
+                                if value == "rst state":
                                     if stateTypesList != "":
                                         stateNames = stateTypesString.split(",")
                                         value = stateNames[0]
-                                elif value == "all zeros":
+                                elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
-                                    else:
+                                    elif signals[0] in std_logicList:
+                                        value = "'" + '0' + "'"
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[0] in unsignedList:
                                         value = "(others => '0')"
-                                elif value == "all ones":
-                                    value = "(others => '1')"
-                                elif stateTypeSig == True:
-                                    if value == CSState:
-                                        caseEmpty = False
-                                        case_syntax = vhdl_root.getElementsByTagName("case")[0].firstChild.data
-                                        case_syntax = case_syntax.replace("$stateType", value)
-                                        stateNames = stateTypesString.split(",")
-                                        whenCase=""
-                                        for states in stateNames:
-                                            whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
-                                        case_syntax = case_syntax.replace("$whenCase", whenCase)
-                                if value.isdigit():
+                                    else:
+                                        value = str(0)
+                                elif value == "one":
+                                    if signals[0] in arrayList:
+                                        value = "(others =>(others => '1'))"
+                                    elif signals[0] in std_logicList:
+                                        value = "'" + '1' + "'"
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                        0] in unsignedList:
+                                        value = "(others => '1')"
+                                    else:
+                                        value = str(1)
+                                elif value.isdigit():
                                     if value == "1" or value == "0":
                                         value = "'" + value + "'"
                                     else:
                                         value = '"'+value+'"'
 
+                                elif stateTypeSig == True and value == CSState:
+                                    #if value == CSState:
+                                    caseEmpty = False
+                                    case_syntax = vhdl_root.getElementsByTagName("case")[0].firstChild.data
+                                    case_syntax = case_syntax.replace("$stateType", value)
+                                    stateNames = stateTypesString.split(",")
+                                    whenCase=""
+                                    for states in stateNames:
+                                        whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
+                                    case_syntax = case_syntax.replace("$whenCase", whenCase)
+
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
-                                gen_defaults +=  assign_syntax + "\n\t"
+                                gen_defaults +=  assign_syntax + "-- default\n\t"
                                 if len(signals) == 3:
                                     clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
@@ -332,10 +366,6 @@ class Generator(QWidget):
                                     if caseEmpty == False:
                                         gen_defaults += "\n" + case_syntax
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
-                            #if caseEmpty == False:
-                            #    process_syntax = process_syntax.replace("$case", case_syntax)
-                            #else:
-                            #    process_syntax = process_syntax.replace("$case", "")
                             gen_process += process_syntax + "\n\n"
 
 
@@ -358,18 +388,45 @@ class Generator(QWidget):
                                         value = "'" + value + "'"
                                     else:
                                         value = '"' + value + '"'
-                                elif value == "all zeros":
+                                elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
-                                    else:
+                                    elif signals[0] in std_logicList:
+                                        value = "'" + '0' + "'"
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                        0] in unsignedList:
                                         value = "(others => '0')"
+                                    else:
+                                        value = str(0)
                                 assign_syntax = assign_syntax.replace("$value", value)
 
-                                gen_stmts += assign_syntax + "\n"
+                                gen_stmts += assign_syntax
 
                             conc_syntax = conc_syntax.replace("$statement", gen_stmts)
                             gen_process += conc_syntax + "\n"
 
+                        elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
+                            self.includeArrays = True
+                            gen_stmts = ""
+                            instance_syntax = vhdl_root.getElementsByTagName("instance")[0].firstChild.data
+
+                            instance_syntax = instance_syntax.replace("$instance_label",
+                                                              child.getElementsByTagName("label")[
+                                                                  0].firstChild.data)
+                            for instance in child.getElementsByTagName("port"):
+                                assign_syntax = vhdl_root.getElementsByTagName("portAssign")[0].firstChild.data
+                                signals = instance.firstChild.data.split(",")
+                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                assign_syntax = assign_syntax.replace("$value", signals[1])
+
+                                gen_stmts += "\t" + assign_syntax + ",\n"
+                            gen_stmts = gen_stmts.rstrip()
+                            gen_stmts = gen_stmts[0:-1]
+                            instance_syntax = instance_syntax.replace("$portAssign", gen_stmts)
+                            instance_syntax = instance_syntax.replace("$instance",
+                                                                      child.getElementsByTagName("model")[
+                                                                          0].firstChild.data)
+                            gen_process += instance_syntax + "\n"
 
                         child = next
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
@@ -385,12 +442,16 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$int_sig_declaration", gen_int_sig)
                     #gen_arch = gen_arch.replace("$component_declarations", "-- Component declarations")
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
+                    gen_vhdl += gen_library
+                    if self.includeArrays == True:
+                        gen_vhdl += "use work.arrayPackage.all;"
 
+                    # Entity Section placement
+                    gen_vhdl += "\n\n" + gen_entity + "\n\n"
                     gen_vhdl += gen_arch
-        #if includeArrays == True:
 
 
-        return entity_name, gen_vhdl#, gen_array_vhdl
+        return entity_name, gen_vhdl
 
     def create_vhdl_file(self):
 
@@ -399,13 +460,16 @@ class Generator(QWidget):
         entity_name, vhdl_code = self.generate_vhdl()
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
-
+        #vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
         # Writing xml file
         with open(vhdl_file_path, "w") as f:
             f.write(vhdl_code)
 
         print("VHDL Model successfully generated at ", vhdl_file_path)
+        #with open(vhdl_file_path, "w") as f:
+       #     f.write(vhdl_code)
 
+        #print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
         self.entity_name = entity_name
 
 
@@ -422,21 +486,38 @@ class Generator(QWidget):
         tcl_root = tcl_database.documentElement
 
         tcl_file_template = tcl_root.getElementsByTagName("vivado_vhdl_tcl")[0]
-        #print(tcl_file_template)
         tcl_file_template = tcl_file_template.firstChild.data
-        #print(tcl_file_template)
 
         tb_file_name = self.entity_name + "_tb"
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", self.entity_name)
-        #add_files -norecurse C:/Users/User/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd
         wd = os.getcwd()
         wd = wd.replace("\\","/")
         mainPackagePath = "add_files -norecurse  "+ wd +"/HDLDesigner/Package/mainPackage.vhd"
+
         if self.includeArrays == True:
             tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","")
+        files=""
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        root = minidom.parse(mainPackageDir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
+        components = hdlDesign[0].getElementsByTagName("components")
+        comp_nodes = components[0].getElementsByTagName('component')
+        for i in range(0, len(comp_nodes)):
+            dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+            self.dirs.append(dir)
+        if self.dirs is not None:
+            for dir in self.dirs:
+                files += "add_files -norecurse  "+ dir + " \n"
+            print(files)
+            tcl_vivado_code = tcl_vivado_code.replace("$files", files)
+        else:
+            tcl_vivado_code = tcl_vivado_code.replace("$files", "")
+            print("no files")
         tcl_vivado_code = tcl_vivado_code.replace("$tb_name", tb_file_name)
         tcl_vivado_code = tcl_vivado_code.replace("$proj_name", proj_name)
         proj_path = "{" + proj_path + "}"
@@ -525,33 +606,34 @@ class Generator(QWidget):
                             inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'1\';\n"
-                        elif signal.getElementsByTagName('type')[0].firstChild.data == "std_logic_vector":
+                        elif signal.getElementsByTagName('type')[0].firstChild.data[0:16] == "std_logic_vector":
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'1\');\n"
                         else:
+                            print("std_logic_vector is"+ signal.getElementsByTagName('type')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
                             arrayPackage=True
+                else:
+                    if signal.getElementsByTagName('type')[0].firstChild.data != "std_logic" and signal.getElementsByTagName('type')[0].firstChild.data[0:16] != "std_logic_vector":
+                        arrayPackage = True
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
                     0].firstChild.data + "\t" + signal_description + "\n"
                 gen_signals += "\t" + signal_declare_syntax + "\n"
                 io_port_map += "\t" + io_port_map_syntax + "\n"
-                if signal.getElementsByTagName('name')[0].firstChild.data == "clk" or signal.getElementsByTagName('name')[0].firstChild.data == "rst" :
+                if signal.getElementsByTagName('name')[0].firstChild.data == "clk" or signal.getElementsByTagName('name')[0].firstChild.data == "rst":
                     clkrst=clkrst+1
                 else:
                     io_signals += io_signal_declare_syntax + "\n"
             io_port_map = io_port_map.rstrip()
             io_port_map = io_port_map[0:-1]
             io_signals = io_signals.rstrip()
-            #io_signals = io_signals[0:-1]
-            #other_signals = "\n-- <delete (Start) If UUT is a combinational component>\n"
             other_signals = ""
             if clkrst > 0:
-                other_signals = "signal clk: std_logic := '1';\n" #-- entity includes signal clk, so declare (and initialise) tetbench clk signal\n"
+                other_signals = "signal clk: std_logic := '1';\n"
             if clkrst == 2:
-                other_signals += "signal rst: std_logic;        \n"#-- entity may include signal rst (reset), so declare in testbench\n"
-            #other_signals += "-- <delete (End)\n\n-- testbench control signal declarations\n"
+                other_signals += "signal rst: std_logic;        \n"
             control_signals = "signal endOfSim : boolean := false; -- assert at end of simulation to highlight simuation done. Stops clk signal generation.\n"
             control_signals += "signal testNo: integer; -- aids locating test in simulation waveform\n\n"
             control_signals += "constant period: time := 20 ns; -- Default simulation time. Use as simulation delay constant, or clk period if sequential model ((50MHz clk here)\n"
@@ -613,13 +695,11 @@ class Generator(QWidget):
                 # entity signal dictionary
                 gen_entity_signal = "-- entity signal dictionary\n"
                 gen_entity_signal += entity_signal_description + "\n"
-                #tb_code += gen_entity_signal
 
                 # internal signal dictionary
                 gen_internal_signal = "-- internal signal dictionary\n"
                 gen_internal_signal_result = gen_internal_signal_result + "\n"
                 gen_internal_signal += gen_internal_signal_result
-                #tb_code += gen_internal_signal
                 # Libraries Section
 
                 libraries_node = vhdl_root.getElementsByTagName("libraries")
@@ -642,18 +722,14 @@ class Generator(QWidget):
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
                 if clkrst > 0:
-                    #gen_process += "-- <delete (Start) If UUT is a combinational component>\n"
                     gen_process += "-- Generate clk signal, if sequential component, and endOfSim is FALSE.\n"
                     gen_process += "clkStim: clk <= not clk after period/2 when endOfSim = false else '0';\n"
-                    #gen_process += "-- <delete (End)\n\n"
                 gen_process += "-- instantiate unit under test (UUT)\n"
                 gen_process += "UUT: "+entity_name+ "-- map component internal sigs => testbench signals\n"
                 gen_process += "port map\n\t(\n"
                 gen_process += io_port_map+"\n\t);\n\n"
                 gen_process += "-- Signal stimulus process\n"
                 gen_process += "stim_p: process -- process sensitivity list is empty, so process automatically executes at start of simulation. Suspend process at the wait; statement\n"
-                #gen_process += "-- <delete (Start) if note using variables\n"
-                #gen_process += "variable stimVec : std_logic_vector(" + str(len(inputArray)-1)+" downto 0);\n"
                 gen_process += "begin\n"
                 gen_process += "\t-- Apply default INPUT signal values. Do not assign output signals (generated by the UUT) in this stim_p process\n"
                 gen_process += "\t-- Each stimulus signal change occurs 0.2*period after the active low-to-high clk edge\n"
@@ -661,38 +737,20 @@ class Generator(QWidget):
                 gen_process += inputsToZero
                 gen_process += "\treport \"%N Simulation start\";\n\n"
                 if clkrst == 2:
-                    #gen_process += "\t-- <delete (Start) If UUT is a combinational component>\n"
                     gen_process += "\treport \"Assert and toggle rst\";\n\ttestNo <= 0;\n\trst    <= '1';\n"
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                     gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"#-- <delete (End)\n\n"
                 gen_process += "-- include testbench stimulus sequence here. USe new testNo for each test set"
                 gen_process += "\t-- individual tests. Generate input signal combinations and wait for period.\n"
                 gen_process += "\ttestNo <= 1;\n"
-                #gen_process += "\t-- <delete (Start) if note using variables\n"
-                #gen_process += "\tfor i in 0 to " + str(pow(2,len(inputArray))-1) + " loop\n"
-                #gen_process += "\t\tstimVec := std_logic_vector( to_unsigned(i," + str(len(inputArray)) +") );\n"
-                #indexOfArray = len(inputArray)
-                #for x in inputArray:
-                #    indexOfArray = indexOfArray-1
-                #    gen_process += "\t\t"+ x + " <= stimVec("+str(indexOfArray)+");\n"
-                #gen_process += "\t\twait for period;\n"
-                #gen_process += "\tend loop;\n"
-                #gen_process += "\t-- <delete (End)\n\n"
-                #gen_process += "\t-- <delete (Start) if not required\n"
-                #gen_process += inputsToOne
                 gen_process += "\twait for 3*period;\n"
                 gen_process += "\n\t-- include testbench stimulus sequence here. USe new testNo for each test set\n\n"
-                #gen_process += "\t-- <delete (End)\n\n"
                 gen_process += "\treport \"%N Simulation done\";\n"
                 gen_process += "\tendOfSim <= TRUE; -- assert flag to stop clk signal generation\n\n"
                 gen_process += "\twait; -- wait forever\n"
                 if len(arch_node) != 0 and arch_node[0].firstChild is not None:
-
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
                     arch_name_node = arch_node[0].getElementsByTagName("archName")
-
-                    #arch_name = "comb"
-
                     if len(arch_name_node) != 0 and arch_name_node[0].firstChild is not None:
                         arch_name = arch_name_node[0].firstChild.data
 
@@ -713,17 +771,19 @@ class Generator(QWidget):
         entity_name, vhdl_tb_code = self.create_vhdl_testbench_code()
 
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_tb.vhd")
-
-        #print(vhdl_tb_code)
+        #vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_tb_HDLGen.vhd")
 
         # Writing xml file
         with open(vhdl_tb_path, "w") as f:
             f.write(vhdl_tb_code)
 
         print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
-
+        #with open(vhdl_tb_HDLGen_path, "w") as f:
+        #    f.write(vhdl_tb_code)
+        #print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
     def generate_mainPackage(self):
         gen_arrays =""
+        comp = ""
         vhdl_database_path = "./Generator/HDL_Database/vhdl_database.xml"
         # Parsing the xml file
         vhdl_database = minidom.parse(vhdl_database_path)
@@ -734,6 +794,8 @@ class Generator(QWidget):
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
         array_nodes = mainPackage[0].getElementsByTagName('array')
+        components = hdlDesign[0].getElementsByTagName("components")
+        comp_nodes = components[0].getElementsByTagName('component')
         for i in range(0, len(array_nodes)):
             name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
@@ -746,13 +808,32 @@ class Generator(QWidget):
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", depth)
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", width)
             gen_arrays += gen_arrayType_syntax
-            # arrayPackage
-        # if gen_arrays != "":
+        for i in range(0, len(comp_nodes)):
+            model = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
+            dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+            ports=""
+            for port_signal in comp_nodes[i].getElementsByTagName("port"):
+                print("in ports")
+                signals = port_signal.firstChild.data.split(",")
+                gen_compType_assign_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
+                gen_compType_assign_syntax = gen_compType_assign_syntax.replace("$sig_name", signals[0])
+                gen_compType_assign_syntax = gen_compType_assign_syntax.replace("$mode", signals[1])
+                gen_compType_assign_syntax = gen_compType_assign_syntax.replace("$type", signals[2])
+                ports += "\t" + gen_compType_assign_syntax + "\n"
+            ports = ports.rstrip()
+            ports = ports[0:-1]
+            #signals = comp_nodes[i].getElementsByTagName('SignalName')[0].firstChild.data
+            gen_compType_syntax = vhdl_root.getElementsByTagName("component")[0].firstChild.data
+            gen_compType_syntax = gen_compType_syntax.replace("$model",model)
+            gen_compType_syntax = gen_compType_syntax.replace("$ports", ports)
+            comp += gen_compType_syntax + "\n"
+
         array_vhdl_code = vhdl_root.getElementsByTagName("arrayPackage")[0].firstChild.data
         array_vhdl_code = array_vhdl_code.replace("$arrays", gen_arrays)
+
+        array_vhdl_code = array_vhdl_code.replace("$Component", comp)
         # Creating arrayPackage file
         array_vhdl_file_path = os.getcwd() + "\HDLDesigner\Package\mainPackage.vhd"
-        # array_vhdl_file_path = os.path.join(proj_path, "VHDL", "model", "arrayPackage.vhd")
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
             f.write(array_vhdl_code)

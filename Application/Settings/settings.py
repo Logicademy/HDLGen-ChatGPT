@@ -3,8 +3,9 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys
 import os
+# make sure to add to requirements.txt
+import configparser
 sys.path.append("..")
-from ProjectManager.project_manager import ProjectManager
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -36,7 +37,7 @@ class settingsDialog(QDialog):
         self.company_label.setStyleSheet(WHITE_COLOR)
         self.company_input = QLineEdit()
 
-        self.vivado_label = QLabel("Vivado.bin path")
+        self.vivado_label = QLabel("Vivado.bat path")
         self.vivado_label.setStyleSheet(WHITE_COLOR)
         self.vivado_input = QLineEdit()
 
@@ -54,26 +55,23 @@ class settingsDialog(QDialog):
 
 
         self.ok_btn = QPushButton("Ok")
-        self.ok_btn.setEnabled(False)
         self.ok_btn.setFixedSize(60, 25)
         self.ok_btn.setStyleSheet(
             "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
             "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
-        self.enable_ok_btn()
         self.input_frame = QFrame()
 
         self.cancelled = True
+        self.config = configparser.ConfigParser()
 
         self.setup_ui()
     def setup_ui(self):
-        settingsDir = os.getcwd() + "\Settings\settings.txt"
-        settings = open(settingsDir, "r")
-        vivadoPath=settings.readline()
-        author=settings.readline()
-        email=settings.readline()
-        company=settings.readline()
-        settings.close()
+        self.config.read('config.ini')
+        vivadoPath= self.config.get('user', 'vivado.bat')#settings.readline()
+        author = self.config.get('user', 'author')  # settings.readline().strip()
+        email = self.config.get('user', 'email')  # settings.readline().strip()
+        company = self.config.get('user', 'company')
 
         self.vivado_input.setText(vivadoPath.strip())
         self.author_input.setText(author.strip())
@@ -90,7 +88,7 @@ class settingsDialog(QDialog):
         self.input_layout.addWidget(self.browse_btn, 3, 3, 1, 1)
         self.input_layout.addWidget(self.cancel_btn, 4, 2, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 4, 3, 1, 1, alignment=Qt.AlignRight)
-        self.vivado_input.textChanged.connect(self.enable_ok_btn)
+        #self.vivado_input.textChanged.connect(self.enable_ok_btn)
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
@@ -120,10 +118,6 @@ class settingsDialog(QDialog):
             self.ok_btn.setEnabled(False)
 
     def save(self):
-        settingsDir = os.getcwd() + "\Settings\settings.txt"
-        settings = open(settingsDir, "w")
-        #settings = open("C:\\Users\\User\\HDLGen\\Application\\Settings\\settings.txt", "w")
-
         if self.vivado_input.text().strip() == "":
             self.vivado_input.setText("To be completed")
         if self.author_input.text().strip() == "":
@@ -136,11 +130,12 @@ class settingsDialog(QDialog):
         if self.company_input.text().strip() == "":
             print("company")
             self.company_input.setText("To be completed")
-        #lines = [self.vivado_input.text(),self.author_input.text(), self.email_input.text(),self.company_input.text()]
-        settings.write(self.vivado_input.text()+"\n")
-        settings.write(self.author_input.text()+"\n")
-        settings.write(self.email_input.text()+"\n")
-        settings.write(self.company_input.text()+"\n")
-        settings.close()
+
+        self.config.set("user", "author", self.author_input.text())
+        self.config.set("user", "email", self.email_input.text())
+        self.config.set("user", "company", self.company_input.text())
+        self.config.set("user", "vivado.bat", self.vivado_input.text())
+        with open('config.ini', 'w') as configfile:
+            self.config.write(configfile)
         self.cancelled = False
         self.close()
