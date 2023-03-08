@@ -396,7 +396,7 @@ class ProcessDialog(QDialog):
                             onRst_val_options = self.input_signals + self.internal_signals
                             onRst_val_options.append("zero")
                             #onRst_val_options.append("Custom")
-                            #onRst_val_options.insert(0, "rst state")
+                            onRst_val_options.insert(0, "rst state")
                             #onRst_val_options.insert(0, "zero")
                             #onRst_val_options.insert(0, "one")
                             onRst_val_options.insert(0, "Select")

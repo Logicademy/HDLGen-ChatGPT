@@ -3,22 +3,10 @@
 	<hdlDesign>
 		<mainPackage>
 			<array>
-				<name>array3x12</name>
+				<name>array3x32</name>
 				<depth>3</depth>
-				<width>12</width>
+				<width>32</width>
 				<signalType>std_logic_vector</signalType>
-			</array>
-			<array>
-				<name>array3x12_signed</name>
-				<depth>3</depth>
-				<width>12</width>
-				<signalType>signed</signalType>
-			</array>
-			<array>
-				<name>array3x12_unsigned</name>
-				<depth>3</depth>
-				<width>12</width>
-				<signalType>unsigned</signalType>
 			</array>
 		</mainPackage>
 		<components/>

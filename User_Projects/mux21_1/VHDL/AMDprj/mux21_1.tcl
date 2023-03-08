@@ -13,14 +13,14 @@
 
         # cmd 
 
-        # cd {C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects/mux21_1} 
+        # cd {C:/Users/User/HDLGen/User_Projects/mux21_1} 
 
-        # $vivado_bat_path -source C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects/mux21_1/VHDL/AMDPrj/mux21_1.tcl 
+        # $vivado_bat_path -source C:/Users/User/HDLGen/User_Projects/mux21_1/VHDL/AMDPrj/mux21_1.tcl 
 
 
         # Vivado tcl file mux21_1.tcl, created in AMDprj folder 
 
-        cd {C:\Users\johnp\Documents\5thYear\mastersProject\HDLGen\User_Projects/mux21_1} 
+        cd {C:/Users/User/HDLGen/User_Projects/mux21_1} 
 
         # Close_project  Not required. Will advise that Vivado sessions should be closed. 
 
@@ -31,6 +31,7 @@
         set_property target_language VHDL [current_project]
 
         add_files -norecurse  ./VHDL/model/mux21_1.vhd
+
 
         update_compile_order -fileset sources_1
 

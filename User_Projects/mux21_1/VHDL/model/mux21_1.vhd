@@ -26,6 +26,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+
 -- entity declaration
 entity mux21_1 is 
 Port(
@@ -38,15 +39,14 @@ end entity mux21_1;
 
 architecture Combinational of mux21_1 is
 -- Internal signal declarations
-
--- Component declarations
+-- None
 
 begin
 
 muxOut_p: process(sel,muxIn1,muxIn0)
 begin
-	-- Complete the process
-		muxOut <= muxIn1;
+	-- Complete the process if required
+	muxOut <= muxIn1;-- default
 	
 end process;
 
