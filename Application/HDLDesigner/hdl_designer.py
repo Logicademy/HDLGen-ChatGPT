@@ -27,15 +27,22 @@ class HDLDesigner(QWidget):
         self.preview_window = QTextEdit()
 
         self.tabs = VerticalTabWidget()
-
         # Creating a container
         self.container = QWidget()
         self.compDetails = CompDetails(self.proj_dir)
+        self.project_manager = ProjectManager(self.proj_dir, self)
         self.setup_ui()
-
         if load_data:
-            self.update_preview()
-
+            if self.project_manager.vhdl_check.isChecked():
+                print("update vhdl yooo")
+                self.hdl = "VHDL"
+                self.update_preview("VHDL")
+            else:
+                print("update verilog")
+                self.hdl = "Verilog"
+                self.update_preview("Verilog")
+        else:
+            self.hdl = "VHDL"
     def setup_ui(self):
         print("in set up")
         self.compDetails = CompDetails(self.proj_dir)
@@ -64,9 +71,14 @@ class HDLDesigner(QWidget):
         self.architecture.save_btn.clicked.connect(self.update_preview)
         internalSignal.save_signal_btn.clicked.connect(self.update_preview)
 
-    def update_preview(self):
-        entity_name, vhdl = Generator.generate_vhdl(self)
-        self.preview_window.setText(vhdl)
+    def update_preview(self, hdl):
+        if hdl != False:
+            self.hdl=hdl
+        if self.hdl == "VHDL":
+            entity_name, code = Generator.generate_vhdl(self)
+        elif self.hdl == "Verilog":
+            entity_name,code = Generator.generate_verilog(self)
+        self.preview_window.setText(code)
     def update_arch(self):
         xml_data_path = ProjectManager.get_xml_data_path()
         print(xml_data_path)

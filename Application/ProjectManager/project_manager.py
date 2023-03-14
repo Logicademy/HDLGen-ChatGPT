@@ -27,6 +27,7 @@ class ProjectManager(QWidget):
         print(os.getcwd())
         ProjectManager.proj_dir = None
         ProjectManager.proj_name = None
+        #ProjectManager.hdl = None
         ProjectManager.vivado_bat_path = None
         self.MainWindow = MainWindow
         ProjectManager.xml_data_path = None
@@ -65,16 +66,15 @@ class ProjectManager(QWidget):
         self.lang_label = QLabel("Languages")
         self.lang_label.setFont(bold_font)
         self.lang_label.setStyleSheet(BLACK_COLOR)
-        self.vhdl_check = QCheckBox("VHDL")
-        self.vhdl_check.setChecked(True)
+        self.vhdl_check = QRadioButton("VHDL")
+        #self.vhdl_check.setChecked(True)
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
-        self.verilog_check = QCheckBox("Verilog")
+        self.verilog_check = QRadioButton("Verilog")
         self.verilog_check.setStyleSheet(BLACK_COLOR)
-        self.verilog_check.setEnabled(False)
-        self.sverilog_check = QCheckBox("System Verilog")
+        self.sverilog_check = QRadioButton("System Verilog")
         self.sverilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check.setEnabled(False)
-        self.chisel_check = QCheckBox("Chisel")
+        self.chisel_check = QRadioButton("Chisel")
         self.chisel_check.setStyleSheet(BLACK_COLOR)
         self.chisel_check.setEnabled(False)
 
@@ -166,7 +166,6 @@ class ProjectManager(QWidget):
             self.fill_default_proj_details()
 
     def setup_ui(self):
-
         self.projSettingLayout.addWidget(self.proj_setting_title)
         self.projSettingLayout.addSpacing(SMALL_SPACING)
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
@@ -263,7 +262,8 @@ class ProjectManager(QWidget):
 
         self.proj_close_btn.clicked.connect(self.close_project)
         self.proj_save_btn.clicked.connect(self.create_xml)
-
+        self.vhdl_check.clicked.connect(self.create_xml)
+        self.verilog_check.clicked.connect(self.create_xml)
 
     def fill_default_proj_details(self):
 
@@ -319,7 +319,9 @@ class ProjectManager(QWidget):
         self.intel_dir_input.setText(self.intel_dir[0])
 
     def create_xml(self):
+
         ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
+
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
 
@@ -395,6 +397,7 @@ class ProjectManager(QWidget):
         # If vhdl is selected then vhdl folders to be created are written inside genFolder element
         # and the vhdl language detail is written into hdl element
         if self.vhdl_check.isChecked():
+            ProjectManager.hdl = "VHDL"
             vhdl_dir = root.createElement('vhdl_folder')
             vhdl_model_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/model')
             vhdl_testbench_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/testbench')
@@ -429,6 +432,7 @@ class ProjectManager(QWidget):
         # If verilog is selected then verilog folders to be created are written inside genFolder element
         # and the verliog language detail is written into hdl element
         if self.verilog_check.isChecked():
+            ProjectManager.hdl = "Verilog"
             verilog_dir = root.createElement('verilog_folder')
             verilog_model_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/model')
             verilog_tstbnch_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/testbench')
@@ -605,15 +609,26 @@ class ProjectManager(QWidget):
 
         hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]
         hdl_langs = hdl_data.getElementsByTagName("language")
-
+        #print(hdl_langs[0].getElementsByTagName('name')[0].firstChild.data)
         for hdl_lang in hdl_langs:
             if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "VHDL":
                 self.vhdl_check.setChecked(True)
+                print("in vhdl in load")
+                ProjectManager.hdl = "VHDL"
             elif hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
                 self.verilog_check.setChecked(True)
+                print("in Verilog in load")
+                ProjectManager.hdl = "Verilog"
 
         print("Project successfully loaded!")
 
     def vivado_help_window(self):
         vivado_help_dialog = VivadoHelpDialog()
         vivado_help_dialog.exec_()
+    @staticmethod
+    def get_hdl():
+        if ProjectManager.hdl == "VHDL":
+            return "VHDL"
+        else:
+            print("in get_hdl soe how")
+            return "Verilog"

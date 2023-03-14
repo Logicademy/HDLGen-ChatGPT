@@ -47,18 +47,22 @@ class Home(QMainWindow):
 
         if self.proj_dir is not None:
             load_data = True
-        hdl_designer = HDLDesigner(self.proj_dir, load_data)
+        else:
+            print("setting VHDL_check")
+            self.project_manager.vhdl_check.setChecked(True)
+        self.hdl_designer = HDLDesigner(self.proj_dir, load_data)
 
         print("Setting up UI")
         self.tabs.addTab(self.project_manager, "Project Manager")
-        self.tabs.addTab(hdl_designer, "HDL Designer")
+        self.tabs.addTab(self.hdl_designer, "HDL Designer")
         self.tabs.addTab(Help(), "Help")
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
         self.tabs.setCornerWidget(self.cornerWidget)
         self.start_vivado_btn.clicked.connect(self.start_vivado_btn_clicked)
 
-
-        self.tabs.currentChanged.connect(hdl_designer.compDetails.update_comp_name)
+        self.project_manager.vhdl_check.clicked.connect(lambda: self.hdl_designer.update_preview("VHDL"))
+        self.project_manager.verilog_check.clicked.connect(lambda: self.hdl_designer.update_preview("Verilog"))
+        self.tabs.currentChanged.connect(self.hdl_designer.compDetails.update_comp_name)
 
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)
@@ -68,22 +72,31 @@ class Home(QMainWindow):
         self.setCentralWidget(self.container)
 
 
+
+
     def generate_btn_clicked(self):
-
-        self.generator.generate_folders()
-        self.generator.create_vhdl_file()
-        self.generator.create_tcl_file()
-        self.generator.create_testbench_file()
-        msgBox = QMessageBox()
-        msgBox.setWindowTitle("Alert")
-        msgBox.setText("VHDL and Testbench Generated")
-        msgBox.exec_()
-
+        if self.project_manager.vhdl_check.isChecked():
+            self.generator.generate_folders()
+            overwrite = self.generator.create_vhdl_file()
+            self.generator.create_tcl_file()
+            self.generator.create_testbench_file(overwrite)
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("VHDL and Testbench Generated")
+            msgBox.exec_()
+        elif self.project_manager.verilog_check.isChecked():
+            self.generator.generate_folders()
+            self.generator.create_verilog_file()
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("Verilog and Testbench Generated")
+            msgBox.exec_()
     def start_vivado_btn_clicked(self):
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Alert")
         if self.project_manager.vivado_dir_input.text()[-10:] == "vivado.bat":
             msgBox.setText("Starting EDA tool")
+            #self.generator.create_tcl_file()
             self.generator.run_tcl_file()
         else:
             msgBox.setText("No vivado.bat path set")

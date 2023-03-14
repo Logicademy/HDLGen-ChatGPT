@@ -1,4 +1,5 @@
 import os
+import re
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 import subprocess
@@ -236,14 +237,6 @@ class Generator(QWidget):
                 for library in libraries:
                     gen_library += library.firstChild.data + "\n"
 
-                #gen_library += "\n"
-              #  gen_vhdl += gen_library
-               # if self.includeArrays == True:
-               #     gen_vhdl += "use work.arrayPackage.all;"
-
-                # Entity Section placement
-              # gen_vhdl += "\n\n" + gen_entity + "\n\n"
-                # Architecture section
 
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
@@ -460,17 +453,33 @@ class Generator(QWidget):
         entity_name, vhdl_code = self.generate_vhdl()
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
-        #vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
-        # Writing xml file
-        with open(vhdl_file_path, "w") as f:
+        vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
+        overwrite = False
+
+        if os.path.exists(vhdl_file_path):
+            print("The file exists!")
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Question)
+            msgBox.setText("Do you want to overwrite manually edited file?")
+            msgBox.setWindowTitle("Confirmation")
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msgBox.setDefaultButton(QMessageBox.No)
+            response = msgBox.exec_()
+            if response == QMessageBox.Yes:
+                print("User clicked Yes!")
+                overwrite = True
+                # Writing xml file
+                with open(vhdl_file_path, "w") as f:
+                    f.write(vhdl_code)
+                print("VHDL Model successfully generated at ", vhdl_file_path)
+            else:
+                print("User clicked No.")
+        with open(vhdl_file_HDLGen_path, "w") as f:
             f.write(vhdl_code)
 
-        print("VHDL Model successfully generated at ", vhdl_file_path)
-        #with open(vhdl_file_path, "w") as f:
-       #     f.write(vhdl_code)
-
-        #print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
+        print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
         self.entity_name = entity_name
+        return overwrite
 
 
     def create_tcl_file(self):
@@ -487,10 +496,24 @@ class Generator(QWidget):
 
         tcl_file_template = tcl_root.getElementsByTagName("vivado_vhdl_tcl")[0]
         tcl_file_template = tcl_file_template.firstChild.data
-
-        tb_file_name = self.entity_name + "_tb"
+        comp = self.entity_name
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Question)
+        msgBox.setText("Do you to open HDlGen version?")
+        msgBox.setWindowTitle("Confirmation")
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msgBox.setDefaultButton(QMessageBox.No)
+        response = msgBox.exec()
+        if response == QMessageBox.Yes:
+            print("User clicked Yes!")
+            tb_file_name = self.entity_name + "_tb"
+        else:
+            vhdl_path = proj_path + "/VHDL/model/" + self.entity_name + "_HDLGen.vhd"
+            tb_file_name = self.entity_name + "_HDLGen_tb"
+            comp = self.entity_name+"_HDLGen"
+            print("User clicked No.")
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
-        tcl_vivado_code = tcl_vivado_code.replace("$comp_name", self.entity_name)
+        tcl_vivado_code = tcl_vivado_code.replace("$comp_name", comp)
         wd = os.getcwd()
         wd = wd.replace("\\","/")
         mainPackagePath = "add_files -norecurse  "+ wd +"/HDLDesigner/Package/mainPackage.vhd"
@@ -522,7 +545,7 @@ class Generator(QWidget):
         tcl_vivado_code = tcl_vivado_code.replace("$proj_name", proj_name)
         proj_path = "{" + proj_path + "}"
         tcl_vivado_code = tcl_vivado_code.replace("$proj_dir", proj_path)
-        tcl_vivado_code = tcl_vivado_code.replace("$vhdl_path", vhdl_path)
+        #tcl_vivado_code = tcl_vivado_code.replace("$vhdl_path", vhdl_path)
 
         # Writing xml file
         with open(self.tcl_path, "w") as f:
@@ -536,9 +559,15 @@ class Generator(QWidget):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        print(proj_path)
         subprocess.Popen("cd " + proj_path, shell=True)
         vivado_bat_file_path = ProjectManager.get_vivado_bat_path()
-        start_vivado_cmd = vivado_bat_file_path + " -source " + self.tcl_path
+
+        if ProjectManager.get_hdl() == "VHDL":
+            tcl_path=proj_path+"\VHDL\AMDprj\\"+str(ProjectManager.get_proj_name())+".tcl"
+        elif ProjectManager.get_hdl() == "Verilog":
+            tcl_path = proj_path + "\Verilog\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
+        start_vivado_cmd = vivado_bat_file_path + " -source " + tcl_path#self.tcl_path
         subprocess.Popen(start_vivado_cmd, shell=True)
 
     def create_vhdl_testbench_code(self):
@@ -764,23 +793,23 @@ class Generator(QWidget):
 
         return entity_name, tb_code
 
-    def create_testbench_file(self):
+    def create_testbench_file(self, overwrite):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
 
         entity_name, vhdl_tb_code = self.create_vhdl_testbench_code()
 
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_tb.vhd")
-        #vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_tb_HDLGen.vhd")
+        vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_HDLGen_tb.vhd")
+        if overwrite == False:
+            # Writing xml file
+            with open(vhdl_tb_path, "w") as f:
+                f.write(vhdl_tb_code)
 
-        # Writing xml file
-        with open(vhdl_tb_path, "w") as f:
+            print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
+        with open(vhdl_tb_HDLGen_path, "w") as f:
             f.write(vhdl_tb_code)
-
-        print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
-        #with open(vhdl_tb_HDLGen_path, "w") as f:
-        #    f.write(vhdl_tb_code)
-        #print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
+        print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
     def generate_mainPackage(self):
         gen_arrays =""
         comp = ""
@@ -837,3 +866,437 @@ class Generator(QWidget):
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
             f.write(array_vhdl_code)
+
+    def generate_verilog(self):
+
+        gen_verilog = ""
+
+        xml_data_path = ProjectManager.get_xml_data_path()
+
+        verilog_database_path = "./Generator/HDL_Database/verilog_database.xml"
+
+        # Parsing the xml file
+        project_data = minidom.parse(xml_data_path)
+        HDLGen = project_data.documentElement
+
+        verilog_database = minidom.parse(verilog_database_path)
+        verilog_root = verilog_database.documentElement
+
+        hdl_design = HDLGen.getElementsByTagName("hdlDesign")
+        stateTypesList = ""
+        entity_name = ""
+        gen_int_sig = ""
+        gen_internal_signal_result = ""
+        arrayList=[]
+        std_logicList=[]
+        std_logic_vectorList=[]
+        unsignedList=[]
+        signedList=[]
+        # Entity Section
+        gen_signals = ""
+        port_signals = ""
+        entity_signal_description = ""
+        io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
+        gen_entity = ""
+        self.includeArrays = False
+        portSignals=[]
+        internalSignals=[]
+
+        stateTypeSig = False
+        if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
+
+            for signal in io_port_node[0].getElementsByTagName('signal'):
+                name = signal.getElementsByTagName('name')[0].firstChild.data
+                type = signal.getElementsByTagName('type')[0].firstChild.data
+                mode = signal.getElementsByTagName('mode')[0].firstChild.data
+
+                portData=[name,type,mode]
+                portSignals.append(portData)
+                if type[0:5] == "array":
+                    self.includeArrays = True
+                    arrayList.append(name)
+                elif type == "std_logic":
+                    std_logicList.append(name)
+                    type = ""
+                elif type[0:16] == "std_logic_vector":
+                    std_logic_vectorList.append(name)
+                    digits_list = re.findall(r'\d+', type)
+                    type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+                elif type[0:8] == "unsigned":
+                    unsignedList.append(name)
+                    digits_list = re.findall(r'\d+', type)
+                    type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+                elif type[0:6] == "signed":
+                    signedList.append(name)
+                    digits_list = re.findall(r'\d+', type)
+                    type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+                port_declare_syntax = verilog_root.getElementsByTagName("portDeclaration")[0].firstChild.data
+
+                port_declare_syntax = port_declare_syntax.replace("$name", name)
+                port_declare_syntax = port_declare_syntax.replace("$size", type)
+                port_declare_syntax = port_declare_syntax.replace("$mode", mode)
+                signal_declare_syntax = verilog_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
+
+                signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
+                                                                      signal.getElementsByTagName('name')[
+                                                                          0].firstChild.data)
+                signal_description = signal.getElementsByTagName('description')[
+                    0].firstChild.data
+                signal_description = signal_description.replace("&#10;", "\n// ")
+                entity_signal_description += "// " + signal.getElementsByTagName('name')[
+                    0].firstChild.data + "\t" + signal_description + "\n"
+                gen_signals += "\t\t" + signal_declare_syntax + ",\n"
+                port_signals += "\t" + port_declare_syntax + "\n"
+            port_signals = port_signals.rstrip()
+            gen_signals = gen_signals.rstrip()
+            gen_signals = gen_signals[0:-1]
+
+            entity_syntax = verilog_root.getElementsByTagName("module")
+            gen_entity = "// module declaration\n"
+            gen_entity += entity_syntax[0].firstChild.data
+
+            gen_entity = gen_entity.replace("$signals", gen_signals)
+            port_def = "\t// Port definitions\n"
+            port_def += port_signals
+
+            gen_entity = gen_entity.replace("$portDef", port_def)
+
+            # Internal signals
+            gen_int_sig = "// Internal signal declarations"
+
+            int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
+
+            if int_sig_node[0].firstChild is not None:
+                stateTypesString = ""
+
+                stateTypesList = int_sig_node[0].getElementsByTagName("stateTypes")
+                for stateType in int_sig_node[0].getElementsByTagName("stateTypes"):  # stateTypesList:
+                    stateTypesString += stateType.firstChild.data + ", "
+                    stateType_syntax = verilog_root.getElementsByTagName("stateNamesDeclarations")[0].firstChild.data
+                    stateType_syntax = stateType_syntax.replace("$stateName", stateType.firstChild.data)
+                    gen_int_sig += "\n" + stateType_syntax
+                stateTypesString = stateTypesString[:-2]
+
+                for signal in int_sig_node[0].getElementsByTagName("signal"):
+                    name = signal.getElementsByTagName('name')[0].firstChild.data
+                    type = signal.getElementsByTagName('type')[0].firstChild.data
+                    internalData = [name, type]
+                    internalSignals.append(internalData)
+                    if type == "Enumerated type state signals":
+                        type = "stateType"
+                        if name[0:2] == "CS":
+                            stateTypeSig = True
+                            CSState = name
+                    elif type == "std_logic":
+                        std_logicList.append(name)
+                        type = ""
+                    elif type[0:5] == "array":
+                        self.includeArrays = True
+                        arrayList.append(name)
+                    elif type[0:16] == "std_logic_vector":
+                        std_logic_vectorList.append(name)
+                        digits_list = re.findall(r'\d+', type)
+                        type ="["+str(digits_list[0])+":"+str(digits_list[1])+"]"
+                    elif type[0:8] == "unsigned":
+                        unsignedList.append(name)
+                    elif type[0:6] == "signed":
+                        signedList.append(name)
+                    int_sig_syntax = verilog_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
+                    int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
+                    int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)
+                    int_signal_description = signal.getElementsByTagName('description')[
+                        0].firstChild.data
+                    int_signal_description = int_signal_description.replace("&#10;", "\n// ")
+
+                    gen_int_sig += "\n" + int_sig_syntax
+                    gen_internal_signal_result += "// " + signal.getElementsByTagName('name')[
+                        0].firstChild.data + "\t" + int_signal_description + "\n"
+
+                gen_int_sig.rstrip()
+
+            else:
+                gen_int_sig += "\n// None"
+                gen_internal_signal_result = "// None\n"
+
+        # Header Section
+        print(portSignals)
+        header_node = hdl_design[0].getElementsByTagName("header")
+        if header_node is not None:
+            comp_node = header_node[0].getElementsByTagName("compName")[0]
+            if comp_node.firstChild.data != "null":
+                entity_name = comp_node.firstChild.data
+
+                gen_header = "// Header Section\n"
+                gen_header += "// Component Name : " + entity_name + "\n"
+                title = header_node[0].getElementsByTagName("title")[0].firstChild.data
+                gen_header += "// Title          : " + (title if title != "null" else "") + "\n\n"
+                desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
+                desc = desc.replace("&#10;", "\n// ")
+                gen_header += "// Description\n// "
+                gen_header += (desc if desc != "null" else "") + "\n"
+                authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
+                gen_header += "\n// Author(s)      : " + (authors if authors != "null" else "") + "\n"
+                company = header_node[0].getElementsByTagName("company")[0].firstChild.data
+                gen_header += "// Company        : " + (company if company != "null" else "") + "\n"
+                email = header_node[0].getElementsByTagName("email")[0].firstChild.data
+                gen_header += "// Email          : " + (email if email != "null" else "") + "\n"
+                gen_header += "// Date           : " + header_node[0].getElementsByTagName("date")[
+                    0].firstChild.data + "\n\n"
+
+                gen_verilog += gen_header
+
+                # entity signal dictionary
+                gen_entity = gen_entity.replace("$comp_name", entity_name)
+                gen_entity_signal = "// entity signal dictionary\n"
+                gen_entity_signal += entity_signal_description + "\n"
+                gen_verilog += gen_entity_signal
+
+                # internal signal dictionary
+                gen_internal_signal = "// internal signal dictionary\n"
+                gen_internal_signal_result = gen_internal_signal_result + "\n"
+                gen_internal_signal += gen_internal_signal_result
+                gen_verilog += gen_internal_signal
+                # Libraries Section
+
+                libraries_node = verilog_root.getElementsByTagName("libraries")
+                libraries = libraries_node[0].getElementsByTagName("library")
+                gen_library = "// library declarations\n"
+
+                for library in libraries:
+                    gen_library += library.firstChild.data + "\n"
+
+                # Process
+                arch_node = hdl_design[0].getElementsByTagName("architecture")
+                gen_process = ""
+                clkAndRst = hdl_design[0].getElementsByTagName('clkAndRst')
+                if len(arch_node) != 0 and arch_node[0].firstChild is not None:
+
+                    child = arch_node[0].firstChild
+
+                    while child is not None:
+
+                        next = child.nextSibling
+
+                        if (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "process"):
+
+                            process_syntax = verilog_root.getElementsByTagName("process")[0].firstChild.data
+
+                            gen_in_sig = ""
+
+                            gen_defaults = ""
+                            if_gen_defaults = ""
+                            clkgen_defaults = ""
+                            caseEmpty = True
+                            for default_out in child.getElementsByTagName("defaultOutput"):
+                                assign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
+                                signals = default_out.firstChild.data.split(",")
+                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                value = signals[1]
+                                if value == "rst state":
+                                    if stateTypesList != "":
+                                        stateNames = stateTypesString.split(",")
+                                        value = stateNames[0]
+                                elif value == "zero":
+                                    if signals[0] in arrayList:
+                                        value = "(others =>(others => '0'))"
+                                    elif signals[0] in std_logicList:
+                                        value = "1'b0"
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                        0] in unsignedList:
+                                        for signal in portSignals:
+                                            if signals[0] == signal[0]:
+                                                size = signal[1]
+                                                size = int(size[17]) + 1
+                                        for signal in internalSignals:
+                                            if signals[0] == signal[0]:
+                                                size = signal[1]
+                                                size = int(size[17]) + 1
+                                        value = str(size) + "'b0"
+                                    else:
+                                        value = str(0)
+                                elif value.isdigit():
+                                    size = len(value)
+                                    value = str(size) + "'b" + value
+
+                                elif stateTypeSig == True and value == CSState:
+                                    # if value == CSState:
+                                    caseEmpty = False
+                                    case_syntax = verilog_root.getElementsByTagName("case")[0].firstChild.data
+                                    case_syntax = case_syntax.replace("$stateType", value)
+                                    stateNames = stateTypesString.split(",")
+                                    whenCase = ""
+                                    for states in stateNames:
+                                        whenCase += "\n\t\t" + states + " :" + "\n\t\t\tbegin\n\n\t\t\tend"
+                                    case_syntax = case_syntax.replace("$whenCase", whenCase)
+
+                                assign_syntax = assign_syntax.replace("$value", value)
+                                if_gen_defaults += "\t\t" + assign_syntax + "\n"
+                                gen_defaults += "\t\t"+assign_syntax + " // default\n"
+                                if len(signals) == 3:
+                                    clkAssign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
+                                    clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
+                                    clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
+                                    clkgen_defaults += "\n\t\t" + clkAssign_syntax
+                            if gen_defaults != "":
+                                if clkgen_defaults != "":
+                                    for clkRst in clkAndRst[0].getElementsByTagName("clkAndRst"):
+                                        clkEdge = "posedge"
+                                        if clkRst.getElementsByTagName('activeClkEdge')[0].firstChild.data == "H-L":
+                                            clkEdge = "negedge"
+                                        if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
+                                            if_syntax = verilog_root.getElementsByTagName("ifStatement")[0].firstChild.data
+                                            if_syntax = if_syntax.replace("$assignment", "rst")
+                                            rstlvl="posedge"
+                                            if clkRst.getElementsByTagName('ActiveRstLvl')[0].firstChild.data == '0':
+                                                rstlvl="negedge"
+                                            if_syntax = if_syntax.replace("$default_assignments",
+                                                                          if_gen_defaults)
+                                            if_gen_defaults = "\n\t" + if_syntax
+
+                                            else_syntax = verilog_root.getElementsByTagName("elseStatement")[
+                                                    0].firstChild.data
+                                            else_syntax = else_syntax.replace("$default_assignments",
+                                                                                  clkgen_defaults)
+                                            if_syntax = if_syntax.replace("$else", else_syntax)
+                                            clkgen_defaults = "\t" + if_syntax + "\n"
+
+                                    process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
+                                else:
+                                    if caseEmpty == False:
+                                        gen_defaults += "\n" + case_syntax
+                                    process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
+                            for input_signal in child.getElementsByTagName("inputSignal"):
+                                if input_signal.firstChild.data == "clk":
+                                    gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
+                                elif input_signal.firstChild.data == "rst":
+                                    gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
+                                else:
+                                    gen_in_sig += input_signal.firstChild.data + " or "
+                            gen_in_sig = gen_in_sig.strip()
+                            gen_in_sig = gen_in_sig[:-2]
+
+                            process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
+                            gen_process += process_syntax + "\n\n"
+
+
+                        elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
+
+                            gen_stmts = ""
+                            conc_syntax = verilog_root.getElementsByTagName("concurrentstmt")[0].firstChild.data
+
+                            conc_syntax = conc_syntax.replace("$concurrentstmt_label",
+                                                              child.getElementsByTagName("label")[
+                                                                  0].firstChild.data)
+
+                            for statement in child.getElementsByTagName("statement"):
+                                assign_syntax = verilog_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                signals = statement.firstChild.data.split(",")
+                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                value = signals[1]
+                                if value.isdigit():
+                                    size=len(value)
+                                    value = str(size)+"'b" + value
+                                elif value == "zero":
+                                    if signals[0] in arrayList:
+                                        value = "(others =>(others => '0'))"
+                                    elif signals[0] in std_logicList:
+                                        value = "1'b0"
+                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                        0] in unsignedList:
+                                        for signal in portSignals:
+                                            if signals[0] == signal[0]:
+                                                size = signal[1]
+                                                size = int(size[17]) + 1
+                                        for signal in internalSignals:
+                                            if signals[0] == signal[0]:
+                                                size = signal[1]
+                                                size = int(size[17])+1
+                                        value = str(size)+"'b0"
+                                    else:
+                                        value = str(0)
+                                assign_syntax = assign_syntax.replace("$value", value)
+
+                                gen_stmts += assign_syntax
+
+                            conc_syntax = conc_syntax.replace("$statement", gen_stmts)
+                            gen_process += conc_syntax + "\n"
+
+                        elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
+                            self.includeArrays = True
+                            gen_stmts = ""
+                            instance_syntax = verilog_root.getElementsByTagName("instance")[0].firstChild.data
+
+                            instance_syntax = instance_syntax.replace("$instance_label",
+                                                                      child.getElementsByTagName("label")[
+                                                                          0].firstChild.data)
+                            for instance in child.getElementsByTagName("port"):
+                                assign_syntax = verilog_root.getElementsByTagName("portAssign")[0].firstChild.data
+                                signals = instance.firstChild.data.split(",")
+                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                assign_syntax = assign_syntax.replace("$value", signals[1])
+
+                                gen_stmts += "\t" + assign_syntax + ",\n"
+                            gen_stmts = gen_stmts.rstrip()
+                            gen_stmts = gen_stmts[0:-1]
+                            instance_syntax = instance_syntax.replace("$portAssign", gen_stmts)
+                            instance_syntax = instance_syntax.replace("$instance",
+                                                                      child.getElementsByTagName("model")[
+                                                                          0].firstChild.data)
+                            gen_process += instance_syntax + "\n"
+
+                        child = next
+                    arch_syntax = verilog_root.getElementsByTagName("architecture")[0].firstChild.data
+
+                    gen_arch = arch_syntax.replace("$int_sig_declaration", gen_int_sig)
+                    gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
+                    gen_entity = gen_entity.replace("$arch", indent(gen_arch,'    '))
+                    gen_verilog += gen_library
+                    if self.includeArrays == True:
+                        gen_verilog += "use work.arrayPackage.all;"
+
+                    # Entity Section placement
+                    gen_verilog += "\n\n" + gen_entity + "\n\n"
+
+        return entity_name, gen_verilog
+
+    def create_verilog_file(self):
+
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        entity_name, verilog_code = self.generate_verilog()
+
+        verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".verilog")
+        verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_HDLGen.verilog")
+        overwrite = False
+
+        if os.path.exists(verilog_file_path):
+            print("The file exists!")
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Question)
+            msgBox.setText("Do you want to overwrite manually edited file?")
+            msgBox.setWindowTitle("Confirmation")
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msgBox.setDefaultButton(QMessageBox.No)
+            response = msgBox.exec_()
+            if response == QMessageBox.Yes:
+                print("User clicked Yes!")
+                overwrite = True
+                # Writing xml file
+                with open(verilog_file_path, "w") as f:
+                    f.write(verilog_code)
+                print("Verilog Model successfully generated at ", verilog_file_path)
+            else:
+                print("User clicked No.")
+                with open(verilog_file_HDLGen_path, "w") as f:
+                    f.write(verilog_code)
+                print("Verilog HDLGen Model successfully generated at ", verilog_file_HDLGen_path)
+        else:
+            # Writing xml file
+            with open(verilog_file_path, "w") as f:
+                f.write(verilog_code)
+            print("Verilog Model successfully generated at ", verilog_file_path)
+            with open(verilog_file_HDLGen_path, "w") as f:
+                f.write(verilog_code)
+            print("Verilog HDLGen Model successfully generated at ", verilog_file_HDLGen_path)
+        self.entity_name = entity_name
+        return overwrite
