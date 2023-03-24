@@ -1,3 +1,4 @@
+from PySide2.QtGui import QFont
 from PySide2.QtWidgets import *
 import sys
 sys.path.append("..")
@@ -12,14 +13,17 @@ class Home(QMainWindow):
     def __init__(self, proj_dir=None):
 
         super().__init__()
-
+        small_text_font = QFont()
+        small_text_font.setPointSize(10)
         self.setWindowTitle("HDLGen V2022.0.1")
 
         self.cornerWidget = QWidget()
         self.generate_btn = QPushButton("Generate model and TB HDL")
-        self.generate_btn.setFixedHeight(20)
+        self.generate_btn.setFont(small_text_font)
+        #self.generate_btn.setFixedHeight(20)
         self.start_vivado_btn = QPushButton("Generate/Open Vivado")
-        self.start_vivado_btn.setFixedHeight(20)
+        self.start_vivado_btn.setFont(small_text_font)
+        #self.start_vivado_btn.setFixedHeight(20)
         self.cornerWidgetLayout = QHBoxLayout()
         self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)
         self.cornerWidgetLayout.addWidget(self.generate_btn)
@@ -56,6 +60,9 @@ class Home(QMainWindow):
         self.tabs.addTab(self.project_manager, "Project Manager")
         self.tabs.addTab(self.hdl_designer, "HDL Designer")
         self.tabs.addTab(Help(), "Help")
+        font = self.tabs.font()
+        font.setPointSize(10)
+        self.tabs.setFont(font)
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
         self.tabs.setCornerWidget(self.cornerWidget)
         self.start_vivado_btn.clicked.connect(self.start_vivado_btn_clicked)
@@ -78,7 +85,7 @@ class Home(QMainWindow):
         if self.project_manager.vhdl_check.isChecked():
             self.generator.generate_folders()
             overwrite = self.generator.create_vhdl_file()
-            self.generator.create_tcl_file()
+            self.generator.create_tcl_file("VHDL")
             self.generator.create_testbench_file(overwrite)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
@@ -86,7 +93,9 @@ class Home(QMainWindow):
             msgBox.exec_()
         elif self.project_manager.verilog_check.isChecked():
             self.generator.generate_folders()
-            self.generator.create_verilog_file()
+            overwrite = self.generator.create_verilog_file()
+            self.generator.create_tcl_file("Verilog")
+            self.generator.create_verilog_testbench_file(overwrite)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
             msgBox.setText("Verilog and Testbench Generated")
@@ -95,10 +104,17 @@ class Home(QMainWindow):
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Alert")
         if self.project_manager.vivado_dir_input.text()[-10:] == "vivado.bat":
-            msgBox.setText("Starting EDA tool")
-            #self.generator.create_tcl_file()
-            self.generator.run_tcl_file()
+            if self.project_manager.vhdl_check.isChecked():
+                msgBox.setText("Starting EDA tool")
+                msgBox.exec_()
+                #self.generator.create_tcl_file()
+                self.generator.run_tcl_file("VHDL")
+            else:
+                msgBox.setText("Starting EDA tool")
+                msgBox.exec_()
+                # self.generator.create_tcl_file()
+                self.generator.run_tcl_file("Verilog")
         else:
             msgBox.setText("No vivado.bat path set")
-        msgBox.exec_()
+
 

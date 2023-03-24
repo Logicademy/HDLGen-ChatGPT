@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<!--
+    Escape Characters
+    "   &quot;
+    '   &apos;
+    <   &lt;
+    >   &gt;
+    &   &amp;
+    \n  &#10;
+    \t  &#x9;
+-->
+
+<vhdl_tb>
+
+    <entity>module $comp_name_TB();</entity>
+
+    <signalDeclaration>$sig_name : $mode $type;</signalDeclaration>
+
+    <IOSignalDeclaration>$regOrwire $sig_name;</IOSignalDeclaration>
+
+    <architecture>$tbSignalDeclaration &#10;$arch_elements&#10;end&#10;endmodule</architecture>
+
+    <intSigDeclaration>signal $int_sig_name : $int_sig_type;</intSigDeclaration>
+
+    <portMap>.$sig_name ($sig_name), </portMap>
+
+    <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
+
+</vhdl_tb>

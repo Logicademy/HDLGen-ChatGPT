@@ -547,8 +547,9 @@ class ProjectManager(QWidget):
         from Application.main import HDLGen
         self.MainWindow.close()
         self.window = HDLGen()
-        self.window.resize(600, 300)
-        self.window.show()
+        #self.window.resize(600, 300)
+        #self.window.show()
+        self.window.showMaximized()
         print("Project Closed!")
 
     def load_proj_data(self, load_proj_dir):
@@ -609,15 +610,12 @@ class ProjectManager(QWidget):
 
         hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]
         hdl_langs = hdl_data.getElementsByTagName("language")
-        #print(hdl_langs[0].getElementsByTagName('name')[0].firstChild.data)
         for hdl_lang in hdl_langs:
             if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "VHDL":
                 self.vhdl_check.setChecked(True)
-                print("in vhdl in load")
                 ProjectManager.hdl = "VHDL"
             elif hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
                 self.verilog_check.setChecked(True)
-                print("in Verilog in load")
                 ProjectManager.hdl = "Verilog"
 
         print("Project successfully loaded!")
@@ -630,5 +628,4 @@ class ProjectManager(QWidget):
         if ProjectManager.hdl == "VHDL":
             return "VHDL"
         else:
-            print("in get_hdl soe how")
             return "Verilog"

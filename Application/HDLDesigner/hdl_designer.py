@@ -60,7 +60,9 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(ioPorts, "Ports")
         self.tabs.addTab(internalSignal, "Internal Signals")
         self.tabs.addTab(self.architecture, "Architecture")
-
+        font = self.tabs.font()
+        font.setPointSize(10)
+        self.tabs.setFont(font)
         self.mainLayout.addWidget(self.tabs)
         self.mainLayout.addLayout(self.preview_pane_layout)
         self.setLayout(self.mainLayout)
