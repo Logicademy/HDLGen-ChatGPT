@@ -33,13 +33,13 @@
         set_property SOURCE_SET sources_1 [get_filesets sim_1]&#10;
         add_files -fileset sim_1 -norecurse ./$lang/testbench/$tb_name.$ext&#10;
         update_compile_order -fileset sim_1&#10;
-        # Remove IOBs from snthesised schematics
-        current_run [get_runs synth_1]
-        set_property -name {STEPS.SYNTH_DESIGN.ARGS.MORE OPTIONS} -value -no_iobuf -objects [get_runs synth_1]
+        # Remove IOBs from snthesised schematics&#10;
+        current_run [get_runs synth_1]&#10;
+        set_property -name {STEPS.SYNTH_DESIGN.ARGS.MORE OPTIONS} -value -no_iobuf -objects [get_runs synth_1]&#10;
 
-        # Save created wcfg in project
-        set_property SOURCE_SET sources_1 [get_filesets sim_1]
-        add_files -fileset sim_1 -norecurse ./$lang/AMDPrj/$tb_name_behav.wcfg
-        # save_wave_config {./$lang/AMDprj/$tb_name_behav.wcfg}
+        # Save created wcfg in project&#10;
+        set_property SOURCE_SET sources_1 [get_filesets sim_1]&#10;
+        add_files -fileset sim_1 -norecurse ./$lang/AMDPrj/$tb_name_behav.wcfg&#10;
+        # save_wave_config {./$lang/AMDprj/$tb_name_behav.wcfg}&#10;
     </vivado_vhdl_tcl>
 </tcl>

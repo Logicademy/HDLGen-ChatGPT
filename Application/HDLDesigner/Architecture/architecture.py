@@ -476,12 +476,16 @@ class Architecture(QWidget):
         self.generator.generate_mainPackage()
 
     def load_data(self, proj_dir):
+        xml_data_path = ProjectManager.get_xml_data_path()
+        self.updateProcessName(xml_data_path)
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
         arch_node = hdlDesign[0].getElementsByTagName('architecture')
-        #arch_name_node = hdlDesign[0].getElementsByTagName("archName")
+        arch_name_node = hdlDesign[0].getElementsByTagName("archName")
+        #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
+
 
 
         if len(arch_node) != 0 and arch_node[0].firstChild is not None:

@@ -548,8 +548,8 @@ class ProjectManager(QWidget):
         self.MainWindow.close()
         self.window = HDLGen()
         #self.window.resize(600, 300)
-        #self.window.show()
-        self.window.showMaximized()
+        self.window.show()
+        #self.window.showMaximized()
         print("Project Closed!")
 
     def load_proj_data(self, load_proj_dir):
