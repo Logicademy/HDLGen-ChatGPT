@@ -76,8 +76,8 @@ class Generator(QWidget):
         gen_int_sig = ""
         gen_internal_signal_result = ""
         arrayList=[]
-        std_logicList=[]
-        std_logic_vectorList=[]
+        single_bitList=[]
+        busList=[]
         unsignedList=[]
         signedList=[]
         # Entity Section
@@ -97,10 +97,12 @@ class Generator(QWidget):
                 if type[0:5] == "array":
                     self.includeArrays = True
                     arrayList.append(name)
-                elif type == "std_logic":
-                    std_logicList.append(name)
-                elif type[0:16] == "std_logic_vector":
-                    std_logic_vectorList.append(name)
+                elif type == "single bit":
+                    single_bitList.append(name)
+                    type = "std_logic"
+                elif type[0:3] == "bus":
+                    busList.append(name)
+                    type = type.replace("bus","std_logic_vector")
                 elif type[0:8] == "unsigned":
                     unsignedList.append(name)
                 elif type[0:6] == "signed":
@@ -114,9 +116,7 @@ class Generator(QWidget):
                 signal_declare_syntax = signal_declare_syntax.replace("$mode",
                                                                       signal.getElementsByTagName('mode')[
                                                                           0].firstChild.data)
-                signal_declare_syntax = signal_declare_syntax.replace("$type",
-                                                                      signal.getElementsByTagName('type')[
-                                                                          0].firstChild.data)
+                signal_declare_syntax = signal_declare_syntax.replace("$type",type)
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
                 signal_description = signal_description.replace("&#10;", "\n-- ")
@@ -154,18 +154,20 @@ class Generator(QWidget):
                     name = signal.getElementsByTagName('name')[0].firstChild.data
                     type = signal.getElementsByTagName('type')[0].firstChild.data
 
-                    if type == "Enumerated type state signals":
+                    if type == "Enumerated type state signal pair(NS/CS)":
                         type = "stateType"
                         if name[0:2] == "CS":
                             stateTypeSig = True
                             CSState = name
-                    elif type == "std_logic":
-                        std_logicList.append(name)
+                    elif type == "single bit":
+                        single_bitList.append(name)
+                        type = "std_logic"
                     elif type[0:5] == "array":
                         self.includeArrays = True
                         arrayList.append(name)
-                    elif type[0:16] == "std_logic_vector":
-                        std_logic_vectorList.append(name)
+                    elif type[0:3] == "bus":
+                        busList.append(name)
+                        type = type.replace("bus","std_logic_vector")
                     elif type[0:8] == "unsigned":
                         unsignedList.append(name)
                     elif type[0:6] == "signed":
@@ -280,18 +282,18 @@ class Generator(QWidget):
                                 elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
-                                    elif signals[0] in std_logicList:
+                                    elif signals[0] in single_bitList:
                                         value = "'" + '0' + "'"
-                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[0] in unsignedList:
+                                    elif signals[0] in busList or signals[0] in signedList or signals[0] in unsignedList:
                                         value = "(others => '0')"
                                     else:
                                         value = str(0)
                                 elif value == "one":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '1'))"
-                                    elif signals[0] in std_logicList:
+                                    elif signals[0] in single_bitList:
                                         value = "'" + '1' + "'"
-                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                    elif signals[0] in busList or signals[0] in signedList or signals[
                                         0] in unsignedList:
                                         value = "(others => '1')"
                                     else:
@@ -318,7 +320,18 @@ class Generator(QWidget):
                                 if len(signals) == 3:
                                     clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
-                                    clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
+                                    value = signals[2]
+                                    if value == "zero":
+                                        if signals[0] in arrayList:
+                                            value = "(others =>(others => '0'))"
+                                        elif signals[0] in single_bitList:
+                                            value = "'" + '0' + "'"
+                                        elif signals[0] in busList or signals[0] in signedList or signals[
+                                            0] in unsignedList:
+                                            value = "(others => '0')"
+                                        else:
+                                            value = str(0)
+                                    clkAssign_syntax = clkAssign_syntax.replace("$value", value)# signals[2])
                                     clkgen_defaults += "\t\t" + clkAssign_syntax + "\n"
                             if gen_defaults != "":
                                 if clkgen_defaults != "":
@@ -381,9 +394,9 @@ class Generator(QWidget):
                                 elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
-                                    elif signals[0] in std_logicList:
+                                    elif signals[0] in single_bitList:
                                         value = "'" + '0' + "'"
-                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                    elif signals[0] in busList or signals[0] in signedList or signals[
                                         0] in unsignedList:
                                         value = "(others => '0')"
                                     else:
@@ -648,14 +661,17 @@ class Generator(QWidget):
                 signal_declare_syntax = signal_declare_syntax.replace("$mode",
                                                                       signal.getElementsByTagName('mode')[
                                                                           0].firstChild.data)
-                signal_declare_syntax = signal_declare_syntax.replace("$type",
-                                                                      signal.getElementsByTagName('type')[
-                                                                          0].firstChild.data)
-                io_signal_declare_syntax = io_signal_declare_syntax.replace("$type",
-                                                                            signal.getElementsByTagName('type')[
-                                                                                0].firstChild.data)
+                type = signal.getElementsByTagName('type')[0].firstChild.data
+                if type == "single bit":
+                    type = "std_logic"
+                elif type[0:3] == "bus":
+                    type = type.replace("bus","std_logic_vector")
+                
+                signal_declare_syntax = signal_declare_syntax.replace("$type", type)
+                io_signal_declare_syntax = io_signal_declare_syntax.replace("$type", type)
                 name = signal.getElementsByTagName('name')[0].firstChild.data
                 type = signal.getElementsByTagName('type')[0].firstChild.data
+                size = ""
                 TB_content = re.sub(r"\[componentName]", entity_name, TB_contents)
                 TB_content = re.sub(r"\[signal]", name, TB_content)
                 UUTEnt_content = re.sub(r"\[componentName]", entity_name, UUTEnt_contents)
@@ -664,10 +680,10 @@ class Generator(QWidget):
                 if type[0:5] == "array":
                     size = ""
                     type = "array"
-                elif type == "std_logic":
+                elif type == "single bit":
                     size = ""
                     type = "logic"
-                elif type[0:16] == "std_logic_vector":
+                elif type[0:3] == "bus":
                     digits_list = re.findall(r'\d+', type)
                     size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                     type = "array"
@@ -688,19 +704,19 @@ class Generator(QWidget):
 
                 if signal.getElementsByTagName('mode')[0].firstChild.data == "in":
                     if signal.getElementsByTagName('name')[0].firstChild.data != "clk" and signal.getElementsByTagName('name')[0].firstChild.data != "rst":
-                        if signal.getElementsByTagName('type')[0].firstChild.data == "std_logic":
+                        if signal.getElementsByTagName('type')[0].firstChild.data == "single bit":
                             inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'0\';\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= \'1\';\n"
-                        elif signal.getElementsByTagName('type')[0].firstChild.data[0:16] == "std_logic_vector":
+                        elif signal.getElementsByTagName('type')[0].firstChild.data[0:3] == "bus":
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'1\');\n"
                         else:
-                            print("std_logic_vector is"+ signal.getElementsByTagName('type')[0].firstChild.data)
+                            print("bus is"+ signal.getElementsByTagName('type')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
                             arrayPackage=True
                 else:
-                    if signal.getElementsByTagName('type')[0].firstChild.data != "std_logic" and signal.getElementsByTagName('type')[0].firstChild.data[0:16] != "std_logic_vector":
+                    if signal.getElementsByTagName('type')[0].firstChild.data != "single bit" and signal.getElementsByTagName('type')[0].firstChild.data[0:3] != "bus":
                         arrayPackage = True
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
@@ -747,10 +763,10 @@ class Generator(QWidget):
                     type = signal.getElementsByTagName('type')[0].firstChild.data
                     UUTInternal_content = re.sub(r"\[componentName]", entity_name, UUTInternal_contents)
                     UUTInternal_content = re.sub(r"\[signal]", name, UUTInternal_content)
-                    if type == "Enumerated type state signals":
+                    if type == "Enumerated type state signal pair(NS/CS)":
                         type = "logic"
                         size=""
-                    elif type == "std_logic":
+                    elif type == "single bit":
                         size = ""
                         type = "logic"
                     elif type[0:5] == "array":
@@ -758,7 +774,7 @@ class Generator(QWidget):
                         digits_list = re.findall(r'\d+', type)
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                         type = "array"
-                    elif type[0:16] == "std_logic_vector":
+                    elif type[0:3] == "bus":
                         digits_list = re.findall(r'\d+', type)
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                         type = "array"
@@ -972,8 +988,8 @@ class Generator(QWidget):
         gen_int_sig = ""
         gen_internal_signal_result = ""
         arrayList=[]
-        std_logicList=[]
-        std_logic_vectorList=[]
+        single_bitList=[]
+        busList=[]
         unsignedList=[]
         signedList=[]
         # Entity Section
@@ -1000,11 +1016,11 @@ class Generator(QWidget):
                 if type[0:5] == "array":
                     self.includeArrays = True
                     arrayList.append(name)
-                elif type == "std_logic":
-                    std_logicList.append(name)
+                elif type == "single bit":
+                    single_bitList.append(name)
                     type = ""
-                elif type[0:16] == "std_logic_vector":
-                    std_logic_vectorList.append(name)
+                elif type[0:3] == "bus":
+                    busList.append(name)
                     digits_list = re.findall(r'\d+', type)
                     type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                 elif type[0:8] == "unsigned":
@@ -1082,19 +1098,19 @@ class Generator(QWidget):
                     type = signal.getElementsByTagName('type')[0].firstChild.data
                     internalData = [name, type]
                     internalSignals.append(internalData)
-                    if type == "Enumerated type state signals":
+                    if type == "Enumerated type state signal pair(NS/CS)":
                         type = ""
                         if name[0:2] == "CS":
                             stateTypeSig = True
                             CSState = name
-                    elif type == "std_logic":
-                        std_logicList.append(name)
+                    elif type == "single bit":
+                        single_bitList.append(name)
                         type = ""
                     elif type[0:5] == "array":
                         self.includeArrays = True
                         arrayList.append(name)
-                    elif type[0:16] == "std_logic_vector":
-                        std_logic_vectorList.append(name)
+                    elif type[0:3] == "bus":
+                        busList.append(name)
                         digits_list = re.findall(r'\d+', type)
                         type ="["+str(digits_list[0])+":"+str(digits_list[1])+"]"
                     elif type[0:8] == "unsigned":
@@ -1185,6 +1201,7 @@ class Generator(QWidget):
                                 signals = default_out.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value = signals[1]
+                                print(signals[0])
                                 if value == "rst state":
                                     if stateTypesList != "":
                                         stateNames = stateTypesString.split(",")
@@ -1192,18 +1209,25 @@ class Generator(QWidget):
                                 elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
-                                    elif signals[0] in std_logicList:
+                                    elif signals[0] in single_bitList:
                                         value = "1'b0"
-                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
-                                        0] in unsignedList:
+                                    elif signals[0] in busList or signals[0] in signedList or signals[0] in unsignedList:
                                         for signal in portSignals:
                                             if signals[0] == signal[0]:
-                                                size = signal[1]
-                                                size = int(size[17]) + 1
+                                                match = re.search(r'\((\d+)\sdownto\s(\d+)\)', signal[1])
+                                                start = int(match.group(1))
+                                                end = int(match.group(2))
+                                                size = start - end + 1
+                                                #size = signal[1]
+                                                #size = int(size[4]) + 1
                                         for signal in internalSignals:
                                             if signals[0] == signal[0]:
-                                                size = signal[1]
-                                                size = int(size[17]) + 1
+                                                match = re.search(r'\((\d+)\sdownto\s(\d+)\)', signal[1])
+                                                start = int(match.group(1))
+                                                end = int(match.group(2))
+                                                size = start - end + 1
+                                                #size = signal[1]
+                                                #size = int(size[4]) + 1
                                         value = str(size) + "'b0"
                                     else:
                                         value = str(0)
@@ -1301,18 +1325,26 @@ class Generator(QWidget):
                                 elif value == "zero":
                                     if signals[0] in arrayList:
                                         value = "(others =>(others => '0'))"
-                                    elif signals[0] in std_logicList:
+                                    elif signals[0] in single_bitList:
                                         value = "1'b0"
-                                    elif signals[0] in std_logic_vectorList or signals[0] in signedList or signals[
+                                    elif signals[0] in busList or signals[0] in signedList or signals[
                                         0] in unsignedList:
                                         for signal in portSignals:
                                             if signals[0] == signal[0]:
-                                                size = signal[1]
-                                                size = int(size[17]) + 1
+                                                match = re.search(r'\((\d+)\sdownto\s(\d+)\)', signal[1])
+                                                start = int(match.group(1))
+                                                end = int(match.group(2))
+                                                size = start - end + 1
+                                                #size = signal[1]
+                                                #size = int(size[4]) + 1
                                         for signal in internalSignals:
                                             if signals[0] == signal[0]:
-                                                size = signal[1]
-                                                size = int(size[17])+1
+                                                match = re.search(r'\((\d+)\sdownto\s(\d+)\)', signal[1])
+                                                start = int(match.group(1))
+                                                end = int(match.group(2))
+                                                size = start - end + 1
+                                                #size = signal[1]
+                                                #size = int(size[4])+1
                                         value = str(size)+"'b0"
                                     else:
                                         value = str(0)
@@ -1494,10 +1526,10 @@ class Generator(QWidget):
                 if type[0:5] == "array":
                     size = ""
                     type = "array"
-                elif type == "std_logic":
+                elif type == "single bit":
                     size = ""
                     type = "logic"
-                elif type[0:16] == "std_logic_vector":
+                elif type[0:3] == "bus":
                     digits_list = re.findall(r'\d+', type)
                     size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                     type = "array"
@@ -1518,20 +1550,20 @@ class Generator(QWidget):
 
                 if signal.getElementsByTagName('mode')[0].firstChild.data == "in":
                     if signal.getElementsByTagName('name')[0].firstChild.data != "clk" and signal.getElementsByTagName('name')[0].firstChild.data != "rst":
-                        if signal.getElementsByTagName('type')[0].firstChild.data == "std_logic":
+                        if signal.getElementsByTagName('type')[0].firstChild.data == "single bit":
                             inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = 1'b0;\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = '1'b1;\n"
-                        elif signal.getElementsByTagName('type')[0].firstChild.data[0:16] == "std_logic_vector":
+                        elif signal.getElementsByTagName('type')[0].firstChild.data[0:3] == "bus":
                             size = signal.getElementsByTagName('type')[0].firstChild.data
-                            size = int(size[17]) + 1
+                            size = int(size[4]) + 1
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "1'b0;\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "1'b1;\n"
                         else:
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
                             arrayPackage=True
                 else:
-                    if signal.getElementsByTagName('type')[0].firstChild.data != "std_logic" and signal.getElementsByTagName('type')[0].firstChild.data[0:16] != "std_logic_vector":
+                    if signal.getElementsByTagName('type')[0].firstChild.data != "single bit" and signal.getElementsByTagName('type')[0].firstChild.data[0:3] != "bus":
                         arrayPackage = True
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
@@ -1577,10 +1609,10 @@ class Generator(QWidget):
                     type = signal.getElementsByTagName('type')[0].firstChild.data
                     UUTInternal_content = re.sub(r"\[componentName]", entity_name, UUTInternal_contents)
                     UUTInternal_content = re.sub(r"\[signal]", name, UUTInternal_content)
-                    if type == "Enumerated type state signals":
+                    if type == "Enumerated type state signal pair(NS/CS)":
                         type = "logic"
                         size=""
-                    elif type == "std_logic":
+                    elif type == "single bit":
                         size = ""
                         type = "logic"
                     elif type[0:5] == "array":
@@ -1588,7 +1620,7 @@ class Generator(QWidget):
                         digits_list = re.findall(r'\d+', type)
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                         type = "array"
-                    elif type[0:16] == "std_logic_vector":
+                    elif type[0:3] == "bus":
                         digits_list = re.findall(r'\d+', type)
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                         type = "array"

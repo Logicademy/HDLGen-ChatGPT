@@ -91,7 +91,8 @@ class IOPorts(QWidget):
             self.comb_checkBox.setChecked(True)
 
     def setup_ui(self):
-
+        bold_font = QFont()
+        bold_font.setBold(True)
         # Port List section
         self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
         self.port_heading_layout.addWidget(self.comb_checkBox, alignment=Qt.AlignLeft)
@@ -104,55 +105,65 @@ class IOPorts(QWidget):
         self.seqSytle_editbtn.clicked.connect(self.edit_RTL)
         self.add_btn.clicked.connect(self.add_signal)
 
-        self.port_list_title_layout.addWidget(self.name_label, 2, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.mode_label, 2, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.type_label, 2, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addWidget(self.size_label, 2, alignment=Qt.AlignLeft)
-        self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
-        self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
+        #self.port_list_title_layout.addWidget(self.name_label, 2, alignment=Qt.AlignLeft)
+        #self.port_list_title_layout.addWidget(self.mode_label, 2, alignment=Qt.AlignLeft)
+        #self.port_list_title_layout.addWidget(self.type_label, 2, alignment=Qt.AlignLeft)
+        #self.port_list_title_layout.addWidget(self.size_label, 2, alignment=Qt.AlignLeft)
+        #self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
+        #self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.port_list_layout.setAlignment(Qt.AlignTop)
-        self.port_list_layout.addLayout(self.port_list_title_layout)
-        self.port_list_layout.addWidget(self.list_div)
+        #self.port_list_layout.addLayout(self.port_list_title_layout)
+        #self.port_list_layout.addWidget(self.list_div)
 
         self.port_table.setColumnCount(6)
         self.port_table.setShowGrid(False)
-        self.port_table.setColumnWidth(0, 80)
-        self.port_table.setColumnWidth(1, 80)
-        self.port_table.setColumnWidth(2, 80)
-        self.port_table.setColumnWidth(3, 5)
-        self.port_table.setColumnWidth(4, 5)
-        self.port_table.setColumnWidth(5, 5)
-        self.port_table.horizontalScrollMode()
-        self.port_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.port_table.horizontalScrollBar().hide()
+        self.port_table.setHorizontalHeaderLabels(['Name', 'Mode', ' Type', 'Size', '', ''])
         header = self.port_table.horizontalHeader()
-        header.hide()
-        header = self.port_table.verticalHeader()
-        header.hide()
+        header.setSectionsClickable(False)
+        header.setSectionsMovable(False)
+        self.port_table.horizontalHeader().setFont(bold_font)
+        self.port_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.port_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.port_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        self.port_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
+        #self.port_table.setColumnWidth(0, 80)
+        #self.port_table.setColumnWidth(1, 80)
+        #self.port_table.setColumnWidth(2, 80)
+        #self.port_table.setColumnWidth(3, 5)
+        self.port_table.setColumnWidth(4, 10)
+        self.port_table.setColumnWidth(5, 10)
+        #self.port_table.horizontalScrollMode()
+        self.port_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        #self.port_table.horizontalScrollBar().hide()
+       # header = self.port_table.horizontalHeader()
+        #header.hide()
+        vert = self.port_table.verticalHeader()
+        vert.hide()
         self.port_table.setFrameStyle(QFrame.NoFrame)
         self.port_list_layout.addWidget(self.port_table)
 
 
         self.port_list_frame.setFrameShape(QFrame.StyledPanel)
         self.port_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.port_list_frame.setFixedSize(420, 300)
+       # self.port_list_frame.setFixedSize(420, 300)
         self.port_list_frame.setLayout(self.port_list_layout)
 
         self.port_action_layout.addLayout(self.port_heading_layout)
         self.port_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.port_action_layout.addWidget(self.port_list_frame, alignment=Qt.AlignCenter)
+        self.port_action_layout.addWidget(self.port_list_frame)#, alignment=Qt.AlignCenter)
         self.port_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.port_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
         self.save_signal_btn.clicked.connect(self.save_signals)
+
         self.port_action_frame.setFrameShape(QFrame.StyledPanel)
         self.port_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.port_action_frame.setFixedSize(500, 400)#410
+        #self.port_action_frame.setFixedSize(500, 400)#410
         self.port_action_frame.setLayout(self.port_action_layout)
 
 
-        self.mainLayout.addWidget(self.port_action_frame, alignment=Qt.AlignCenter)
+        self.mainLayout.addWidget(self.port_action_frame)#, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
@@ -174,7 +185,7 @@ class IOPorts(QWidget):
                 self.all_signals_names.pop(self.all_signals_names.index("rst"))
             clkAndRst_data = seq_dialog.get_clkAndRst()
             self.clkAndRst.append(clkAndRst_data)
-            clk_details = ["clk","Input","std_logic","1","clk signal"]
+            clk_details = ["clk","Input","single bit","1","clk signal"]
             self.all_signals.append(clk_details)
             self.all_signals_names.append(("clk"))
             row_position = self.port_table.rowCount()
@@ -190,22 +201,24 @@ class IOPorts(QWidget):
 
             self.port_table.insertRow(row_position)
             self.port_table.setRowHeight(row_position, 5)
-
+            size = QTableWidgetItem("1")
+            size.setTextAlignment(Qt.AlignHCenter)
             self.port_table.setItem(row_position, 0, QTableWidgetItem("clk"))
             self.port_table.setItem(row_position, 1, QTableWidgetItem("Input"))
-            self.port_table.setItem(row_position, 2, QTableWidgetItem("std_logic"))
-            self.port_table.setItem(row_position, 3, QTableWidgetItem("1"))
+            self.port_table.setItem(row_position, 2, QTableWidgetItem("single bit"))
+            self.port_table.setItem(row_position, 3, size)
 
             if clkAndRst_data[1] == "Yes":
                 row_position = self.port_table.rowCount()
                 self.port_table.insertRow(row_position)
                 self.port_table.setRowHeight(row_position, 5)
-
+                size = QTableWidgetItem("1")
+                size.setTextAlignment(Qt.AlignHCenter)
                 self.port_table.setItem(row_position, 0, QTableWidgetItem("rst"))
                 self.port_table.setItem(row_position, 1, QTableWidgetItem("Input"))
-                self.port_table.setItem(row_position, 2, QTableWidgetItem("std_logic"))
-                self.port_table.setItem(row_position, 3, QTableWidgetItem("1"))
-                rst_details = ["rst", "Input", "std_logic", "1", "rst signal"]
+                self.port_table.setItem(row_position, 2, QTableWidgetItem("single bit"))
+                self.port_table.setItem(row_position, 3, size)
+                rst_details = ["rst", "Input", "single bit", "1", "rst signal"]
                 self.all_signals.append(rst_details)
                 self.all_signals_names.append(("rst"))
             self.update_clk_rst_btn()
@@ -233,11 +246,12 @@ class IOPorts(QWidget):
             row_position = self.port_table.rowCount()
             self.port_table.insertRow(row_position)
             self.port_table.setRowHeight(row_position, 5)
-
+            size = QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1")
+            size.setTextAlignment(Qt.AlignHCenter)
             self.port_table.setItem(row_position, 0, QTableWidgetItem(signal_data[0]))
             self.port_table.setItem(row_position, 1, QTableWidgetItem(signal_data[1]))
             self.port_table.setItem(row_position, 2, QTableWidgetItem(signal_data[2]))
-            self.port_table.setItem(row_position, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
+            self.port_table.setItem(row_position, 3, size)
             self.port_table.setCellWidget(row_position, 4, edit_btn)
             self.port_table.setCellWidget(row_position, 5, delete_btn)
 
@@ -317,11 +331,12 @@ class IOPorts(QWidget):
                 self.all_signals_names.insert(row, signal_data[0])
                 self.port_table.insertRow(row)
                 self.port_table.setRowHeight(row, 5)
-
+                size = QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1")
+                size.setTextAlignment(Qt.AlignHCenter)
                 self.port_table.setItem(row, 0, QTableWidgetItem(signal_data[0]))
                 self.port_table.setItem(row, 1, QTableWidgetItem(signal_data[1]))
                 self.port_table.setItem(row, 2, QTableWidgetItem(signal_data[2]))
-                self.port_table.setItem(row, 3, QTableWidgetItem(signal_data[3] if signal_data[3] != "null" else "1"))
+                self.port_table.setItem(row, 3, size)
                 self.port_table.setCellWidget(row, 4, edit_btn)
                 self.port_table.setCellWidget(row, 5, delete_btn)
             else:
@@ -352,7 +367,7 @@ class IOPorts(QWidget):
             signal_node.appendChild(mode_node)
 
             type_node = root.createElement('type')
-            sig_size = ("(" + str(int(signal[3])-1) + " downto 0)") if signal[2] == "std_logic_vector" else ""
+            sig_size = ("(" + str(int(signal[3])-1) + " downto 0)") if signal[2] == "bus" else ""
             sig_type = signal[2] + sig_size
             type_node.appendChild(root.createTextNode(sig_type))
             signal_node.appendChild(type_node)
@@ -433,7 +448,7 @@ class IOPorts(QWidget):
                 name,
                 "Input" if mode == "in" else "Output",
                 type,
-                "1" if type != "std_logic_vector" else str(int(port[port.index("(") + 1:port.index(" downto")]) + 1),
+                "1" if type != "bus" else str(int(port[port.index("(") + 1:port.index(" downto")]) + 1),
                 desc
             ]
 
@@ -449,11 +464,12 @@ class IOPorts(QWidget):
 
             self.port_table.insertRow(i)
             self.port_table.setRowHeight(i, 5)
-
+            size = QTableWidgetItem(loaded_sig_data[3])
+            size.setTextAlignment(Qt.AlignHCenter)
             self.port_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
             self.port_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             self.port_table.setItem(i, 2, QTableWidgetItem(loaded_sig_data[2]))
-            self.port_table.setItem(i, 3, QTableWidgetItem(loaded_sig_data[3]))
+            self.port_table.setItem(i, 3, size)
             self.port_table.setCellWidget(i, 4, edit_btn)
             self.port_table.setCellWidget(i, 5, delete_btn)
             self.all_signals.append(loaded_sig_data)

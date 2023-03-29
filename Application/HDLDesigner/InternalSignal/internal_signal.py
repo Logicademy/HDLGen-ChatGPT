@@ -75,7 +75,8 @@ class InternalSignal(QWidget):
             self.load_data(proj_dir)
 
     def setup_ui(self):
-
+        bold_font = QFont()
+        bold_font.setBold(True)
         # Port List section
         self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
@@ -88,34 +89,42 @@ class InternalSignal(QWidget):
         self.instSig_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.intSig_list_layout.setAlignment(Qt.AlignTop)
-        self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
-        self.intSig_list_layout.addWidget(self.list_div)
+        #self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
+        #self.intSig_list_layout.addWidget(self.list_div)
 
         self.intSig_table.setColumnCount(5)
         self.intSig_table.setShowGrid(False)
-        self.intSig_table.setColumnWidth(0, 110)
-        self.intSig_table.setColumnWidth(1, 110)
-        self.intSig_table.setColumnWidth(2, 50)
+        self.intSig_table.setHorizontalHeaderLabels(['Name',' Type', 'Size', '', ''])
+        header = self.intSig_table.horizontalHeader()
+        header.setSectionsClickable(False)
+        header.setSectionsMovable(False)
+        self.intSig_table.horizontalHeader().setFont(bold_font)
+        self.intSig_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.intSig_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.intSig_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        #self.intSig_table.setColumnWidth(0, 110)
+        #self.intSig_table.setColumnWidth(1, 110)
+        #self.intSig_table.setColumnWidth(2, 50)
         self.intSig_table.setColumnWidth(3, 1)
         self.intSig_table.setColumnWidth(4, 1)
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.intSig_table.horizontalScrollBar().hide()
-        header = self.intSig_table.horizontalHeader()
-        header.hide()
-        header = self.intSig_table.verticalHeader()
-        header.hide()
+        #self.intSig_table.horizontalScrollBar().hide()
+        #header = self.intSig_table.horizontalHeader()
+        #header.hide()
+        vert = self.intSig_table.verticalHeader()
+        vert.hide()
         self.intSig_table.setFrameStyle(QFrame.NoFrame)
         self.intSig_list_layout.addWidget(self.intSig_table)
 
 
         self.intSig_list_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.intSig_list_frame.setFixedSize(420, 300)
+        #self.intSig_list_frame.setFixedSize(420, 300)
         self.intSig_list_frame.setLayout(self.intSig_list_layout)
 
         self.intSig_action_layout.addLayout(self.port_heading_layout)
         self.intSig_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.intSig_action_layout.addWidget(self.intSig_list_frame, alignment=Qt.AlignCenter)
+        self.intSig_action_layout.addWidget(self.intSig_list_frame)#, alignment=Qt.AlignCenter)
         self.intSig_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.intSig_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
@@ -123,12 +132,11 @@ class InternalSignal(QWidget):
 
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.intSig_action_frame.setFixedSize(500, 400)
-
+        #self.intSig_action_frame.setFixedSize(500, 400)
         self.intSig_action_frame.setLayout(self.intSig_action_layout)
 
 
-        self.mainLayout.addWidget(self.intSig_action_frame, alignment=Qt.AlignCenter)
+        self.mainLayout.addWidget(self.intSig_action_frame)#, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
@@ -141,7 +149,7 @@ class InternalSignal(QWidget):
             CSIntSignal_data = add_intSig.get_data()
             CSIntSignal_data[0] = "CS" + CSIntSignal_data[0]
 
-            if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
+            if intSignal_data[1] == "bus state signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
                 i = 2
             else:
                 i = 1
@@ -163,16 +171,18 @@ class InternalSignal(QWidget):
                 self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
                 if type(intSignal_data[2]) is list:
                     intSignal_data[2] = str(intSignal_data[2])
-                self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
+                size = QTableWidgetItem(intSignal_data[2])
+                size.setTextAlignment(Qt.AlignHCenter)
+                self.intSig_table.setItem(row_position, 2, size)
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
-                if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
+                if intSignal_data[1] == "bus state signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
                     if (i == 2) :
                         self.intSig_table.removeCellWidget(row_position, 3)
                         self.intSig_table.removeCellWidget(row_position, 4)
                         intSignal_data[0] = "NS" + intSignal_data[0]
                         add_intSig.makeIdeal()
-                        if intSignal_data[1] == "Enumerated type state signals":
+                        if intSignal_data[1] == "Enumerated type state signal pair(NS/CS)":
                             self.stateTypes_names = add_intSig.get_stateTypes()
                         self.all_intSignals.append(intSignal_data)
                         self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
@@ -197,7 +207,7 @@ class InternalSignal(QWidget):
             self.all_intSignals.pop(row)
             CSIntSignal_data[0] = "CS" + CSIntSignal_data[0]
 
-            if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
+            if intSignal_data[1] == "bus state signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
                 i = 2
                 self.intSig_table.removeRow(rowBefore)
                 self.all_intSignals.pop(rowBefore)
@@ -221,16 +231,18 @@ class InternalSignal(QWidget):
                 self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
                 if type(intSignal_data[2]) is list:
                     intSignal_data[2] = str(intSignal_data[2])
-                self.intSig_table.setItem(row_position, 2, QTableWidgetItem(intSignal_data[2]))
+                size = QTableWidgetItem(intSignal_data[2])
+                size.setTextAlignment(Qt.AlignHCenter)
+                self.intSig_table.setItem(row_position, 2, size)
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
-                if intSignal_data[1] == "std_logic_vector state signals" or intSignal_data[1] == "Enumerated type state signals":
+                if intSignal_data[1] == "bus sstate signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
                     if (i == 2) :
                         self.intSig_table.removeCellWidget(row_position, 3)
                         self.intSig_table.removeCellWidget(row_position, 4)
                         intSignal_data[0] = "NS" + intSignal_data[0]
                         add_intSig.makeIdeal()
-                        if intSignal_data[1] == "Enumerated type state signals":
+                        if intSignal_data[1] == "Enumerated type state signal pair(NS/CS)":
                             self.stateTypes_names = add_intSig.get_stateTypes()
                         self.all_intSignals.append(intSignal_data)
                         self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
@@ -252,9 +264,9 @@ class InternalSignal(QWidget):
         if button:
             row = self.intSig_table.indexAt(button.pos()).row()
             rowBefore = row -1
-            if str(self.all_intSignals[row][1]) == "Enumerated type state signals":
+            if str(self.all_intSignals[row][1]) == "Enumerated type state signal pair(NS/CS)":
                 self.stateTypes_names = []
-            if str(self.all_intSignals[row][1]) == "Enumerated type state signals" or str(self.all_intSignals[row][1]) == "std_logic_vector state signals":
+            if str(self.all_intSignals[row][1]) == "Enumerated type state signal pair(NS/CS)" or str(self.all_intSignals[row][1]) == "bus state signal pair(NS/CS)" or str(self.all_intSignals[row][1]) == "integer state signal pair(NS/CS)":
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
                 self.all_intSignals.pop(rowBefore)
@@ -283,22 +295,27 @@ class InternalSignal(QWidget):
             name_node = root.createElement('name')
             name_node.appendChild(root.createTextNode(signal[0]))
             signal_node.appendChild(name_node)
-
             type_node = root.createElement('type')
-            if signal[1] == "std_logic":
-                sig_type = "std_logic"
-            elif signal[1] == "Enumerated type state signals":
-                sig_type = "Enumerated type state signals"
-            elif signal[1] == "integer":
+            print(signal[0])
+            print(signal[1])
+            print(signal[2])
+            if signal[1] == "single bit":
+                sig_type = "single bit"
+            elif signal[1] == "Enumerated type state signal pair(NS/CS)":
+                print("saving enumerated")
+                sig_type = "Enumerated type state signal pair(NS/CS)"
+            elif signal[1] == "integer" or signal[1] == "integer state signal pair(NS/CS)":
                 sig_type = "integer range 0 to " + str(int(signal[2]) - 1)
-            else:
+            elif signal[1] == "signed" or signal[1] == "unsigned" or signal[1][:3] == "bus":
                 sig_size = ("(" + str(int(signal[2]) - 1) + " downto 0)")
                 if signal[1] == "signed":
                     sig_type = "signed" + sig_size
                 elif signal[1] == "unsigned":
                     sig_type = "unsigned" + sig_size
                 else:
-                    sig_type = "std_logic_vector" + sig_size
+                    sig_type = "bus" + sig_size
+            else:
+                sig_type = signal[1]
             type_node.appendChild(root.createTextNode(sig_type))
             signal_node.appendChild(type_node)
 
@@ -350,10 +367,15 @@ class InternalSignal(QWidget):
             self.intSig_table.setCellWidget(i, 4, delete_btn)
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
             signal = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
-            if signal == "std_logic":
+            value = ""
+            if signal == "single bit":
                 type = signal
                 value = "1"
-            elif signal == "Enumerated type state signals":
+            elif signal[:7] == "integer":
+                signal = signal.split(" ")
+                type = signal[0]
+                value = str(int(signal[4]) + 1)
+            elif signal == "Enumerated type state signal pair(NS/CS)":
                 type = signal
                 stateTypesList = []
                 for stateType in io_ports[0].getElementsByTagName("stateTypes"):
@@ -363,15 +385,14 @@ class InternalSignal(QWidget):
                 if name[:2] == "NS":
                     self.intSig_table.removeCellWidget(i, 3)
                     self.intSig_table.removeCellWidget(i, 4)
+            elif signal.endswith(")"):
+                type = signal[0:signal.index("(")]
+                if type == "bus" or type == "signed" or type == "unsigned":
+                    value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
             else:
-                if signal.endswith(")"):
-                    type = signal[0:signal.index("(")]
-                    if type == "std_logic_vector" or type == "signed" or type == "unsigned":
-                        value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
-                else:
-                    signal=signal.split(" ")
-                    type = signal[0]
-                    value = signal[4]
+                signal=signal.split(" ")
+                type = str(signal[0])
+                value = ""
             desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
 
             loaded_sig_data = [
@@ -384,4 +405,6 @@ class InternalSignal(QWidget):
             self.all_intSignals.append(loaded_sig_data)
             self.intSig_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
             self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
-            self.intSig_table.setItem(i, 2, QTableWidgetItem(str(loaded_sig_data[2])))
+            size = QTableWidgetItem(str(loaded_sig_data[2]))
+            size.setTextAlignment(Qt.AlignHCenter)
+            self.intSig_table.setItem(i, 2, size)

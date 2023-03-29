@@ -7,6 +7,7 @@ import sys
 sys.path.append("..")
 from HDLDesigner.InternalSignal.stateNamesDialog import state_Name_Dialog
 from ProjectManager.project_manager import ProjectManager
+from xml.dom import minidom
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -29,15 +30,36 @@ class IntSignalDialog(QDialog):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.sig_types = ["std_logic", "std_logic_vector", "signed", "unsigned", "std_logic_vector state signals", "Enumerated type state signals", "integer"]
-        self.FSM_types = ["Enumerated", "Binary"]
-        self.rst_types = ["0", "1"]
+        self.sig_types = ["standard", "state signal pair(NS/CS)","array"]
 
+        self.state_sig_types = ["bus", "Enumerated type", "integer"]
+        self.standard_signal_types = ["single bit", "bus", "signed", "unsigned", "integer"]
         self.mainLayout = QVBoxLayout()
 
         self.intSig_name_label = QLabel("Internal Signal Name*")
         self.intSig_name_label.setStyleSheet(WHITE_COLOR)
         self.intSig_name_input = QLineEdit()
+
+        self.state_signal_Type_label = QLabel("State Signal Type")
+        self.state_signal_Type_label.setStyleSheet(WHITE_COLOR)
+        self.state_signal_Type_input = QComboBox()
+        pal = self.state_signal_Type_input.palette()
+        pal.setColor(QPalette.Button, QColor(255, 255, 255))
+        self.state_signal_Type_input.setPalette(pal)
+        self.state_signal_Type_input.addItems(self.state_sig_types)
+        self.state_signal_Type_input.setVisible(False)
+        self.state_signal_Type_label.setVisible(False)
+
+        self.standard_signal_Type_label = QLabel("Standard Signal Type")
+        self.standard_signal_Type_label.setStyleSheet(WHITE_COLOR)
+        self.standard_signal_Type_input = QComboBox()
+        pal = self.standard_signal_Type_input.palette()
+        pal.setColor(QPalette.Button, QColor(255, 255, 255))
+        self.standard_signal_Type_input.setPalette(pal)
+        self.standard_signal_Type_input.addItems(self.standard_signal_types)
+        self.standard_signal_Type_input.setVisible(True)
+        self.standard_signal_Type_label.setVisible(True)
+
         self.CS_name_label = QLabel("CS name")
         self.CS_name_label.setStyleSheet(WHITE_COLOR)
         self.CS_name_input = QLineEdit()
@@ -119,41 +141,70 @@ class IntSignalDialog(QDialog):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
             "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
 
+        self.arrayName_label = QLabel("Arrays")
+        self.arrayName_label.setStyleSheet(WHITE_COLOR)
+        self.arrayName_input = QComboBox()
+        pal = self.arrayName_input.palette()
+        pal.setColor(QPalette.Button, QColor(255, 255, 255))
+        self.arrayName_input.setPalette(pal)
+        self.arrayName_label.setVisible(False)
+        self.arrayName_input.setVisible(False)
+        self.arrayName_input.setCurrentText("Create in packages")
+
         self.input_frame = QFrame()
 
         self.cancelled = True
-
+        self.arrays = []
         self.setup_ui()
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+
+        root = minidom.parse(mainPackageDir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
+        array_nodes = mainPackage[0].getElementsByTagName('array')
+
+        if len(array_nodes) != 0:
+            for i in range(0, len(array_nodes)):
+                array_name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                self.arrays.append(array_name)
+        self.arrayName_input.addItems(self.arrays)
 
         if add_or_edit == "edit" and intSig_data != None:
             self.load_sig_data(intSig_data)
 
     def setup_ui(self):
 
-        self.input_layout.addWidget(self.intSig_name_label, 0, 0)#, 1, 3)
-        self.input_layout.addWidget(self.intSig_name_input, 1, 0)#, 1, 3)
+        self.input_layout.addWidget(self.intSig_name_label, 0, 0)
+        self.input_layout.addWidget(self.intSig_name_input, 1, 0)
 
-        self.input_layout.addWidget(self.CS_name_label, 0, 1)
-        self.input_layout.addWidget(self.CS_name_input, 1, 1)
+        self.input_layout.addWidget(self.CS_name_label, 0, 0)
+        self.input_layout.addWidget(self.CS_name_input, 1, 0)
 
-        self.input_layout.addWidget(self.NS_name_label, 0, 2)
-        self.input_layout.addWidget(self.NS_name_input, 1, 2)
+        self.input_layout.addWidget(self.NS_name_label, 0, 1)
+        self.input_layout.addWidget(self.NS_name_input, 1, 1)
 
-        self.input_layout.addWidget(self.sig_desc_label, 2, 0, 1, 3)
-        self.input_layout.addWidget(self.sig_desc_input, 3, 0, 1, 3)
+        self.input_layout.addWidget(self.sig_type_label, 2, 0, 1, 1)
+        self.input_layout.addWidget(self.sig_type_combo, 3, 0, 1, 1)
 
-        self.input_layout.addWidget(self.sig_type_label, 4, 0, 1, 2)
-        self.input_layout.addWidget(self.sig_type_combo, 5, 0, 1, 2)
+        self.input_layout.addWidget(self.sig_size_label, 2, 2, 1, 1)
+        self.input_layout.addWidget(self.sig_size_input, 3, 2, 1, 1)
 
-        self.input_layout.addWidget(self.sig_size_label, 4, 2, 1, 1)
-        self.input_layout.addWidget(self.sig_size_input, 5, 2, 1, 1)
+        self.input_layout.addWidget(self.arrayName_label, 2, 1, 1, 2)
+        self.input_layout.addWidget(self.arrayName_input, 3, 1, 1, 2)
 
-        self.input_layout.addWidget(self.stateNames_table, 6, 0, 2, 3)
+        self.input_layout.addWidget(self.sig_desc_label, 6, 0, 1, 3)
+        self.input_layout.addWidget(self.sig_desc_input, 7, 0, 1, 3)
+
+        self.input_layout.addWidget(self.stateNames_table, 4, 0, 2, 3)
 
 
-        self.input_layout.addWidget(self.add_btn, 5, 2, 1, 1)
-
-        self.input_layout.addItem(QSpacerItem(0, 20), 7, 0, 1, 3)
+        self.input_layout.addWidget(self.add_btn, 3, 2, 1, 1)
+        self.input_layout.addWidget(self.state_signal_Type_label, 2, 1, 1, 1)
+        self.input_layout.addWidget(self.state_signal_Type_input, 3, 1, 1, 1)
+        self.input_layout.addWidget(self.standard_signal_Type_label, 2, 1, 1, 1)
+        self.input_layout.addWidget(self.standard_signal_Type_input, 3, 1, 1, 1)
+        #self.input_layout.addItem(QSpacerItem(0, 20), 7, 0, 1, 3)
         self.input_layout.addWidget(self.cancel_btn, 8, 1, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 8, 2, 1, 1, alignment=Qt.AlignRight)
 
@@ -164,6 +215,8 @@ class IntSignalDialog(QDialog):
         self.input_frame.setLayout(self.input_layout)
 
         self.sig_type_combo.currentTextChanged.connect(self.sig_type_options)
+        self.state_signal_Type_input.currentTextChanged.connect(self.state_sig_type_options)
+        self.standard_signal_Type_input.currentTextChanged.connect(self.standard_sig_type_options)
         self.intSig_name_input.textChanged.connect(self.updateCSAndNS)
         self.sig_desc_input.setVisible(True)
         self.sig_desc_label.setVisible(True)
@@ -179,14 +232,48 @@ class IntSignalDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def load_sig_data(self, intSig_data):
-        self.sig_type_combo.setCurrentText(intSig_data[1])
-        if intSig_data[1] != "Enumerated type state signals":
-            self.sig_size_input.setText(intSig_data[2])
-            if intSig_data[1] == "std_logic_vector state signals":
-                self.intSig_name_input.setText(intSig_data[0][2:])
-            else:
-                self.intSig_name_input.setText(intSig_data[0])
+        print(intSig_data)
+        if intSig_data[1][-24:] == "state signal pair(NS/CS)":
+            self.sig_type_combo.setCurrentText(intSig_data[1][-24:])
+            self.state_signal_Type_input.setCurrentText(intSig_data[1][:-25])
         else:
+            self.sig_type_combo.setCurrentText(intSig_data[1])
+        if intSig_data[1][:15] != "Enumerated type":
+            if intSig_data[1] == "bus state signal pair(NS/CS)" or intSig_data[1] == "integer state signal pair(NS/CS)":
+                self.intSig_name_input.setText(intSig_data[0][2:])
+                self.sig_size_input.setText(intSig_data[2])
+            else:
+                if intSig_data[1] == "single bit":
+                    self.standard_signal_Type_input.setCurrentText(intSig_data[1])
+                    self.sig_type_combo.setCurrentText("standard")
+                    self.intSig_name_input.setText(intSig_data[0])
+                    self.sig_size_input.setText(intSig_data[2])
+                elif intSig_data[1][:3] == "bus":
+                    self.standard_signal_Type_input.setCurrentText(intSig_data[1][:3])
+                    self.sig_type_combo.setCurrentText("standard")
+                    self.intSig_name_input.setText(intSig_data[0])
+                    self.sig_size_input.setText(intSig_data[2])
+                elif intSig_data[1][:7] == "integer":
+                    self.standard_signal_Type_input.setCurrentText(intSig_data[1][:7])
+                    self.sig_type_combo.setCurrentText("standard")
+                    self.intSig_name_input.setText(intSig_data[0])
+                    self.sig_size_input.setText(intSig_data[2])
+                elif intSig_data[1][:6] == "signed":
+                    self.standard_signal_Type_input.setCurrentText(intSig_data[1][:6])
+                    self.sig_type_combo.setCurrentText("standard")
+                    self.intSig_name_input.setText(intSig_data[0])
+                    self.sig_size_input.setText(intSig_data[2])
+                elif intSig_data[1][:8] == "unsigned":
+                    self.standard_signal_Type_input.setCurrentText(intSig_data[1][:8])
+                    self.sig_type_combo.setCurrentText("standard")
+                    self.intSig_name_input.setText(intSig_data[0])
+                    self.sig_size_input.setText(intSig_data[2])
+                else:
+                    self.intSig_name_input.setText(intSig_data[0])
+                    self.sig_type_combo.setCurrentText("array")
+                    self.arrayName_input.setCurrentText(intSig_data[1])
+
+        elif intSig_data[1][:15] == "Enumerated type":
             self.intSig_name_input.setText(intSig_data[0][2:])
             self.all_stateNames.append(intSig_data[2])
             intSig_data[2] = str(intSig_data[2]).replace('\'', '')
@@ -261,13 +348,22 @@ class IntSignalDialog(QDialog):
         if intSignalDescription == "":
             intSignalDescription = "to be completed"
         data.append(self.intSig_name_input.text().strip().replace(" ", ""))
-        data.append(self.sig_type_combo.currentText())
-        if self.sig_type_combo.currentText() != "Enumerated type state signals":
+
+        if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
+            data.append(str(self.state_signal_Type_input.currentText())+" state signal pair(NS/CS)")
+        elif self.sig_type_combo.currentText() == "array":
+            data.append(self.arrayName_input.currentText())
+        elif self.sig_type_combo.currentText() == "standard":
+            #data.append(self.sig_type_combo.currentText())
+            data.append(self.standard_signal_Type_input.currentText())
+        if data[1] != "Enumerated type state signal pair(NS/CS)":
             data.append(self.sig_size_input.text())
         else:
             data.append(self.all_stateNames)
         data.append(intSignalDescription)
-
+        print("data printing")
+        print(data)
+        print("data printed")
         self.cancelled = False
         self.close()
         return data
@@ -277,11 +373,19 @@ class IntSignalDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.sig_type_combo.currentText() == "std_logic_vector state signals" or self.sig_type_combo.currentText() == "Enumerated type state signals":
-            if self.sig_size_input.text() != "":
+        if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
+            if self.state_signal_Type_input.currentText() == "bus" or self.state_signal_Type_input.currentText() == "integer":
+                if self.sig_size_input.text() != "":
+                    self.ok_btn.setEnabled(True)
+                else:
+                    self.ok_btn.setEnabled(False)
+            elif self.state_signal_Type_input.currentText() == "Enumerated type":
                 self.ok_btn.setEnabled(True)
-            else:
+        elif self.sig_type_combo.currentText() == "array":
+            if self.arrayName_input.currentText() == "Create in packages":
                 self.ok_btn.setEnabled(False)
+            else:
+                self.ok_btn.setEnabled(True)
         else:
             if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "" :
                 self.ok_btn.setEnabled(True)
@@ -354,56 +458,93 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setCellWidget(row_position, 2, delete_btn)
                 self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
 
+    def standard_sig_type_options(self):
+        self.enable_ok_btn()
+        if self.standard_signal_Type_input.currentText() != "single bit":
+            self.sig_size_input.setEnabled(True)
+            self.sig_size_input.clear()
+            if self.standard_signal_Type_input.currentText() == "integer":
+                self.sig_size_label.setText("Number of values")
+            else:
+                self.sig_size_label.setText("Size (eg. 32)*")
+        else:
+            self.sig_size_input.setEnabled(False)
+            self.sig_size_input.setText("1")
 
-    def sig_type_options(self):
-        if self.sig_type_combo.currentText() == "std_logic_vector":
-            self.intSig_name_label.setText("Internal Signal Name*")
-            self.ok_btn.setEnabled(False)
-            self.sig_desc_label.setVisible(True)
-            self.sig_desc_input.setVisible(True)
-            self.CS_name_label.setVisible(False)
-            self.CS_name_input.setVisible(False)
-            self.NS_name_label.setVisible(False)
-            self.NS_name_input.setVisible(False)
+    def state_sig_type_options(self):
+        self.enable_ok_btn()
+        if self.state_signal_Type_input.currentText() != "Enumerated type":
+            self.add_btn.setVisible(False)
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
             self.sig_size_label.setVisible(True)
             self.sig_size_input.setVisible(True)
             self.sig_size_input.setEnabled(True)
-            self.sig_size_input.clear()
-            self.stateNames_table.setVisible(False)
-            self.add_btn.setVisible(False)
-
-        elif self.sig_type_combo.currentText() == "std_logic" :
-            self.intSig_name_label.setText("Internal Signal Name*")
-            self.ok_btn.setEnabled(False)
-            self.sig_desc_label.setVisible(True)
-            self.sig_desc_input.setVisible(True)
-            self.CS_name_label.setVisible(False)
-            self.CS_name_input.setVisible(False)
-            self.NS_name_label.setVisible(False)
-            self.NS_name_input.setVisible(False)
-            self.stateNames_table.setVisible(False)
-            self.add_btn.setVisible(False)
-            self.sig_size_label.setVisible(True)
-            self.sig_size_input.setVisible(True)
-            self.sig_size_input.setEnabled(False)
-            self.sig_size_input.setText("1")
-        elif self.sig_type_combo.currentText() == "Enumerated type state signals":
-            self.intSig_name_label.setText("Suffix eg_abc")
-            self.ok_btn.setEnabled(True)
-            self.sig_desc_label.setVisible(True)
-            self.sig_desc_input.setVisible(True)
-            self.CS_name_label.setVisible(True)
-            self.CS_name_input.setVisible(True)
-            self.NS_name_label.setVisible(True)
-            self.NS_name_input.setVisible(True)
+            if self.state_signal_Type_input.currentText() == "integer":
+                print("in integer")
+                self.sig_size_label.setText("Number of values")
+            else:
+                self.sig_size_label.setText("Size (eg. 32)*")
+        else:
             self.stateNames_table.setVisible(True)
             self.add_btn.setVisible(True)
             self.sig_size_label.setVisible(False)
             self.sig_size_input.setVisible(False)
             self.sig_size_input.setEnabled(False)
 
-        elif self.sig_type_combo.currentText() == "std_logic_vector state signals":
+
+    def sig_type_options(self):
+        if self.sig_type_combo.currentText() == "standard":
+            self.intSig_name_label.setText("Internal Signal Name*")
+            self.input_layout.addWidget(self.intSig_name_label, 0, 0)
+            self.input_layout.addWidget(self.intSig_name_input, 1, 0)
+            self.standard_signal_Type_input.setVisible(True)
+            self.standard_signal_Type_label.setVisible(True)
+            self.ok_btn.setEnabled(False)
+            self.sig_desc_label.setVisible(True)
+            self.state_signal_Type_input.setVisible(False)
+            self.state_signal_Type_label.setVisible(False)
+            self.sig_desc_input.setVisible(True)
+            self.CS_name_label.setVisible(False)
+            self.CS_name_input.setVisible(False)
+            self.NS_name_label.setVisible(False)
+            self.NS_name_input.setVisible(False)
+            self.sig_size_label.setVisible(True)
+            self.sig_size_input.setVisible(True)
+            self.sig_size_input.clear()
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
+            self.arrayName_label.setVisible(False)
+            self.arrayName_input.setVisible(False)
+
+        elif self.sig_type_combo.currentText() == "array":
+            self.intSig_name_label.setText("Internal Signal Name*")
+            self.input_layout.addWidget(self.intSig_name_label, 0, 0)
+            self.input_layout.addWidget(self.intSig_name_input, 1, 0)
+            self.ok_btn.setEnabled(False)
+            self.sig_desc_label.setVisible(True)
+            self.standard_signal_Type_input.setVisible(False)
+            self.standard_signal_Type_label.setVisible(False)
+            self.state_signal_Type_input.setVisible(False)
+            self.state_signal_Type_label.setVisible(False)
+            self.sig_desc_input.setVisible(True)
+            self.CS_name_label.setVisible(False)
+            self.CS_name_input.setVisible(False)
+            self.NS_name_label.setVisible(False)
+            self.NS_name_input.setVisible(False)
+            self.sig_size_label.setVisible(False)
+            self.sig_size_input.setVisible(False)
+            self.sig_size_input.setEnabled(False)
+            self.sig_size_input.clear()
+            self.stateNames_table.setVisible(False)
+            self.add_btn.setVisible(False)
+            self.arrayName_label.setVisible(True)
+            self.arrayName_input.setVisible(True)
+
+        elif self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
             self.intSig_name_label.setText("Suffix eg_abc")
+            self.input_layout.addWidget(self.intSig_name_label, 0, 2)
+            self.input_layout.addWidget(self.intSig_name_input, 1, 2)
             self.ok_btn.setEnabled(False)
             self.sig_desc_label.setVisible(True)
             self.sig_desc_input.setVisible(True)
@@ -411,6 +552,10 @@ class IntSignalDialog(QDialog):
             self.CS_name_input.setVisible(True)
             self.NS_name_label.setVisible(True)
             self.NS_name_input.setVisible(True)
+            self.state_signal_Type_input.setVisible(True)
+            self.state_signal_Type_label.setVisible(True)
+            self.standard_signal_Type_input.setVisible(False)
+            self.standard_signal_Type_label.setVisible(False)
             self.add_btn.setVisible(False)
             self.stateNames_table.setVisible(False)
             self.add_btn.setVisible(False)
@@ -418,53 +563,9 @@ class IntSignalDialog(QDialog):
             self.sig_size_input.setVisible(True)
             self.sig_size_input.setEnabled(True)
             self.sig_size_input.clear()
+            self.arrayName_label.setVisible(False)
+            self.arrayName_input.setVisible(False)
 
-        elif self.sig_type_combo.currentText() == "signed":
-            self.intSig_name_label.setText("Internal Signal Name*")
-            self.ok_btn.setEnabled(False)
-            self.sig_desc_label.setVisible(True)
-            self.sig_desc_input.setVisible(True)
-            self.CS_name_label.setVisible(False)
-            self.CS_name_input.setVisible(False)
-            self.NS_name_label.setVisible(False)
-            self.NS_name_input.setVisible(False)
-            self.sig_size_label.setVisible(True)
-            self.sig_size_input.setVisible(True)
-            self.sig_size_input.setEnabled(True)
-            self.sig_size_input.clear()
-            self.stateNames_table.setVisible(False)
-            self.add_btn.setVisible(False)
-
-        elif self.sig_type_combo.currentText() == "unsigned":
-            self.ok_btn.setEnabled(False)
-            self.sig_desc_label.setVisible(True)
-            self.sig_desc_input.setVisible(True)
-            self.CS_name_label.setVisible(False)
-            self.CS_name_input.setVisible(False)
-            self.NS_name_label.setVisible(False)
-            self.NS_name_input.setVisible(False)
-            self.sig_size_label.setVisible(True)
-            self.sig_size_input.setVisible(True)
-            self.sig_size_input.setEnabled(True)
-            self.sig_size_input.clear()
-            self.stateNames_table.setVisible(False)
-            self.add_btn.setVisible(False)
-
-        elif self.sig_type_combo.currentText() == "integer":
-            self.intSig_name_label.setText("Internal Signal Name*")
-            self.ok_btn.setEnabled(False)
-            self.sig_desc_label.setVisible(True)
-            self.sig_desc_input.setVisible(True)
-            self.CS_name_label.setVisible(False)
-            self.CS_name_input.setVisible(False)
-            self.NS_name_label.setVisible(False)
-            self.NS_name_input.setVisible(False)
-            self.sig_size_label.setVisible(True)
-            self.sig_size_input.setVisible(True)
-            self.sig_size_input.setEnabled(True)
-            self.sig_size_input.clear()
-            self.stateNames_table.setVisible(False)
-            self.add_btn.setVisible(False)
 
     def delete_clicked(self):
         button = self.sender()

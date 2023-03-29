@@ -44,8 +44,8 @@ class IOPortDialog(QDialog):
         pal = self.sig_type_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_type_input.setPalette(pal)
-        self.sig_type_input.addItem("std_logic")
-        self.sig_type_input.addItem("std_logic_vector")
+        self.sig_type_input.addItem("single bit")
+        self.sig_type_input.addItem("bus")
         self.sig_type_input.addItem(("array"))
 
         self.sig_size_label = QLabel("Size (eg. 32) * ")
@@ -62,7 +62,7 @@ class IOPortDialog(QDialog):
         self.arrayName_input.setPalette(pal)
         self.arrayName_label.setVisible(False)
         self.arrayName_input.setVisible(False)
-        self.arrayName_input.setCurrentText("Create in internal signals")
+        self.arrayName_input.setCurrentText("Create in packages")
 
         self.onlyInt = QIntValidator()
         self.sig_size_input.setValidator(self.onlyInt)
@@ -185,7 +185,7 @@ class IOPortDialog(QDialog):
         self.sig_name_input.setText(signal_data[0])
         self.sig_mode_input.setCurrentText(signal_data[1])
         sig_type=signal_data[2]
-        if sig_type != "std_logic_vector" and signal_data[2] != "std_logic":
+        if sig_type != "bus" and signal_data[2] != "single bit":
             sig_type = "array"
             self.arrayName_input.setCurrentText(signal_data[2])
         self.sig_type_input.setCurrentText(sig_type)
@@ -204,7 +204,7 @@ class IOPortDialog(QDialog):
             self.ok_btn.setEnabled(False)
 
     def enable_size_option(self):
-        if self.sig_type_input.currentText() == "std_logic_vector":
+        if self.sig_type_input.currentText() == "bus":
             self.sig_size_input.setEnabled(True)
             self.sig_size_input.clear()
         else:
