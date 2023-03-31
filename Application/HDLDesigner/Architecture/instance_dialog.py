@@ -273,8 +273,11 @@ class InstanceDialog(QDialog):
         return data
 
     def loadComponent(self, model):
-        i = self.comps_names.index(model)
-        signal_names = self.comps[i]
+        if model != "":
+            i = self.comps_names.index(model)
+            signal_names = self.comps[i]
+        else:
+            signal_names = ""
         return signal_names#, signal_mode
 
     def load_data(self):

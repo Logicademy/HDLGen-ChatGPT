@@ -128,7 +128,7 @@ class InternalSignal(QWidget):
         self.intSig_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.intSig_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
-        self.save_signal_btn.clicked.connect(self.save_signals)
+        self.save_signal_btn.clicked.connect(self.save_data)
 
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -279,7 +279,7 @@ class InternalSignal(QWidget):
 
 
 
-    def save_signals(self):
+    def save_data(self):
 
         xml_data_path = ProjectManager.get_xml_data_path()
 

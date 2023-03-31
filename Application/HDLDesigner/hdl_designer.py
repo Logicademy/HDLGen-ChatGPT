@@ -27,11 +27,13 @@ class HDLDesigner(QWidget):
         self.preview_window = QTextEdit()
 
         self.tabs = VerticalTabWidget()
+        self.tabs.other_class = self
         # Creating a container
         self.container = QWidget()
         self.compDetails = CompDetails(self.proj_dir)
         self.project_manager = ProjectManager(self.proj_dir, self)
         self.setup_ui()
+        self.hdl = "VHDL"
         if load_data:
             if self.project_manager.vhdl_check.isChecked():
                 print("update vhdl yooo")
@@ -74,6 +76,7 @@ class HDLDesigner(QWidget):
         internalSignal.save_signal_btn.clicked.connect(self.update_preview)
 
     def update_preview(self, hdl):
+        print("preview")
         if hdl != False:
             self.hdl=hdl
         if self.hdl == "VHDL":
@@ -85,6 +88,9 @@ class HDLDesigner(QWidget):
         xml_data_path = ProjectManager.get_xml_data_path()
         print(xml_data_path)
         self.architecture.updateProcessName(xml_data_path)
+
+    def get_hdl(self):
+        return self.hdl
 
 class TabBar(QTabBar):
 
@@ -116,8 +122,21 @@ class TabBar(QTabBar):
 
 
 class VerticalTabWidget(QTabWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, other_class=None, *args, **kwargs):
         QTabWidget.__init__(self, *args, **kwargs)
         self.setTabBar(TabBar())
         self.setTabPosition(QTabWidget.West)
+        self.currentChanged.connect(self.tab_changed)
+        self.previous_index = self.currentIndex()
+        self.other_class = other_class
+    def tab_changed(self, index):
+        # save state of previous tab
+        prev_tab = self.widget(self.previous_index)
+        if prev_tab:
+            prev_tab.save_data()
+            if self.other_class:
+                lang = self.other_class.get_hdl()
+                self.other_class.update_preview(lang)
+        self.previous_index = index
+
 

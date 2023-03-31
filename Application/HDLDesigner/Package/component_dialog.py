@@ -133,63 +133,29 @@ class ComponentDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def populate_signals(self, proj_dir, comp_dir):
-        self.input_signals=[]
-        self.output_signals=[]
-        self.internal_signals=[]
+        print("in pop_signals")
         rows = self.signal_table.rowCount()
         for i in range(rows):
             self.signal_table.removeRow(0)
-        outputList_flag = 0
-        if (proj_dir != None):
-            root = minidom.parse(proj_dir)
-            HDLGen = root.documentElement
-            hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        self.comp_signals, self.model, self.comp_mode = self.loadComponent(comp_dir)
+        i = 0
+        for signal in self.comp_signals:
+            temp = self.comp_mode[i].split(' ')
+            row_position = self.signal_table.rowCount()
+            self.signal_table.insertRow(row_position)
+            self.signal_table.setRowHeight(row_position, 5)
 
-            io_ports = hdlDesign[0].getElementsByTagName('entityIOPorts')
-            signal_nodes = io_ports[0].getElementsByTagName('signal')
+            self.signal_table.setItem(row_position, 0, QTableWidgetItem(signal))
+            self.signal_table.setItem(row_position, 1, QTableWidgetItem(temp[0]))
+            self.signal_table.setItem(row_position, 2, QTableWidgetItem(temp[1]))
+            i = i + 1
 
-            intSignals = hdlDesign[0].getElementsByTagName('internalSignals')
-            intSignal_nodes = intSignals[0].getElementsByTagName('signal')
 
-
-            if len(signal_nodes) != 0 or len(intSignal_nodes) != 0:
-                for i in range(0, len(signal_nodes)):
-                    port_name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
-                    port_mode = signal_nodes[i].getElementsByTagName('mode')[0].firstChild.data
-
-                    if port_mode == "in":
-                        self.input_signals.append(port_name)
-                    elif port_mode == "out":
-                        self.output_signals.append(port_name)
-
-                for i in range(0, len(intSignal_nodes)):
-                    internal_signal = intSignal_nodes[i].getElementsByTagName('name')[0].firstChild.data
-                    self.internal_signals.append(internal_signal)
-
-                if len(self.output_signals) != 0 and len(self.input_signals) != 0:
-                    outputList_flag = 1
-                    self.comp_signals, self.model, self.comp_mode = self.loadComponent(comp_dir)
-                    i = 0
-                    for signal in self.comp_signals:
-                        temp = self.comp_mode[i].split(' ')
-                        row_position = self.signal_table.rowCount()
-                        self.signal_table.insertRow(row_position)
-                        self.signal_table.setRowHeight(row_position, 5)
-
-                        self.signal_table.setItem(row_position, 0, QTableWidgetItem(signal))
-                        self.signal_table.setItem(row_position, 1, QTableWidgetItem(temp[0]))
-                        self.signal_table.setItem(row_position, 2, QTableWidgetItem(temp[1]))
-                        i = i + 1
-                   # self.signal_layout.addWidget(self.signal_table)
-                if outputList_flag == 0:
-                    self.signal_layout.addWidget(self.signal_empty_info, alignment=Qt.AlignTop)
-                return
-
-        self.signal_layout.addWidget(self.signal_empty_info, alignment=Qt.AlignTop)
 
     def set_comp_path(self):
         comp_path = QFileDialog.getOpenFileName(self,"Select model .vhd file","../User_Projects/", filter="VHDL files (*.vhd)")
         comp_path = comp_path[0]
+        print("in set comp path")
         self.file_path_input.setText(comp_path)
         self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
     def load_component_data(self, component_data):
@@ -253,6 +219,7 @@ class ComponentDialog(QDialog):
         return data
 
     def loadComponent(self, comp_dir):
+        print("in loadcomponent")
         # Open the VHDL file and read its contents
         with open(comp_dir, 'r') as file:
             vhdl_code = file.read()

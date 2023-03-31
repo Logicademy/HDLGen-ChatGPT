@@ -55,7 +55,7 @@ class Generator(QWidget):
 
     #@staticmethod
     def generate_vhdl(self):
-
+        entity_name = ""
         gen_vhdl = ""
         gen_array_vhdl = ""
 
@@ -643,6 +643,8 @@ class Generator(QWidget):
         io_port_map = ""
         inputsToZero = ""
         inputsToOne = ""
+        other_signals = ""
+        control_signals = ""
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
@@ -968,7 +970,6 @@ class Generator(QWidget):
             f.write(array_vhdl_code)
 
     def generate_verilog(self):
-
         gen_verilog = ""
 
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -1490,6 +1491,8 @@ class Generator(QWidget):
         io_port_map = ""
         inputsToZero = ""
         inputsToOne = ""
+        other_signals = ""
+        control_signals = ""
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):

@@ -140,7 +140,7 @@ class Package(QWidget):
         self.package_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.package_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
-        self.save_signal_btn.clicked.connect(self.save_signals)
+        self.save_signal_btn.clicked.connect(self.save_data)
 
         self.package_action_frame.setFrameShape(QFrame.StyledPanel)
         self.package_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -291,7 +291,7 @@ class Package(QWidget):
             self.component_table.removeRow(row)
             self.comps.pop(row)
             self.comps_names.pop(row)
-    def save_signals(self):
+    def save_data(self):
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
 
         root = minidom.parse(mainPackageDir)

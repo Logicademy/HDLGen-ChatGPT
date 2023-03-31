@@ -128,7 +128,7 @@ class CompDetails(QWidget):
         self.btn_layout.addWidget(self.reset_btn)
         self.btn_layout.addWidget(self.save_btn)
 
-        self.save_btn.clicked.connect(self.save_comp_details)
+        self.save_btn.clicked.connect(self.save_data)
         self.reset_btn.clicked.connect(self.reset_comp_details)
 
         self.input_layout.addItem(self.vspacer, 13, 0, 1, 2)
@@ -153,7 +153,7 @@ class CompDetails(QWidget):
     def update_comp_name(self):
         self.comp_name_input.setText(ProjectManager.get_proj_name())
 
-    def save_comp_details(self):
+    def save_data(self):
 
         xml_data_path = ProjectManager.get_xml_data_path()
 
@@ -220,7 +220,7 @@ class CompDetails(QWidget):
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
 
-        print("Successfully saved!")
+        print("Successfully saved component details!")
 
     def reset_comp_details(self):
 
