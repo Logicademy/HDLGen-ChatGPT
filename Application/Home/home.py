@@ -52,11 +52,9 @@ class Home(QMainWindow):
         if self.proj_dir is not None:
             load_data = True
         else:
-            print("setting VHDL_check")
             self.project_manager.vhdl_check.setChecked(True)
         self.hdl_designer = HDLDesigner(self.proj_dir, load_data)
 
-        print("Setting up UI")
         self.tabs.addTab(self.project_manager, "Project Manager")
         self.tabs.addTab(self.hdl_designer, "HDL Designer")
         self.tabs.addTab(Help(), "Help")

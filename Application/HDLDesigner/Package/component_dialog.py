@@ -133,7 +133,6 @@ class ComponentDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def populate_signals(self, proj_dir, comp_dir):
-        print("in pop_signals")
         rows = self.signal_table.rowCount()
         for i in range(rows):
             self.signal_table.removeRow(0)
@@ -155,7 +154,6 @@ class ComponentDialog(QDialog):
     def set_comp_path(self):
         comp_path = QFileDialog.getOpenFileName(self,"Select model .vhd file","../User_Projects/", filter="VHDL files (*.vhd)")
         comp_path = comp_path[0]
-        print("in set comp path")
         self.file_path_input.setText(comp_path)
         self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
     def load_component_data(self, component_data):
@@ -219,7 +217,6 @@ class ComponentDialog(QDialog):
         return data
 
     def loadComponent(self, comp_dir):
-        print("in loadcomponent")
         # Open the VHDL file and read its contents
         with open(comp_dir, 'r') as file:
             vhdl_code = file.read()

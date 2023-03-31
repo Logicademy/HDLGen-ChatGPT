@@ -174,16 +174,13 @@ class CompDetails(QWidget):
         for i in range(doc.blockCount()):
             block = doc.findBlockByNumber(i)
             if block.isVisible():
-                print(block.layout().lineCount())
                 for j in range(block.layout().lineCount()):
                     lineStart = block.position() + block.layout().lineAt(j).textStart()
                     lineEnd = lineStart + block.layout().lineAt(j).textLength()
                     cursor.setPosition(lineStart)
                     cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
                     line += cursor.selectedText()
-                    print(line)
                     if lineEnd == cursor.position():
-                        print(line)
                         lines += line + "\n"
                         line = ""
         lines = lines.strip()
@@ -220,7 +217,6 @@ class CompDetails(QWidget):
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
 
-        print("Successfully saved component details!")
 
     def reset_comp_details(self):
 
@@ -231,7 +227,6 @@ class CompDetails(QWidget):
         self.comp_company_input.clear()
         self.comp_email_input.clear()
         self.comp_date_picker.setDate(QDate.currentDate())
-        print("reset button clicked")
 
     def load_data(self, proj_dir):
 

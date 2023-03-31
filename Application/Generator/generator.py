@@ -51,7 +51,6 @@ class Generator(QWidget):
                     path = os.path.join(location, folder.firstChild.data)
                     os.makedirs(path, exist_ok=True)
 
-        # print("All project folders have been successfully generated at ", self.proj_dir)
 
     #@staticmethod
     def generate_vhdl(self):
@@ -465,7 +464,6 @@ class Generator(QWidget):
         overwrite = False
 
         if os.path.exists(vhdl_file_path):
-            print("The file exists!")
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Question)
             msgBox.setText("Do you want to overwrite manually edited file?")
@@ -474,14 +472,12 @@ class Generator(QWidget):
             msgBox.setDefaultButton(QMessageBox.No)
             response = msgBox.exec_()
             if response == QMessageBox.Yes:
-                print("User clicked Yes!")
                 overwrite = True
                 # Writing xml file
                 with open(vhdl_file_path, "w") as f:
                     f.write(vhdl_code)
                 print("VHDL Model successfully generated at ", vhdl_file_path)
-            else:
-                print("User clicked No.")
+
         else:
             with open(vhdl_file_path, "w") as f:
                 f.write(vhdl_code)
@@ -541,11 +537,9 @@ class Generator(QWidget):
         if self.dirs is not None:
             for dir in self.dirs:
                 files += "add_files -norecurse  "+ dir + " \n"
-            print(files)
             tcl_vivado_code = tcl_vivado_code.replace("$files", files)
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$files", "")
-            print("no files")
         tcl_vivado_code = tcl_vivado_code.replace("$tb_name", tb_file_name)
         tcl_vivado_code = tcl_vivado_code.replace("$proj_name", proj_name)
         proj_path = "{" + proj_path + "}"
@@ -566,15 +560,14 @@ class Generator(QWidget):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        print(proj_path)
         subprocess.Popen("cd " + proj_path, shell=True)
         vivado_bat_file_path = ProjectManager.get_vivado_bat_path()
 
         if lang == "VHDL":
             tcl_path=proj_path+"\VHDL\AMDprj\\"+str(ProjectManager.get_proj_name())+".tcl"
-            print("in vhdl")
+
         elif lang == "Verilog":
-            print("in verilog")
+
             tcl_path = proj_path + "\Verilog\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
         if os.path.exists(tcl_path):
             start_vivado_cmd = vivado_bat_file_path + " -source " + tcl_path
@@ -714,7 +707,6 @@ class Generator(QWidget):
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'0\');\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others => \'1\');\n"
                         else:
-                            print("bus is"+ signal.getElementsByTagName('type')[0].firstChild.data)
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
                             arrayPackage=True
                 else:
@@ -882,7 +874,6 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     tb_code += gen_arch
-        print(wcfg)
         return entity_name, tb_code, wcfg
 
     def create_testbench_file(self, overwrite):
@@ -944,7 +935,6 @@ class Generator(QWidget):
             dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
             ports=""
             for port_signal in comp_nodes[i].getElementsByTagName("port"):
-                print("in ports")
                 signals = port_signal.firstChild.data.split(",")
                 gen_compType_assign_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
                 gen_compType_assign_syntax = gen_compType_assign_syntax.replace("$sig_name", signals[0])
@@ -1140,7 +1130,6 @@ class Generator(QWidget):
                 gen_internal_signal_result = "// None\n"
 
         # Header Section
-        print(portSignals)
         header_node = hdl_design[0].getElementsByTagName("header")
         if header_node is not None:
             comp_node = header_node[0].getElementsByTagName("compName")[0]
@@ -1202,7 +1191,6 @@ class Generator(QWidget):
                                 signals = default_out.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value = signals[1]
-                                print(signals[0])
                                 if value == "rst state":
                                     if stateTypesList != "":
                                         stateNames = stateTypesString.split(",")
@@ -1314,7 +1302,6 @@ class Generator(QWidget):
                                 # find the signal and change it to wire
                                 # Define the regular expression pattern with optional bit width specification
                                 var_name = signals[0]
-                                print(var_name)
                                 pattern = f"(reg)\s*(\[\s*\d+\s*:\s*\d+\s*\])?\s+({var_name})"
 
                                 # Replace "reg" with "wire" in the matching line
@@ -1404,7 +1391,6 @@ class Generator(QWidget):
         overwrite = False
 
         if os.path.exists(verilog_file_path):
-            print("The file exists!")
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Question)
             msgBox.setText("Do you want to overwrite manually edited file?")
@@ -1413,24 +1399,19 @@ class Generator(QWidget):
             msgBox.setDefaultButton(QMessageBox.No)
             response = msgBox.exec_()
             if response == QMessageBox.Yes:
-                print("User clicked Yes!")
                 overwrite = True
                 # Writing xml file
                 with open(verilog_file_path, "w") as f:
                     f.write(verilog_code)
-                print("Verilog Model successfully generated at ", verilog_file_path)
             else:
                 with open(verilog_file_HDLGen_path, "w") as f:
                     f.write(verilog_code)
-                print("Verilog HDLGen Model successfully generated at ", verilog_file_HDLGen_path)
         else:
             # Writing xml file
             with open(verilog_file_path, "w") as f:
                 f.write(verilog_code)
-            print("Verilog Model successfully generated at ", verilog_file_path)
         with open(verilog_file_HDLGen_path, "w") as f:
             f.write(verilog_code)
-        print("Verilog HDLGen Model successfully generated at ", verilog_file_HDLGen_path)
         self.entity_name = entity_name
         return overwrite
     def create_verilog_testbench_code(self):
@@ -1712,8 +1693,6 @@ class Generator(QWidget):
                 gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                 tb_code += gen_arch
-        print(tb_code)
-        print(wcfg)
         return entity_name, tb_code, wcfg
 
     def create_verilog_testbench_file(self, overwrite):

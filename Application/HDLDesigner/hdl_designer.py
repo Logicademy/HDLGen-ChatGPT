@@ -36,17 +36,14 @@ class HDLDesigner(QWidget):
         self.hdl = "VHDL"
         if load_data:
             if self.project_manager.vhdl_check.isChecked():
-                print("update vhdl yooo")
                 self.hdl = "VHDL"
                 self.update_preview("VHDL")
             else:
-                print("update verilog")
                 self.hdl = "Verilog"
                 self.update_preview("Verilog")
         else:
             self.hdl = "VHDL"
     def setup_ui(self):
-        print("in set up")
         self.compDetails = CompDetails(self.proj_dir)
         ioPorts = IOPorts(self.proj_dir)
         self.architecture = Architecture(self.proj_dir)
@@ -76,7 +73,6 @@ class HDLDesigner(QWidget):
         internalSignal.save_signal_btn.clicked.connect(self.update_preview)
 
     def update_preview(self, hdl):
-        print("preview")
         if hdl != False:
             self.hdl=hdl
         if self.hdl == "VHDL":
@@ -86,7 +82,6 @@ class HDLDesigner(QWidget):
         self.preview_window.setText(code)
     def update_arch(self):
         xml_data_path = ProjectManager.get_xml_data_path()
-        print(xml_data_path)
         self.architecture.updateProcessName(xml_data_path)
 
     def get_hdl(self):

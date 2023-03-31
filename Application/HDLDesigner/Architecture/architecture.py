@@ -311,7 +311,6 @@ class Architecture(QWidget):
             data = add_instance.get_data()
             data.insert(0, "instance")
             self.all_data.append(data)
-            print(data)
 
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -442,7 +441,6 @@ class Architecture(QWidget):
         # Writing xml file
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
-        print("Successfully saved all the signals!")
         self.generator.generate_mainPackage()
 
     def load_data(self, proj_dir):
@@ -574,7 +572,6 @@ class Architecture(QWidget):
                     temp_data.append(label_val)
                     temp_data.append(child.getElementsByTagName("model")[0].firstChild.data)
                     temp_data.append(output_signals)
-                    print(temp_data)
                     self.all_data.append(temp_data)
 
                     delete_btn = QPushButton()

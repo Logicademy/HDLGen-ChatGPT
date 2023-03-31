@@ -233,7 +233,6 @@ class Package(QWidget):
         add_comp.exec_()
         if not add_comp.cancelled:
             comp_data = add_comp.get_data()
-            print(comp_data)
             self.comps.append(comp_data)
             self.comps_names.append((comp_data[0]))
             delete_btn = QPushButton()
@@ -299,7 +298,6 @@ class Package(QWidget):
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         mainPackage = root.createElement("mainPackage")
         new_comp_node = root.createElement("components")
-        print(self.arrays)
         for array in self.arrays:
             array_node = root.createElement('array')
 

@@ -296,13 +296,9 @@ class InternalSignal(QWidget):
             name_node.appendChild(root.createTextNode(signal[0]))
             signal_node.appendChild(name_node)
             type_node = root.createElement('type')
-            print(signal[0])
-            print(signal[1])
-            print(signal[2])
             if signal[1] == "single bit":
                 sig_type = "single bit"
             elif signal[1] == "Enumerated type state signal pair(NS/CS)":
-                print("saving enumerated")
                 sig_type = "Enumerated type state signal pair(NS/CS)"
             elif signal[1] == "integer" or signal[1] == "integer state signal pair(NS/CS)":
                 sig_type = "integer range 0 to " + str(int(signal[2]) - 1)
@@ -338,7 +334,6 @@ class InternalSignal(QWidget):
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
 
-        print("Successfully saved all the signals!")
 
 
     def load_data(self, proj_dir):

@@ -405,7 +405,6 @@ class IOPorts(QWidget):
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
 
-        print("Successfully saved all the signals!")
     def load_data(self, proj_dir):
 
         root = minidom.parse(proj_dir[0])
