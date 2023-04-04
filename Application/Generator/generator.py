@@ -1346,6 +1346,7 @@ class Generator(QWidget):
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
                             self.includeArrays = True
                             gen_stmts = ""
+
                             instance_syntax = verilog_root.getElementsByTagName("instance")[0].firstChild.data
 
                             instance_syntax = instance_syntax.replace("$instance_label",
@@ -1356,7 +1357,11 @@ class Generator(QWidget):
                                 signals = instance.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 assign_syntax = assign_syntax.replace("$value", signals[1])
+                                var_name = signals[0]
+                                pattern = f"(reg)\s*(\[\s*\d+\s*:\s*\d+\s*\])?\s+({var_name})"
 
+                                # Replace "reg" with "wire" in the matching line
+                                gen_int_sig = re.sub(pattern, r"wire \2 \3", gen_int_sig)
                                 gen_stmts += "\t" + assign_syntax + ",\n"
                             gen_stmts = gen_stmts.rstrip()
                             gen_stmts = gen_stmts[0:-1]
@@ -1532,7 +1537,8 @@ class Generator(QWidget):
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = '1'b1;\n"
                         elif signal.getElementsByTagName('type')[0].firstChild.data[0:3] == "bus":
                             size = signal.getElementsByTagName('type')[0].firstChild.data
-                            size = int(size[4]) + 1
+                            digits_list = re.findall(r'\d+', size)
+                            size = int(digits_list[0]) + 1
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "'b0;\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "'b1;\n"
                         else:
