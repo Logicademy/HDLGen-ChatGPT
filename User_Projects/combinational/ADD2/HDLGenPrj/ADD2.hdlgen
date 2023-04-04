@@ -8,7 +8,7 @@
 	<projectManager>
 		<settings>
 			<name>ADD2</name>
-			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational</location>
+			<location>C:/Users/User/HDLGen/User_Projects/combinational</location>
 		</settings>
 		<EDA>
 			<tool>
@@ -31,7 +31,7 @@
 			<authors>Fearghal Morgan</authors>
 			<company>University of Galway</company>
 			<email>fearghal.morgan@universityofgalway.ie</email>
-			<date>03/04/2023</date>
+			<date>04/04/2023</date>
 		</header>
 		<clkAndRst/>
 		<entityIOPorts>
