@@ -1460,7 +1460,7 @@ class Generator(QWidget):
         # Entity Section
         inputArray = []
         arrayPackage=False
-        gen_signals = ""
+        #gen_signals = ""
         sig_decl = "// testbench signal declarations\n"
         sig_decl += "integer testNo; // aids locating test in simulation waveform\n"
         sig_decl += "reg endOfSim; // assert at end of simulation to highlight simuation done. Stops clk signal generation.\n\n"
@@ -1477,23 +1477,14 @@ class Generator(QWidget):
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
-                signal_declare_syntax = verilog_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
                 io_signal_declare_syntax = verilog_root.getElementsByTagName("IOSignalDeclaration")[0].firstChild.data
                 io_port_map_syntax = verilog_root.getElementsByTagName("portMap")[0].firstChild.data
-                signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
-                                                                      signal.getElementsByTagName('name')[
-                                                                          0].firstChild.data)
+
                 io_port_map_syntax = io_port_map_syntax.replace("$sig_name",
                                                                       signal.getElementsByTagName('name')[
                                                                           0].firstChild.data)
                 io_signal_declare_syntax = io_signal_declare_syntax.replace("$sig_name",
                                                                       signal.getElementsByTagName('name')[
-                                                                          0].firstChild.data)
-                signal_declare_syntax = signal_declare_syntax.replace("$mode",
-                                                                      signal.getElementsByTagName('mode')[
-                                                                          0].firstChild.data)
-                signal_declare_syntax = signal_declare_syntax.replace("$type",
-                                                                      signal.getElementsByTagName('type')[
                                                                           0].firstChild.data)
                 if signal.getElementsByTagName('mode')[0].firstChild.data == "in":
                     regOrwire = "reg"
@@ -1525,6 +1516,7 @@ class Generator(QWidget):
                     digits_list = re.findall(r'\d+', type)
                     size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                     type = "array"
+                io_signal_declare_syntax = io_signal_declare_syntax.replace("$size",size)
                 TB_content = re.sub(r"\[type]", type, TB_content)
                 TB_content = re.sub(r"\[size]", size, TB_content)
                 TB += TB_content
@@ -1541,8 +1533,8 @@ class Generator(QWidget):
                         elif signal.getElementsByTagName('type')[0].firstChild.data[0:3] == "bus":
                             size = signal.getElementsByTagName('type')[0].firstChild.data
                             size = int(size[4]) + 1
-                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "1'b0;\n"
-                            inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "1'b1;\n"
+                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "'b0;\n"
+                            inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "'b1;\n"
                         else:
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
                             arrayPackage=True
@@ -1553,7 +1545,7 @@ class Generator(QWidget):
                     0].firstChild.data
                 entity_signal_description += "-- " + signal.getElementsByTagName('name')[
                     0].firstChild.data + "\t" + signal_description + "\n"
-                gen_signals += "\t" + signal_declare_syntax + "\n"
+               # gen_signals += "\t" + signal_declare_syntax + "\n"
                 io_port_map += "\t" + io_port_map_syntax + "\n"
                 if signal.getElementsByTagName('name')[0].firstChild.data == "clk" or signal.getElementsByTagName('name')[0].firstChild.data == "rst":
                     clkrst=clkrst+1
@@ -1573,8 +1565,8 @@ class Generator(QWidget):
             if clkrst == 2:
                 other_signals += "reg rst;\n"
             control_signals += "initial endOfSim = 1'b0;\n"
-            gen_signals = gen_signals.rstrip()
-            gen_signals = gen_signals[0:-1]
+            #gen_signals = gen_signals.rstrip()
+            #gen_signals = gen_signals[0:-1]
 
             entity_syntax = verilog_root.getElementsByTagName("entity")
             gen_entity = entity_syntax[0].firstChild.data
@@ -1688,8 +1680,8 @@ class Generator(QWidget):
 
                 arch_syntax = verilog_root.getElementsByTagName("architecture")[0].firstChild.data
 
-                gen_arch = arch_syntax.replace("$port", gen_signals)
-                gen_arch = gen_arch.replace("$tbSignalDeclaration", tbSignalDeclaration)
+                #gen_arch = arch_syntax.replace("$port", gen_signals)
+                gen_arch = arch_syntax.replace("$tbSignalDeclaration", tbSignalDeclaration)
                 gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                 tb_code += gen_arch

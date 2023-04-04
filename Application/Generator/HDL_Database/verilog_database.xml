@@ -27,9 +27,9 @@
     <case>&#x9;case ( $stateType )$whenCase&#10;&#x9;&#x9;default :&#10;&#x9;&#x9;&#x9;begin&#10;&#10;&#x9;&#x9;&#x9;end&#10;&#x9;endcase</case>
     <sigAssingn>$output_signal = $value;</sigAssingn>
     <processAssign>$output_signal &lt;= $value;</processAssign>
-    <portAssign>$output_signal &lt;= $value</portAssign>
+    <portAssign>.$output_signal ($value)</portAssign>
     <concurrentstmt>assign $statement // Complete the concurrent statement if required</concurrentstmt>
-    <instance>$instance_label: $instance -- Complete the concurrent statement if required&#10;port map(&#10;$portAssign&#10;&#x9;);</instance>
+    <instance>$instance $instance_label&#10;(&#10;$portAssign&#10;&#x9;);</instance>
     <component>component $model is&#10;port(&#10;$ports&#10;);&#10;end component $model; </component>
 
 </verilog>

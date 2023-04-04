@@ -303,7 +303,7 @@ class ProjectManager(QWidget):
 
     def set_proj_dir(self):
         ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
-        self.proj_folder_input.setText(self.proj_dir)
+        self.proj_folder_input.setText(ProjectManager.proj_dir)#self.proj_dir)
 
     def set_vivado_bat_path(self):
         ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")

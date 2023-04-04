@@ -17,7 +17,7 @@
 
     <signalDeclaration>$sig_name : $mode $type;</signalDeclaration>
 
-    <IOSignalDeclaration>$regOrwire $sig_name;</IOSignalDeclaration>
+    <IOSignalDeclaration>$regOrwire $size $sig_name;</IOSignalDeclaration>
 
     <architecture>$tbSignalDeclaration &#10;$arch_elements&#10;end&#10;endmodule</architecture>
 
