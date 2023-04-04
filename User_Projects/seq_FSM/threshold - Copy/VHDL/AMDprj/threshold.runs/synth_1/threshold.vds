@@ -1,0 +1,469 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Thu Mar 30 13:51:05 2023
+# Process ID: 12240
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1
+# Command line: vivado.exe -log threshold.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source threshold.tcl
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1/threshold.vds
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source threshold.tcl -notrace
+Command: synth_design -top threshold -part xc7z020clg400-1 -no_iobuf
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 7096 
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 454.664 ; gain = 161.422
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'threshold' [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:84]
+INFO: [Synth 8-226] default block is never used [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:116]
+INFO: [Synth 8-256] done synthesizing module 'threshold' (1#1) [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:84]
+WARNING: [Synth 8-3917] design threshold has port functBus[95] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[94] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[93] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[92] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[91] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[90] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[89] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[88] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[87] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[86] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[85] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[84] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[83] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[82] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[81] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[80] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[79] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[78] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[77] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[76] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[75] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[74] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[73] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[72] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[71] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[70] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[69] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[68] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[67] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[66] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[65] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[64] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[63] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[62] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[61] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[60] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[59] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[58] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[57] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[56] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[55] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[54] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[53] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[52] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[51] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[50] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[49] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[48] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[47] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[46] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[45] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[44] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[43] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[42] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[41] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[40] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[39] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[38] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[37] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[36] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[35] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[34] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[33] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[32] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[31] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[30] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[29] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[28] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[27] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[26] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[25] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[24] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[23] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[22] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[21] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[20] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[19] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[18] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[17] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[16] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[15] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[14] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[13] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[12] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[11] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[10] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[9] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[8] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[7] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[6] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[5] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[4] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[3] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[2] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[1] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[0] driven by constant 0
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[0][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[0][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRB[3][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRB[3][30]
+INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 517.977 ; gain = 224.734
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 517.977 ; gain = 224.734
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 517.977 ; gain = 224.734
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-802] inferred FSM for state register 'CS_reg' in module 'threshold'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    idle |                             0001 |                               00
+chkbram_byte_gt_thresholdvalue |                             0010 |                               01
+wr_threshvec_to_reg32x32 |                             0100 |                               10
+write_status_to_reg4x32_csra0 |                             1000 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'CS_reg' using encoding 'one-hot' in module 'threshold'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 517.977 ; gain = 224.734
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      5 Bit       Adders := 2     
++---Registers : 
+	               32 Bit    Registers := 1     
+	                5 Bit    Registers := 2     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 2     
+	   4 Input     32 Bit        Muxes := 2     
+	   4 Input      8 Bit        Muxes := 1     
+	   4 Input      5 Bit        Muxes := 2     
+	   4 Input      4 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 5     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module threshold 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      5 Bit       Adders := 2     
++---Registers : 
+	               32 Bit    Registers := 1     
+	                5 Bit    Registers := 2     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 2     
+	   4 Input     32 Bit        Muxes := 2     
+	   4 Input      8 Bit        Muxes := 1     
+	   4 Input      5 Bit        Muxes := 2     
+	   4 Input      4 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 5     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+Warning: Parallel synthesis criteria is not met 
+WARNING: [Synth 8-3917] design threshold has port add[7] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[95] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[94] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[93] driven by constant 0
+INFO: [Common 17-14] Message 'Synth 8-3917' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 707.090 ; gain = 413.848
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 709.883 ; gain = 416.641
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |CARRY4 |     1|
+|2     |LUT2   |     4|
+|3     |LUT3   |    13|
+|4     |LUT4   |    16|
+|5     |LUT5   |    40|
+|6     |LUT6   |   108|
+|7     |MUXF7  |    32|
+|8     |FDCE   |    45|
+|9     |FDPE   |     1|
++------+-------+------+
+
+Report Instance Areas: 
++------+---------+-------+------+
+|      |Instance |Module |Cells |
++------+---------+-------+------+
+|1     |top      |       |   260|
++------+---------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 645 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+Synthesis Optimization Complete : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 710.066 ; gain = 416.824
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 33 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 808.207 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+16 Infos, 200 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:11 ; elapsed = 00:00:13 . Memory (MB): peak = 808.207 ; gain = 514.965
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 808.207 ; gain = 0.000
+WARNING: [Constraints 18-5210] No constraints selected for write.
+Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
+INFO: [Common 17-1381] The checkpoint 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1/threshold.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file threshold_utilization_synth.rpt -pb threshold_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Thu Mar 30 13:51:19 2023...

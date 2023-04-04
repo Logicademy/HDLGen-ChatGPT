@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>mux21_4/VHDL/model</vhdl_folder>
+		<vhdl_folder>mux21_4/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>mux21_4/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>mux21_4</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>mux21_4</compName>
+			<title>mux21_4 title</title>
+			<description>mux21_4 description</description>
+			<authors>Fearghal Morgan</authors>
+			<company>UG</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>03/04/2023</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>mux21_4_In1</name>
+				<mode>in</mode>
+				<type>bus(3 downto 0)</type>
+				<description>mux21_4_In1 description</description>
+			</signal>
+			<signal>
+				<name>mux21_4_In0</name>
+				<mode>in</mode>
+				<type>bus(3 downto 0)</type>
+				<description>mux21_4_In0 description</description>
+			</signal>
+			<signal>
+				<name>sel</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>sel description</description>
+			</signal>
+			<signal>
+				<name>mux21_4_Out</name>
+				<mode>out</mode>
+				<type>bus(3 downto 0)</type>
+				<description>mux21_4_Out description</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals/>
+		<architecture>
+			<archName>Combinational</archName>
+			<process>
+				<label>mux21_4_p</label>
+				<inputSignal>mux21_4_In1</inputSignal>
+				<inputSignal>mux21_4_In0</inputSignal>
+				<inputSignal>sel</inputSignal>
+				<defaultOutput>mux21_4_Out,mux21_4_In0</defaultOutput>
+			</process>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

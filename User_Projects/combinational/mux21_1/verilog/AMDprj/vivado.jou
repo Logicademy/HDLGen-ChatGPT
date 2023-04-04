@@ -1,0 +1,41 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Mon Mar 20 11:05:09 2023
+# Process ID: 11528
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent16816 C:\2023\vicilogic\HDLGenTop\HDLGen\User_Projects\mux21_1\verilog\AMDprj\mux21_1.xpr
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/vivado.log
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1.xpr
+update_compile_order -fileset sources_1
+launch_simulation
+open_wave_config C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1_TB_behav.wcfg
+open_wave_config C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/VHDL/AMDprj/mux21_1_TB_behav1.wcfg
+source mux21_1_TB.tcl
+close_sim
+close_project
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/VHDL/AMDprj/mux21_1.xpr
+update_compile_order -fileset sources_1
+launch_simulation
+open_wave_config C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/VHDL/AMDprj/mux21_1_TB_behav1.wcfg
+source mux21_1_TB.tcl
+close_sim
+update_files -from_files C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/VHDL/AMDprj/mux21_1_TB_behav.wcfg -to_files C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/VHDL/AMDprj/mux21_1_TB_behav1.wcfg -filesets [get_filesets *]
+close_project
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1.xpr
+update_compile_order -fileset sources_1
+export_ip_user_files -of_objects  [get_files C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/VHDL/AMDprj/mux21_1_TB_behav1.wcfg] -no_script -reset -force -quiet
+remove_files  -fileset sim_1 C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/VHDL/AMDprj/mux21_1_TB_behav1.wcfg
+export_ip_user_files -of_objects  [get_files C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1_TB_behav.wcfg] -no_script -reset -force -quiet
+remove_files  -fileset sim_1 C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1_TB_behav.wcfg
+launch_simulation
+source mux21_1_TB.tcl
+open_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1_TB_behav.wcfg}
+save_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1_TB_behav.wcfg}
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+add_files -fileset sim_1 -norecurse C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_1/verilog/AMDprj/mux21_1_TB_behav.wcfg
+close_sim

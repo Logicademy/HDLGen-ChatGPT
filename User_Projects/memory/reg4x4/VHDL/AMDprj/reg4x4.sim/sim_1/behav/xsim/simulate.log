@@ -1,0 +1,18 @@
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd
+Note: %N Simulation end, time = 284000 ps
+Time: 284 ns  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd
+Note: %N Simulation end, time = 284000 ps
+Time: 284 ns  Iteration: 0  Process: /reg4x4_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/testbench/reg4x4_tb.vhd

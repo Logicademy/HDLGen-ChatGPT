@@ -1,0 +1,164 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>memorySys/VHDL/model</vhdl_folder>
+		<vhdl_folder>memorySys/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>memorySys/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>memorySys</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>memorySys</compName>
+			<title>2 x 4-digit memory array write/read and bank select mux</title>
+			<description>System contains 2 x synchronous write / combinational read register memory arrays (4 x &amp;#10;4-bit arrays)&amp;#10;ce enable all registers&amp;#10;selMemBankToBeWritten selects register array memory bank select for writes&amp;#10;we assertion enables synchronous writes&amp;#10;Write data is dIn(3:00)&amp;#10;&amp;#10;selMemBankToBeRead selects register array memory bank select for reads, with output &amp;#10;data dOut(3:0)</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>02/04/2023</date>
+		</header>
+		<clkAndRst>
+			<clkAndRst>
+				<activeClkEdge>L-H</activeClkEdge>
+				<rst>Yes</rst>
+				<RstType>asynch</RstType>
+				<ActiveRstLvl>1</ActiveRstLvl>
+			</clkAndRst>
+		</clkAndRst>
+		<entityIOPorts>
+			<signal>
+				<name>clk</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>clk signal</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>rst signal</description>
+			</signal>
+			<signal>
+				<name>selMemBankToBeWritten</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>select memory array to be written to</description>
+			</signal>
+			<signal>
+				<name>we</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>Synchronous write enable</description>
+			</signal>
+			<signal>
+				<name>add</name>
+				<mode>in</mode>
+				<type>bus(1 downto 0)</type>
+				<description>memory address</description>
+			</signal>
+			<signal>
+				<name>dIn</name>
+				<mode>in</mode>
+				<type>bus(3 downto 0)</type>
+				<description>4-bit input data bus</description>
+			</signal>
+			<signal>
+				<name>dOut</name>
+				<mode>out</mode>
+				<type>bus(3 downto 0)</type>
+				<description>4-bit data output</description>
+			</signal>
+			<signal>
+				<name>ce</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>Chip enable</description>
+			</signal>
+			<signal>
+				<name>selMemBankToBeRead</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>0 select reg4x4() memory output data, 1 select reg4x4() &amp;#10;memory output data</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals>
+			<signal>
+				<name>dOut_1</name>
+				<type>bus(3 downto 0)</type>
+				<description>memory back 1 data array</description>
+			</signal>
+			<signal>
+				<name>dOut_0</name>
+				<type>bus(3 downto 0)</type>
+				<description>memory back 0 data array</description>
+			</signal>
+			<signal>
+				<name>selCe1</name>
+				<type>single bit</type>
+				<description>selCe1	selCe1 = ce and selMemBankToBeWritten</description>
+			</signal>
+			<signal>
+				<name>selCe0</name>
+				<type>single bit</type>
+				<description>-- selCe0	selCe0 = ce and (not &amp;#10;selMemBankToBeWritten)</description>
+			</signal>
+		</internalSignals>
+		<architecture>
+			<archName>RTL</archName>
+			<instance>
+				<label>mux21_4_i</label>
+				<model>mux21_4</model>
+				<port>mux21_4_In1,dOut_1</port>
+				<port>mux21_4_In0,dOut_0</port>
+				<port>sel,selMemBankToBeRead</port>
+				<port>mux21_4_Out,dOut</port>
+			</instance>
+			<instance>
+				<label>reg4x4_1_i</label>
+				<model>reg4x4</model>
+				<port>clk,clk</port>
+				<port>rst,rst</port>
+				<port>ce,selCe1</port>
+				<port>we,we</port>
+				<port>add,add</port>
+				<port>dIn,dIn</port>
+				<port>dOut,dOut_1</port>
+			</instance>
+			<instance>
+				<label>reg4x4_0_i</label>
+				<model>reg4x4</model>
+				<port>clk,clk</port>
+				<port>rst,rst</port>
+				<port>ce,selCe0</port>
+				<port>we,we</port>
+				<port>add,add</port>
+				<port>dIn,dIn</port>
+				<port>dOut,dOut_0</port>
+			</instance>
+			<concurrentStmt>
+				<label>selCe0_c</label>
+				<statement>selCe0,ce</statement>
+			</concurrentStmt>
+			<concurrentStmt>
+				<label>selCe1_c</label>
+				<statement>selCe1,ce</statement>
+			</concurrentStmt>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

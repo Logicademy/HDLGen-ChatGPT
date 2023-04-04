@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="ADD2_TB_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="ADD2_TB" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0ns"></ZoomStartTime>
+      <ZoomEndTime time="100ns"></ZoomEndTime>
+      <Cursor1Time time="0s"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="233"></NameColumnWidth>
+      <ValueColumnWidth column_width="72"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="3" />
+   <wvobject fp_name="/ADD2_TB/testNo" type="array">
+      <obj_property name="ElementShortName">testNo[31:0]</obj_property>
+      <obj_property name="ObjectShortName">testNo[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ADD2_TB/endOfSim" type="logic">
+      <obj_property name="ElementShortName">endOfSim</obj_property>
+      <obj_property name="ObjectShortName">endOfSim</obj_property>
+   </wvobject>
+   <wvobject fp_name="UUTGroup" type="group">
+      <obj_property name="label">UUT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="group30" type="group">
+         <obj_property name="label">entity</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject fp_name="/ADD2_TB/uut/addIn1" type="array">
+            <obj_property name="ElementShortName">addIn1[1:0]</obj_property>
+            <obj_property name="ObjectShortName">addIn1[1:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/ADD2_TB/uut/addIn0" type="array">
+            <obj_property name="ElementShortName">addIn0[1:0]</obj_property>
+            <obj_property name="ObjectShortName">addIn0[1:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/ADD2_TB/uut/sum" type="array">
+            <obj_property name="ElementShortName">sum[1:0]</obj_property>
+            <obj_property name="ObjectShortName">sum[1:0]</obj_property>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+</wave_config>

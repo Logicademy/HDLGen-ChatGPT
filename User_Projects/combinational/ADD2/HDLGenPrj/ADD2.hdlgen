@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<verilog_folder>ADD2/Verilog/model</verilog_folder>
+		<verilog_folder>ADD2/Verilog/testbench</verilog_folder>
+		<verilog_folder>ADD2/Verilog/AMDprj</verilog_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>ADD2</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>Verilog</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>ADD2</compName>
+			<title>2-bit binary adder</title>
+			<description>2-bit binary adder&amp;#10;&amp;#10;-- IEEE.numeric_std library + function used in this model&amp;#10;which converts an &amp;#10;-- unsigned vector to type std_logic_vector, the type of the signal &amp;#10;sum</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>03/04/2023</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>addIn1</name>
+				<mode>in</mode>
+				<type>bus(1 downto 0)</type>
+				<description>2-bit input</description>
+			</signal>
+			<signal>
+				<name>addIn0</name>
+				<mode>in</mode>
+				<type>bus(1 downto 0)</type>
+				<description>2-bit input</description>
+			</signal>
+			<signal>
+				<name>sum</name>
+				<mode>out</mode>
+				<type>bus(1 downto 0)</type>
+				<description>2-bit output</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals/>
+		<architecture>
+			<archName>Combinational</archName>
+			<concurrentStmt>
+				<label>sum_c</label>
+				<statement>sum,addIn1</statement>
+			</concurrentStmt>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

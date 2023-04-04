@@ -1,0 +1,25 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "muxOut",
+					"strict" : false
+				},
+				{
+					"name" : "sel",
+					"strict" : false
+				},
+				{
+					"name" : "muxIn1",
+					"strict" : false
+				},
+				{
+					"name" : "muxIn0",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>singleShot/VHDL/model</vhdl_folder>
+		<vhdl_folder>singleShot/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>singleShot/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>singleShot</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>singleShot</compName>
+			<title>Pulse generator, one clock period duration</title>
+			<description>Pulse generator, one clock period duration pulse&amp;#10;aShot asserted (h) when sw is asserted (h)&amp;#10;aShot deasserted   on subsequent clk active (l-h) edge &amp;#10;If rst asserted while sw is assertted, wait for sw to deassert before &amp;#10;generating aShot pulse, on next rising edge on sw</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>03/04/2023</date>
+		</header>
+		<clkAndRst>
+			<clkAndRst>
+				<activeClkEdge>L-H</activeClkEdge>
+				<rst>Yes</rst>
+				<RstType>asynch</RstType>
+				<ActiveRstLvl>1</ActiveRstLvl>
+			</clkAndRst>
+		</clkAndRst>
+		<entityIOPorts>
+			<signal>
+				<name>clk</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>clk signal</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>Asynchronous reset signal, asserted h</description>
+			</signal>
+			<signal>
+				<name>sw</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>Assertion L-H edge asserts signal aShot</description>
+			</signal>
+			<signal>
+				<name>aShot</name>
+				<mode>out</mode>
+				<type>single bit</type>
+				<description>Asserted on L-H edge of signal sw. Deasserts on subsequent &amp;#10;active clk edge. Asserted for maximum one clock period.</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals>
+			<signal>
+				<name>NS</name>
+				<type>Enumerated type state signal pair(NS/CS)</type>
+				<description>Current / Next state signal</description>
+			</signal>
+			<signal>
+				<name>CS</name>
+				<type>Enumerated type state signal pair(NS/CS)</type>
+				<description>Current / Next state signal</description>
+			</signal>
+			<stateTypes>waitFor0</stateTypes>
+			<stateTypes>waitFor1</stateTypes>
+		</internalSignals>
+		<architecture>
+			<archName>RTL</archName>
+			<process>
+				<label>NSAndOPDecode_p</label>
+				<inputSignal>sw</inputSignal>
+				<inputSignal>CS</inputSignal>
+				<defaultOutput>aShot,zero</defaultOutput>
+				<defaultOutput>NS,CS</defaultOutput>
+			</process>
+			<process>
+				<label>stateReg_p</label>
+				<inputSignal>clk</inputSignal>
+				<inputSignal>rst</inputSignal>
+				<defaultOutput>CS,rst state,NS</defaultOutput>
+			</process>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

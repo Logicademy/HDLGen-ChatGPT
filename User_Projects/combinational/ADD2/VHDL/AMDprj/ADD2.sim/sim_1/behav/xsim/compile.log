@@ -1,0 +1,4 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/model/ADD2.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'ADD2'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'ADD2_TB'

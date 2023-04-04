@@ -1,0 +1,206 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<verilog_folder>threshold/Verilog/model</verilog_folder>
+		<verilog_folder>threshold/Verilog/testbench</verilog_folder>
+		<verilog_folder>threshold/Verilog/AMDprj</verilog_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>threshold</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>Verilog</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>threshold</compName>
+			<title>Generate a 32-x32-bit threshold array from 32x32-byte source (BRAM) data array</title>
+			<description>Generate a 32-x32-bit threshold array from &amp;#10;- 32x32-byte source (BRAM) data array&amp;#10;- threshVal(7:0)&amp;#10;&amp;#10;Result bit is asserted if souce byte &gt;= threshVal</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>02/04/2023</date>
+		</header>
+		<clkAndRst>
+			<clkAndRst>
+				<activeClkEdge>L-H</activeClkEdge>
+				<rst>Yes</rst>
+				<RstType>asynch</RstType>
+				<ActiveRstLvl>1</ActiveRstLvl>
+			</clkAndRst>
+		</clkAndRst>
+		<entityIOPorts>
+			<signal>
+				<name>ce</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>threshold component enable. Assertion (h) activates the threshold register components.
+</description>
+			</signal>
+			<signal>
+				<name>go</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>Assertion (h) activates threshold finite state machine (FSM)
+</description>
+			</signal>
+			<signal>
+				<name>reg4x32_CSRA</name>
+				<mode>in</mode>
+				<type>reg4x32_Array</type>
+				<description>4 x 32-bit register memory, control and status register A</description>
+			</signal>
+			<signal>
+				<name>reg4x32_CSRB</name>
+				<mode>in</mode>
+				<type>reg4x32_Array</type>
+				<description>4 x 32-bit register memory, control and status register B</description>
+			</signal>
+			<signal>
+				<name>BRAM_dOut</name>
+				<mode>in</mode>
+				<type>bus(255:0)</type>
+				<description>256-bit block RAM (BRAM) memory
+</description>
+			</signal>
+			<signal>
+				<name>active</name>
+				<mode>out</mode>
+				<type>single bit</type>
+				<description>Asserted to highlight that FSM is active. Signal is a flag and is not used externally. 
+</description>
+			</signal>
+			<signal>
+				<name>wr</name>
+				<mode>out</mode>
+				<type>single bit</type>
+				<description>Assertion (h) synchronously writes memory(add) = dataToMem(31:0)
+</description>
+			</signal>
+			<signal>
+				<name>add</name>
+				<mode>out</mode>
+				<type>bus(7 downto 0)</type>
+				<description>memory address</description>
+			</signal>
+			<signal>
+				<name>datToMem</name>
+				<mode>out</mode>
+				<type>bus(31 downto 0)</type>
+				<description>memory write data
+</description>
+			</signal>
+			<signal>
+				<name>functBus</name>
+				<mode>out</mode>
+				<type>bus(95 downto 0)</type>
+				<description>96-bit bus which can be connected to any threshold component signals, to be stored / viewed during threshold function execution</description>
+			</signal>
+			<signal>
+				<name>clk</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>clk signal</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>rst signal</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals>
+			<signal>
+				<name>NSYAdd</name>
+				<type>bus(4 downto 0)</type>
+				<description>Y address bus state signals</description>
+			</signal>
+			<signal>
+				<name>NSXAdd</name>
+				<type>bus(4 downto 0)</type>
+				<description>X address bus state signals</description>
+			</signal>
+			<signal>
+				<name>BRAMByte</name>
+				<type>bus(7 downto 0)</type>
+				<description>BRAM_dOut(CSXAdd*8+7 : CSXAdd*8)
+</description>
+			</signal>
+			<signal>
+				<name>NS </name>
+				<type>Enumerated type state signal pair (NS/CS)</type>
+				<description>Finite State Machine (FSM) next state and current state</description>
+			</signal>
+			<signal>
+				<name>CS </name>
+				<type>Enumerated type state signal pair (NS/CS)</type>
+				<description>Finite State Machine (FSM) next state and current state</description>
+			</signal>
+			<stateTypes>waitFor0</stateTypes>			<stateTypes>waitFor1</stateTypes>						<signal>
+				<name>threshVal</name>
+				<type>bus(7 downto 0)</type>
+				<description>threshVal(7:0) = reg4x32_CSRA(31:24)</description>
+			</signal>
+			<signal>
+				<name>CSYAdd</name>
+				<type>bus(4 downto 0)</type>
+				<description>Y address bus current state signal</description>
+			</signal>
+			<signal>
+				<name>CSXAdd(4 downto 0)</name>
+				<type>bus</type>
+				<description>X address bus current state signal</description>
+			</signal>
+		</internalSignals>
+		<architecture>
+			<archName>RTL</archName>
+			<process>
+				<label>NSAndOPDecode_p</label>
+				<inputSignal>go</inputSignal>
+				<inputSignal>reg4x32_CSRA</inputSignal>
+				<inputSignal>reg4x32_CSRB</inputSignal>
+				<inputSignal>CSYAdd</inputSignal>
+				<inputSignal>CSXAdd</inputSignal>
+				<inputSignal>BRAMByte</inputSignal>
+				<inputSignal>CS </inputSignal>
+				<inputSignal>threshVal</inputSignal>
+				<defaultOutput>active,</defaultOutput>
+				<defaultOutput>wr,0</defaultOutput>
+				<defaultOutput>add,all zeros</defaultOutput>
+				<defaultOutput>datToMem,all zeros</defaultOutput>
+				<defaultOutput>NSYAdd,CSYAdd</defaultOutput>
+				<defaultOutput>NSXAdd,CSXAdd</defaultOutput>
+				<defaultOutput>NS ,CS </defaultOutput>
+			</process>
+			<process>
+				<label>stateReg_p</label>
+				<inputSignal>clk</inputSignal>
+				<inputSignal>rst</inputSignal>
+				<defaultOutput>CS ,Idle,NS </defaultOutput>
+				<defaultOutput>CSYAdd,all zeros,NSYAdd</defaultOutput>
+				<defaultOutput>CSXAdd,all zeros,NSXAdd</defaultOutput>
+				<defaultOutput>CSthreshVec,all zeros,NSthreshVec</defaultOutput>
+			</process>
+			<concurrentStmt>
+				<label>asgn_add</label>
+				<statement>add,all zeros</statement>
+			</concurrentStmt>
+			<concurrentStmt>
+				<label>asgn_BRAMByte</label>
+				<statement>BRAMByte,all zeros</statement>
+			</concurrentStmt>
+		</architecture>
+	</hdlDesign>
+</HDLGen>
