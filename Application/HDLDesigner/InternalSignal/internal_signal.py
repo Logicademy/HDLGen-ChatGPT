@@ -236,7 +236,7 @@ class InternalSignal(QWidget):
                 self.intSig_table.setItem(row_position, 2, size)
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
-                if intSignal_data[1] == "bus sstate signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
+                if intSignal_data[1] == "bus state signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
                     if (i == 2) :
                         self.intSig_table.removeCellWidget(row_position, 3)
                         self.intSig_table.removeCellWidget(row_position, 4)
