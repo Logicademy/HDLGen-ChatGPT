@@ -2,7 +2,6 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys
-import os
 # make sure to add to requirements.txt
 import configparser
 sys.path.append("..")

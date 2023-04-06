@@ -8,8 +8,6 @@ import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from Generator.generator import Generator
-BLACK_COLOR = "color: black"
-WHITE_COLOR = "color: white"
 
 
 class ComponentDialog(QDialog):

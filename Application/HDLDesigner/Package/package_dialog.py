@@ -1,6 +1,5 @@
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-import qtawesome as qta
 import sys
 
 sys.path.append("..")
