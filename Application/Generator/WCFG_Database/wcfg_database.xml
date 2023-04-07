@@ -32,18 +32,8 @@
       <obj_property name="ElementShortName">endOfSim</obj_property>
       <obj_property name="ObjectShortName">endOfSim</obj_property>
    </wvobject>
-    <wvobject fp_name="TBGroup" type="group">
-      <obj_property name="label">TB</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
 </head>
-<TB>
-    <wvobject fp_name="/[componentName]_TB/[signal]" type="[type]">
-         <obj_property name="ElementShortName">[signal][size]</obj_property>
-         <obj_property name="ObjectShortName">[signal][size]</obj_property>
-      </wvobject>
-</TB>
 <UUT>
-    </wvobject>
     <wvobject fp_name="UUTGroup" type="group">
       <obj_property name="label">UUT</obj_property>
       <obj_property name="DisplayName">label</obj_property>
