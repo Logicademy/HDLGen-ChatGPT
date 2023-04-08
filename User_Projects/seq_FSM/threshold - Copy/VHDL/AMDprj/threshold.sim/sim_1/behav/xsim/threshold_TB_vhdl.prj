@@ -1,8 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../../../../../../Application/HDLDesigner/Package/mainPackage.vhd" \
-"../../../../../model/threshold.vhd" \
-"../../../../../testbench/threshold_tb.vhd" \
-
-# Do not sort compile order
-nosort

@@ -1,6 +1,6 @@
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/User/HDLGen/User_Projects/combinational/ADD2/verilog/model/ADD2.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/ADD2/Verilog/model/ADD2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module ADD2
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/User/HDLGen/User_Projects/combinational/ADD2/verilog/testbench/ADD2_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/ADD2/Verilog/testbench/ADD2_tb.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module ADD2_TB
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/User/HDLGen/User_Projects/combinational/ADD2/verilog/AMDPrj/ADD2.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/ADD2/Verilog/AMDprj/ADD2.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module glbl

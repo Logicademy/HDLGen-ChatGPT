@@ -448,7 +448,7 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
                     gen_vhdl += gen_library
                     if self.includeArrays == True:
-                        gen_vhdl += "use work.arrayPackage.all;"
+                        gen_vhdl += "use work.MainPackage.all;"
 
                     # Entity Section placement
                     gen_vhdl += "\n\n" + gen_entity + "\n\n"
@@ -465,7 +465,7 @@ class Generator(QWidget):
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
         overwrite = False
-
+        instances=[]
         if os.path.exists(vhdl_file_path):
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Question)
@@ -494,7 +494,7 @@ class Generator(QWidget):
         return overwrite
 
 
-    def create_tcl_file(self, lang):
+    def create_tcl_file(self, lang, instances):
         print("creating tcl")
 
         proj_name = ProjectManager.get_proj_name()
@@ -520,8 +520,8 @@ class Generator(QWidget):
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", comp)
         wd = os.getcwd()
         wd = wd.replace("\\","/")
-        mainPackagePath = "add_files -norecurse  "+ wd +"/HDLDesigner/Package/mainPackage.vhd"
-
+        mainPackagePath = "add_files -norecurse  "+ wd
+        mainPackagePath = mainPackagePath.replace("Application","Package/mainPackage.vhd")
         if self.includeArrays == True:
             tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
         else:
@@ -535,6 +535,7 @@ class Generator(QWidget):
         components = hdlDesign[0].getElementsByTagName("components")
         comp_nodes = components[0].getElementsByTagName('component')
         for i in range(0, len(comp_nodes)):
+            #if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
             dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
             self.dirs.append(dir)
         if self.dirs is not None:
@@ -825,7 +826,7 @@ class Generator(QWidget):
                 for library in libraries:
                     gen_library += library.firstChild.data + "\n"
                 if arrayPackage == True:
-                    gen_library += "use work.arrayPackage.all;"
+                    gen_library += "use work.MainPackage.all;"
                 gen_library += "\n"
                 tb_code += gen_library
 
@@ -963,7 +964,9 @@ class Generator(QWidget):
 
         array_vhdl_code = array_vhdl_code.replace("$Component", comp)
         # Creating arrayPackage file
-        array_vhdl_file_path = os.getcwd() + "\HDLDesigner\Package\mainPackage.vhd"
+        array_vhdl_file_path = os.getcwd()
+        array_vhdl_file_path = array_vhdl_file_path.replace("Application","Package\MainPackage.vhd",)
+        print(array_vhdl_file_path)
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
             f.write(array_vhdl_code)

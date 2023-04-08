@@ -167,8 +167,8 @@ class ComponentDialog(QDialog):
             temp = signal.split(',')
             signals.append(temp[0])
             mode.append(temp[1])
-            if temp[2][0:16] == "std_logic_vector":
-                temp[2] = temp[2] + " downto 0)"
+            #if temp[2][0:16] == "std_logic_vector":
+              #  temp[2] = temp[2] + " downto 0)"
             type.append(temp[2])
         i = 0
         for sig in signals:
@@ -203,8 +203,8 @@ class ComponentDialog(QDialog):
             signal = self.signal_table.item(i, 0).text()
             mode = self.signal_table.item(i, 1).text()
             type = self.signal_table.item(i, 2).text()
-            if type[0:16] == "std_logic_vector":
-                type = type + " downto 0)"
+            #if type[0:16] == "std_logic_vector":
+               # type = type + " downto 0)"
             signals.append(signal + "," + mode + "," + type)
 
         data.append(self.component_name_input.text())
