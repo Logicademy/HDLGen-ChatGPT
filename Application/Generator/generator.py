@@ -494,7 +494,7 @@ class Generator(QWidget):
         return overwrite
 
 
-    def create_tcl_file(self, lang, instances):
+    def create_tcl_file(self, lang):
         print("creating tcl")
 
         proj_name = ProjectManager.get_proj_name()
