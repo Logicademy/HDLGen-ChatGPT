@@ -87,6 +87,7 @@ class Generator(QWidget):
         self.includeArrays = False
         gen_arrays=""
         stateTypeSig = False
+        instances = []
 
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
@@ -431,6 +432,7 @@ class Generator(QWidget):
                             instance_syntax = instance_syntax.replace("$instance",
                                                                       child.getElementsByTagName("model")[
                                                                           0].firstChild.data)
+                            instances.append(child.getElementsByTagName("model")[0].firstChild.data)
                             gen_process += instance_syntax + "\n"
 
                         child = next
@@ -454,18 +456,17 @@ class Generator(QWidget):
                     gen_vhdl += "\n\n" + gen_entity + "\n\n"
                     gen_vhdl += gen_arch
 
-        return entity_name, gen_vhdl
+        return entity_name, gen_vhdl, instances
 
     def create_vhdl_file(self):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        entity_name, vhdl_code = self.generate_vhdl()
+        entity_name, vhdl_code, instances = self.generate_vhdl()
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
         overwrite = False
-        instances=[]
         if os.path.exists(vhdl_file_path):
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Question)
@@ -491,10 +492,10 @@ class Generator(QWidget):
 
         print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
         self.entity_name = entity_name
-        return overwrite
+        return overwrite, instances
 
 
-    def create_tcl_file(self, lang):
+    def create_tcl_file(self, lang, instances):
         print("creating tcl")
 
         proj_name = ProjectManager.get_proj_name()
@@ -535,9 +536,9 @@ class Generator(QWidget):
         components = hdlDesign[0].getElementsByTagName("components")
         comp_nodes = components[0].getElementsByTagName('component')
         for i in range(0, len(comp_nodes)):
-            #if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
-            dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
-            self.dirs.append(dir)
+            if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
+                dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+                self.dirs.append(dir)
         if self.dirs is not None:
             for dir in self.dirs:
                 files += "add_files -norecurse  "+ dir + " \n"
@@ -1008,7 +1009,7 @@ class Generator(QWidget):
         self.includeArrays = False
         portSignals=[]
         internalSignals=[]
-
+        instances = []
         stateTypeSig = False
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
@@ -1374,11 +1375,13 @@ class Generator(QWidget):
                                 signals = instance.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 assign_syntax = assign_syntax.replace("$value", signals[1])
-                                var_name = signals[0]
+                                var_name = signals[1]
                                 pattern = f"(reg)\s*(\[\s*\d+\s*:\s*\d+\s*\])?\s+({var_name})"
 
                                 # Replace "reg" with "wire" in the matching line
                                 gen_int_sig = re.sub(pattern, r"wire \2 \3", gen_int_sig)
+
+                                print(signals[0]+signals[1]+" change to wire\n")
                                 gen_stmts += "\t" + assign_syntax + ",\n"
                             gen_stmts = gen_stmts.rstrip()
                             gen_stmts = gen_stmts[0:-1]
@@ -1386,6 +1389,7 @@ class Generator(QWidget):
                             instance_syntax = instance_syntax.replace("$instance",
                                                                       child.getElementsByTagName("model")[
                                                                           0].firstChild.data)
+                            instances.append(child.getElementsByTagName("model")[0].firstChild.data)
                             gen_process += instance_syntax + "\n"
 
                         child = next
@@ -1400,13 +1404,13 @@ class Generator(QWidget):
                     # Entity Section placement
                     gen_verilog += "\n\n" + gen_entity + "\n\n"
 
-        return entity_name, gen_verilog
+        return entity_name, gen_verilog, instances
 
     def create_verilog_file(self):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        entity_name, verilog_code = self.generate_verilog()
+        entity_name, verilog_code, instances = self.generate_verilog()
 
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_HDLGen.v")
@@ -1435,7 +1439,7 @@ class Generator(QWidget):
         with open(verilog_file_HDLGen_path, "w") as f:
             f.write(verilog_code)
         self.entity_name = entity_name
-        return overwrite
+        return overwrite, instances
     def create_verilog_testbench_code(self):
         tb_code = ""
         clkrst = 0

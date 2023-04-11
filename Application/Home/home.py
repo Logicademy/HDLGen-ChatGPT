@@ -82,8 +82,8 @@ class Home(QMainWindow):
     def generate_btn_clicked(self):
         if self.project_manager.vhdl_check.isChecked():
             self.generator.generate_folders()
-            overwrite = self.generator.create_vhdl_file()
-            self.generator.create_tcl_file("VHDL")
+            overwrite, instances = self.generator.create_vhdl_file()
+            self.generator.create_tcl_file("VHDL", instances)
             self.generator.create_testbench_file(overwrite)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
@@ -91,8 +91,8 @@ class Home(QMainWindow):
             msgBox.exec_()
         elif self.project_manager.verilog_check.isChecked():
             self.generator.generate_folders()
-            overwrite = self.generator.create_verilog_file()
-            self.generator.create_tcl_file("Verilog")
+            overwrite, instances = self.generator.create_verilog_file()
+            self.generator.create_tcl_file("Verilog", instances)
             self.generator.create_verilog_testbench_file(overwrite)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
