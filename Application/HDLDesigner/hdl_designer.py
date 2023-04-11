@@ -9,6 +9,7 @@ from HDLDesigner.IOPorts.io_ports import IOPorts
 from HDLDesigner.Architecture.architecture import Architecture
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from HDLDesigner.Package.package import Package
+from HDLDesigner.Subcomponents.subcomponents import Subcomponents
 from Generator.generator import Generator
 from ProjectManager.project_manager import ProjectManager
 
@@ -49,13 +50,15 @@ class HDLDesigner(QWidget):
         self.architecture = Architecture(self.proj_dir)
         internalSignal = InternalSignal(self.proj_dir)
         package = Package()
+        subcomponents = Subcomponents()
 
         self.preview_window.setReadOnly(True)
         self.preview_pane_layout.addWidget(self.preview_label)
         self.preview_pane_layout.addWidget(self.preview_window)
 
         self.tabs.addTab(self.compDetails, "Component")
-        self.tabs.addTab(package, "Packages")
+        self.tabs.addTab(package, "VHDL types")
+        self.tabs.addTab(subcomponents, "Sub-components")
         self.tabs.addTab(ioPorts, "Ports")
         self.tabs.addTab(internalSignal, "Internal Signals")
         self.tabs.addTab(self.architecture, "Architecture")
