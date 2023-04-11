@@ -1011,6 +1011,14 @@ class Generator(QWidget):
         internalSignals=[]
         instances = []
         stateTypeSig = False
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        root = minidom.parse(mainPackageDir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
+        array_nodes = mainPackage[0].getElementsByTagName('array')
+
+
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
@@ -1020,10 +1028,7 @@ class Generator(QWidget):
 
                 portData=[name,type,mode]
                 portSignals.append(portData)
-                if type[0:5] == "array":
-                    self.includeArrays = True
-                    arrayList.append(name)
-                elif type == "single bit":
+                if type == "single bit":
                     single_bitList.append(name)
                     type = ""
                 elif type[0:3] == "bus":
@@ -1038,6 +1043,25 @@ class Generator(QWidget):
                     signedList.append(name)
                     digits_list = re.findall(r'\d+', type)
                     type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+                else:
+                    type = type.split(",")
+                    for i in range(0, len(array_nodes)):
+                        typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                        if typeName == type[1]:
+                            depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
+                            width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+                    bits = int(width)*int(depth)-1
+                    width=int(width)-1
+                    depth=int(depth)-1
+                    type = "[" + str(bits) + ":0]"
+                    bits = bits + 1
+
+                    output_reg_signals += "wire [" + str(width) + ":0] " + name + " [" + str(depth) + ":0];\n"
+                    name = name+"_"+str(bits)
+
+
+                    self.includeArrays = True
+                    arrayList.append(name)
                 port_declare_syntax = verilog_root.getElementsByTagName("portDeclaration")[0].firstChild.data
 
                 port_declare_syntax = port_declare_syntax.replace("$name", name)
@@ -1052,9 +1076,7 @@ class Generator(QWidget):
 
                 signal_declare_syntax = verilog_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
-                signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
-                                                                      signal.getElementsByTagName('name')[
-                                                                          0].firstChild.data)
+                signal_declare_syntax = signal_declare_syntax.replace("$sig_name",name)
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
                 signal_description = signal_description.replace("&#10;", "\n// ")
@@ -1128,6 +1150,7 @@ class Generator(QWidget):
                         signedList.append(name)
                         digits_list = re.findall(r'\d+', type)
                         type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+
                     int_sig_syntax = verilog_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)
@@ -1381,7 +1404,6 @@ class Generator(QWidget):
                                 # Replace "reg" with "wire" in the matching line
                                 gen_int_sig = re.sub(pattern, r"wire \2 \3", gen_int_sig)
 
-                                print(signals[0]+signals[1]+" change to wire\n")
                                 gen_stmts += "\t" + assign_syntax + ",\n"
                             gen_stmts = gen_stmts.rstrip()
                             gen_stmts = gen_stmts[0:-1]
@@ -1398,8 +1420,6 @@ class Generator(QWidget):
                     gen_arch = arch_syntax.replace("$int_sig_declaration", gen_int_sig)
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
                     gen_entity = gen_entity.replace("$arch", indent(gen_arch,'    '))
-                    #if self.includeArrays == True:
-                       # gen_verilog += "use work.arrayPackage.all;"
 
                     # Entity Section placement
                     gen_verilog += "\n\n" + gen_entity + "\n\n"
@@ -1458,20 +1478,21 @@ class Generator(QWidget):
 
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
         wcfg = ""
-        #TB = ""
         UUTEnt = ""
         header_node = hdl_design[0].getElementsByTagName("header")
         comp_node = header_node[0].getElementsByTagName("compName")[0]
         entity_name = comp_node.firstChild.data
-
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        root = minidom.parse(mainPackageDir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
+        array_nodes = mainPackage[0].getElementsByTagName('array')
         with open(wcfg_database_path, "r") as f:
             xml_string = f.read()
 
         head_regex = r"<head>(.*?)</head>"
         head_contents = re.search(head_regex, xml_string, re.DOTALL).group(1)
-
-        #TB_regex = r"<TB>(.*?)</TB>"
-        #TB_contents = re.search(TB_regex, xml_string, re.DOTALL).group(1)
 
         UUT_regex = r"<UUT>(.*?)</UUT>"
         UUT_contents = re.search(UUT_regex, xml_string, re.DOTALL).group(1)
@@ -1486,7 +1507,6 @@ class Generator(QWidget):
         # Entity Section
         inputArray = []
         arrayPackage=False
-        #gen_signals = ""
         sig_decl = "// testbench signal declarations\n"
         sig_decl += "integer testNo; // aids locating test in simulation waveform\n"
         sig_decl += "reg endOfSim; // assert at end of simulation to highlight simuation done. Stops clk signal generation.\n\n"
@@ -1500,18 +1520,14 @@ class Generator(QWidget):
         inputsToOne = ""
         other_signals = ""
         control_signals = ""
+        arrayList=[]
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
                 io_signal_declare_syntax = verilog_root.getElementsByTagName("IOSignalDeclaration")[0].firstChild.data
                 io_port_map_syntax = verilog_root.getElementsByTagName("portMap")[0].firstChild.data
+                name = signal.getElementsByTagName('name')[0].firstChild.data
 
-                io_port_map_syntax = io_port_map_syntax.replace("$sig_name",
-                                                                      signal.getElementsByTagName('name')[
-                                                                          0].firstChild.data)
-                io_signal_declare_syntax = io_signal_declare_syntax.replace("$sig_name",
-                                                                      signal.getElementsByTagName('name')[
-                                                                          0].firstChild.data)
                 if signal.getElementsByTagName('mode')[0].firstChild.data == "in":
                     regOrwire = "reg"
                 else:
@@ -1519,15 +1535,13 @@ class Generator(QWidget):
                 io_signal_declare_syntax = io_signal_declare_syntax.replace("$regOrwire", regOrwire)
                 name = signal.getElementsByTagName('name')[0].firstChild.data
                 type = signal.getElementsByTagName('type')[0].firstChild.data
-                #TB_content = re.sub(r"\[componentName]", entity_name, TB_contents)
-                #TB_content = re.sub(r"\[signal]", name, TB_content)
                 UUTEnt_content = re.sub(r"\[componentName]", entity_name, UUTEnt_contents)
                 UUTEnt_content = re.sub(r"\[signal]", name, UUTEnt_content)
 
-                if type[0:5] == "array":
-                    size = ""
-                    type = "array"
-                elif type == "single bit":
+                #if type[0:5] == "array":
+                    #size = ""
+                    #type = "array"
+                if type == "single bit":
                     size = ""
                     type = "logic"
                 elif type[0:3] == "bus":
@@ -1542,10 +1556,23 @@ class Generator(QWidget):
                     digits_list = re.findall(r'\d+', type)
                     size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                     type = "array"
+                else:
+                    type = type.split(",")
+                    for i in range(0, len(array_nodes)):
+                        typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                        if typeName == type[1]:
+                            depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
+                            width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+                    arrayInfo=[name,depth,width]
+                    arrayList.append(arrayInfo)
+                    bits = int(width)*int(depth)-1
+                    type = "array"
+                    size = "[" + str(bits) + ":0]"
+                    bits = int(bits)+1
+                    name = name+"_"+str(bits)
+                io_port_map_syntax = io_port_map_syntax.replace("$sig_name", name)
+                io_signal_declare_syntax = io_signal_declare_syntax.replace("$sig_name", name)
                 io_signal_declare_syntax = io_signal_declare_syntax.replace("$size",size)
-                #TB_content = re.sub(r"\[type]", type, TB_content)
-                #TB_content = re.sub(r"\[size]", size, TB_content)
-                #TB += TB_content
                 UUTEnt_content = re.sub(r"\[type]", type, UUTEnt_content)
                 UUTEnt_content = re.sub(r"\[size]", size, UUTEnt_content)
                 UUTEnt += UUTEnt_content
@@ -1563,8 +1590,12 @@ class Generator(QWidget):
                             inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "'b0;\n"
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(size) + "'b1;\n"
                         else:
-                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " <= (others =>(others => \'0\'));\n"
-                            arrayPackage=True
+                            for i in range(0, len(arrayList)):
+                                if signal.getElementsByTagName('name')[0].firstChild.data == arrayList[i][0]:
+
+                                    size = int(arrayList[i][1]) * int(arrayList[i][2])
+                                    name = signal.getElementsByTagName('name')[0].firstChild.data + "_" + str(size)
+                                    inputsToZero += "\t" + name + " = " + str(size) + "'b0;\n"
                 else:
                     if signal.getElementsByTagName('type')[0].firstChild.data != "single bit" and signal.getElementsByTagName('type')[0].firstChild.data[0:3] != "bus":
                         arrayPackage = True
@@ -1578,7 +1609,6 @@ class Generator(QWidget):
                     clkrst=clkrst+1
                 else:
                     io_signals += io_signal_declare_syntax + "\n"
-            #wcfg += TB
             wcfg += UUT_contents
             wcfg += UUTEnt
             io_port_map = io_port_map.rstrip()
@@ -1689,12 +1719,12 @@ class Generator(QWidget):
                 gen_process += "$display(\"Simulation start :: time is %0t\",$time);\n"
                 gen_process += "\t// Apply default INPUT signal values. Do not assign output signals (generated by the UUT) here\n"
                 gen_process += "\t// Each stimulus signal change occurs 0.2*period after the active low-to-high clk edge\n"
-                gen_process += "\ttestNo <= 0;\n"
+                gen_process += "\ttestNo = 0;\n"
                 gen_process += inputsToZero
                 if clkrst == 2:
-                    gen_process += "\trst    <= 1'b1;\n"
+                    gen_process += "\trst    = 1'b1;\n"
                     gen_process += "\t@(posedge clk);\n"
-                    gen_process += "\trst   <= 1'b0;\n"
+                    gen_process += "\trst   = 1'b0;\n"
                 gen_process += "\t#period\n"
                 if clkrst >= 1:
                     gen_process += "\t@(posedge clk);\n"
@@ -1703,7 +1733,7 @@ class Generator(QWidget):
                 gen_process += "\t// include testbench stimulus sequence here. Use new testNo for each test set\n"
                 gen_process += "\t// individual tests. Generate input signal combinations and\n"
                 gen_process += "\t// repeat(number of times) #period\n"
-                gen_process += "\ttestNo <= 1;\n"
+                gen_process += "\ttestNo = 1;\n"
                 gen_process += "\trepeat(2)\n"
                 gen_process += "\t#period"
                 gen_process += "\t// manually added code END\n\n"
