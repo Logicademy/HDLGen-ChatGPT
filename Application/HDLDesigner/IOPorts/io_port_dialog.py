@@ -168,7 +168,7 @@ class IOPortDialog(QDialog):
         if signalDescription == "":
             signalDescription = "to be completed"
         if self.sig_type_input.currentText() == "array":
-            typeValue= self.arrayName_input.currentText()
+            typeValue= "array,"+self.arrayName_input.currentText()
         else:
             typeValue= self.sig_type_input.currentText()
         sig_details = [self.sig_name_input.text().strip().replace(" ", ""),
@@ -187,7 +187,8 @@ class IOPortDialog(QDialog):
         sig_type=signal_data[2]
         if sig_type != "bus" and signal_data[2] != "single bit":
             sig_type = "array"
-            self.arrayName_input.setCurrentText(signal_data[2])
+            arrayname = signal_data[2].split(",")
+            self.arrayName_input.setCurrentText(arrayname[1])#signal_data[2])
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
         signal_data[4] = signal_data[4].replace("&#10;", "\n")
@@ -201,7 +202,10 @@ class IOPortDialog(QDialog):
         if self.sig_name_input.text() != "" and self.sig_size_input.text() != "":
             self.ok_btn.setEnabled(True)
         else:
-            self.ok_btn.setEnabled(False)
+            if self.sig_name_input.text() != "" and self.sig_type_input.currentText() == "array" and self.arrayName_input.currentText() != "":
+                self.ok_btn.setEnabled(True)
+            else:
+                self.ok_btn.setEnabled(False)
 
     def enable_size_option(self):
         if self.sig_type_input.currentText() == "bus":

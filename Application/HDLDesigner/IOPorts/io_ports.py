@@ -440,14 +440,25 @@ class IOPorts(QWidget):
             type = port[0:port.index("(")] if port.endswith(")") else port
             self.all_signals_names.append(name)
             desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
+            print(type[0:6])
             if desc == "":
                 desc = "To be Completed"
-
+            size = "1"
+            if mode == "in":
+                mode = "Input"
+            else:
+                mode = "Output"
+            if type == "bus":
+                size = str(int(port[port.index("(") + 1:port.index(" downto")]) + 1)
+            elif type[0:6] == "array,":
+                size = ""
             loaded_sig_data = [
                 name,
-                "Input" if mode == "in" else "Output",
+                mode,
+                #"Input" if mode == "in" else "Output",
                 type,
-                "1" if type != "bus" else str(int(port[port.index("(") + 1:port.index(" downto")]) + 1),
+                size,
+                #"1" if type != "bus" else str(int(port[port.index("(") + 1:port.index(" downto")]) + 1),
                 desc
             ]
 
@@ -467,7 +478,10 @@ class IOPorts(QWidget):
             size.setTextAlignment(Qt.AlignHCenter)
             self.port_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
             self.port_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
-            self.port_table.setItem(i, 2, QTableWidgetItem(loaded_sig_data[2]))
+            if loaded_sig_data[2][0:6] == "array,":
+                self.port_table.setItem(i, 2, QTableWidgetItem("array"))
+            else:
+                self.port_table.setItem(i, 2, QTableWidgetItem(loaded_sig_data[2]))
             self.port_table.setItem(i, 3, size)
             self.port_table.setCellWidget(i, 4, edit_btn)
             self.port_table.setCellWidget(i, 5, delete_btn)
