@@ -440,7 +440,6 @@ class IOPorts(QWidget):
             type = port[0:port.index("(")] if port.endswith(")") else port
             self.all_signals_names.append(name)
             desc = signal_nodes[i].getElementsByTagName('description')[0].firstChild.data
-            print(type[0:6])
             if desc == "":
                 desc = "To be Completed"
             size = "1"
