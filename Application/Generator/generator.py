@@ -1275,7 +1275,7 @@ class Generator(QWidget):
                                                 depth = int(arr[1])+1
                                                 width = int(arr[2])
                                                 for j in range(0, depth):
-                                                    array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0;\n\t"
+                                                    array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // default assignment\n\t"
                                                     arraySignal=True
                                     elif signals[0] in single_bitList:
                                         value = "1'b0"
@@ -1294,8 +1294,6 @@ class Generator(QWidget):
                                                 start = int(match.group(1))
                                                 end = int(match.group(2))
                                                 size = start - end + 1
-                                                #size = signal[1]
-                                                #size = int(size[4]) + 1
                                         value = str(size) + "'b0"
                                     else:
                                         value = str(0)
@@ -1319,8 +1317,9 @@ class Generator(QWidget):
                                         0].firstChild.data
                                     assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                     assign_syntax = assign_syntax.replace("$value", value)
+                                    assign_syntax = assign_syntax + " // default assignment"
                                 if_gen_defaults += "\n\t\t" + assign_syntax + "\n"
-                                gen_defaults += "\n\t"+assign_syntax + " // default assignment"
+                                gen_defaults += "\n\t"+assign_syntax
                                 if len(signals) == 3:
                                     clkAssign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
@@ -1381,9 +1380,8 @@ class Generator(QWidget):
                                                                   0].firstChild.data)
 
                             for statement in child.getElementsByTagName("statement"):
-                                assign_syntax = verilog_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                arraySignal = False
                                 signals = statement.firstChild.data.split(",")
-                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 # find the signal and change it to wire
                                 # Define the regular expression pattern with optional bit width specification
                                 var_name = signals[0]
@@ -1397,7 +1395,18 @@ class Generator(QWidget):
                                     value = str(size)+"'b" + value
                                 elif value == "zero":
                                     if signals[0] in arrayList:
-                                        value = "(others =>(others => '0'))"
+                                        print("array signal")
+                                        array_syntax = ""
+                                        for arr in arrayInfo:
+                                            print("checking array info")
+                                            if arr[0] == signals[0]:
+                                                print("name match")
+                                                depth = int(arr[1]) + 1
+                                                width = int(arr[2])
+                                                for j in range(0, depth):
+                                                    array_syntax += "assign "+ signals[0] + "[" + str(j) + "] = " + str(
+                                                        width) + "'b0; // Complete the concurrent statement if required\n"
+                                                    arraySignal = True
                                     elif signals[0] in single_bitList:
                                         value = "1'b0"
                                     elif signals[0] in busList or signals[0] in signedList or signals[
@@ -1408,24 +1417,25 @@ class Generator(QWidget):
                                                 start = int(match.group(1))
                                                 end = int(match.group(2))
                                                 size = start - end + 1
-                                                #size = signal[1]
-                                                #size = int(size[4]) + 1
                                         for signal in internalSignals:
                                             if signals[0] == signal[0]:
                                                 match = re.search(r'\((\d+)\sdownto\s(\d+)\)', signal[1])
                                                 start = int(match.group(1))
                                                 end = int(match.group(2))
                                                 size = start - end + 1
-                                                #size = signal[1]
-                                                #size = int(size[4])+1
                                         value = str(size)+"'b0"
                                     else:
                                         value = str(0)
-                                assign_syntax = assign_syntax.replace("$value", value)
+                                if arraySignal == True:
+                                    conc_syntax = array_syntax
+                                else:
+                                    assign_syntax = verilog_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                    assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                    assign_syntax = assign_syntax.replace("$value", value)
 
-                                gen_stmts += assign_syntax
+                                    gen_stmts += assign_syntax
 
-                            conc_syntax = conc_syntax.replace("$statement", gen_stmts)
+                                    conc_syntax = conc_syntax.replace("$statement", gen_stmts)
                             gen_process += conc_syntax + "\n"
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
