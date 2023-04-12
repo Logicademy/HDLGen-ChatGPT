@@ -532,9 +532,9 @@ class Generator(QWidget):
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
         components = hdlDesign[0].getElementsByTagName("components")
         comp_nodes = components[0].getElementsByTagName('component')
+        self.dirs=[]
         for i in range(0, len(comp_nodes)):
             if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
                 dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
@@ -995,6 +995,8 @@ class Generator(QWidget):
         gen_int_sig = ""
         gen_internal_signal_result = ""
         arrayList=[]
+        arrayInfo=[]
+        array_assign=""
         single_bitList=[]
         busList=[]
         unsignedList=[]
@@ -1059,11 +1061,18 @@ class Generator(QWidget):
                     bits = bits + 1
 
                     output_reg_signals += "wire [" + str(width) + ":0] " + name + " [" + str(depth) + ":0];\n"
+                    top = bits -1
+                    low = bits - width -1
+                    for j in range(0, depth+1):
+                        array_assign += "assign "+name+"["+str(j)+"] = "+name+"_"+str(bits)+"["+str(top)+":"+str(low)+"];\n"
+                        top = low -1
+                        low = low -width -1
                     name = name+"_"+str(bits)
 
 
                     self.includeArrays = True
                     arrayList.append(name)
+                    arrayInfo.append([name, depth, width])
                 port_declare_syntax = verilog_root.getElementsByTagName("portDeclaration")[0].firstChild.data
 
                 port_declare_syntax = port_declare_syntax.replace("$name", name)
@@ -1161,9 +1170,11 @@ class Generator(QWidget):
                             if typeName == type[1]:
                                 depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                                 width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+                        arrayList.append(name)
+                        arrayInfo.append([name,depth,width])
                         width = int(width) - 1
                         depth = int(depth) - 1
-                        arrayList.append(name)
+
                         type = "[" + str(width) + ":0] " + name + " [" + str(depth) + ":0]"
                         name = ""
                     int_sig_syntax = verilog_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
@@ -1225,6 +1236,8 @@ class Generator(QWidget):
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
+                if array_assign != "":
+                    gen_process = array_assign + "\n"
                 clkAndRst = hdl_design[0].getElementsByTagName('clkAndRst')
                 if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
@@ -1242,9 +1255,10 @@ class Generator(QWidget):
                             clkgen_defaults = ""
                             caseEmpty = True
                             for default_out in child.getElementsByTagName("defaultOutput"):
-                                assign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
+                                arraySignal = False
+                                #assign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
                                 signals = default_out.firstChild.data.split(",")
-                                assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                #assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value = signals[1]
                                 if value == "rst state":
                                     if stateTypesList != "":
@@ -1252,7 +1266,17 @@ class Generator(QWidget):
                                         value = stateNames[0]
                                 elif value == "zero":
                                     if signals[0] in arrayList:
-                                        value = "(others =>(others => '0'))"
+                                        print("array signal")
+                                        array_syntax=""
+                                        for arr in arrayInfo:
+                                            print("checking array info")
+                                            if arr[0] == signals[0]:
+                                                print("name match")
+                                                depth = int(arr[1])+1
+                                                width = int(arr[2])
+                                                for j in range(0, depth):
+                                                    array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0;\n\t"
+                                                    arraySignal=True
                                     elif signals[0] in single_bitList:
                                         value = "1'b0"
                                     elif signals[0] in busList or signals[0] in signedList or signals[0] in unsignedList:
@@ -1288,8 +1312,13 @@ class Generator(QWidget):
                                     for states in stateNames:
                                         whenCase += "\n\t\t" + states + " :" + "\n\t\t\tbegin\n\n\t\t\tend"
                                     case_syntax = case_syntax.replace("$whenCase", whenCase)
-
-                                assign_syntax = assign_syntax.replace("$value", value)
+                                if arraySignal == True:
+                                    assign_syntax = array_syntax
+                                else:
+                                    assign_syntax = verilog_root.getElementsByTagName("processAssign")[
+                                        0].firstChild.data
+                                    assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                    assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\n\t\t" + assign_syntax + "\n"
                                 gen_defaults += "\n\t"+assign_syntax + " // default assignment"
                                 if len(signals) == 3:
@@ -1557,6 +1586,9 @@ class Generator(QWidget):
                     #size = ""
                     #type = "array"
                 if type == "single bit":
+                    size = ""
+                    type = "logic"
+                elif type[0:8] == "integer":
                     size = ""
                     type = "logic"
                 elif type[0:3] == "bus":
