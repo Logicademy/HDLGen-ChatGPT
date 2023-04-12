@@ -20,6 +20,7 @@ class HDLGen(QMainWindow):
 
         super().__init__()
         self.setWindowTitle("HDLGen V.1")
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
 
         title_font = QFont()
         title_font.setPointSize(30)
