@@ -172,7 +172,7 @@ class InternalSignal(QWidget):
                 if type(intSignal_data[2]) is list:
                     intSignal_data[2] = str(intSignal_data[2])
                 size = QTableWidgetItem(intSignal_data[2])
-                size.setTextAlignment(Qt.AlignHCenter)
+                size.setTextAlignment(Qt.AlignCenter)
                 self.intSig_table.setItem(row_position, 2, size)
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
@@ -227,12 +227,14 @@ class InternalSignal(QWidget):
                 row_position = self.intSig_table.rowCount()
                 self.intSig_table.insertRow(row_position)
                 self.intSig_table.setRowHeight(row_position, 5)
-
-                self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
+                if intSignal_data[1][0:6] == "array,":
+                    self.intSig_table.setItem(row_position, 1, QTableWidgetItem("array"))
+                else:
+                    self.intSig_table.setItem(row_position, 1, QTableWidgetItem(intSignal_data[1]))
                 if type(intSignal_data[2]) is list:
                     intSignal_data[2] = str(intSignal_data[2])
                 size = QTableWidgetItem(intSignal_data[2])
-                size.setTextAlignment(Qt.AlignHCenter)
+                size.setTextAlignment(Qt.AlignCenter)
                 self.intSig_table.setItem(row_position, 2, size)
                 self.intSig_table.setCellWidget(row_position, 3, edit_btn)
                 self.intSig_table.setCellWidget(row_position, 4, delete_btn)
@@ -384,6 +386,9 @@ class InternalSignal(QWidget):
                 type = signal[0:signal.index("(")]
                 if type == "bus" or type == "signed" or type == "unsigned":
                     value = str(int(signal[signal.index("(") + 1:signal.index(" downto")]) + 1)
+            elif signal[0:6] == "array,":
+                value = ""
+                type = signal
             else:
                 signal=signal.split(" ")
                 type = str(signal[0])
@@ -399,7 +404,11 @@ class InternalSignal(QWidget):
 
             self.all_intSignals.append(loaded_sig_data)
             self.intSig_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
-            self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
+            if loaded_sig_data[1][0:6] == "array,":
+                self.intSig_table.setItem(i, 1, QTableWidgetItem("array"))
+            else:
+                self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
+            #self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             size = QTableWidgetItem(str(loaded_sig_data[2]))
-            size.setTextAlignment(Qt.AlignHCenter)
+            size.setTextAlignment(Qt.AlignCenter)
             self.intSig_table.setItem(i, 2, size)

@@ -1137,9 +1137,9 @@ class Generator(QWidget):
                     elif type == "single bit":
                         single_bitList.append(name)
                         type = ""
-                    elif type[0:5] == "array":
-                        self.includeArrays = True
-                        arrayList.append(name)
+                    #elif type[0:5] == "array":
+                        #self.includeArrays = True
+                        #arrayList.append(name)
                     elif type[0:3] == "bus":
                         busList.append(name)
                         digits_list = re.findall(r'\d+', type)
@@ -1152,7 +1152,20 @@ class Generator(QWidget):
                         signedList.append(name)
                         digits_list = re.findall(r'\d+', type)
                         type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
-
+                    else:
+                        type = type.split(",")
+                        width = 0
+                        depth = 0
+                        for i in range(0, len(array_nodes)):
+                            typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                            if typeName == type[1]:
+                                depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
+                                width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+                        width = int(width) - 1
+                        depth = int(depth) - 1
+                        arrayList.append(name)
+                        type = "[" + str(width) + ":0] " + name + " [" + str(depth) + ":0]"
+                        name = ""
                     int_sig_syntax = verilog_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)

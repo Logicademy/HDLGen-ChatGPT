@@ -271,7 +271,8 @@ class IntSignalDialog(QDialog):
                 else:
                     self.intSig_name_input.setText(intSig_data[0])
                     self.sig_type_combo.setCurrentText("array")
-                    self.arrayName_input.setCurrentText(intSig_data[1])
+                    arrayname = intSig_data[1].split(",")
+                    self.arrayName_input.setCurrentText(arrayname[1])
 
         elif intSig_data[1][:15] == "Enumerated type":
             self.intSig_name_input.setText(intSig_data[0][2:])
@@ -352,7 +353,7 @@ class IntSignalDialog(QDialog):
         if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
             data.append(str(self.state_signal_Type_input.currentText())+" state signal pair(NS/CS)")
         elif self.sig_type_combo.currentText() == "array":
-            data.append(self.arrayName_input.currentText())
+            data.append("array," + self.arrayName_input.currentText())
         elif self.sig_type_combo.currentText() == "standard":
             #data.append(self.sig_type_combo.currentText())
             data.append(self.standard_signal_Type_input.currentText())
