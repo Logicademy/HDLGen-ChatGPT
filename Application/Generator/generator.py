@@ -1045,6 +1045,8 @@ class Generator(QWidget):
                     type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                 else:
                     type = type.split(",")
+                    width=0
+                    depth=0
                     for i in range(0, len(array_nodes)):
                         typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
                         if typeName == type[1]:
