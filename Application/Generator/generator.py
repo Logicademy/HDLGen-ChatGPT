@@ -94,7 +94,9 @@ class Generator(QWidget):
             for signal in io_port_node[0].getElementsByTagName('signal'):
                 name = signal.getElementsByTagName('name')[0].firstChild.data
                 type = signal.getElementsByTagName('type')[0].firstChild.data
-                if type[0:5] == "array":
+                if type[0:6] == "array,":
+                    type = type.split(",")
+                    type = type[1]
                     self.includeArrays = True
                     arrayList.append(name)
                 elif type == "single bit":
@@ -162,9 +164,6 @@ class Generator(QWidget):
                     elif type == "single bit":
                         single_bitList.append(name)
                         type = "std_logic"
-                    elif type[0:5] == "array":
-                        self.includeArrays = True
-                        arrayList.append(name)
                     elif type[0:3] == "bus":
                         busList.append(name)
                         type = type.replace("bus","std_logic_vector")
@@ -172,6 +171,11 @@ class Generator(QWidget):
                         unsignedList.append(name)
                     elif type[0:6] == "signed":
                         signedList.append(name)
+                    else:
+                        type = type.split(",")
+                        type = type[1]
+                        self.includeArrays = True
+                        arrayList.append(name)
                     int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)
@@ -666,6 +670,9 @@ class Generator(QWidget):
                     type = "std_logic"
                 elif type[0:3] == "bus":
                     type = type.replace("bus","std_logic_vector")
+                elif type[0:6] == "array,":
+                    type=type.split(",")
+                    type = type[1]
                 
                 signal_declare_syntax = signal_declare_syntax.replace("$type", type)
                 io_signal_declare_syntax = io_signal_declare_syntax.replace("$type", type)
@@ -677,7 +684,7 @@ class Generator(QWidget):
                 UUTEnt_content = re.sub(r"\[componentName]", entity_name, UUTEnt_contents)
                 UUTEnt_content = re.sub(r"\[signal]", name, UUTEnt_content)
 
-                if type[0:5] == "array":
+                if type[0:6] == "array,":
                     size = ""
                     type = "array"
                 elif type == "single bit":
@@ -768,10 +775,9 @@ class Generator(QWidget):
                     elif type == "single bit":
                         size = ""
                         type = "logic"
-                    elif type[0:5] == "array":
+                    elif type[0:6] == "array,":
                         self.includeArrays = True
-                        digits_list = re.findall(r'\d+', type)
-                        size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+                        size = ""
                         type = "array"
                     elif type[0:3] == "bus":
                         digits_list = re.findall(r'\d+', type)
@@ -935,14 +941,16 @@ class Generator(QWidget):
         for i in range(0, len(array_nodes)):
             name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
+            depth = int(depth) -1
             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+            width = int(width) -1
             sigType = array_nodes[i].getElementsByTagName('signalType')[0].firstChild.data
 
             gen_arrayType_syntax = vhdl_root.getElementsByTagName("arrayType")[0].firstChild.data
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayName", name)
             gen_arrayType_syntax = gen_arrayType_syntax.replace("$signalType", sigType)
-            gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", depth)
-            gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", width)
+            gen_arrayType_syntax = gen_arrayType_syntax.replace("$arraySize", str(depth))
+            gen_arrayType_syntax = gen_arrayType_syntax.replace("$arrayLength", str(width))
             gen_arrays += gen_arrayType_syntax
         for i in range(0, len(comp_nodes)):
             model = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
@@ -1001,6 +1009,7 @@ class Generator(QWidget):
         busList=[]
         unsignedList=[]
         signedList=[]
+        integerList=[]
         # Entity Section
         gen_signals = ""
         port_signals = ""
@@ -1161,6 +1170,11 @@ class Generator(QWidget):
                         signedList.append(name)
                         digits_list = re.findall(r'\d+', type)
                         type = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+                    elif type[0:7] == "integer":
+                        integerList.append(name)
+                        #digits_list = re.findall(r'\d+', type)
+                        #bitwidth = int(digits_list[1]).bit_length()
+                        type = "integer"#"[" + str(bitwidth) + ":0]"
                     else:
                         type = type.split(",")
                         width = 0
@@ -1180,6 +1194,8 @@ class Generator(QWidget):
                     int_sig_syntax = verilog_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_name", name)
                     int_sig_syntax = int_sig_syntax.replace("$int_sig_type", type)
+                    if type == "integer":
+                        int_sig_syntax=int_sig_syntax.replace("reg ","")
                     int_signal_description = signal.getElementsByTagName('description')[
                         0].firstChild.data
                     int_signal_description = int_signal_description.replace("&#10;", "\n// ")
@@ -1613,6 +1629,9 @@ class Generator(QWidget):
                     digits_list = re.findall(r'\d+', type)
                     size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                     type = "array"
+                elif type[0:7] == "integer":
+                    size = ""
+                    type = "logic"
                 else:
                     type = type.split(",")
                     for i in range(0, len(array_nodes)):
@@ -1705,11 +1724,9 @@ class Generator(QWidget):
                     elif type == "single bit":
                         size = ""
                         type = "logic"
-                    elif type[0:5] == "array":
-                        self.includeArrays = True
-                        digits_list = re.findall(r'\d+', type)
-                        size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
-                        type = "array"
+                    elif type[0:8] == "integer":
+                        size = ""
+                        type = "logic"
                     elif type[0:3] == "bus":
                         digits_list = re.findall(r'\d+', type)
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
@@ -1719,6 +1736,14 @@ class Generator(QWidget):
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                         type = "array"
                     elif type[0:6] == "signed":
+                        digits_list = re.findall(r'\d+', type)
+                        size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
+                        type = "array"
+                    elif type[0:7] == "integer":
+                        size = ""
+                        type = "logic"
+                    else:
+                        self.includeArrays = True
                         digits_list = re.findall(r'\d+', type)
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                         type = "array"
