@@ -84,6 +84,8 @@ class note_Dialog(QDialog):
 
     def get_data(self):
         data = self.note_input.toPlainText().strip()
+        data=data.replace("\n"," ")
+        data=data.replace(","," ")
         self.cancelled = False
         self.close()
         return data
