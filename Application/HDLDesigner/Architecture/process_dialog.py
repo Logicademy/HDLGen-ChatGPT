@@ -59,30 +59,9 @@ class ProcessDialog(QDialog):
         self.suffix_input.setEnabled(False)
         self.suffix_input.setText("_p")
 
-        self.out_sig_header_layout = QHBoxLayout()
-        self.out_sig_label = QLabel("Output Signals")
-        self.out_sig_label.setFont(bold_font)
-        self.val_label = QLabel("Default Value")
-        self.val_label.setFont(bold_font)
-        self.Binval_label = QLabel("Binary Value")
-        self.Binval_label.setFont(bold_font)
         self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in Ports")
         self.out_sig_empty_info.setFixedSize(400, 300)
-        self.list_div = QFrame()
-        self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
-        self.list_div.setFixedHeight(1)
 
-        self.CSlist_div = QFrame()
-        self.CSlist_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
-        self.CSlist_div.setFixedHeight(1)
-
-        self.CSNS_header_layout = QHBoxLayout()
-        self.CSNS_label = QLabel("Assign signals")
-        self.CSNS_label.setFont(bold_font)
-        self.onRst_label = QLabel("on rst")
-        self.onRst_label.setFont(bold_font)
-        self.onClk_label = QLabel("on clk")
-        self.onClk_label.setFont(bold_font)
         self.CSNS_empty_info = QLabel("No CS NS Signals found!\nPlease add signals in Internal Signals")
         self.CSNS_empty_info.setFixedSize(400, 300)
         self.CSNS_table = QTableWidget()
@@ -122,7 +101,7 @@ class ProcessDialog(QDialog):
     def setup_ui(self):
         bold_font = QFont()
         bold_font.setBold(True)
-        bold_font.setPointSize(7)
+        bold_font.setPointSize(10)
 
         self.in_sig_layout.addWidget(self.in_sig_label, alignment=Qt.AlignTop)
         self.in_sig_layout.addItem(QSpacerItem(1, 10))
@@ -131,16 +110,10 @@ class ProcessDialog(QDialog):
         self.in_sig_frame.setLayout(self.in_sig_layout)
         self.in_sig_frame.setFixedWidth(175)
 
-        #self.out_sig_header_layout.addWidget(self.out_sig_label,alignment=Qt.AlignRight)
-        #self.out_sig_header_layout.addWidget(self.val_label,alignment=Qt.AlignRight)
-        #self.out_sig_header_layout.addWidget(self.Binval_label,alignment=Qt.AlignRight)
-
-        #self.out_sig_layout.addLayout(self.out_sig_header_layout)
-        #self.out_sig_layout.addWidget(self.list_div)
         self.out_sig_table.setFrameStyle(QFrame.NoFrame)
         self.out_sig_table.setColumnCount(4)
         self.out_sig_table.setShowGrid(False)
-        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Binary Value'])
+        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Value'])
         header = self.out_sig_table.horizontalHeader()
         header.setSectionsClickable(False)
         header.setSectionsMovable(False)
@@ -157,15 +130,9 @@ class ProcessDialog(QDialog):
         self.out_sig_frame.setFrameStyle(QFrame.NoFrame)
         self.out_sig_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
         self.out_sig_frame.setLayout(self.out_sig_layout)
-        self.out_sig_frame.setFixedSize(325, 275)
+        self.out_sig_frame.setFixedSize(750, 275)
 
-        self.CSNS_header_layout.addWidget(self.CSNS_label)
-        self.CSNS_header_layout.addItem(QSpacerItem(50, 1))
-        self.CSNS_header_layout.addWidget(self.onClk_label)
-        self.CSNS_header_layout.addWidget(self.onRst_label)
 
-        #self.CSNS_layout.addLayout(self.CSNS_header_layout)
-        #self.CSNS_layout.addWidget(self.CSlist_div)
         self.CSNS_table.setFrameStyle(QFrame.NoFrame)
         self.CSNS_table.setColumnCount(4)
         self.CSNS_table.setShowGrid(False)
@@ -188,7 +155,7 @@ class ProcessDialog(QDialog):
         self.CSNS_frame.setFrameStyle(QFrame.NoFrame)
         self.CSNS_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
         self.CSNS_frame.setLayout(self.CSNS_layout)
-        self.CSNS_frame.setFixedSize(325, 275)
+        self.CSNS_frame.setFixedSize(750, 275)
         self.CSNS_frame.hide()
 
         self.input_layout.addWidget(self.proc_name_label, 0, 0, 1, 1)
@@ -209,7 +176,7 @@ class ProcessDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(550, 400)
+        self.input_frame.setFixedSize(1000, 400)
         self.input_frame.setLayout(self.input_layout)
         self.seq_checkBox.clicked.connect(self.seq_checked)
         self.ok_btn.clicked.connect(self.get_data)
@@ -220,7 +187,6 @@ class ProcessDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def populate_signals(self, proj_dir):
-
         sensitivityList_flag = 0
         outputList_flag = 0
 
@@ -286,32 +252,30 @@ class ProcessDialog(QDialog):
                         self.in_sig_layout.addWidget(self.in_sig_list)
 
                 if sensitivityList_flag == 0:
-
                     self.in_sig_layout.addWidget(self.in_sig_empty_info, alignment=Qt.AlignTop)
-
 
                 if len(self.output_signals) != 0:
 
                     outputList_flag = 1
 
                     for signal in self.output_signals:
+                        print(signal)
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
 
                         out_val_combo = QComboBox()
-                        out_val_options = self.input_signals + self.internal_signals #+ "select"
+                        out_val_options = self.input_signals + self.internal_signals  # + "select"
                         out_val_options.append("zero")
-                        #out_val_options.append("Custom")
+                        # out_val_options.append("Custom")
                         out_val_options.insert(0, "Custom")
-                        #out_val_options.insert(1, "zero")
-                        #out_val_options.insert(2, "one")
+                        # out_val_options.insert(1, "zero")
+                        # out_val_options.insert(2, "one")
                         out_val_combo.addItems(out_val_options)
-                        #out_val_options.pop(0)
+                        # out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
-                        out_val_input.setFixedWidth(60)
-                        out_val_input.setPlaceholderText("Eg. 1")
+                        out_val_input.setPlaceholderText("Enter binary value or text")
 
                         row_position = self.out_sig_table.rowCount()
                         self.out_sig_table.insertRow(row_position)
@@ -326,25 +290,25 @@ class ProcessDialog(QDialog):
                         CScheckbox.setFixedWidth(45)
 
                         CSout_val_combo = QComboBox()
-                        CSout_val_options = self.input_signals + self.internal_signals #+ "select"
+                        CSout_val_options = self.input_signals + self.internal_signals  # + "select"
                         CSout_val_options.append("zero")
-                        #CSout_val_options.append("Select")
+                        # CSout_val_options.append("Select")
                         CSout_val_options.insert(0, "Select")
                         CSout_val_combo.addItems(CSout_val_options)
-                        #CSout_val_options.pop(0)
+                        # CSout_val_options.pop(0)
 
                         CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
 
                         onRst_val_combo = QComboBox()
-                        onRst_val_options = self.input_signals + self.internal_signals #+ "select" + "zero"
+                        onRst_val_options = self.input_signals + self.internal_signals  # + "select" + "zero"
                         onRst_val_options.append("zero")
-                        #onRst_val_options.append("Select")
+                        # onRst_val_options.append("Select")
                         onRst_val_options.insert(0, "Select")
-                        #onRst_val_options.insert(0, "zero")
+                        # onRst_val_options.insert(0, "zero")
                         onRst_val_combo.addItems(onRst_val_options)
-                        #onRst_val_options.pop(0)
+                        # onRst_val_options.pop(0)
 
-                        #onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                        # onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         row_positionCSNS = self.CSNS_table.rowCount()
                         self.CSNS_table.insertRow(row_positionCSNS)
                         self.CSNS_table.setRowHeight(row_positionCSNS, 5)
@@ -360,6 +324,7 @@ class ProcessDialog(QDialog):
 
                     outputList_flag = 1
                     for signal in self.internal_signals:
+                        print(signal)
 
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
@@ -367,17 +332,16 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.append("zero")
-                        #out_val_options.append("Custom")
-                        #out_val_options.insert(0, "zero")
-                       # out_val_options.insert(0, "one")
+                        # out_val_options.append("Custom")
+                        # out_val_options.insert(0, "zero")
+                        # out_val_options.insert(0, "one")
                         out_val_options.insert(0, "Custom")
                         out_val_combo.addItems(out_val_options)
-                        #out_val_options.pop(0)
+                        # out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
-                        out_val_input.setFixedWidth(60)
-                        out_val_input.setPlaceholderText("Eg. 1")
+                        out_val_input.setPlaceholderText("Enter binary value or text")
 
                         row_position = self.out_sig_table.rowCount()
                         self.out_sig_table.insertRow(row_position)
@@ -394,25 +358,25 @@ class ProcessDialog(QDialog):
                             CSout_val_combo = QComboBox()
                             CSout_val_options = self.input_signals + self.internal_signals
                             CSout_val_options.append("zero")
-                            #CSout_val_options.append("Custom")
+                            # CSout_val_options.append("Custom")
                             CSout_val_options.insert(0, "Select")
                             CSout_val_combo.addItems(CSout_val_options)
-                            #CSout_val_options.pop(0)
+                            # CSout_val_options.pop(0)
 
-                            CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                            #CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
 
                             onRst_val_combo = QComboBox()
                             onRst_val_options = self.input_signals + self.internal_signals
                             onRst_val_options.append("zero")
-                            #onRst_val_options.append("Custom")
+                            # onRst_val_options.append("Custom")
                             onRst_val_options.insert(0, "rst state")
-                            #onRst_val_options.insert(0, "zero")
-                            #onRst_val_options.insert(0, "one")
+                            # onRst_val_options.insert(0, "zero")
+                            # onRst_val_options.insert(0, "one")
                             onRst_val_options.insert(0, "Select")
                             onRst_val_combo.addItems(onRst_val_options)
-                            #onRst_val_options.pop(0)
+                            # onRst_val_options.pop(0)
 
-                            onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                            #onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
                             row_positionCSNS = self.CSNS_table.rowCount()
                             self.CSNS_table.insertRow(row_positionCSNS)
                             self.CSNS_table.setRowHeight(row_positionCSNS, 5)
@@ -424,7 +388,7 @@ class ProcessDialog(QDialog):
                         self.CSNS_layout.addWidget(self.CSNS_table)
                     self.out_sig_layout.addWidget(self.out_sig_table)
                 if outputList_flag == 0:
-                        self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
+                    self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
                 return
 
         self.in_sig_layout.addWidget(self.in_sig_empty_info, alignment=Qt.AlignTop)
@@ -473,15 +437,16 @@ class ProcessDialog(QDialog):
             if len(temp) == 3:
                 clk_default_vals.append(temp[2])
 
-
         for i in range(0, self.out_sig_table.rowCount()):
 
             if self.out_sig_table.item(i, 1).text() in out_sigs:
                 if not clk_default_vals:
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Checked)
-                    self.out_sig_table.cellWidget(i, 2).setCurrentText(default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
+                    self.out_sig_table.cellWidget(i, 2).setCurrentText(
+                        default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
                     if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
-                        self.out_sig_table.cellWidget(i, 3).setText(default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
+                        self.out_sig_table.cellWidget(i, 3).setText(
+                            default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
 
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.item(i, 1).text() in out_sigs:
@@ -489,8 +454,10 @@ class ProcessDialog(QDialog):
                     self.seq_checkBox.setCheckState(Qt.Checked)
                     self.seq_checked()
                     self.CSNS_table.cellWidget(i, 0).setCheckState(Qt.Checked)
-                    self.CSNS_table.cellWidget(i, 2).setCurrentText(clk_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
-                    self.CSNS_table.cellWidget(i, 3).setCurrentText(default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
+                    self.CSNS_table.cellWidget(i, 2).setCurrentText(
+                        clk_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
+                    self.CSNS_table.cellWidget(i, 3).setCurrentText(
+                        default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
 
 
     def cancel_selected(self):
@@ -548,14 +515,20 @@ class ProcessDialog(QDialog):
         return data
 
     def disable_custom_input(self):
+        print("in disable custom")
         combo = self.sender()
 
         if combo:
+            print(combo.pos())
             row = self.out_sig_table.indexAt(combo.pos()).row()
+            print(row)
+            print(combo.currentText())
             if combo.currentText() == "Custom":
+                print("in custom")
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)
-                self.out_sig_table.cellWidget(row, 3).setPlaceholderText("Eg. 1")
+                self.out_sig_table.cellWidget(row, 3).setPlaceholderText("Enter binary value or text")
             else:
+                print("not in custom")
                 self.out_sig_table.cellWidget(row, 3).clear()
                 self.out_sig_table.cellWidget(row, 3).setPlaceholderText("")
                 self.out_sig_table.cellWidget(row, 3).setEnabled(False)
