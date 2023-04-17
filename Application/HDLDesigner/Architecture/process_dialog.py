@@ -6,6 +6,7 @@ from PySide2.QtGui import *
 import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
+from HDLDesigner.Architecture.note_dialog import note_Dialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -31,7 +32,7 @@ class ProcessDialog(QDialog):
         self.internal_signals = []
         self.input_signals = []
         self.output_signals = []
-
+        self.notes = []
         self.input_layout = QGridLayout()
 
         self.mainLayout = QVBoxLayout()
@@ -87,14 +88,14 @@ class ProcessDialog(QDialog):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
             "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
 
+
+
         self.input_frame = QFrame()
 
         self.cancelled = True
 
         self.setup_ui()
-
         self.populate_signals(ProjectManager.get_xml_data_path())
-
         if add_or_edit == "edit" and process_data != None:
             self.load_process_data(process_data)
 
@@ -111,9 +112,9 @@ class ProcessDialog(QDialog):
         self.in_sig_frame.setFixedWidth(175)
 
         self.out_sig_table.setFrameStyle(QFrame.NoFrame)
-        self.out_sig_table.setColumnCount(4)
+        self.out_sig_table.setColumnCount(5)
         self.out_sig_table.setShowGrid(False)
-        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Value'])
+        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Value', ''])
         header = self.out_sig_table.horizontalHeader()
         header.setSectionsClickable(False)
         header.setSectionsMovable(False)
@@ -122,6 +123,8 @@ class ProcessDialog(QDialog):
         self.out_sig_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.out_sig_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.out_sig_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
+        #self.out_sig_table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
+        self.out_sig_table.setColumnWidth(4, 80)
 
         self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         vert = self.out_sig_table.verticalHeader()
@@ -259,7 +262,7 @@ class ProcessDialog(QDialog):
                     outputList_flag = 1
 
                     for signal in self.output_signals:
-                        print(signal)
+                        self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
 
@@ -277,7 +280,17 @@ class ProcessDialog(QDialog):
                         out_val_input = QLineEdit()
                         out_val_input.setPlaceholderText("Enter binary value or text")
 
+
                         row_position = self.out_sig_table.rowCount()
+                        #if self.notes[row_position] != "":
+                        add_note_btn = QPushButton("Add note")
+                        #else:
+                            #add_note_btn = QPushButton("Edit note")
+                        add_note_btn.setFixedSize(80, 25)
+                        add_note_btn.setStyleSheet(
+                            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+                            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+                        add_note_btn.clicked.connect(self.add_note)
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
 
@@ -285,6 +298,7 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
+                        self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
 
                         CScheckbox = QCheckBox()
                         CScheckbox.setFixedWidth(45)
@@ -324,8 +338,7 @@ class ProcessDialog(QDialog):
 
                     outputList_flag = 1
                     for signal in self.internal_signals:
-                        print(signal)
-
+                        self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
 
@@ -344,6 +357,15 @@ class ProcessDialog(QDialog):
                         out_val_input.setPlaceholderText("Enter binary value or text")
 
                         row_position = self.out_sig_table.rowCount()
+                        #if self.notes[row_position] != "":
+                        add_note_btn = QPushButton("Add note")
+                        #else:
+                            #add_note_btn = QPushButton("Edit note")
+                        add_note_btn.setFixedSize(80, 25)
+                        add_note_btn.setStyleSheet(
+                            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+                            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+                        add_note_btn.clicked.connect(self.add_note)
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
 
@@ -351,6 +373,7 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
+                        self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
                         if signal[0:2] != "NS":
                             CScheckbox = QCheckBox()
                             CScheckbox.setFixedWidth(45)
@@ -421,7 +444,7 @@ class ProcessDialog(QDialog):
                     self.in_sig_list.item(self.input_signals.index("rst")).setHidden(True)
 
     def load_process_data(self, process_data):
-
+        print("in load")
         self.proc_name_input.setText(process_data[1])
         for i in range(0, self.in_sig_list.count()):
             if self.in_sig_list.item(i).text() in process_data[2]:
@@ -429,25 +452,35 @@ class ProcessDialog(QDialog):
         out_sigs = []
         default_vals = []
         clk_default_vals = []
+        notes = []
+
         for out_sig in process_data[3]:
             temp = out_sig.split(',')
-
+            # fix for older projects
+            if len(temp) == 2:
+                temp.append("*note")
             out_sigs.append(temp[0])
             default_vals.append(temp[1])
-            if len(temp) == 3:
+            if temp[2][0:5] != "*note":
+            #if len(temp) == 3:
                 clk_default_vals.append(temp[2])
+            else:
+                notes.append(temp[2][5:])
 
         for i in range(0, self.out_sig_table.rowCount()):
-
+            self.notes.append("")
             if self.out_sig_table.item(i, 1).text() in out_sigs:
                 if not clk_default_vals:
+                    self.notes[i] = notes[out_sigs.index(self.out_sig_table.item(i, 1).text())]
+                    if self.notes[i] != "":
+                        self.out_sig_table.cellWidget(i, 4).setText("Edit note")
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Checked)
                     self.out_sig_table.cellWidget(i, 2).setCurrentText(
                         default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
                     if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
                         self.out_sig_table.cellWidget(i, 3).setText(
                             default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
-
+        print(self.notes)
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.item(i, 1).text() in out_sigs:
                 if clk_default_vals:
@@ -458,6 +491,7 @@ class ProcessDialog(QDialog):
                         clk_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
                     self.CSNS_table.cellWidget(i, 3).setCurrentText(
                         default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
+
 
 
     def cancel_selected(self):
@@ -479,7 +513,7 @@ class ProcessDialog(QDialog):
         processName = self.proc_name_input.text().strip().replace(" ", "")
         if processName[-2:] != "_p":
             processName=processName+"_p"
-        data.append(processName)#self.proc_name_input.text())
+        data.append(processName)
         rstBoolean = False
 
         for i in range(self.in_sig_list.count()):
@@ -496,8 +530,9 @@ class ProcessDialog(QDialog):
                     default_val = self.out_sig_table.cellWidget(i, 3).text()
                 else:
                     default_val = self.out_sig_table.cellWidget(i, 2).currentText()
-
-                out_sigs.append(output + "," + default_val)
+                note = self.notes[i]
+                print("putting note in hdlgen "+note)
+                out_sigs.append(output + "," + default_val + ",*note" + note)
 
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.cellWidget(i, 0).checkState() == Qt.Checked:
@@ -515,20 +550,33 @@ class ProcessDialog(QDialog):
         return data
 
     def disable_custom_input(self):
-        print("in disable custom")
         combo = self.sender()
 
         if combo:
-            print(combo.pos())
             row = self.out_sig_table.indexAt(combo.pos()).row()
-            print(row)
-            print(combo.currentText())
             if combo.currentText() == "Custom":
-                print("in custom")
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)
                 self.out_sig_table.cellWidget(row, 3).setPlaceholderText("Enter binary value or text")
             else:
-                print("not in custom")
                 self.out_sig_table.cellWidget(row, 3).clear()
                 self.out_sig_table.cellWidget(row, 3).setPlaceholderText("")
                 self.out_sig_table.cellWidget(row, 3).setEnabled(False)
+
+    def add_note(self):
+        button = self.sender()
+        if button:
+
+            row = self.out_sig_table.indexAt(button.pos()).row()
+            if button.text() == "Edit note":
+                add_note = note_Dialog("edit", self.notes[row])#"add")
+            else:
+                add_note = note_Dialog("add")
+            add_note.exec_()
+
+            if not add_note.cancelled:
+                note_data = add_note.get_data()
+                if note_data == "":
+                    self.out_sig_table.cellWidget(row, 4).setText("Add note")
+                else:
+                    self.out_sig_table.cellWidget(row, 4).setText("Edit note")
+                self.notes[row] = note_data

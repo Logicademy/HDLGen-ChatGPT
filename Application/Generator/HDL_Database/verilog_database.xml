@@ -31,5 +31,6 @@
     <concurrentstmt>assign $statement // Complete the concurrent statement if required</concurrentstmt>
     <instance>$instance $instance_label&#10;(&#10;$portAssign&#10;&#x9;);</instance>
     <component>component $model is&#10;port(&#10;$ports&#10;);&#10;end component $model; </component>
+    <note>// User to complete: START&#10;// Complete process $processName, generating signal(s) $signalList, as follows$notes&#10;// User to complete: END</note>
 
 </verilog>

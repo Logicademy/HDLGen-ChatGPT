@@ -40,5 +40,6 @@
     <concurrentstmt>$concurrentstmt_label: $statement -- Complete the concurrent statement if required and delete this comment&#10;</concurrentstmt>
     <instance>$instance_label: $instance&#10;port map(&#10;$portAssign&#10;&#x9;);</instance>
     <component>component $model is&#10;port(&#10;$ports&#10;);&#10;end component $model; </component>
+    <note>-- User to complete: START&#10;-- Complete process $processName, generating signal(s) $signalList, as follows$notes&#10;-- User to complete: END</note>
 
 </vhdl>
