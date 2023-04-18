@@ -265,6 +265,7 @@ class ProcessDialog(QDialog):
                         self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
+                        checkbox.clicked.connect(self.assignSignal_tick)
 
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals  # + "select"
@@ -274,12 +275,13 @@ class ProcessDialog(QDialog):
                         # out_val_options.insert(1, "zero")
                         # out_val_options.insert(2, "one")
                         out_val_combo.addItems(out_val_options)
+                        out_val_combo.setEnabled(False)
                         # out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
                         out_val_input.setPlaceholderText("Enter binary value or text")
-
+                        out_val_input.setEnabled(False)
 
                         row_position = self.out_sig_table.rowCount()
                         #if self.notes[row_position] != "":
@@ -287,6 +289,7 @@ class ProcessDialog(QDialog):
                         #else:
                             #add_note_btn = QPushButton("Edit note")
                         add_note_btn.setFixedSize(80, 25)
+                        add_note_btn.setEnabled(False)
                         add_note_btn.setStyleSheet(
                             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
                             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
@@ -311,7 +314,7 @@ class ProcessDialog(QDialog):
                         CSout_val_combo.addItems(CSout_val_options)
                         # CSout_val_options.pop(0)
 
-                        CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                        #CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
 
                         onRst_val_combo = QComboBox()
                         onRst_val_options = self.input_signals + self.internal_signals  # + "select" + "zero"
@@ -341,6 +344,7 @@ class ProcessDialog(QDialog):
                         self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
+                        checkbox.clicked.connect(self.assignSignal_tick)
 
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
@@ -350,15 +354,18 @@ class ProcessDialog(QDialog):
                         # out_val_options.insert(0, "one")
                         out_val_options.insert(0, "Custom")
                         out_val_combo.addItems(out_val_options)
+                        out_val_combo.setEnabled(False)
                         # out_val_options.pop(0)
 
-                        out_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                        #out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
+                        out_val_input.setEnabled(False)
                         out_val_input.setPlaceholderText("Enter binary value or text")
 
                         row_position = self.out_sig_table.rowCount()
                         #if self.notes[row_position] != "":
                         add_note_btn = QPushButton("Add note")
+                        add_note_btn.setEnabled(False)
                         #else:
                             #add_note_btn = QPushButton("Edit note")
                         add_note_btn.setFixedSize(80, 25)
@@ -470,6 +477,9 @@ class ProcessDialog(QDialog):
         for i in range(0, self.out_sig_table.rowCount()):
             self.notes.append("")
             if self.out_sig_table.item(i, 1).text() in out_sigs:
+                self.out_sig_table.cellWidget(i, 2).setEnabled(True)
+                self.out_sig_table.cellWidget(i, 3).setEnabled(True)
+                self.out_sig_table.cellWidget(i, 4).setEnabled(True)
                 if not clk_default_vals:
                     self.notes[i] = notes[out_sigs.index(self.out_sig_table.item(i, 1).text())]
                     if self.notes[i] != "":
@@ -478,8 +488,14 @@ class ProcessDialog(QDialog):
                     self.out_sig_table.cellWidget(i, 2).setCurrentText(
                         default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
                     if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
+                        self.out_sig_table.cellWidget(i, 3).setEnabled(True)
+                        #self.out_sig_table.cellWidget(i, 3).setPlaceholderText("Enter binary value or text")
                         self.out_sig_table.cellWidget(i, 3).setText(
                             default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
+                    else:
+                        self.out_sig_table.cellWidget(i, 3).clear()
+                        self.out_sig_table.cellWidget(i, 3).setPlaceholderText("")
+                        self.out_sig_table.cellWidget(i, 3).setEnabled(False)
         print(self.notes)
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.item(i, 1).text() in out_sigs:
@@ -580,3 +596,18 @@ class ProcessDialog(QDialog):
                 else:
                     self.out_sig_table.cellWidget(row, 4).setText("Edit note")
                 self.notes[row] = note_data
+
+    def assignSignal_tick(self):
+        print("assignSignalTick")
+        tick = self.sender()
+        if tick:
+            row = self.out_sig_table.indexAt(tick.pos()).row()
+            print("box ticked")
+            if self.out_sig_table.cellWidget(row, 0).checkState() == Qt.Checked:
+                self.out_sig_table.cellWidget(row, 2).setEnabled(True)
+                self.out_sig_table.cellWidget(row, 3).setEnabled(True)
+                self.out_sig_table.cellWidget(row, 4).setEnabled(True)
+            else:
+                self.out_sig_table.cellWidget(row, 2).setEnabled(False)
+                self.out_sig_table.cellWidget(row, 3).setEnabled(False)
+                self.out_sig_table.cellWidget(row, 4).setEnabled(False)
