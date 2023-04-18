@@ -45,8 +45,10 @@ class ProcessDialog(QDialog):
         self.in_sig_label.setFont(title_font)
 
         self.seq_checkBox = QCheckBox("Sequential")
-        #self.seq_label = QLabel("Sequential")
         self.seq_checkBox.setStyleSheet(WHITE_COLOR)
+
+        self.seq_ceBox = QCheckBox("CE")
+        self.seq_ceBox.setStyleSheet(WHITE_COLOR)
 
         self.in_sig_layout = QVBoxLayout()
         self.in_sig_frame = QFrame()
@@ -148,9 +150,7 @@ class ProcessDialog(QDialog):
         self.CSNS_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.CSNS_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.CSNS_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
-        #self.CSNS_table.horizontalScrollMode()
         self.CSNS_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        #self.CSNS_table.horizontalScrollBar().hide()
         vert = self.CSNS_table.verticalHeader()
         vert.hide()
 
@@ -165,7 +165,7 @@ class ProcessDialog(QDialog):
         self.input_layout.addWidget(self.proc_name_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.suffix_label, 0, 1, 1, 1)
         self.input_layout.addWidget(self.suffix_input, 1, 1, 1, 1)
-        #self.input_layout.addWidget(self.seq_label, 0, 2, 1, 1)
+        self.input_layout.addWidget(self.seq_ceBox, 0, 2, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.seq_checkBox, 1, 2, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.in_sig_frame, 0, 3, 7, 2)
         self.input_layout.addWidget(self.out_sig_frame, 3, 0, 4, 2)
@@ -236,8 +236,10 @@ class ProcessDialog(QDialog):
 
                         self.in_sig_layout.addWidget(self.in_sig_list)
                         self.seq_checkBox.setVisible(False)
+                        self.seq_ceBox.setVisible(False)
                     if self.clkState == True:
                         self.seq_checkBox.setVisible(True)
+
                         self.in_sig_list.item(self.input_signals.index("clk")).setHidden(True)
                         if self.rstState == True:
                             self.in_sig_list.item(self.input_signals.index("rst")).setHidden(True)
@@ -284,10 +286,7 @@ class ProcessDialog(QDialog):
                         out_val_input.setEnabled(False)
 
                         row_position = self.out_sig_table.rowCount()
-                        #if self.notes[row_position] != "":
                         add_note_btn = QPushButton("Add note")
-                        #else:
-                            #add_note_btn = QPushButton("Edit note")
                         add_note_btn.setFixedSize(80, 25)
                         add_note_btn.setEnabled(False)
                         add_note_btn.setStyleSheet(
@@ -309,7 +308,6 @@ class ProcessDialog(QDialog):
                         CSout_val_combo = QComboBox()
                         CSout_val_options = self.input_signals + self.internal_signals  # + "select"
                         CSout_val_options.append("zero")
-                        # CSout_val_options.append("Select")
                         CSout_val_options.insert(0, "Select")
                         CSout_val_combo.addItems(CSout_val_options)
                         # CSout_val_options.pop(0)
@@ -357,7 +355,7 @@ class ProcessDialog(QDialog):
                         out_val_combo.setEnabled(False)
                         # out_val_options.pop(0)
 
-                        #out_val_combo.currentTextChanged.connect(self.disable_custom_input)
+                        out_val_combo.currentTextChanged.connect(self.disable_custom_input)
                         out_val_input = QLineEdit()
                         out_val_input.setEnabled(False)
                         out_val_input.setPlaceholderText("Enter binary value or text")
@@ -415,7 +413,7 @@ class ProcessDialog(QDialog):
                             self.CSNS_table.setItem(row_positionCSNS, 1, QTableWidgetItem(signal))
                             self.CSNS_table.setCellWidget(row_positionCSNS, 2, CSout_val_combo)
                             self.CSNS_table.setCellWidget(row_positionCSNS, 3, onRst_val_combo)
-                        self.CSNS_layout.addWidget(self.CSNS_table)
+                    self.CSNS_layout.addWidget(self.CSNS_table)
                     self.out_sig_layout.addWidget(self.out_sig_table)
                 if outputList_flag == 0:
                     self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
@@ -429,18 +427,21 @@ class ProcessDialog(QDialog):
         if self.seq_checkBox.isChecked():
             self.CSNS_frame.show()
             self.out_sig_frame.hide()
+
             if self.clkState == True:
                 for i in range(self.in_sig_list.count()):
                     self.in_sig_list.item(i).setHidden(True)
                 self.in_sig_list.item(self.input_signals.index("clk")).setHidden(False)
                 self.in_sig_list.item(self.input_signals.index("clk")).setCheckState(Qt.Checked)
                 if self.rstState == True:
+                    self.seq_ceBox.setVisible(True)
                     self.CSNS_table.showColumn(3)
                     self.in_sig_list.item(self.input_signals.index("rst")).setHidden(False)
                     self.in_sig_list.item(self.input_signals.index("rst")).setCheckState(Qt.Checked)
                 else:
                     self.CSNS_table.hideColumn(3)
         else:
+            self.seq_ceBox.setVisible(False)
             self.CSNS_frame.hide()
             self.out_sig_frame.show()
             for i in range(self.in_sig_list.count()):
@@ -459,6 +460,7 @@ class ProcessDialog(QDialog):
         out_sigs = []
         default_vals = []
         clk_default_vals = []
+        ce_default_vals = []
         notes = []
 
         for out_sig in process_data[3]:
@@ -469,8 +471,10 @@ class ProcessDialog(QDialog):
             out_sigs.append(temp[0])
             default_vals.append(temp[1])
             if temp[2][0:5] != "*note":
-            #if len(temp) == 3:
+                if len(temp) == 3:
+                    temp.append("N/A")
                 clk_default_vals.append(temp[2])
+                ce_default_vals.append(temp[3])
             else:
                 notes.append(temp[2][5:])
 
@@ -507,6 +511,10 @@ class ProcessDialog(QDialog):
                         clk_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
                     self.CSNS_table.cellWidget(i, 3).setCurrentText(
                         default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
+                    if ce_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())] == "ce":
+                        self.seq_ceBox.setCheckState(Qt.Checked)
+
+
 
 
 
@@ -538,7 +546,6 @@ class ProcessDialog(QDialog):
                 if self.in_sig_list.item(i).text() == "rst":
                     rstBoolean = True
 
-
         for i in range(self.out_sig_table.rowCount()):
             if self.out_sig_table.cellWidget(i, 0).checkState() == Qt.Checked:
                 output = self.out_sig_table.item(i, 1).text()
@@ -557,7 +564,10 @@ class ProcessDialog(QDialog):
                 if rstBoolean == False:
                     rst_default_val = "N/A"
                 clk_default_val = self.CSNS_table.cellWidget(i, 2).currentText()
-                out_sigs.append(output + "," + rst_default_val + "," + clk_default_val)
+                if self.seq_ceBox.checkState() == Qt.Checked:
+                    out_sigs.append(output + "," + rst_default_val + "," + clk_default_val + ",ce")
+                else:
+                    out_sigs.append(output + "," + rst_default_val + "," + clk_default_val + ",N/A")
 
         data.append(in_sigs)
         data.append(out_sigs)

@@ -274,9 +274,11 @@ class Generator(QWidget):
                             gen_defaults = "\t"
                             if_gen_defaults = "\t"
                             clkgen_defaults = ""
+                            ceInSeq=False
                             caseEmpty=True
                             notes = ""
                             signalList = ""
+
                             for default_out in child.getElementsByTagName("defaultOutput"):
 
 
@@ -333,6 +335,10 @@ class Generator(QWidget):
                                     clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
                                     value = signals[2]
+                                    if len(signals) == 3:
+                                        signals.append("N/A")
+                                    if signals[3] != "N/A":
+                                        ceInSeq = True
                                     if value == "zero":
                                         if signals[0] in arrayList:
                                             value = "(others =>(others => '0'))"
@@ -360,16 +366,22 @@ class Generator(QWidget):
                                             if_syntax = vhdl_root.getElementsByTagName("ifStatement")[0].firstChild.data
                                             if_syntax = if_syntax.replace("$assignment", "rst")
                                             if_syntax = if_syntax.replace("$value", clkRst.getElementsByTagName('ActiveRstLvl')[0].firstChild.data)
-                                            if_syntax = if_syntax.replace("$default_assignments", if_gen_defaults)#gen_defaults )
+                                            if_syntax = if_syntax.replace("$default_assignments", if_gen_defaults)
                                            # if_gen_defaults = "\t" + if_syntax + "\n"
                                             if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
                                                 elsif_syntax = vhdl_root.getElementsByTagName("elsifStatement")[0].firstChild.data
                                                 elsif_syntax = elsif_syntax.replace("$edge", clkEdge)
+                                                if ceInSeq == True:
+                                                    clkgen_defaults = "\tif ce = '1' then -- enable register\n"+clkgen_defaults+"\tend if;\n"
+                                                    clkgen_defaults = indent(clkgen_defaults, '    ')
                                                 elsif_syntax = elsif_syntax.replace("$default_assignments",clkgen_defaults)
                                                 if_syntax = if_syntax.replace("$else", elsif_syntax)
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
                                             else:
                                                 else_syntax = vhdl_root.getElementsByTagName("elseStatement")[0].firstChild.data
+                                                if ceInSeq == True:
+                                                    clkgen_defaults = "\tif ce = '1' then -- enable register\n"+clkgen_defaults+"\tend if;\n"
+                                                    clkgen_defaults = indent(clkgen_defaults, '    ')
                                                 else_syntax = else_syntax.replace("$default_assignments", clkgen_defaults )
                                                 if_syntax = if_syntax.replace("$else", else_syntax)
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
@@ -1290,6 +1302,7 @@ class Generator(QWidget):
                             gen_defaults = ""
                             if_gen_defaults = ""
                             clkgen_defaults = ""
+                            ceInSeq=False
                             caseEmpty = True
                             notes = ""
                             signalList = ""
@@ -1367,15 +1380,23 @@ class Generator(QWidget):
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
                                     clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
                                     clkgen_defaults += "\n\t\t" + clkAssign_syntax
+                                    if len(signals) == 3:
+                                        signals.append("N/A")
+                                    if signals[3] != "N/A":
+                                        ceInSeq = True
                                 else:
                                     signalList += ", "+signals[0]
                                     notes += "\n// "+signals[2][5:]
+                            rstlvl=""
+                            clkEdge = ""
                             if gen_defaults != "":
                                 if clkgen_defaults != "":
                                     for clkRst in clkAndRst[0].getElementsByTagName("clkAndRst"):
                                         clkEdge = "posedge"
                                         if clkRst.getElementsByTagName('activeClkEdge')[0].firstChild.data == "H-L":
                                             clkEdge = "negedge"
+                                        clkif_syntax = verilog_root.getElementsByTagName("clkIfStatement")[0].firstChild.data
+                                        clkif_syntax = clkif_syntax.replace("$edge", clkEdge)
                                         if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
                                             if_syntax = verilog_root.getElementsByTagName("ifStatement")[0].firstChild.data
                                             if_syntax = if_syntax.replace("$assignment", "rst")
@@ -1385,14 +1406,33 @@ class Generator(QWidget):
                                             if_syntax = if_syntax.replace("$default_assignments",
                                                                           if_gen_defaults)
                                             #if_gen_defaults = "\n\t" + if_syntax
-
-                                            else_syntax = verilog_root.getElementsByTagName("elseStatement")[
+                                            if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
+                                                else_syntax = verilog_root.getElementsByTagName("elseStatement")[
                                                     0].firstChild.data
-                                            else_syntax = else_syntax.replace("$default_assignments",
+                                                if ceInSeq == True:
+                                                    clkgen_defaults = indent(clkgen_defaults, '    ')
+                                                    clkgen_defaults = "\n\t\tif ( ce ) // enable register\n\t\t\tbegin"+clkgen_defaults+"\n\t\t\tend"
+                                                    clkgen_defaults = indent(clkgen_defaults, '    ')
+                                                else_syntax = else_syntax.replace("$default_assignments",clkgen_defaults)
+                                                if_syntax = if_syntax.replace("$else", else_syntax)
+                                                clkgen_defaults = "\t" + if_syntax + "\n"
+                                            else:
+                                                else_syntax = verilog_root.getElementsByTagName("elseStatement")[0].firstChild.data
+                                                if ceInSeq == True:
+                                                    clkgen_defaults = indent(clkgen_defaults, '    ')
+                                                    clkgen_defaults = "\n\t\tif ( ce ) // enable register\n\t\t\tbegin"+clkgen_defaults+"\n\t\t\tend"
+                                                    clkgen_defaults = indent(clkgen_defaults, '    ')
+                                                else_syntax = else_syntax.replace("$default_assignments",
                                                                                   clkgen_defaults)
-                                            if_syntax = if_syntax.replace("$else", else_syntax)
-                                            clkgen_defaults = "\t" + if_syntax
-                                        clkgen_defaults = clkgen_defaults.rstrip()
+                                                if_syntax = if_syntax.replace("$else", else_syntax)
+                                                clkgen_defaults = "\t" + if_syntax + "\n"
+                                                clkgen_defaults = indent(clkgen_defaults,'    ')
+                                                clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
+                                                clkgen_defaults = "\t" + clkif_syntax + "\n"
+                                        else:
+                                            clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
+                                            clkgen_defaults = "\t" + clkif_syntax + "\n"
+                                    clkgen_defaults = clkgen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
                                 else:
                                     if caseEmpty == False:
