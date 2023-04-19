@@ -9,6 +9,7 @@ sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.IOPorts.io_port_dialog import IOPortDialog
 from HDLDesigner.IOPorts.sequential_dialog import seqDialog
+from PySide2.QtCore import QObject, Signal
 
 from HDLDesigner.Architecture.architecture import Architecture
 
@@ -17,7 +18,7 @@ WHITE_COLOR = "color: white"
 ICONS_DIR = "../../Resources/icons/"
 
 class IOPorts(QWidget):
-
+    save_signal = Signal(bool)
     def __init__(self, proj_dir):
         super().__init__()
 
@@ -56,11 +57,11 @@ class IOPorts(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
-        self.save_signal_btn = QPushButton("Save")
-        self.save_signal_btn.setFixedSize(60, 30)
-        self.save_signal_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+       # self.save_signal_btn = QPushButton("Save")
+        #self.save_signal_btn.setFixedSize(60, 30)
+        #self.save_signal_btn.setStyleSheet(
+        #    "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+        #    " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         # Port list layout widgets
         self.name_label = QLabel("Name")
@@ -153,9 +154,9 @@ class IOPorts(QWidget):
         self.port_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.port_action_layout.addWidget(self.port_list_frame)#, alignment=Qt.AlignCenter)
         self.port_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.port_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
+        #self.port_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
-        self.save_signal_btn.clicked.connect(self.save_data)
+        #self.save_signal_btn.clicked.connect(self.save_data)
 
         self.port_action_frame.setFrameShape(QFrame.StyledPanel)
         self.port_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -222,6 +223,7 @@ class IOPorts(QWidget):
                 self.all_signals.append(rst_details)
                 self.all_signals_names.append(("rst"))
             self.update_clk_rst_btn()
+            self.save_data()
 
 
     def add_signal(self):
@@ -257,6 +259,7 @@ class IOPorts(QWidget):
             self.port_table.setItem(row_position, 3, size)
             self.port_table.setCellWidget(row_position, 4, edit_btn)
             self.port_table.setCellWidget(row_position, 5, delete_btn)
+            self.save_data()
 
     def delete_clicked(self):
         button = self.sender()
@@ -265,6 +268,7 @@ class IOPorts(QWidget):
             self.port_table.removeRow(row)
             self.all_signals.pop(row)
             self.all_signals_names.pop(row)
+            self.save_data()
 
     def checkBox_clicked(self):
         button = self.sender()
@@ -286,6 +290,7 @@ class IOPorts(QWidget):
                     self.all_signals_names.pop(self.all_signals_names.index("rst"))
                 self.seqSytle_editbtn.setVisible(False)
                 self.clkAndRst = []
+
         else:
             if button.isChecked():
                 self.seqSytle_checkBox.setChecked(False)
@@ -300,10 +305,12 @@ class IOPorts(QWidget):
                     self.all_signals_names.pop(self.all_signals_names.index("rst"))
                 self.seqSytle_editbtn.setVisible(False)
                 self.clkAndRst = []
+
             else:
                 self.clkAndRst = []
                 self.seqSytle_editbtn.setVisible(True)
                 self.seqSytle_checkBox.setChecked(True)
+        self.save_data()
 
 
 
@@ -345,8 +352,10 @@ class IOPorts(QWidget):
                 self.port_table.setItem(row, 3, size)
                 self.port_table.setCellWidget(row, 4, edit_btn)
                 self.port_table.setCellWidget(row, 5, delete_btn)
+                self.save_data()
             else:
                 self.all_signals[row][4]=self.all_signals[row][4].replace("\n", "&#10;")
+                self.save_data()
 
     def save_data(self):
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -410,6 +419,9 @@ class IOPorts(QWidget):
         # Writing xml file
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
+        hdl = False
+        self.save_signal.emit(hdl)
+        print("Saved port signal")
 
     def load_data(self, proj_dir):
 

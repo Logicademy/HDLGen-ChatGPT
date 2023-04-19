@@ -12,7 +12,7 @@ from ProjectManager.project_manager import ProjectManager
 WHITE_COLOR = "color: white"
 
 class CompDetails(QWidget):
-
+    save_signal = Signal(bool)
     def __init__(self, proj_dir):
         super().__init__()
         small_text_font = QFont()
@@ -64,13 +64,13 @@ class CompDetails(QWidget):
         self.comp_date_label.setStyleSheet(WHITE_COLOR)
         self.comp_date_label.setFont(small_text_font)
 
-        self.save_btn = QPushButton("Save")
-        self.save_btn.setFixedSize(60, 30)
-        self.save_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-        self.save_btn.setEnabled(False)
+        #self.save_btn = QPushButton("Save")
+        #self.save_btn.setFixedSize(60, 30)
+        #self.save_btn.setStyleSheet(
+            #"QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
+            #"QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            #" QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+        #self.save_btn.setEnabled(False)
 
         self.reset_btn = QPushButton("Reset")
         self.reset_btn.setFixedSize(60, 30)
@@ -97,12 +97,13 @@ class CompDetails(QWidget):
         email = config.get('user', 'email').strip()
         company = config.get('user', 'company').strip()
         self.comp_author_input.setText(author)
+
         self.comp_email_input.setText(email)
         self.comp_company_input.setText(company)
         self.input_layout.addWidget(self.comp_name_label, 0, 0)
         self.input_layout.addWidget(self.comp_name_input, 1, 0, 1, 2)
         self.comp_name_input.setText(ProjectManager.get_proj_name())
-        self.comp_name_input.textChanged.connect(self.enable_save_btn)
+        #self.comp_name_input.textChanged.connect(self.enable_save_btn)
         self.comp_title_input.setText("To be Completed")
         self.input_layout.addWidget(self.comp_title_label, 2, 0)
         self.input_layout.addWidget(self.comp_title_input, 3, 0, 1, 2)
@@ -125,9 +126,19 @@ class CompDetails(QWidget):
         self.input_layout.addWidget(self.comp_date_picker, 12, 1, 1, 1)
 
         self.btn_layout.addWidget(self.reset_btn)
-        self.btn_layout.addWidget(self.save_btn)
+        #self.btn_layout.addWidget(self.save_btn)
 
-        self.save_btn.clicked.connect(self.save_data)
+
+
+        self.comp_author_input.textChanged.connect(self.save_data)
+        self.comp_name_input.textChanged.connect(self.save_data)
+        self.comp_email_input.textChanged.connect(self.save_data)
+        self.comp_title_input.textChanged.connect(self.save_data)
+        self.comp_company_input.textChanged.connect(self.save_data)
+        self.comp_description_input.textChanged.connect(self.save_data)
+        self.comp_date_picker.dateChanged.connect(self.save_data)
+        #self.comp_date_picker.textChanged.connect(self.save_data)
+        #self.save_btn.clicked.connect(self.save_data)
         self.reset_btn.clicked.connect(self.reset_comp_details)
 
         self.input_layout.addItem(self.vspacer, 13, 0, 1, 2)
@@ -143,11 +154,11 @@ class CompDetails(QWidget):
 
         self.setLayout(self.mainLayout)
 
-    def enable_save_btn(self):
-        if self.comp_name_input.text() != "":
-            self.save_btn.setEnabled(True)
-        else:
-            self.save_btn.setEnabled(False)
+    #def enable_save_btn(self):
+        #if self.comp_name_input.text() != "":
+            #self.save_btn.setEnabled(True)
+        #else:
+            #self.save_btn.setEnabled(False)
 
     def update_comp_name(self):
         self.comp_name_input.setText(ProjectManager.get_proj_name())
@@ -162,10 +173,10 @@ class CompDetails(QWidget):
 
         comp_name = self.comp_name_input.text()
         if comp_name == "":
-            comp_name = "null"
+            comp_name = "To be completed"
         comp_title = self.comp_title_input.text()
         if comp_title == "":
-            comp_title = "null"
+            comp_title = "To be completed"
         cursor = self.comp_description_input.textCursor()
         doc = self.comp_description_input.document()
         lines = ""
@@ -185,16 +196,16 @@ class CompDetails(QWidget):
         lines = lines.strip()
         comp_description = lines#self.comp_description_input.toPlainText()
         if comp_description == "":
-            comp_description = "null"
+            comp_description = "To be completed"
         comp_authors = self.comp_author_input.text().strip()
         if comp_authors == "":
-            comp_authors = "null"
+            comp_authors = "To be completed"
         comp_company = self.comp_company_input.text().strip()
         if comp_company == "":
-            comp_company = "null"
+            comp_company = "To be completed"
         comp_email = self.comp_email_input.text().strip()
         if comp_email == "":
-            comp_email = "null"
+            comp_email = "To be completed"
         comp_date = self.comp_date_picker.text()
 
         header = hdlDesign[0].getElementsByTagName('header')
@@ -215,6 +226,9 @@ class CompDetails(QWidget):
         # Writing xml file
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
+        hdl = False
+        self.save_signal.emit(hdl)
+        print("Saved Component details")
 
 
     def reset_comp_details(self):
@@ -246,7 +260,7 @@ class CompDetails(QWidget):
 
         if comp_name != "null":
             self.comp_name_input.setText(comp_name)
-            self.enable_save_btn()
+            #self.enable_save_btn()
 
         if comp_title != "null":
             self.comp_title_input.setText(comp_title)

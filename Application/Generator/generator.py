@@ -175,7 +175,6 @@ class Generator(QWidget):
                     elif type[0:13] == "integer range":
                         integerList.append(name)
                     else:
-                        print(name)
                         type = type.split(",")
                         type = type[1]
                         self.includeArrays = True
@@ -1323,12 +1322,9 @@ class Generator(QWidget):
                                         value = stateNames[0]
                                 elif value == "zero":
                                     if signals[0] in arrayList:
-                                        print("array signal")
                                         array_syntax=""
                                         for arr in arrayInfo:
-                                            print("checking array info")
                                             if arr[0] == signals[0]:
-                                                print("name match")
                                                 depth = int(arr[1])+1
                                                 width = int(arr[2])
                                                 for j in range(0, depth):
@@ -1496,12 +1492,9 @@ class Generator(QWidget):
                                     value = str(size)+"'b" + value
                                 elif value == "zero":
                                     if signals[0] in arrayList:
-                                        print("array signal")
                                         array_syntax = ""
                                         for arr in arrayInfo:
-                                            print("checking array info")
                                             if arr[0] == signals[0]:
-                                                print("name match")
                                                 depth = int(arr[1]) + 1
                                                 width = int(arr[2])
                                                 for j in range(0, depth):

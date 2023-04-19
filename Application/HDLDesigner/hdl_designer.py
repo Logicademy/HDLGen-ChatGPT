@@ -69,18 +69,19 @@ class HDLDesigner(QWidget):
         self.mainLayout.addLayout(self.preview_pane_layout)
         self.setLayout(self.mainLayout)
 
-        self.compDetails.save_btn.clicked.connect(self.update_preview)
-        ioPorts.save_signal_btn.clicked.connect(self.update_preview)
-        ioPorts.save_signal_btn.clicked.connect(self.update_arch)
-        internalSignal.save_signal_btn.clicked.connect(self.update_preview)
+        #self.compDetails.save_btn.clicked.connect(self.update_preview)
+        self.compDetails.save_signal.connect(self.update_preview)
+        #ioPorts.save_signal_btn.clicked.connect(self.update_preview)
+        ioPorts.save_signal.connect(self.update_preview)
+        ioPorts.save_signal.connect(self.update_arch)
+        #ioPorts.save_signal_btn.clicked.connect(self.update_arch)
+        #internalSignal.save_signal_btn.clicked.connect(self.update_preview)
+        internalSignal.save_signal.connect(self.update_preview)
         #self.architecture.save_btn.clicked.connect(self.update_preview)
         self.architecture.save_signal.connect(self.update_preview)
 
     def update_preview(self, hdl):
-        print(hdl)
-        print(self.hdl)
         if hdl != False:
-            print("in here")
             self.hdl = hdl
 
         if self.hdl == "VHDL":

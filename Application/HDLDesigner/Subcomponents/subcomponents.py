@@ -47,11 +47,11 @@ class Subcomponents(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
-        self.save_signal_btn = QPushButton("Save")
-        self.save_signal_btn.setFixedSize(60, 30)
-        self.save_signal_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+        #self.save_signal_btn = QPushButton("Save")
+        #self.save_signal_btn.setFixedSize(60, 30)
+        #self.save_signal_btn.setStyleSheet(
+            #"QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            #" QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
@@ -100,9 +100,9 @@ class Subcomponents(QWidget):
         self.package_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.package_action_layout.addWidget(self.component_list_frame)
         self.package_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.package_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
+        #self.package_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
-        self.save_signal_btn.clicked.connect(self.save_data)
+        #self.save_signal_btn.clicked.connect(self.save_data)
 
         self.package_action_frame.setFrameShape(QFrame.StyledPanel)
         self.package_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -135,6 +135,7 @@ class Subcomponents(QWidget):
             self.component_table.setItem(row_position, 0, QTableWidgetItem(comp_data[0]))
             self.component_table.setCellWidget(row_position, 1, edit_btn)
             self.component_table.setCellWidget(row_position, 2, delete_btn)
+            self.save_data()
 
     def edit_component(self):
         button = self.sender()
@@ -166,6 +167,7 @@ class Subcomponents(QWidget):
                 self.component_table.setItem(row, 0, QTableWidgetItem(comp_data[0]))
                 self.component_table.setCellWidget(row, 1, edit_btn)
                 self.component_table.setCellWidget(row, 2, delete_btn)
+                self.save_data()
 
     def delete_component_clicked(self):
         button = self.sender()
@@ -174,6 +176,7 @@ class Subcomponents(QWidget):
             self.component_table.removeRow(row)
             self.comps.pop(row)
             self.comps_names.pop(row)
+            self.save_data()
     def save_data(self):
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
 
@@ -208,6 +211,7 @@ class Subcomponents(QWidget):
         with open(mainPackageDir, "w") as f:
             f.write(xml_str)
         self.generator.generate_mainPackage()
+        print("Saved sub component")
 
     def load_data(self):
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"

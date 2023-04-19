@@ -63,13 +63,13 @@ class Architecture(QWidget):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         #self.new_instance_btn.setFont(btn_font)
 
-        self.save_btn = QPushButton("Save")
-        self.save_btn.setEnabled(False)
-        self.save_btn.setFixedSize(60, 30)
-        self.save_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+        #self.save_btn = QPushButton("Save")
+       # self.save_btn.setEnabled(False)
+        #self.save_btn.setFixedSize(60, 30)
+        #self.save_btn.setStyleSheet(
+         #   "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
+         #   " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
+         #   "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
 
         self.name_label = QLabel("Name")
         self.name_label.setFont(bold_font)
@@ -98,7 +98,7 @@ class Architecture(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.enable_save_btn()
+        #self.enable_save_btn()
         self.top_layout.addWidget(self.arch_name_input, 0, 0, 1, 1)
         self.top_layout.addWidget(self.new_proc_btn, 0, 1, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
@@ -157,7 +157,7 @@ class Architecture(QWidget):
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.arch_action_layout.addWidget(self.list_frame)#, alignment=Qt.AlignCenter)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
-        self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
+        #self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
         #self.save_btn.clicked.connect(self.save_data)
 
         self.mainLayout.addWidget(self.main_frame)#, alignment=Qt.AlignCenter)
@@ -451,9 +451,9 @@ class Architecture(QWidget):
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
         self.generator.generate_mainPackage()
-        print("saved")
         hdl=False
         self.save_signal.emit(hdl)
+        print("Saved process, concurrent or instance")
 
 
     def load_data(self, proj_dir):
@@ -622,9 +622,9 @@ class Architecture(QWidget):
         else:
             self.process = "Combin"
             self.arch_name_input.setText('Combinational')
-    def enable_save_btn(self):
+    #def enable_save_btn(self):
         #if self.arch_name_input.text() != "":
-        if self.arch_name_input.text() != "":
-            self.save_btn.setEnabled(True)
-        else:
-            self.save_btn.setEnabled(False)
+        #if self.arch_name_input.text() != "":
+        #    self.save_btn.setEnabled(True)
+        #else:
+           # self.save_btn.setEnabled(False)

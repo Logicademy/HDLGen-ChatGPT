@@ -46,11 +46,11 @@ class Package(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
-        self.save_signal_btn = QPushButton("Save")
-        self.save_signal_btn.setFixedSize(60, 30)
-        self.save_signal_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+        #self.save_signal_btn = QPushButton("Save")
+        #self.save_signal_btn.setFixedSize(60, 30)
+        #self.save_signal_btn.setStyleSheet(
+        #    "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+        #    " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
@@ -104,9 +104,9 @@ class Package(QWidget):
         self.package_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.package_action_layout.addWidget(self.package_list_frame)
         self.package_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.package_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
+        #self.package_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
-        self.save_signal_btn.clicked.connect(self.save_data)
+        #self.save_signal_btn.clicked.connect(self.save_data)
 
         self.package_action_frame.setFrameShape(QFrame.StyledPanel)
         self.package_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -147,6 +147,7 @@ class Package(QWidget):
             self.package_table.setItem(row_position, 3, QTableWidgetItem(array_data[3]))
             self.package_table.setCellWidget(row_position, 4, edit_btn)
             self.package_table.setCellWidget(row_position, 5, delete_btn)
+            self.save_data()
 
     def edit_package(self):
         button = self.sender()
@@ -185,6 +186,7 @@ class Package(QWidget):
                 self.package_table.setItem(row, 3, QTableWidgetItem(array_data[3]))
                 self.package_table.setCellWidget(row, 4, edit_btn)
                 self.package_table.setCellWidget(row, 5, delete_btn)
+                self.save_data()
 
     def delete_clicked(self):
         button = self.sender()
@@ -193,6 +195,7 @@ class Package(QWidget):
             self.package_table.removeRow(row)
             self.arrays.pop(row)
             self.arrays_names.pop(row)
+            self.save_data()
 
     def save_data(self):
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
@@ -230,6 +233,7 @@ class Package(QWidget):
         with open(mainPackageDir, "w") as f:
             f.write(xml_str)
         self.generator.generate_mainPackage()
+        print("Saved type")
 
     def load_data(self):
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"

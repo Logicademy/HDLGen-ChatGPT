@@ -8,11 +8,13 @@ import qtawesome as qta
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.InternalSignal.int_sig_dialog import IntSignalDialog
+from PySide2.QtCore import QObject, Signal
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 ICONS_DIR = "../../Resources/icons/"
 
 class InternalSignal(QWidget):
+    save_signal = Signal(bool)
     def __init__(self, proj_dir):
         super().__init__()
 
@@ -43,11 +45,11 @@ class InternalSignal(QWidget):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
 
-        self.save_signal_btn = QPushButton("Save")
-        self.save_signal_btn.setFixedSize(60, 30)
-        self.save_signal_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+        #self.save_signal_btn = QPushButton("Save")
+        #self.save_signal_btn.setFixedSize(60, 30)
+        #self.save_signal_btn.setStyleSheet(
+            #"QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+           # " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
 
         # Port list layout widgets
@@ -126,9 +128,9 @@ class InternalSignal(QWidget):
         self.intSig_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.intSig_action_layout.addWidget(self.intSig_list_frame)#, alignment=Qt.AlignCenter)
         self.intSig_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.intSig_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
+        #self.intSig_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
 
-        self.save_signal_btn.clicked.connect(self.save_data)
+        #self.save_signal_btn.clicked.connect(self.save_data)
 
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -193,6 +195,7 @@ class InternalSignal(QWidget):
                     self.all_intSignals.append(intSignal_data)
                     self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                 i=i-1
+            self.save_data()
     def edit_intSign(self):
         button = self.sender()
         if button:
@@ -255,6 +258,7 @@ class InternalSignal(QWidget):
                     self.all_intSignals.append(intSignal_data)
                     self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                 i=i-1
+            self.save_data()
         else:
             self.all_intSignals[row][3]=self.all_intSignals[row][3].replace("\n", "&#10;")
 
@@ -277,6 +281,7 @@ class InternalSignal(QWidget):
             else:
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
+            self.save_data()
 
 
 
@@ -335,6 +340,9 @@ class InternalSignal(QWidget):
         # Writing xml file
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
+        hdl = False
+        self.save_signal.emit(hdl)
+        print("Saved internal signal(s)")
 
 
 
