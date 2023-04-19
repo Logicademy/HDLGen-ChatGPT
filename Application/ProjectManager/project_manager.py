@@ -401,15 +401,15 @@ class ProjectManager(QWidget):
             vhdl_dir = root.createElement('vhdl_folder')
             vhdl_model_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/model')
             vhdl_testbench_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/testbench')
-
+            vhdl_ChatGPT_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/ChatGPT')
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
             lang_name = root.createElement('name')
             lang_name.appendChild(root.createTextNode('VHDL'))
             lang_data.appendChild(lang_name)
 
-            vhdl_folders = [vhdl_model_dir, vhdl_testbench_dir]
-            no_of_folders = 2
+            vhdl_folders = [vhdl_model_dir, vhdl_testbench_dir,vhdl_ChatGPT_dir]
+            no_of_folders = 3
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
@@ -436,6 +436,7 @@ class ProjectManager(QWidget):
             verilog_dir = root.createElement('verilog_folder')
             verilog_model_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/model')
             verilog_tstbnch_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/testbench')
+            verilog_ChatGPT_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/ChatGPT')
 
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
@@ -443,8 +444,8 @@ class ProjectManager(QWidget):
             lang_name.appendChild(root.createTextNode('Verilog'))
             lang_data.appendChild(lang_name)
 
-            verilog_folders = [verilog_model_dir, verilog_tstbnch_dir]
-            no_of_folders = 2
+            verilog_folders = [verilog_model_dir, verilog_tstbnch_dir, verilog_ChatGPT_dir]
+            no_of_folders = 3
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():

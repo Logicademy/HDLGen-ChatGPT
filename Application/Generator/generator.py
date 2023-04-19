@@ -7,7 +7,7 @@ import sys
 from textwrap import indent
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
-
+import configparser
 
 class Generator(QWidget):
 
@@ -18,6 +18,11 @@ class Generator(QWidget):
         self.arrayPackage = ""
         self.includeArrays = False
         self.tcl_path = ""
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')
+        self.chatGPTHeader = self.config.get('user', 'chatGPTHeader')
+        self.chatGPTModel = self.config.get('user', 'chatGPTModel')
+        self.chatGPTTestbench = self.config.get('user', 'chatGPTTestbench')
 
 
     def generate_folders(self):
@@ -56,6 +61,8 @@ class Generator(QWidget):
     def generate_vhdl(self):
         entity_name = ""
         gen_vhdl = ""
+        chatgpt_header = ""
+        chatgpt_vhdl = ""
         gen_array_vhdl = ""
 
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -222,19 +229,21 @@ class Generator(QWidget):
                 gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[
                     0].firstChild.data + "\n\n"
-
+                chatgpt_header += gen_header
                 gen_vhdl += gen_header
 
                 # entity signal dictionary
                 gen_entity = gen_entity.replace("$comp_name", entity_name)
                 gen_entity_signal = "-- entity signal dictionary\n"
                 gen_entity_signal += entity_signal_description+"\n"
+                chatgpt_header += gen_entity_signal
                 gen_vhdl += gen_entity_signal
 
                 # internal signal dictionary
                 gen_internal_signal = "-- internal signal dictionary\n"
                 gen_internal_signal_result = gen_internal_signal_result +"\n"
                 gen_internal_signal += gen_internal_signal_result
+                chatgpt_header += gen_internal_signal
                 gen_vhdl += gen_internal_signal
                 # Libraries Section
 
@@ -490,23 +499,29 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$int_sig_declaration", gen_int_sig)
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
                     gen_vhdl += gen_library
+                    chatgpt_vhdl += gen_library
                     if self.includeArrays == True:
                         gen_vhdl += "use work.MainPackage.all;"
-
+                        chatgpt_vhdl += "use work.MainPackage.all;"
                     # Entity Section placement
                     gen_vhdl += "\n\n" + gen_entity + "\n\n"
+                    chatgpt_vhdl += "\n\n" + gen_entity + "\n\n"
                     gen_vhdl += gen_arch
+                    chatgpt_vhdl += gen_arch
 
-        return entity_name, gen_vhdl, instances
+        return entity_name, gen_vhdl, instances, chatgpt_header, chatgpt_vhdl
 
     def create_vhdl_file(self):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        entity_name, vhdl_code, instances = self.generate_vhdl()
-
+        entity_name, vhdl_code, instances, chatgpt_header, chatgpt_vhdl = self.generate_vhdl()
+        chatgpt_header = self.chatGPTHeader + "\n" + chatgpt_header
+        chatgpt_vhdl = self.chatGPTModel + "\n" + chatgpt_vhdl
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
+        chatgpt_header_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_vhdl_header_ChatGPT.txt")
+        chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_vhdl_ChatGPT.txt")
         overwrite = False
         if os.path.exists(vhdl_file_path):
             msgBox = QMessageBox()
@@ -532,6 +547,16 @@ class Generator(QWidget):
             f.write(vhdl_code)
 
         print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
+
+        with open(chatgpt_header_file_path, "w") as f:
+            f.write(chatgpt_header)
+
+        print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
+
+        with open(chatgpt_vhdl_file_path, "w") as f:
+            f.write(chatgpt_vhdl)
+
+        print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
         self.entity_name = entity_name
         return overwrite, instances
 
@@ -626,6 +651,7 @@ class Generator(QWidget):
 
     def create_vhdl_testbench_code(self):
         tb_code = ""
+        chatgpt_tb = ""
         clkrst = 0
         xml_data_path = ProjectManager.get_xml_data_path()
 
@@ -873,10 +899,12 @@ class Generator(QWidget):
                     gen_library += "use work.MainPackage.all;"
                 gen_library += "\n"
                 tb_code += gen_library
+                chatgpt_tb += gen_library
 
                 # Entity declaration
                 gen_entity = gen_entity.replace("$comp_name", entity_name)
                 tb_code += gen_entity +"\n\n"
+                chatgpt_tb += gen_entity + "\n\n"
                 tbSignalDeclaration=""
                 if sig_decl != "":
                     tbSignalDeclaration += sig_decl +"\n"
@@ -931,18 +959,19 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     tb_code += gen_arch
-        return entity_name, tb_code, wcfg
+                    chatgpt_tb += gen_arch
+        return entity_name, tb_code, wcfg, chatgpt_tb
 
     def create_testbench_file(self, overwrite):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
 
-        entity_name, vhdl_tb_code, waveform = self.create_vhdl_testbench_code()
-
+        entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
+        chatgpt_tb = self.chatGPTTestbench + "\n" + chatgpt_tb
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_TB.vhd")
         vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_HDLGen_TB.vhd")
         waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", self.entity_name + "_TB_behav.wcfg")
-
+        chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_TB_ChatGPT.txt")
         if os.path.exists(vhdl_tb_path) == False:
             with open(vhdl_tb_path, "w") as f:
                 f.write(vhdl_tb_code)
@@ -960,6 +989,11 @@ class Generator(QWidget):
 
         with open(waveform_path, "w") as f:
             f.write(waveform)
+        print("Waveform file successfully generated at ", waveform_path)
+
+        with open(chatgpt_vhdl_file_path, "w") as f:
+            f.write(chatgpt_tb)
+        print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
     def generate_mainPackage(self):
         gen_arrays =""
         comp = ""
@@ -1022,6 +1056,8 @@ class Generator(QWidget):
 
     def generate_verilog(self):
         gen_verilog = ""
+        chatgpt_header = ""
+        chatgpt_verilog = ""
 
         xml_data_path = ProjectManager.get_xml_data_path()
 
@@ -1271,7 +1307,7 @@ class Generator(QWidget):
                 gen_header += "// Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "// Date           : " + header_node[0].getElementsByTagName("date")[
                     0].firstChild.data + "\n\n"
-
+                chatgpt_header += gen_header
                 gen_verilog += gen_header
 
                 # entity signal dictionary
@@ -1279,13 +1315,15 @@ class Generator(QWidget):
                 gen_entity_signal = "// entity signal dictionary\n"
                 gen_entity_signal += entity_signal_description + "\n"
                 gen_verilog += gen_entity_signal
+                chatgpt_header += gen_entity_signal
 
                 # internal signal dictionary
                 gen_internal_signal = "// internal signal dictionary\n"
                 gen_internal_signal_result = gen_internal_signal_result + "\n"
                 gen_internal_signal += gen_internal_signal_result
                 gen_verilog += gen_internal_signal
-
+                chatgpt_header += gen_internal_signal
+                
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
@@ -1568,20 +1606,23 @@ class Generator(QWidget):
                     gen_arch = arch_syntax.replace("$int_sig_declaration", gen_int_sig)
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
                     gen_entity = gen_entity.replace("$arch", indent(gen_arch,'    '))
-
+                    chatgpt_verilog += "\n\n" + gen_entity + "\n\n"
                     # Entity Section placement
                     gen_verilog += "\n\n" + gen_entity + "\n\n"
 
-        return entity_name, gen_verilog, instances
+        return entity_name, gen_verilog, instances, chatgpt_header, chatgpt_verilog
 
     def create_verilog_file(self):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        entity_name, verilog_code, instances = self.generate_verilog()
-
+        entity_name, verilog_code, instances, chatgpt_header, chatgpt_verilog = self.generate_verilog()
+        chatgpt_header = self.chatGPTHeader.replace("VHDL","Verilog") + "\n" + chatgpt_header
+        chatgpt_verilog = self.chatGPTHeader.replace("VHDL","Verilog") + "\n" + chatgpt_verilog
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_HDLGen.v")
+        chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_verilog_header_ChatGPT.txt")
+        chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_verilog_ChatGPT.txt")
         overwrite = False
 
         if os.path.exists(verilog_file_path):
@@ -1606,10 +1647,21 @@ class Generator(QWidget):
                 f.write(verilog_code)
         with open(verilog_file_HDLGen_path, "w") as f:
             f.write(verilog_code)
+
+        with open(chatgpt_header_file_path, "w") as f:
+            f.write(chatgpt_header)
+
+        print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
+
+        with open(chatgpt_verilog_file_path, "w") as f:
+            f.write(chatgpt_verilog)
+
+        print("ChatGPT VHDL model successfully generated at ", chatgpt_verilog_file_path)
         self.entity_name = entity_name
         return overwrite, instances
     def create_verilog_testbench_code(self):
         tb_code = ""
+        chatgpt_tb=""
         clkrst = 0
         xml_data_path = ProjectManager.get_xml_data_path()
 
@@ -1864,6 +1916,7 @@ class Generator(QWidget):
                 # Entity declaration
                 gen_entity = gen_entity.replace("$comp_name", entity_name)
                 tb_code += gen_entity +"\n\n"
+                chatgpt_tb += gen_entity +"\n\n"
                 tbSignalDeclaration = sig_decl + "\n" + other_signals + "\n" + io_signals + "\n\n" + control_signals
                 # Architecture section
 
@@ -1911,17 +1964,19 @@ class Generator(QWidget):
                 gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                 tb_code += gen_arch
-        return entity_name, tb_code, wcfg
+                chatgpt_tb += gen_arch
+        return entity_name, tb_code, wcfg, chatgpt_tb
 
     def create_verilog_testbench_file(self, overwrite):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
 
-        entity_name, verilog_tb_code, waveform = self.create_verilog_testbench_code()
-
+        entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
+        chatgpt_tb = self.chatGPTTestbench.replace("VHDL","Verilog") + "\n" + chatgpt_tb
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
         verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_HDLGen_TB.v")
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", self.entity_name + "_TB_behav.wcfg")
+        chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_verilog_TB_ChatGPT.txt")
         if os.path.exists(verilog_tb_path) == False:
             with open(verilog_tb_path, "w") as f:
                 f.write(verilog_tb_code)
@@ -1939,3 +1994,8 @@ class Generator(QWidget):
 
         with open(waveform_path, "w") as f:
             f.write(waveform)
+        print("Waveform file successfully generated at ", waveform_path)
+
+        with open(chatgpt_verilog_file_path, "w") as f:
+            f.write(chatgpt_tb)
+        print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)

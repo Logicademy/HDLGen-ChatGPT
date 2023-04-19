@@ -85,9 +85,9 @@ class HDLDesigner(QWidget):
             self.hdl = hdl
 
         if self.hdl == "VHDL":
-            entity_name, code, instances = Generator.generate_vhdl(self)
+            entity_name, code, instances, chatgpt_header, chatgpt_vhdl = Generator.generate_vhdl(self)
         elif self.hdl == "Verilog":
-            entity_name,code, instances = Generator.generate_verilog(self)
+            entity_name,code, instances, chatgpt_header, chatgpt_vhdl = Generator.generate_verilog(self)
         self.preview_window.setText(code)
     def update_arch(self):
         xml_data_path = ProjectManager.get_xml_data_path()
