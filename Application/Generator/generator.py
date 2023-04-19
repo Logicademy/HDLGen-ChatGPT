@@ -79,6 +79,7 @@ class Generator(QWidget):
         busList=[]
         unsignedList=[]
         signedList=[]
+        integerList = []
         # Entity Section
         gen_signals = ""
         entity_signal_description = ""
@@ -171,7 +172,10 @@ class Generator(QWidget):
                         unsignedList.append(name)
                     elif type[0:6] == "signed":
                         signedList.append(name)
+                    elif type[0:13] == "integer range":
+                        integerList.append(name)
                     else:
+                        print(name)
                         type = type.split(",")
                         type = type[1]
                         self.includeArrays = True
@@ -354,6 +358,7 @@ class Generator(QWidget):
                                 else:
                                     signalList += ", "+signals[0]
                                     notes += "\n-- "+signals[2][5:]
+                                    notes = notes.replace("&amp;", "&")
                             if gen_defaults != "":
                                 if clkgen_defaults != "":
                                     for clkRst in clkAndRst[0].getElementsByTagName("clkAndRst"):
@@ -1387,6 +1392,8 @@ class Generator(QWidget):
                                 else:
                                     signalList += ", "+signals[0]
                                     notes += "\n// "+signals[2][5:]
+                                    notes = notes.replace("&amp;", "&")
+
                             rstlvl=""
                             clkEdge = ""
                             if gen_defaults != "":
@@ -1437,6 +1444,7 @@ class Generator(QWidget):
                                 else:
                                     if caseEmpty == False:
                                         gen_defaults += "\n" + case_syntax
+
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
                                     note_syntax = note_syntax.replace("$signalList",signalList)
@@ -1691,7 +1699,7 @@ class Generator(QWidget):
                 if type == "single bit":
                     size = ""
                     type = "logic"
-                elif type[0:8] == "integer":
+                elif type[0:7] == "integer":
                     size = ""
                     type = "logic"
                 elif type[0:3] == "bus":
@@ -1801,7 +1809,7 @@ class Generator(QWidget):
                     elif type == "single bit":
                         size = ""
                         type = "logic"
-                    elif type[0:8] == "integer":
+                    elif type[0:7] == "integer":
                         size = ""
                         type = "logic"
                     elif type[0:3] == "bus":

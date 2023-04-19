@@ -72,12 +72,17 @@ class HDLDesigner(QWidget):
         self.compDetails.save_btn.clicked.connect(self.update_preview)
         ioPorts.save_signal_btn.clicked.connect(self.update_preview)
         ioPorts.save_signal_btn.clicked.connect(self.update_arch)
-        self.architecture.save_btn.clicked.connect(self.update_preview)
         internalSignal.save_signal_btn.clicked.connect(self.update_preview)
+        #self.architecture.save_btn.clicked.connect(self.update_preview)
+        self.architecture.save_signal.connect(self.update_preview)
 
     def update_preview(self, hdl):
+        print(hdl)
+        print(self.hdl)
         if hdl != False:
-            self.hdl=hdl
+            print("in here")
+            self.hdl = hdl
+
         if self.hdl == "VHDL":
             entity_name, code, instances = Generator.generate_vhdl(self)
         elif self.hdl == "Verilog":

@@ -79,11 +79,14 @@ class note_Dialog(QDialog):
 
 
     def load_sig_data(self, note_data):
-        note_data = note_data
+        print(note_data)
+        note_data = note_data.replace("&amp;","&")
         self.note_input.setPlainText(note_data)
 
     def get_data(self):
         data = self.note_input.toPlainText().strip()
+        print(data)
+        data=data.replace("&","&amp;")
         data=data.replace("\n"," ")
         data=data.replace(","," ")
         self.cancelled = False

@@ -12,13 +12,14 @@ from HDLDesigner.Architecture.process_dialog import ProcessDialog
 from HDLDesigner.Architecture.concurrentstmt_dialog import ConcurrentStmtDialog
 from HDLDesigner.Architecture.instance_dialog import InstanceDialog
 from Generator.generator import Generator
+from PySide2.QtCore import QObject, Signal
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 ICONS_DIR = "../../Resources/icons/"
 
 class Architecture(QWidget):
-
+    save_signal = Signal(bool)
     def __init__(self, proj_dir):
         super().__init__()
 
@@ -157,7 +158,7 @@ class Architecture(QWidget):
         self.arch_action_layout.addWidget(self.list_frame)#, alignment=Qt.AlignCenter)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
-        self.save_btn.clicked.connect(self.save_data)
+        #self.save_btn.clicked.connect(self.save_data)
 
         self.mainLayout.addWidget(self.main_frame)#, alignment=Qt.AlignCenter)
 
@@ -198,6 +199,7 @@ class Architecture(QWidget):
             self.proc_table.setItem(row_position, 2, QTableWidgetItem(input_signals))
             self.proc_table.setCellWidget(row_position, 3, edit_btn)
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
+            self.save_data()
 
     def edit_proc(self):
         button = self.sender()
@@ -240,6 +242,7 @@ class Architecture(QWidget):
                 self.proc_table.setItem(row, 2, QTableWidgetItem(input_signals))
                 self.proc_table.setCellWidget(row, 3, edit_btn)
                 self.proc_table.setCellWidget(row, 4, delete_btn)
+                self.save_data()
 
     def add_concurrentstmt(self):
         add_concurrentstmt = ConcurrentStmtDialog("add")
@@ -271,6 +274,7 @@ class Architecture(QWidget):
             self.proc_table.setItem(row_position, 2, QTableWidgetItem("-"))
             self.proc_table.setCellWidget(row_position, 3, edit_btn)
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
+            self.save_data()
 
     def edit_concurrentstmt(self):
         button = self.sender()
@@ -303,6 +307,7 @@ class Architecture(QWidget):
                 self.proc_table.setItem(row, 2, QTableWidgetItem("-"))
                 self.proc_table.setCellWidget(row, 3, edit_btn)
                 self.proc_table.setCellWidget(row, 4, delete_btn)
+                self.save_data()
     def add_instance(self):
         add_instance= InstanceDialog("add")
         add_instance.exec_()
@@ -333,6 +338,7 @@ class Architecture(QWidget):
             self.proc_table.setItem(row_position, 2, QTableWidgetItem("-"))
             self.proc_table.setCellWidget(row_position, 3, edit_btn)
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
+            self.save_data()
 
     def edit_instance(self):
         button = self.sender()
@@ -365,6 +371,7 @@ class Architecture(QWidget):
                 self.proc_table.setItem(row, 2, QTableWidgetItem("-"))
                 self.proc_table.setCellWidget(row, 3, edit_btn)
                 self.proc_table.setCellWidget(row, 4, delete_btn)
+                self.save_data()
 
     def delete_clicked(self):
         button = self.sender()
@@ -372,6 +379,8 @@ class Architecture(QWidget):
             row = self.proc_table.indexAt(button.pos()).row()
             self.proc_table.removeRow(row)
             self.all_data.pop(row)
+            self.save_data()
+
 
     def save_data(self):
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -442,6 +451,10 @@ class Architecture(QWidget):
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
         self.generator.generate_mainPackage()
+        print("saved")
+        hdl=False
+        self.save_signal.emit(hdl)
+
 
     def load_data(self, proj_dir):
         xml_data_path = ProjectManager.get_xml_data_path()
