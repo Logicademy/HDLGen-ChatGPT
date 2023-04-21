@@ -80,14 +80,33 @@ class note_Dialog(QDialog):
 
     def load_sig_data(self, note_data):
         print(note_data)
+        note_data = note_data.replace("&#10;", "\n")
         note_data = note_data.replace("&amp;","&")
         self.note_input.setPlainText(note_data)
 
     def get_data(self):
         data = self.note_input.toPlainText().strip()
         print(data)
+        cursor = self.note_input.textCursor()
+        doc = self.note_input.document()
+        lines = ""
+        line = ""
+        for i in range(doc.blockCount()):
+            block = doc.findBlockByNumber(i)
+            if block.isVisible():
+                for j in range(block.layout().lineCount()):
+                    lineStart = block.position() + block.layout().lineAt(j).textStart()
+                    lineEnd = lineStart + block.layout().lineAt(j).textLength()
+                    cursor.setPosition(lineStart)
+                    cursor.setPosition(lineEnd, QTextCursor.KeepAnchor)
+                    line += cursor.selectedText()
+                    if lineEnd == cursor.position():
+                        lines += line + "\n"
+                        line = ""
+        lines = lines.strip()
+        data = lines
         data=data.replace("&","&amp;")
-        data=data.replace("\n"," ")
+        data=data.replace("\n", "&#10;")
         data=data.replace(","," ")
         self.cancelled = False
         self.close()

@@ -170,6 +170,7 @@ class Architecture(QWidget):
 
         if not add_proc.cancelled:
             data = add_proc.get_data()
+            print(data)
             data.insert(0, "process")
             self.all_data.append(data)
 
@@ -211,6 +212,7 @@ class Architecture(QWidget):
 
             if not proc_dialog.cancelled:
                 data = proc_dialog.get_data()
+                print(data)
                 data.insert(0, "process")
                 self.proc_table.removeRow(row)
                 self.all_data.pop(row)
@@ -397,6 +399,9 @@ class Architecture(QWidget):
         for data in self.all_data:
 
             if data[0] == "process":
+                print("hello")
+                print(type(data[4]))
+                print(data)
                 process_node = root.createElement("process")
                 label_node = root.createElement("label")
                 label_node.appendChild(root.createTextNode(data[1]))
@@ -411,7 +416,9 @@ class Architecture(QWidget):
                     out_sig_node = root.createElement("defaultOutput")
                     out_sig_node.appendChild(root.createTextNode(output_signal))
                     process_node.appendChild(out_sig_node)
-
+                note_node = root.createElement("note")
+                note_node.appendChild(root.createTextNode(data[4]))
+                process_node.appendChild(note_node)
                 new_arch_node.appendChild(process_node)
 
             elif data[0] == "concurrentStmt":
@@ -496,11 +503,14 @@ class Architecture(QWidget):
                         output_signals.append(output_signal_node.firstChild.data)
 
                     temp_data.append(output_signals)
+                    note = child.getElementsByTagName("note")[0].firstChild.data
+                    temp_data.append(note)
                     temp_data.insert(0, "process")
                     self.all_data.append(temp_data)
 
+
+
                     delete_btn = QPushButton()
-                    # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
                     delete_btn.setIcon(qta.icon("mdi.delete"))
                     delete_btn.setFixedSize(35, 22)
                     delete_btn.clicked.connect(self.delete_clicked)

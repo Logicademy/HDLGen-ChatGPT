@@ -33,7 +33,8 @@ class ProcessDialog(QDialog):
         self.internal_signals = []
         self.input_signals = []
         self.output_signals = []
-        self.notes = []
+        #self.notes = []
+        self.process_notes = "None"
         self.input_layout = QGridLayout()
 
         self.mainLayout = QVBoxLayout()
@@ -57,6 +58,13 @@ class ProcessDialog(QDialog):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
         self.set_ce.setVisible(False)
+
+        self.add_note_btn = QPushButton("Add note")
+        self.add_note_btn.setFixedSize(80, 25)
+        self.add_note_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+
 
         self.in_sig_layout = QVBoxLayout()
         self.in_sig_frame = QFrame()
@@ -174,6 +182,7 @@ class ProcessDialog(QDialog):
         self.input_layout.addWidget(self.suffix_label, 0, 1, 1, 1)
         self.input_layout.addWidget(self.suffix_input, 1, 1, 1, 1)
         self.input_layout.addWidget(self.seq_checkBox, 1, 2, 1, 1, Qt.AlignCenter)
+        self.input_layout.addWidget(self.add_note_btn, 1, 3, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.seq_ceBox, 1, 3, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.set_ce, 1, 4, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.in_sig_frame, 0, 5, 7, 2)
@@ -193,6 +202,7 @@ class ProcessDialog(QDialog):
         self.seq_checkBox.clicked.connect(self.seq_checked)
         self.seq_ceBox.clicked.connect(self.ceBox_checked)
         self.set_ce.clicked.connect(self.add_ce)
+        self.add_note_btn.clicked.connect(self.add_process_note)
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
@@ -248,6 +258,7 @@ class ProcessDialog(QDialog):
                         self.in_sig_layout.addWidget(self.in_sig_list)
                         self.seq_checkBox.setVisible(False)
                         self.seq_ceBox.setVisible(False)
+                        self.add_note_btn.setVisible(True)
                     if self.clkState == True:
                         self.seq_checkBox.setVisible(True)
 
@@ -275,7 +286,7 @@ class ProcessDialog(QDialog):
                     outputList_flag = 1
 
                     for signal in self.output_signals:
-                        self.notes.append("")
+                       # self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
                         checkbox.clicked.connect(self.assignSignal_tick)
@@ -297,13 +308,13 @@ class ProcessDialog(QDialog):
                         out_val_input.setEnabled(False)
 
                         row_position = self.out_sig_table.rowCount()
-                        add_note_btn = QPushButton("Add note")
-                        add_note_btn.setFixedSize(80, 25)
-                        add_note_btn.setEnabled(False)
-                        add_note_btn.setStyleSheet(
-                            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-                            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-                        add_note_btn.clicked.connect(self.add_note)
+                      #  add_note_btn = QPushButton("Add note")
+                      #  add_note_btn.setFixedSize(80, 25)
+                       # add_note_btn.setEnabled(False)
+                       # add_note_btn.setStyleSheet(
+                      #      "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+                       #     " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+                       # add_note_btn.clicked.connect(self.add_note)
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
 
@@ -311,7 +322,7 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
-                        self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
+                       # self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
 
                         CScheckbox = QCheckBox()
                         CScheckbox.setFixedWidth(45)
@@ -350,7 +361,7 @@ class ProcessDialog(QDialog):
 
                     outputList_flag = 1
                     for signal in self.internal_signals:
-                        self.notes.append("")
+                       # self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
                         checkbox.clicked.connect(self.assignSignal_tick)
@@ -373,15 +384,15 @@ class ProcessDialog(QDialog):
 
                         row_position = self.out_sig_table.rowCount()
                         #if self.notes[row_position] != "":
-                        add_note_btn = QPushButton("Add note")
-                        add_note_btn.setEnabled(False)
+                        #add_note_btn = QPushButton("Add note")
+                        #add_note_btn.setEnabled(False)
                         #else:
                             #add_note_btn = QPushButton("Edit note")
-                        add_note_btn.setFixedSize(80, 25)
-                        add_note_btn.setStyleSheet(
-                            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-                            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-                        add_note_btn.clicked.connect(self.add_note)
+                        #add_note_btn.setFixedSize(80, 25)
+                       # add_note_btn.setStyleSheet(
+                        #    "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+                        #    " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+                       # add_note_btn.clicked.connect(self.add_note)
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
 
@@ -389,7 +400,7 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
-                        self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
+                       # self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
                         if signal[0:2] != "NS":
                             CScheckbox = QCheckBox()
                             CScheckbox.setFixedWidth(45)
@@ -437,6 +448,7 @@ class ProcessDialog(QDialog):
                 self.in_sig_list.item(self.input_signals.index("clk")).setCheckState(Qt.Checked)
                 if self.rstState == True:
                     self.seq_ceBox.setVisible(True)
+                    self.add_note_btn.setVisible(False)
                     self.CSNS_table.showColumn(3)
                     self.in_sig_list.item(self.input_signals.index("rst")).setHidden(False)
                     self.in_sig_list.item(self.input_signals.index("rst")).setCheckState(Qt.Checked)
@@ -445,6 +457,7 @@ class ProcessDialog(QDialog):
         else:
             self.seq_ceBox.setVisible(False)
             self.set_ce.setVisible(False)
+            self.add_note_btn.setVisible(True)
             self.CSNS_frame.hide()
             self.out_sig_frame.show()
             for i in range(self.in_sig_list.count()):
@@ -469,7 +482,9 @@ class ProcessDialog(QDialog):
         clk_default_vals = []
         ce_default_vals = []
         notes = []
-
+        self.process_notes = process_data[4]
+        if self.process_notes != "None":
+            self.add_note_btn.setText("Edit note")
         for out_sig in process_data[3]:
             temp = out_sig.split(',')
             # fix for older projects
@@ -486,15 +501,15 @@ class ProcessDialog(QDialog):
                 notes.append(temp[2][5:])
 
         for i in range(0, self.out_sig_table.rowCount()):
-            self.notes.append("")
+           # self.notes.append("")
             if self.out_sig_table.item(i, 1).text() in out_sigs:
                 self.out_sig_table.cellWidget(i, 2).setEnabled(True)
                 self.out_sig_table.cellWidget(i, 3).setEnabled(True)
-                self.out_sig_table.cellWidget(i, 4).setEnabled(True)
+#                self.out_sig_table.cellWidget(i, 4).setEnabled(True)
                 if not clk_default_vals:
-                    self.notes[i] = notes[out_sigs.index(self.out_sig_table.item(i, 1).text())]
-                    if self.notes[i] != "":
-                        self.out_sig_table.cellWidget(i, 4).setText("Edit note")
+                   # self.notes[i] = notes[out_sigs.index(self.out_sig_table.item(i, 1).text())]
+                   # if self.notes[i] != "":
+                      #  self.out_sig_table.cellWidget(i, 4).setText("Edit note")
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Checked)
                     self.out_sig_table.cellWidget(i, 2).setCurrentText(
                         default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
@@ -557,8 +572,8 @@ class ProcessDialog(QDialog):
                     default_val = self.out_sig_table.cellWidget(i, 3).text()
                 else:
                     default_val = self.out_sig_table.cellWidget(i, 2).currentText()
-                note = self.notes[i]
-                out_sigs.append(output + "," + default_val + ",*note" + note)
+                #note = self.notes[i]
+                out_sigs.append(output + "," + default_val + ",*note" )#+ note)
 
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.cellWidget(i, 0).checkState() == Qt.Checked:
@@ -575,6 +590,7 @@ class ProcessDialog(QDialog):
 
         data.append(in_sigs)
         data.append(out_sigs)
+        data.append(self.process_notes)
         self.cancelled = False
         self.close()
         return data
@@ -592,13 +608,32 @@ class ProcessDialog(QDialog):
                 self.out_sig_table.cellWidget(row, 3).setPlaceholderText("")
                 self.out_sig_table.cellWidget(row, 3).setEnabled(False)
 
-    def add_note(self):
+    #def add_note(self):
+       # button = self.sender()
+      #  if button:
+
+           # row = self.out_sig_table.indexAt(button.pos()).row()
+          #  if button.text() == "Edit note":
+          #      add_note = note_Dialog("edit", self.notes[row])
+          #  else:
+          #      add_note = note_Dialog("add")
+          #  add_note.exec_()
+
+           # if not add_note.cancelled:
+           #     note_data = add_note.get_data()
+          #      if note_data == "":
+          #          self.out_sig_table.cellWidget(row, 4).setText("Add note")
+          #      else:
+          #          self.out_sig_table.cellWidget(row, 4).setText("Edit note")
+           #     self.notes[row] = note_data
+
+    def add_process_note(self):
         button = self.sender()
         if button:
-
-            row = self.out_sig_table.indexAt(button.pos()).row()
             if button.text() == "Edit note":
-                add_note = note_Dialog("edit", self.ceData)
+                print(self.process_notes)
+                print(type(self.process_notes))
+                add_note = note_Dialog("edit", self.process_notes)
             else:
                 add_note = note_Dialog("add")
             add_note.exec_()
@@ -606,10 +641,10 @@ class ProcessDialog(QDialog):
             if not add_note.cancelled:
                 note_data = add_note.get_data()
                 if note_data == "":
-                    self.out_sig_table.cellWidget(row, 4).setText("Add note")
+                    self.add_note_btn.setText("Add note")
                 else:
-                    self.out_sig_table.cellWidget(row, 4).setText("Edit note")
-                self.notes[row] = note_data
+                    self.add_note_btn.setText("Edit note")
+                self.process_notes = note_data
 
     def add_ce(self):
         button = self.sender()
@@ -632,8 +667,8 @@ class ProcessDialog(QDialog):
             if self.out_sig_table.cellWidget(row, 0).checkState() == Qt.Checked:
                 self.out_sig_table.cellWidget(row, 2).setEnabled(True)
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)
-                self.out_sig_table.cellWidget(row, 4).setEnabled(True)
+                #self.out_sig_table.cellWidget(row, 4).setEnabled(True)
             else:
                 self.out_sig_table.cellWidget(row, 2).setEnabled(False)
                 self.out_sig_table.cellWidget(row, 3).setEnabled(False)
-                self.out_sig_table.cellWidget(row, 4).setEnabled(False)
+                #self.out_sig_table.cellWidget(row, 4).setEnabled(False)
