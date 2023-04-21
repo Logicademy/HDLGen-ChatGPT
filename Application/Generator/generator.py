@@ -286,7 +286,7 @@ class Generator(QWidget):
                             gen_defaults = "\t"
                             if_gen_defaults = "\t"
                             clkgen_defaults = ""
-                            ceInSeq=False
+                            ceInSeq=""
                             caseEmpty=True
                             notes = ""
                             signalList = ""
@@ -350,7 +350,7 @@ class Generator(QWidget):
                                     if len(signals) == 3:
                                         signals.append("N/A")
                                     if signals[3] != "N/A":
-                                        ceInSeq = True
+                                        ceInSeq = signals[3]
                                     if value == "zero":
                                         if signals[0] in arrayList:
                                             value = "(others =>(others => '0'))"
@@ -384,16 +384,16 @@ class Generator(QWidget):
                                             if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
                                                 elsif_syntax = vhdl_root.getElementsByTagName("elsifStatement")[0].firstChild.data
                                                 elsif_syntax = elsif_syntax.replace("$edge", clkEdge)
-                                                if ceInSeq == True:
-                                                    clkgen_defaults = "\tif ce = '1' then -- enable register\n"+clkgen_defaults+"\tend if;\n"
+                                                if ceInSeq != True:
+                                                    clkgen_defaults = "\tif "+ceInSeq+" = '1' then -- enable register\n"+clkgen_defaults+"\tend if;\n"
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
                                                 elsif_syntax = elsif_syntax.replace("$default_assignments",clkgen_defaults)
                                                 if_syntax = if_syntax.replace("$else", elsif_syntax)
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
                                             else:
                                                 else_syntax = vhdl_root.getElementsByTagName("elseStatement")[0].firstChild.data
-                                                if ceInSeq == True:
-                                                    clkgen_defaults = "\tif ce = '1' then -- enable register\n"+clkgen_defaults+"\tend if;\n"
+                                                if ceInSeq != "":
+                                                    clkgen_defaults = "\tif "+ceInSeq+" = '1' then -- enable register\n"+clkgen_defaults+"\tend if;\n"
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
                                                 else_syntax = else_syntax.replace("$default_assignments", clkgen_defaults )
                                                 if_syntax = if_syntax.replace("$else", else_syntax)
@@ -1344,7 +1344,7 @@ class Generator(QWidget):
                             gen_defaults = ""
                             if_gen_defaults = ""
                             clkgen_defaults = ""
-                            ceInSeq=False
+                            ceInSeq=""
                             caseEmpty = True
                             notes = ""
                             signalList = ""
@@ -1422,7 +1422,7 @@ class Generator(QWidget):
                                     if len(signals) == 3:
                                         signals.append("N/A")
                                     if signals[3] != "N/A":
-                                        ceInSeq = True
+                                        ceInSeq = signals[3]
                                 else:
                                     signalList += ", "+signals[0]
                                     notes += "\n// "+signals[2][5:]
@@ -1437,7 +1437,7 @@ class Generator(QWidget):
                                         if clkRst.getElementsByTagName('activeClkEdge')[0].firstChild.data == "H-L":
                                             clkEdge = "negedge"
                                         clkif_syntax = verilog_root.getElementsByTagName("clkIfStatement")[0].firstChild.data
-                                        clkif_syntax = clkif_syntax.replace("$edge", clkEdge)
+                                        #clkif_syntax = clkif_syntax.replace("$edge", clkEdge)
                                         if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
                                             if_syntax = verilog_root.getElementsByTagName("ifStatement")[0].firstChild.data
                                             if_syntax = if_syntax.replace("$assignment", "rst")
@@ -1446,13 +1446,12 @@ class Generator(QWidget):
                                                 rstlvl="negedge"
                                             if_syntax = if_syntax.replace("$default_assignments",
                                                                           if_gen_defaults)
-                                            #if_gen_defaults = "\n\t" + if_syntax
                                             if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
                                                 else_syntax = verilog_root.getElementsByTagName("elseStatement")[
                                                     0].firstChild.data
-                                                if ceInSeq == True:
+                                                if ceInSeq != "":
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
-                                                    clkgen_defaults = "\n\t\tif ( ce ) // enable register\n\t\t\tbegin"+clkgen_defaults+"\n\t\t\tend"
+                                                    clkgen_defaults = "\n\t\tif ( "+ceInSeq+" ) // enable register\n\t\t\tbegin"+clkgen_defaults+"\n\t\t\tend"
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
                                                 else_syntax = else_syntax.replace("$default_assignments",clkgen_defaults)
                                                 if_syntax = if_syntax.replace("$else", else_syntax)
@@ -1461,7 +1460,7 @@ class Generator(QWidget):
                                                 else_syntax = verilog_root.getElementsByTagName("elseStatement")[0].firstChild.data
                                                 if ceInSeq == True:
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
-                                                    clkgen_defaults = "\n\t\tif ( ce ) // enable register\n\t\t\tbegin"+clkgen_defaults+"\n\t\t\tend"
+                                                    clkgen_defaults = "\n\t\tif ( "+ceInSeq+" ) // enable register\n\t\t\tbegin"+clkgen_defaults+"\n\t\t\tend"
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
                                                 else_syntax = else_syntax.replace("$default_assignments",
                                                                                   clkgen_defaults)

@@ -7,6 +7,7 @@ import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Architecture.note_dialog import note_Dialog
+from HDLDesigner.Architecture.chipEnabled import ChipEnabledDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -47,8 +48,15 @@ class ProcessDialog(QDialog):
         self.seq_checkBox = QCheckBox("Sequential")
         self.seq_checkBox.setStyleSheet(WHITE_COLOR)
 
-        self.seq_ceBox = QCheckBox("CE")
+        self.seq_ceBox = QCheckBox("Chip Enabled")
         self.seq_ceBox.setStyleSheet(WHITE_COLOR)
+
+        self.set_ce = QPushButton("Set CE")
+        self.set_ce.setFixedSize(80, 25)
+        self.set_ce.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+        self.set_ce.setVisible(False)
 
         self.in_sig_layout = QVBoxLayout()
         self.in_sig_frame = QFrame()
@@ -165,15 +173,16 @@ class ProcessDialog(QDialog):
         self.input_layout.addWidget(self.proc_name_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.suffix_label, 0, 1, 1, 1)
         self.input_layout.addWidget(self.suffix_input, 1, 1, 1, 1)
-        self.input_layout.addWidget(self.seq_ceBox, 0, 2, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.seq_checkBox, 1, 2, 1, 1, Qt.AlignCenter)
-        self.input_layout.addWidget(self.in_sig_frame, 0, 3, 7, 2)
+        self.input_layout.addWidget(self.seq_ceBox, 1, 3, 1, 1, Qt.AlignCenter)
+        self.input_layout.addWidget(self.set_ce, 1, 4, 1, 1, Qt.AlignCenter)
+        self.input_layout.addWidget(self.in_sig_frame, 0, 5, 7, 2)
         self.input_layout.addWidget(self.out_sig_frame, 3, 0, 4, 2)
         self.input_layout.addWidget(self.CSNS_frame, 3, 0, 4, 2)
 
         self.input_layout.addItem(QSpacerItem(0, 50), 6, 0, 1, 3)
-        self.input_layout.addWidget(self.cancel_btn, 7, 3, 1, 1, alignment=Qt.AlignRight)
-        self.input_layout.addWidget(self.ok_btn, 7, 4, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.cancel_btn, 7, 5, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.ok_btn, 7, 6, 1, 1, alignment=Qt.AlignRight)
 
         self.proc_name_input.textChanged.connect(self.enable_ok_btn);
         self.input_frame.setFrameShape(QFrame.StyledPanel)
@@ -182,6 +191,8 @@ class ProcessDialog(QDialog):
         self.input_frame.setFixedSize(1000, 400)
         self.input_frame.setLayout(self.input_layout)
         self.seq_checkBox.clicked.connect(self.seq_checked)
+        self.seq_ceBox.clicked.connect(self.ceBox_checked)
+        self.set_ce.clicked.connect(self.add_ce)
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
@@ -386,25 +397,16 @@ class ProcessDialog(QDialog):
                             CSout_val_combo = QComboBox()
                             CSout_val_options = self.input_signals + self.internal_signals
                             CSout_val_options.append("zero")
-                            # CSout_val_options.append("Custom")
                             CSout_val_options.insert(0, "Select")
                             CSout_val_combo.addItems(CSout_val_options)
-                            # CSout_val_options.pop(0)
-
-                            #CSout_val_combo.currentTextChanged.connect(self.disable_custom_input)
 
                             onRst_val_combo = QComboBox()
                             onRst_val_options = self.input_signals + self.internal_signals
                             onRst_val_options.append("zero")
-                            # onRst_val_options.append("Custom")
                             onRst_val_options.insert(0, "rst state")
-                            # onRst_val_options.insert(0, "zero")
-                            # onRst_val_options.insert(0, "one")
                             onRst_val_options.insert(0, "Select")
                             onRst_val_combo.addItems(onRst_val_options)
-                            # onRst_val_options.pop(0)
 
-                            #onRst_val_combo.currentTextChanged.connect(self.disable_custom_input)
                             row_positionCSNS = self.CSNS_table.rowCount()
                             self.CSNS_table.insertRow(row_positionCSNS)
                             self.CSNS_table.setRowHeight(row_positionCSNS, 5)
@@ -442,6 +444,7 @@ class ProcessDialog(QDialog):
                     self.CSNS_table.hideColumn(3)
         else:
             self.seq_ceBox.setVisible(False)
+            self.set_ce.setVisible(False)
             self.CSNS_frame.hide()
             self.out_sig_frame.show()
             for i in range(self.in_sig_list.count()):
@@ -451,8 +454,12 @@ class ProcessDialog(QDialog):
                 if self.rstState == True:
                     self.in_sig_list.item(self.input_signals.index("rst")).setHidden(True)
 
+    def ceBox_checked(self):
+        if self.seq_ceBox.isChecked():
+            self.set_ce.setVisible(True)
+        else:
+            self.set_ce.setVisible(False)
     def load_process_data(self, process_data):
-        print("in load")
         self.proc_name_input.setText(process_data[1])
         for i in range(0, self.in_sig_list.count()):
             if self.in_sig_list.item(i).text() in process_data[2]:
@@ -493,14 +500,12 @@ class ProcessDialog(QDialog):
                         default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
                     if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
                         self.out_sig_table.cellWidget(i, 3).setEnabled(True)
-                        #self.out_sig_table.cellWidget(i, 3).setPlaceholderText("Enter binary value or text")
                         self.out_sig_table.cellWidget(i, 3).setText(
                             default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
                     else:
                         self.out_sig_table.cellWidget(i, 3).clear()
                         self.out_sig_table.cellWidget(i, 3).setPlaceholderText("")
                         self.out_sig_table.cellWidget(i, 3).setEnabled(False)
-        print(self.notes)
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.item(i, 1).text() in out_sigs:
                 if clk_default_vals:
@@ -511,12 +516,11 @@ class ProcessDialog(QDialog):
                         clk_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
                     self.CSNS_table.cellWidget(i, 3).setCurrentText(
                         default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())])
-                    if ce_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())] == "ce":
+                    if ce_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())] != "N/A":
                         self.seq_ceBox.setCheckState(Qt.Checked)
-
-
-
-
+                        self.set_ce.setVisible(True)
+                        self.set_ce.setText("Edit CE")
+                        self.ceData=ce_default_vals[out_sigs.index(self.CSNS_table.item(i, 1).text())]
 
     def cancel_selected(self):
         self.cancelled = True
@@ -554,7 +558,6 @@ class ProcessDialog(QDialog):
                 else:
                     default_val = self.out_sig_table.cellWidget(i, 2).currentText()
                 note = self.notes[i]
-                print("putting note in hdlgen "+note)
                 out_sigs.append(output + "," + default_val + ",*note" + note)
 
         for i in range(self.CSNS_table.rowCount()):
@@ -564,8 +567,9 @@ class ProcessDialog(QDialog):
                 if rstBoolean == False:
                     rst_default_val = "N/A"
                 clk_default_val = self.CSNS_table.cellWidget(i, 2).currentText()
-                if self.seq_ceBox.checkState() == Qt.Checked:
-                    out_sigs.append(output + "," + rst_default_val + "," + clk_default_val + ",ce")
+                if self.seq_ceBox.checkState() == Qt.Checked and self.set_ce.text() == "Edit CE":
+
+                    out_sigs.append(output + "," + rst_default_val + "," + clk_default_val + "," + self.ceData)
                 else:
                     out_sigs.append(output + "," + rst_default_val + "," + clk_default_val + ",N/A")
 
@@ -594,7 +598,7 @@ class ProcessDialog(QDialog):
 
             row = self.out_sig_table.indexAt(button.pos()).row()
             if button.text() == "Edit note":
-                add_note = note_Dialog("edit", self.notes[row])#"add")
+                add_note = note_Dialog("edit", self.ceData)
             else:
                 add_note = note_Dialog("add")
             add_note.exec_()
@@ -607,12 +611,24 @@ class ProcessDialog(QDialog):
                     self.out_sig_table.cellWidget(row, 4).setText("Edit note")
                 self.notes[row] = note_data
 
+    def add_ce(self):
+        button = self.sender()
+        if button:
+            if button.text() == "Set CE":
+                add_ce = ChipEnabledDialog("add")
+            else:
+                add_ce = ChipEnabledDialog("edit", self.ceData)
+            add_ce.exec_()
+
+            if not add_ce.cancelled:
+                ce_data = add_ce.get_data()
+                self.set_ce.setText("Edit CE")
+                self.ceData = ce_data
+
     def assignSignal_tick(self):
-        print("assignSignalTick")
         tick = self.sender()
         if tick:
             row = self.out_sig_table.indexAt(tick.pos()).row()
-            print("box ticked")
             if self.out_sig_table.cellWidget(row, 0).checkState() == Qt.Checked:
                 self.out_sig_table.cellWidget(row, 2).setEnabled(True)
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)

@@ -25,7 +25,7 @@
     <ifStatement>&#10;&#x9;if ( $assignment )&#10;&#x9;&#x9;begin$default_assignments&#x9;&#x9;end&#10;&#x9;$else</ifStatement>
     <elseStatement>else&#10;&#x9;&#x9;begin$default_assignments&#10;&#x9;&#x9;end</elseStatement>
     <elsifStatement>elsif $edge(clk) then&#10;$default_assignments</elsifStatement>
-    <clkIfStatement>if $edge(clk) then&#10;$default_assignments&#x9;end if;</clkIfStatement>
+    <clkIfStatement>if (clk) then&#10;$default_assignments&#x9;end if;</clkIfStatement>
     <case>&#x9;case ( $stateType )$whenCase&#10;&#x9;&#x9;default :&#10;&#x9;&#x9;&#x9;begin&#10;&#10;&#x9;&#x9;&#x9;end&#10;&#x9;endcase</case>
     <sigAssingn>$output_signal = $value;</sigAssingn>
     <processAssign>$output_signal &lt;= $value;</processAssign>
