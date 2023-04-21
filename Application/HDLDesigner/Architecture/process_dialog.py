@@ -442,6 +442,8 @@ class ProcessDialog(QDialog):
             self.out_sig_frame.hide()
 
             if self.clkState == True:
+                for i in range(0, self.out_sig_table.rowCount()):
+                    self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Unchecked)
                 for i in range(self.in_sig_list.count()):
                     self.in_sig_list.item(i).setHidden(True)
                 self.in_sig_list.item(self.input_signals.index("clk")).setHidden(False)
