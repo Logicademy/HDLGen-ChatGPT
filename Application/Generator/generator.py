@@ -288,7 +288,9 @@ class Generator(QWidget):
                             clkgen_defaults = ""
                             ceInSeq=""
                             caseEmpty=True
-                            notes = ""
+                            notes = child.getElementsByTagName("note")[0].firstChild.data
+                            notes = notes.replace("&#10;", "\n-- ")
+
                             signalList = ""
 
                             for default_out in child.getElementsByTagName("defaultOutput"):
@@ -340,15 +342,15 @@ class Generator(QWidget):
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
                                 gen_defaults += assign_syntax + "-- default\n\t"
-                                if len(signals) == 2:
-                                    signals.append("*note")
-                                if signals[2][0:5] != "*note":
-                                #if len(signals) == 3:
+                                #if len(signals) == 2:
+                                  #  signals.append("*note")
+                                #if signals[2][0:5] != "*note":
+                                if len(signals) == 4:
                                     clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
                                     value = signals[2]
-                                    if len(signals) == 3:
-                                        signals.append("N/A")
+                                    #if len(signals) == 3:
+                                     #   signals.append("N/A")
                                     if signals[3] != "N/A":
                                         ceInSeq = signals[3]
                                     if value == "zero":
@@ -365,8 +367,8 @@ class Generator(QWidget):
                                     clkgen_defaults += "\t\t" + clkAssign_syntax + "\n"
                                 else:
                                     signalList += ", "+signals[0]
-                                    notes += "\n-- "+signals[2][5:]
-                                    notes = notes.replace("&amp;", "&")
+                                    #notes += "\n-- "+#signals[2][5:]
+                                    #notes = notes.replace("&amp;", "&")
                             if gen_defaults != "":
                                 if clkgen_defaults != "":
                                     for clkRst in clkAndRst[0].getElementsByTagName("clkAndRst"):
@@ -416,7 +418,8 @@ class Generator(QWidget):
                                     note_syntax = note_syntax.replace("$signalList",signalList)
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     #if all(char != '-' for char in notes):
-                                    if not set(notes) - {'-', ' ', '\t', '\n'}:
+                                    #if not set(notes) - {'-', ' ', '\t', '\n'}:
+                                    if notes == "None":
                                         gen_defaults += ""
                                     else:
                                         gen_defaults += "\n"+ note_syntax
@@ -1346,7 +1349,8 @@ class Generator(QWidget):
                             clkgen_defaults = ""
                             ceInSeq=""
                             caseEmpty = True
-                            notes = ""
+                            notes = child.getElementsByTagName("note")[0].firstChild.data
+                            notes = notes.replace("&#10;", "\n// ")
                             signalList = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
                                 arraySignal = False
@@ -1412,21 +1416,22 @@ class Generator(QWidget):
                                 if_gen_defaults += "\n\t\t" + assign_syntax + "\n"
                                 gen_defaults += "\n\t"+assign_syntax
                                 #if len(signals) == 3:
-                                if len(signals) == 2:
-                                    signals.append("*note")
-                                if signals[2][0:5] != "*note":
+                                #if len(signals) == 2:
+                                 #   signals.append("*note")
+                                #if signals[2][0:5] != "*note":
+                                if len(signals) == 4:
                                     clkAssign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
                                     clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
                                     clkgen_defaults += "\n\t\t" + clkAssign_syntax
-                                    if len(signals) == 3:
-                                        signals.append("N/A")
+                                    #if len(signals) == 3:
+                                        #signals.append("N/A")
                                     if signals[3] != "N/A":
                                         ceInSeq = signals[3]
                                 else:
                                     signalList += ", "+signals[0]
-                                    notes += "\n// "+signals[2][5:]
-                                    notes = notes.replace("&amp;", "&")
+                                    #notes += "\n// "+signals[2][5:]
+                                    #notes = notes.replace("&amp;", "&")
 
                             rstlvl=""
                             clkEdge = ""
@@ -1482,7 +1487,8 @@ class Generator(QWidget):
                                     note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
                                     note_syntax = note_syntax.replace("$signalList",signalList)
                                     note_syntax = note_syntax.replace("$notes", notes)
-                                    if not set(notes) - {'-', ' ', '\t', '\n'}:
+                                    #if not set(notes) - {'-', ' ', '\t', '\n'}:
+                                    if notes == "None":
                                         gen_defaults += ""
                                     else:
                                         gen_defaults += "\n"+note_syntax

@@ -481,24 +481,25 @@ class ProcessDialog(QDialog):
         default_vals = []
         clk_default_vals = []
         ce_default_vals = []
-        notes = []
+        #notes = []
         self.process_notes = process_data[4]
         if self.process_notes != "None":
             self.add_note_btn.setText("Edit note")
         for out_sig in process_data[3]:
             temp = out_sig.split(',')
             # fix for older projects
-            if len(temp) == 2:
-                temp.append("*note")
+            #if len(temp) == 2:
+               # temp.append("*note")
             out_sigs.append(temp[0])
             default_vals.append(temp[1])
-            if temp[2][0:5] != "*note":
-                if len(temp) == 3:
-                    temp.append("N/A")
+            #if temp[2][0:5] != "*note":
+            if len(temp) == 4:
+                #if len(temp) == 3:
+                  #  temp.append("N/A")
                 clk_default_vals.append(temp[2])
                 ce_default_vals.append(temp[3])
-            else:
-                notes.append(temp[2][5:])
+            #else:
+             #   notes.append(temp[2][5:])
 
         for i in range(0, self.out_sig_table.rowCount()):
            # self.notes.append("")
@@ -573,7 +574,7 @@ class ProcessDialog(QDialog):
                 else:
                     default_val = self.out_sig_table.cellWidget(i, 2).currentText()
                 #note = self.notes[i]
-                out_sigs.append(output + "," + default_val + ",*note" )#+ note)
+                out_sigs.append(output + "," + default_val) #+ ",*note" )#+ note)
 
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.cellWidget(i, 0).checkState() == Qt.Checked:
