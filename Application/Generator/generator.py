@@ -409,8 +409,8 @@ class Generator(QWidget):
                                     clkgen_defaults=clkgen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
                                 else:
-                                    if caseEmpty == False:
-                                        gen_defaults += "\n" + case_syntax
+                                    #if caseEmpty == False:
+                                        #gen_defaults += "\n" + case_syntax
 
                                     #gen_defaults += notes
                                     note_syntax = vhdl_root.getElementsByTagName("note")[0].firstChild.data
@@ -1480,8 +1480,8 @@ class Generator(QWidget):
                                     clkgen_defaults = clkgen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
                                 else:
-                                    if caseEmpty == False:
-                                        gen_defaults += "\n" + case_syntax
+                                    #if caseEmpty == False:
+                                        #gen_defaults += "\n" + case_syntax
 
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
