@@ -503,7 +503,7 @@ class Architecture(QWidget):
                         output_signals.append(output_signal_node.firstChild.data)
 
                     temp_data.append(output_signals)
-                    note = child.getElementsByTagName("note")[0].firstChild.data
+                    note = child.getElementsByTagName("note")[0].firstChild.nodeValue
                     temp_data.append(note)
                     temp_data.insert(0, "process")
                     self.all_data.append(temp_data)
