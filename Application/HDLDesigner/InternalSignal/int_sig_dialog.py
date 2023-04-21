@@ -14,9 +14,12 @@ WHITE_COLOR = "color: white"
 
 class IntSignalDialog(QDialog):
 
-    def __init__(self, add_or_edit, intSig_data=None):
+    def __init__(self, add_or_edit, signals_names, intSig_data=None):
         super().__init__()
-
+        self.signalNames = signals_names
+        self.signalName = ""
+        if intSig_data != None:
+            self.signalName = intSig_data[0]
         self.input_layout = QGridLayout()
         self.all_stateNames = []
         if add_or_edit == "add":
@@ -376,7 +379,7 @@ class IntSignalDialog(QDialog):
     def enable_ok_btn(self):
         if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
             if self.state_signal_Type_input.currentText() == "bus" or self.state_signal_Type_input.currentText() == "integer":
-                if self.sig_size_input.text() != "":
+                if self.sig_size_input.text() != "" and self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.sig_name_input.text() != ""):
                     self.ok_btn.setEnabled(True)
                 else:
                     self.ok_btn.setEnabled(False)
@@ -385,10 +388,10 @@ class IntSignalDialog(QDialog):
         elif self.sig_type_combo.currentText() == "array":
             if self.arrayName_input.currentText() == "Create in packages":
                 self.ok_btn.setEnabled(False)
-            else:
+            elif self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
                 self.ok_btn.setEnabled(True)
         else:
-            if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "" :
+            if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "" and (self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != "")):
                 self.ok_btn.setEnabled(True)
             else:
                 self.ok_btn.setEnabled(False)
@@ -435,6 +438,7 @@ class IntSignalDialog(QDialog):
                 stateName_data = add_stateName.get_data()
                 self.stateNames_table.removeRow(row)
                 self.all_stateNames.pop(row)
+
 
                 delete_btn = QPushButton()
                 delete_btn.setIcon(qta.icon("mdi.delete"))

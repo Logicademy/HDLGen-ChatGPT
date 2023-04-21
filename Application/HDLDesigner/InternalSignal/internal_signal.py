@@ -25,6 +25,7 @@ class InternalSignal(QWidget):
         bold_font.setBold(True)
 
         self.all_intSignals = []
+        self.all_signals_names = []
         self.stateTypes_names = []
 
         self.port_heading_layout = QHBoxLayout()
@@ -143,13 +144,14 @@ class InternalSignal(QWidget):
         self.setLayout(self.mainLayout)
 
     def add_intSignal(self):
-        add_intSig = IntSignalDialog("add")
+        add_intSig = IntSignalDialog("add", self.all_signals_names)
         add_intSig.exec_()
 
         if not add_intSig.cancelled:
             intSignal_data = add_intSig.get_data()
             CSIntSignal_data = add_intSig.get_data()
             CSIntSignal_data[0] = "CS" + CSIntSignal_data[0]
+            self.all_signals_names.append((intSignal_data[0]))
 
             if intSignal_data[1] == "bus state signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
                 i = 2
@@ -187,12 +189,15 @@ class InternalSignal(QWidget):
                         if intSignal_data[1] == "Enumerated type state signal pair(NS/CS)":
                             self.stateTypes_names = add_intSig.get_stateTypes()
                         self.all_intSignals.append(intSignal_data)
+                        self.all_signals_names.append(intSignal_data[0])
                         self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                     else:
                         self.all_intSignals.append(CSIntSignal_data)
+                        self.all_signals_names.append(CSIntSignal_data[0])
                         self.intSig_table.setItem(row_position, 0, QTableWidgetItem(CSIntSignal_data[0]))
                 else:
                     self.all_intSignals.append(intSignal_data)
+                    self.all_signals_names.append(intSignal_data[0])
                     self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                 i=i-1
             self.save_data()
@@ -201,19 +206,21 @@ class InternalSignal(QWidget):
         if button:
             row = self.intSig_table.indexAt(button.pos()).row()
             rowBefore = row - 1
-            add_intSig = IntSignalDialog("edit", self.all_intSignals[row])
+            add_intSig = IntSignalDialog("edit", self.all_signals_names, self.all_intSignals[row])
             add_intSig.exec_()
         if not add_intSig.cancelled:
             intSignal_data = add_intSig.get_data()
             CSIntSignal_data = add_intSig.get_data()
             self.intSig_table.removeRow(row)
             self.all_intSignals.pop(row)
+            self.all_signals_names.pop(row)
             CSIntSignal_data[0] = "CS" + CSIntSignal_data[0]
 
             if intSignal_data[1] == "bus state signal pair(NS/CS)" or intSignal_data[1] == "Enumerated type state signal pair(NS/CS)" or intSignal_data[1] == "integer state signal pair(NS/CS)":
                 i = 2
                 self.intSig_table.removeRow(rowBefore)
                 self.all_intSignals.pop(rowBefore)
+
             else:
                 i = 1
             while i > 0:
@@ -250,12 +257,15 @@ class InternalSignal(QWidget):
                         if intSignal_data[1] == "Enumerated type state signal pair(NS/CS)":
                             self.stateTypes_names = add_intSig.get_stateTypes()
                         self.all_intSignals.append(intSignal_data)
+                        self.all_signals_names.append(intSignal_data[0])
                         self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                     else:
                         self.all_intSignals.append(CSIntSignal_data)
+                        self.all_signals_names.append(CSIntSignal_data[0])
                         self.intSig_table.setItem(row_position, 0, QTableWidgetItem(CSIntSignal_data[0]))
                 else:
                     self.all_intSignals.append(intSignal_data)
+                    self.all_signals_names.append(intSignal_data[0])
                     self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                 i=i-1
             self.save_data()
@@ -269,6 +279,7 @@ class InternalSignal(QWidget):
         button = self.sender()
         if button:
             row = self.intSig_table.indexAt(button.pos()).row()
+
             rowBefore = row -1
             if str(self.all_intSignals[row][1]) == "Enumerated type state signal pair(NS/CS)":
                 self.stateTypes_names = []
@@ -277,10 +288,13 @@ class InternalSignal(QWidget):
                 self.all_intSignals.pop(row)
                 self.all_intSignals.pop(rowBefore)
                 self.intSig_table.removeRow(rowBefore)
+                self.all_signals_names.pop(row)
+                self.all_signals_names.pop(rowBefore)
 
             else:
                 self.intSig_table.removeRow(row)
                 self.all_intSignals.pop(row)
+                self.all_signals_names.pop(row)
             self.save_data()
 
 
@@ -371,6 +385,7 @@ class InternalSignal(QWidget):
             self.intSig_table.setCellWidget(i, 3, edit_btn)
             self.intSig_table.setCellWidget(i, 4, delete_btn)
             name = signal_nodes[i].getElementsByTagName('name')[0].firstChild.data
+            self.all_signals_names.append(name)
             signal = signal_nodes[i].getElementsByTagName('type')[0].firstChild.data
             value = ""
             if signal == "single bit":

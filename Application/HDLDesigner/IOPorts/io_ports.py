@@ -228,7 +228,7 @@ class IOPorts(QWidget):
 
     def add_signal(self):
 
-        io_dialog = IOPortDialog("add")
+        io_dialog = IOPortDialog("add", self.all_signals_names)
         io_dialog.exec_()
 
         if not io_dialog.cancelled:
@@ -318,7 +318,7 @@ class IOPorts(QWidget):
         button = self.sender()
         if button:
             row = self.port_table.indexAt(button.pos()).row()
-            io_dialog = IOPortDialog("edit", self.all_signals[row])
+            io_dialog = IOPortDialog("edit", self.all_signals_names, self.all_signals[row])
             io_dialog.exec_()
 
             if not io_dialog.cancelled:
@@ -472,10 +472,8 @@ class IOPorts(QWidget):
             loaded_sig_data = [
                 name,
                 mode,
-                #"Input" if mode == "in" else "Output",
                 type,
                 size,
-                #"1" if type != "bus" else str(int(port[port.index("(") + 1:port.index(" downto")]) + 1),
                 desc
             ]
 
@@ -493,6 +491,7 @@ class IOPorts(QWidget):
             self.port_table.setRowHeight(i, 5)
             size = QTableWidgetItem(loaded_sig_data[3])
             size.setTextAlignment(Qt.AlignCenter)
+
             self.port_table.setItem(i, 0, QTableWidgetItem(loaded_sig_data[0]))
             self.port_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             if loaded_sig_data[2][0:6] == "array,":
