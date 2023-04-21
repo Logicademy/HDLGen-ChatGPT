@@ -414,8 +414,8 @@ class Generator(QWidget):
 
                                     #gen_defaults += notes
                                     note_syntax = vhdl_root.getElementsByTagName("note")[0].firstChild.data
-                                    note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
-                                    note_syntax = note_syntax.replace("$signalList",signalList)
+                                    #note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
+                                    #note_syntax = note_syntax.replace("$signalList",signalList)
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     #if all(char != '-' for char in notes):
                                     #if not set(notes) - {'-', ' ', '\t', '\n'}:
@@ -1484,8 +1484,8 @@ class Generator(QWidget):
                                         #gen_defaults += "\n" + case_syntax
 
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
-                                    note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
-                                    note_syntax = note_syntax.replace("$signalList",signalList)
+                                    #note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
+                                    #note_syntax = note_syntax.replace("$signalList",signalList)
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     #if not set(notes) - {'-', ' ', '\t', '\n'}:
                                     if notes == "None":
