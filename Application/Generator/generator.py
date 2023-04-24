@@ -258,6 +258,8 @@ class Generator(QWidget):
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
+                gen_seq_process = ""
+                gen_instance = ""
                 clkAndRst = hdl_design[0].getElementsByTagName('clkAndRst')
                 if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
@@ -289,7 +291,7 @@ class Generator(QWidget):
                             ceInSeq=""
                             caseEmpty=True
                             notes = child.getElementsByTagName("note")[0].firstChild.data
-                            notes = notes.replace("&#10;", "\n-- ")
+                            notes = notes.replace("&#10;", "\n--- ")
 
                             signalList = ""
 
@@ -341,7 +343,7 @@ class Generator(QWidget):
 
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
-                                gen_defaults += assign_syntax + "-- default\n\t"
+                                gen_defaults += assign_syntax + "-- Default assignment \n\t"
                                 #if len(signals) == 2:
                                   #  signals.append("*note")
                                 #if signals[2][0:5] != "*note":
@@ -408,6 +410,7 @@ class Generator(QWidget):
                                             clkgen_defaults = "\t" + clkif_syntax + "\n"
                                     clkgen_defaults=clkgen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
+                                    gen_seq_process += process_syntax + "\n\n"
                                 else:
                                     #if caseEmpty == False:
                                         #gen_defaults += "\n" + case_syntax
@@ -425,7 +428,8 @@ class Generator(QWidget):
                                         gen_defaults += "\n"+ note_syntax
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
-                            gen_process += process_syntax + "\n\n"
+                                    gen_process += process_syntax + "\n\n"
+                            #gen_process += process_syntax + "\n\n"
 
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
@@ -486,9 +490,13 @@ class Generator(QWidget):
                                                                       child.getElementsByTagName("model")[
                                                                           0].firstChild.data)
                             instances.append(child.getElementsByTagName("model")[0].firstChild.data)
-                            gen_process += instance_syntax + "\n"
+                            gen_instance += instance_syntax + "\n"
 
                         child = next
+                    gen_process = gen_process[:-1]
+                    gen_process += "-- End of selected portion\n"
+                    gen_process += gen_seq_process
+                    gen_process += gen_instance
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
                     arch_name_node = arch_node[0].getElementsByTagName("archName")
 
@@ -507,8 +515,8 @@ class Generator(QWidget):
                         gen_vhdl += "use work.MainPackage.all;"
                         chatgpt_vhdl += "use work.MainPackage.all;"
                     # Entity Section placement
-                    gen_vhdl += "\n\n" + gen_entity + "\n\n"
-                    chatgpt_vhdl += "\n\n" + gen_entity + "\n\n"
+                    gen_vhdl += "\n" + gen_entity + "\n\n"
+                    chatgpt_vhdl += "\n" + gen_entity + "\n\n"
                     gen_vhdl += gen_arch
                     chatgpt_vhdl += gen_arch
 
@@ -805,7 +813,10 @@ class Generator(QWidget):
             wcfg += UUTEnt
             io_port_map = io_port_map.rstrip()
             io_port_map = io_port_map[0:-1]
+
             io_signals = io_signals.rstrip()
+            chatgpt_tb = "signal testNo: integer;\n"
+            chatgpt_tb += io_signals
             other_signals = ""
             if clkrst > 0:
                 other_signals = "signal clk: std_logic := '1';\n"
@@ -902,12 +913,12 @@ class Generator(QWidget):
                     gen_library += "use work.MainPackage.all;"
                 gen_library += "\n"
                 tb_code += gen_library
-                chatgpt_tb += gen_library
+                #chatgpt_tb += gen_library
 
                 # Entity declaration
                 gen_entity = gen_entity.replace("$comp_name", entity_name)
                 tb_code += gen_entity +"\n\n"
-                chatgpt_tb += gen_entity + "\n\n"
+                #chatgpt_tb += gen_entity + "\n\n"
                 tbSignalDeclaration=""
                 if sig_decl != "":
                     tbSignalDeclaration += sig_decl +"\n"
@@ -962,15 +973,22 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     tb_code += gen_arch
-                    chatgpt_tb += gen_arch
+                    #chatgpt_tb += gen_arch
         return entity_name, tb_code, wcfg, chatgpt_tb
 
     def create_testbench_file(self, overwrite):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        root = minidom.parse(proj_path+"/HDLGenPrj/"+proj_name+".hdlgen")
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        testbench_node = hdlDesign[0].getElementsByTagName('testbench')
+        tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
+        self.note = tb_node.firstChild.nodeValue
+        self.note = self.note.replace("&#10;","\n")
 
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
-        chatgpt_tb = self.chatGPTTestbench + "\n" + chatgpt_tb
+        chatgpt_tb = self.chatGPTTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_TB.vhd")
         vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_HDLGen_TB.vhd")
         waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", self.entity_name + "_TB_behav.wcfg")
@@ -1330,6 +1348,8 @@ class Generator(QWidget):
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
+                gen_seq_process = ""
+                gen_instance = ""
                 if array_assign != "":
                     gen_process = array_assign + "\n"
                 clkAndRst = hdl_design[0].getElementsByTagName('clkAndRst')
@@ -1350,7 +1370,7 @@ class Generator(QWidget):
                             ceInSeq=""
                             caseEmpty = True
                             notes = child.getElementsByTagName("note")[0].firstChild.data
-                            notes = notes.replace("&#10;", "\n// ")
+                            notes = notes.replace("&#10;", "\n/// ")
                             signalList = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
                                 arraySignal = False
@@ -1370,7 +1390,7 @@ class Generator(QWidget):
                                                 depth = int(arr[1])+1
                                                 width = int(arr[2])
                                                 for j in range(0, depth):
-                                                    array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // default assignment\n\t"
+                                                    array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // Default assignment"#\n\t"
                                                     arraySignal=True
                                     elif signals[0] in single_bitList:
                                         value = "1'b0"
@@ -1412,9 +1432,9 @@ class Generator(QWidget):
                                         0].firstChild.data
                                     assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                     assign_syntax = assign_syntax.replace("$value", value)
-                                    assign_syntax = assign_syntax + " // default assignment"
-                                if_gen_defaults += "\n\t\t" + assign_syntax + "\n"
-                                gen_defaults += "\n\t"+assign_syntax
+                                    assign_syntax = assign_syntax
+                                if_gen_defaults += "\n\t\t" + assign_syntax
+                                gen_defaults += "\n\t"+assign_syntax + " // Default assignment"
                                 #if len(signals) == 3:
                                 #if len(signals) == 2:
                                  #   signals.append("*note")
@@ -1432,7 +1452,19 @@ class Generator(QWidget):
                                     signalList += ", "+signals[0]
                                     #notes += "\n// "+signals[2][5:]
                                     #notes = notes.replace("&amp;", "&")
+                            for input_signal in child.getElementsByTagName("inputSignal"):
+                                if input_signal.firstChild.data == "clk":
+                                    gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
+                                elif input_signal.firstChild.data == "rst":
+                                    gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
+                                else:
+                                    gen_in_sig += input_signal.firstChild.data + " or "
+                            gen_in_sig = gen_in_sig.strip()
+                            gen_in_sig = gen_in_sig[:-2]
 
+                            process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
+                            process_syntax = process_syntax.replace("$process_label",child.getElementsByTagName("label")[
+                                                                        0].firstChild.data)
                             rstlvl=""
                             clkEdge = ""
                             if gen_defaults != "":
@@ -1479,6 +1511,7 @@ class Generator(QWidget):
                                             clkgen_defaults = "\t" + clkif_syntax + "\n"
                                     clkgen_defaults = clkgen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
+                                    gen_seq_process += process_syntax + "\n\n"
                                 else:
                                     #if caseEmpty == False:
                                         #gen_defaults += "\n" + case_syntax
@@ -1494,20 +1527,21 @@ class Generator(QWidget):
                                         gen_defaults += "\n"+note_syntax
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
-                            for input_signal in child.getElementsByTagName("inputSignal"):
-                                if input_signal.firstChild.data == "clk":
-                                    gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
-                                elif input_signal.firstChild.data == "rst":
-                                    gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
-                                else:
-                                    gen_in_sig += input_signal.firstChild.data + " or "
-                            gen_in_sig = gen_in_sig.strip()
-                            gen_in_sig = gen_in_sig[:-2]
+                                    gen_process += process_syntax + "\n\n"
+                            #for input_signal in child.getElementsByTagName("inputSignal"):
+                            #    if input_signal.firstChild.data == "clk":
+                            #        gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
+                            #    elif input_signal.firstChild.data == "rst":
+                            #        gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
+                            #    else:
+                            #        gen_in_sig += input_signal.firstChild.data + " or "
+                            #gen_in_sig = gen_in_sig.strip()
+                            #gen_in_sig = gen_in_sig[:-2]
 
-                            process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
-                            process_syntax = process_syntax.replace("$process_label",child.getElementsByTagName("label")[
-                                                                        0].firstChild.data)
-                            gen_process += process_syntax + "\n\n"
+                            #process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
+                           # process_syntax = process_syntax.replace("$process_label",child.getElementsByTagName("label")[
+                                                                        #0].firstChild.data)
+                            #gen_process += process_syntax + "\n\n"
 
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
@@ -1603,17 +1637,21 @@ class Generator(QWidget):
                                                                       child.getElementsByTagName("model")[
                                                                           0].firstChild.data)
                             instances.append(child.getElementsByTagName("model")[0].firstChild.data)
-                            gen_process += instance_syntax + "\n"
+                            gen_instance += instance_syntax + "\n"
 
                         child = next
+                    gen_process = gen_process[:-1]
+                    gen_process += "// End of selected portion\n"
+                    gen_process += gen_seq_process
+                    gen_process += gen_instance
                     arch_syntax = verilog_root.getElementsByTagName("architecture")[0].firstChild.data
 
                     gen_arch = arch_syntax.replace("$int_sig_declaration", gen_int_sig)
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
                     gen_entity = gen_entity.replace("$arch", indent(gen_arch,'    '))
-                    chatgpt_verilog += "\n\n" + gen_entity + "\n\n"
+                    chatgpt_verilog +=  gen_entity + "\n\n"
                     # Entity Section placement
-                    gen_verilog += "\n\n" + gen_entity + "\n\n"
+                    gen_verilog +=  gen_entity + "\n\n"
 
         return entity_name, gen_verilog, instances, chatgpt_header, chatgpt_verilog
 
@@ -1825,6 +1863,8 @@ class Generator(QWidget):
             io_port_map = io_port_map.rstrip()
             io_port_map = io_port_map[0:-1]
             io_signals = io_signals.rstrip()
+            chatgpt_tb += "integer testNo;\n"
+            chatgpt_tb += io_signals
             control_signals = "parameter  period = 20; // 20 ns\n"
             other_signals = ""
             if clkrst > 0:
@@ -1921,7 +1961,7 @@ class Generator(QWidget):
                 # Entity declaration
                 gen_entity = gen_entity.replace("$comp_name", entity_name)
                 tb_code += gen_entity +"\n\n"
-                chatgpt_tb += gen_entity +"\n\n"
+               # chatgpt_tb += gen_entity +"\n\n"
                 tbSignalDeclaration = sig_decl + "\n" + other_signals + "\n" + io_signals + "\n\n" + control_signals
                 # Architecture section
 
@@ -1969,15 +2009,21 @@ class Generator(QWidget):
                 gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                 tb_code += gen_arch
-                chatgpt_tb += gen_arch
+                #chatgpt_tb += gen_arch
         return entity_name, tb_code, wcfg, chatgpt_tb
 
     def create_verilog_testbench_file(self, overwrite):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-
+        root = minidom.parse(proj_path+"/HDLGenPrj/"+proj_name+".hdlgen")
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        testbench_node = hdlDesign[0].getElementsByTagName('testbench')
+        tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
+        self.note = tb_node.firstChild.nodeValue
+        self.note = self.note.replace("&#10;", "\n")
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
-        chatgpt_tb = self.chatGPTTestbench.replace("VHDL","Verilog") + "\n" + chatgpt_tb
+        chatgpt_tb = self.chatGPTTestbench.replace("VHDL","Verilog") + "\n\n" + chatgpt_tb + "\n\n" + self.note
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
         verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_HDLGen_TB.v")
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", self.entity_name + "_TB_behav.wcfg")

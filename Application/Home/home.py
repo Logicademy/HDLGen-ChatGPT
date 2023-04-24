@@ -1,11 +1,14 @@
 from PySide2.QtGui import QFont
 from PySide2.QtWidgets import *
+import os
 import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from Generator.generator import Generator
 from Help.help import Help
 from HDLDesigner.hdl_designer import HDLDesigner
+from HDLDesigner.Architecture.note_dialog import note_Dialog
+from xml.dom import minidom
 
 
 class Home(QMainWindow):
@@ -20,12 +23,15 @@ class Home(QMainWindow):
         self.cornerWidget = QWidget()
         self.generate_btn = QPushButton("Generate model and TB HDL")
         self.generate_btn.setFont(small_text_font)
+        self.testbench_btn = QPushButton("Testbench ChatGPT")
+        self.testbench_btn.setFont(small_text_font)
         #self.generate_btn.setFixedHeight(20)
         self.start_vivado_btn = QPushButton("Generate/Open Vivado")
         self.start_vivado_btn.setFont(small_text_font)
         #self.start_vivado_btn.setFixedHeight(20)
         self.cornerWidgetLayout = QHBoxLayout()
         self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)
+        self.cornerWidgetLayout.addWidget(self.testbench_btn)
         self.cornerWidgetLayout.addWidget(self.generate_btn)
         self.cornerWidgetLayout.addWidget(self.start_vivado_btn)
         self.cornerWidget.setLayout(self.cornerWidgetLayout)
@@ -62,6 +68,7 @@ class Home(QMainWindow):
         font.setPointSize(10)
         self.tabs.setFont(font)
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
+        self.testbench_btn.clicked.connect(self.testbench_btn_clicked)
         self.tabs.setCornerWidget(self.cornerWidget)
         self.start_vivado_btn.clicked.connect(self.start_vivado_btn_clicked)
 
@@ -76,7 +83,40 @@ class Home(QMainWindow):
 
         self.setCentralWidget(self.container)
 
+    def testbench_btn_clicked(self):
+        self.note = ""
+        if self.proj_dir is not None:
+            root = minidom.parse(self.proj_dir[0])
+            HDLGen = root.documentElement
+            hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+            testbench_node = hdlDesign[0].getElementsByTagName('testbench')
+            if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
+                tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
+                self.note = tb_node.firstChild.nodeValue
+        button = self.sender()
+        if button:
+            add_note = note_Dialog("edit", self.note)
+            add_note.exec_()
 
+            if not add_note.cancelled:
+                note_data = add_note.get_data()
+                self.note = note_data
+                xml_data_path = ProjectManager.get_xml_data_path()
+
+                root = minidom.parse(xml_data_path)
+                HDLGen = root.documentElement
+                hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+                testbench_node = root.createElement("testbench")
+                tb_node = root.createElement("TBNote")
+                tb_node.appendChild(root.createTextNode(self.note))
+                testbench_node.appendChild(tb_node)
+                hdlDesign[0].replaceChild(testbench_node, hdlDesign[0].getElementsByTagName("testbench")[0])
+                # converting the doc into a string in xml format
+                xml_str = root.toprettyxml()
+                xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+                # Writing xml file
+                with open(xml_data_path, "w") as f:
+                    f.write(xml_str)
 
 
     def generate_btn_clicked(self):
