@@ -13,14 +13,17 @@ WHITE_COLOR = "color: white"
 
 
 class InstanceDialog(QDialog):
-    def __init__(self, add_or_edit, instance_data = None):
+    def __init__(self, add_or_edit, instanceNames, instance_data = None):
         super().__init__()
 
         if add_or_edit == "add":
             self.setWindowTitle("New instance")
         elif add_or_edit == "edit":
             self.setWindowTitle("Edit instance")
-
+        self.instance_names = instanceNames
+        self.instance_name = ""
+        if instance_data != None:
+            self.instance_name = instance_data[1]
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -246,7 +249,7 @@ class InstanceDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.instance_name_input.text() != "":
+        if self.instance_name_input.text() != "" and (self.instance_name_input.text()+"_i" not in self.instance_names or self.instance_name_input.text() == self.instance_name[:-2] ) and (self.instance_name_input.text() not in self.instance_names or self.instance_name_input.text() == self.instance_name):
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)

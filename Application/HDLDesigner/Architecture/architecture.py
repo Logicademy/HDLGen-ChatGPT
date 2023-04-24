@@ -26,6 +26,9 @@ class Architecture(QWidget):
         self.proj_dir = proj_dir
         self.all_data = []
         self.comps = []
+        self.processNames = []
+        self.concNames = []
+        self.instanceNames = []
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -165,14 +168,16 @@ class Architecture(QWidget):
         self.setLayout(self.mainLayout)
 
     def add_proc(self):
-        add_proc = ProcessDialog("add")
+        add_proc = ProcessDialog("add", self.processNames)
         add_proc.exec_()
 
         if not add_proc.cancelled:
             data = add_proc.get_data()
-            print(data)
             data.insert(0, "process")
             self.all_data.append(data)
+            self.processNames.append((data[1]))
+            self.instanceNames.append("")
+            self.concNames.append("")
 
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -207,14 +212,18 @@ class Architecture(QWidget):
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
 
-            proc_dialog = ProcessDialog("edit", self.all_data[row])
+            proc_dialog = ProcessDialog("edit", self.processNames, self.all_data[row])
             proc_dialog.exec_()
 
             if not proc_dialog.cancelled:
                 data = proc_dialog.get_data()
-                print(data)
                 data.insert(0, "process")
                 self.proc_table.removeRow(row)
+                dataProcess = self.all_data[row]
+                #if dataProcess[0] == "process":
+                self.processNames.pop(row)
+                self.instanceNames.pop(row)
+                self.concNames.pop(row)
                 self.all_data.pop(row)
 
                 delete_btn = QPushButton()
@@ -228,6 +237,9 @@ class Architecture(QWidget):
                 edit_btn.clicked.connect(self.edit_proc)
 
                 self.all_data.insert(row, data)
+                self.concNames.insert(row, "")
+                self.instanceNames.insert(row, "")
+                self.processNames.insert(row, data[1])
 
                 self.proc_table.insertRow(row)
                 self.proc_table.setRowHeight(row, 5)
@@ -247,12 +259,15 @@ class Architecture(QWidget):
                 self.save_data()
 
     def add_concurrentstmt(self):
-        add_concurrentstmt = ConcurrentStmtDialog("add")
+        add_concurrentstmt = ConcurrentStmtDialog("add", self.concNames)
         add_concurrentstmt.exec_()
 
         if not add_concurrentstmt.cancelled:
             data = add_concurrentstmt.get_data()
             data.insert(0, "concurrentStmt")
+            self.concNames.append((data[1]))
+            self.processNames.append("")
+            self.instanceNames.append("")
             self.all_data.append(data)
 
             delete_btn = QPushButton()
@@ -283,13 +298,17 @@ class Architecture(QWidget):
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
 
-            edit_concurrentstmt = ConcurrentStmtDialog("edit", self.all_data[row])
+            edit_concurrentstmt = ConcurrentStmtDialog("edit", self.concNames, self.all_data[row])
             edit_concurrentstmt.exec_()
 
             if not edit_concurrentstmt.cancelled:
                 data = edit_concurrentstmt.get_data()
                 data.insert(0, "concurrentStmt")
                 self.proc_table.removeRow(row)
+
+                self.concNames.pop(row)
+                self.instanceNames.pop(row)
+                self.processNames.pop(row)
                 self.all_data.pop(row)
 
                 delete_btn = QPushButton()
@@ -302,6 +321,9 @@ class Architecture(QWidget):
                 edit_btn.clicked.connect(self.edit_concurrentstmt)
 
                 self.all_data.insert(row, data)
+                self.concNames.insert(row, data[1])
+                self.instanceNames.insert(row, "")
+                self.processNames.insert(row, "")
                 self.proc_table.insertRow(row)
                 self.proc_table.setRowHeight(row, 5)
                 self.proc_table.setItem(row, 0, QTableWidgetItem(data[1]))
@@ -311,13 +333,16 @@ class Architecture(QWidget):
                 self.proc_table.setCellWidget(row, 4, delete_btn)
                 self.save_data()
     def add_instance(self):
-        add_instance= InstanceDialog("add")
+        add_instance= InstanceDialog("add", self.instanceNames)
         add_instance.exec_()
 
         if not add_instance.cancelled:
             data = add_instance.get_data()
             data.insert(0, "instance")
             self.all_data.append(data)
+            self.instanceNames.append((data[1]))
+            self.concNames.append("")
+            self.processNames.append("")
 
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -347,12 +372,19 @@ class Architecture(QWidget):
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
 
-            edit_instance = InstanceDialog("edit", self.all_data[row])
+            edit_instance = InstanceDialog("edit", self.instanceNames, self.all_data[row])
             edit_instance.exec_()
 
             if not edit_instance.cancelled:
                 data = edit_instance.get_data()
                 data.insert(0, "instance")
+                dataInst = self.all_data[row]
+                #print(self.instanceNames)
+                #if dataInst[0] == "instance":
+                self.instanceNames.pop(row)
+                self.processNames.pop(row)
+                self.concNames.pop(row)
+
                 self.proc_table.removeRow(row)
                 self.all_data.pop(row)
 
@@ -366,6 +398,9 @@ class Architecture(QWidget):
                 edit_btn.clicked.connect(self.edit_instance)
 
                 self.all_data.insert(row, data)
+                self.concNames.insert(row, "")
+                self.instanceNames.insert(row, data[1])
+                self.processNames.insert(row, "")
                 self.proc_table.insertRow(row)
                 self.proc_table.setRowHeight(row, 5)
                 self.proc_table.setItem(row, 0, QTableWidgetItem(data[1]))
@@ -380,6 +415,10 @@ class Architecture(QWidget):
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
             self.proc_table.removeRow(row)
+            data=self.all_data[row]
+            self.processNames.pop(row)
+            self.concNames.pop(row)
+            self.instanceNames.pop(row)
             self.all_data.pop(row)
             self.save_data()
 
@@ -399,9 +438,6 @@ class Architecture(QWidget):
         for data in self.all_data:
 
             if data[0] == "process":
-                print("hello")
-                print(type(data[4]))
-                print(data)
                 process_node = root.createElement("process")
                 label_node = root.createElement("label")
                 label_node.appendChild(root.createTextNode(data[1]))
@@ -485,7 +521,9 @@ class Architecture(QWidget):
                 if (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "process"):
                     temp_data = []
                     label_val = child.getElementsByTagName("label")[0].firstChild.data
-
+                    self.processNames.append(label_val)
+                    self.concNames.append("")
+                    self.instanceNames.append("")
                     temp_data.append(label_val)
 
                     input_signal_nodes = child.getElementsByTagName("inputSignal")
@@ -541,6 +579,9 @@ class Architecture(QWidget):
 
                     temp_data = []
                     label_val = child.getElementsByTagName("label")[0].firstChild.data
+                    self.concNames.append(label_val)
+                    self.instanceNames.append("")
+                    self.processNames.append("")
 
                     temp_data.append(label_val)
 
@@ -591,6 +632,9 @@ class Architecture(QWidget):
 
                     temp_data.insert(0, "instance")
                     label_val = child.getElementsByTagName("label")[0].firstChild.data
+                    self.instanceNames.append(label_val)
+                    self.concNames.append("")
+                    self.processNames.append("")
 
                     temp_data.append(label_val)
                     temp_data.append(child.getElementsByTagName("model")[0].firstChild.data)

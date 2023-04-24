@@ -10,13 +10,17 @@ WHITE_COLOR = "color: white"
 
 class ConcurrentStmtDialog(QDialog):
 
-    def __init__(self, add_or_edit, conc_data = None):
+    def __init__(self, add_or_edit, concNames ,conc_data = None):
         super().__init__()
 
         if add_or_edit == "add":
             self.setWindowTitle("New Concurrent Statement")
         elif add_or_edit == "edit":
             self.setWindowTitle("Edit Concurrent Statement")
+        self.conc_names = concNames
+        self.conc_name = ""
+        if conc_data != None:
+            self.conc_name = conc_data[1]
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -209,7 +213,7 @@ class ConcurrentStmtDialog(QDialog):
         if self.out_signals_combo.currentText() != "Please select":
             self.conc_name_input.setText("asgn_"+self.out_signals_combo.currentText())
     def enable_ok_btn(self):
-        if self.conc_name_input.text() != "":
+        if self.conc_name_input.text() != ""and (self.conc_name_input.text()+"_c" not in self.conc_names or self.conc_name_input.text() == self.conc_name[:-2] ) and (self.conc_name_input.text() not in self.conc_names or self.conc_name_input.text() == self.conc_name):
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)

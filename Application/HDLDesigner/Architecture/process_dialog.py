@@ -14,14 +14,17 @@ WHITE_COLOR = "color: white"
 
 class ProcessDialog(QDialog):
 
-    def __init__(self, add_or_edit, process_data = None):
+    def __init__(self, add_or_edit, process_names, process_data = None):
         super().__init__()
 
         if add_or_edit == "add":
             self.setWindowTitle("New Process")
         elif add_or_edit == "edit":
             self.setWindowTitle("Edit Process")
-
+        self.process_names = process_names
+        self.process_name = ""
+        if process_data != None:
+            self.process_name = process_data[1]
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -545,7 +548,9 @@ class ProcessDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.proc_name_input.text() != "":
+        print(self.process_names)
+        print(self.process_name)
+        if self.proc_name_input.text() != "" and (self.proc_name_input.text()+"_p" not in self.process_names or self.proc_name_input.text() == self.process_name[:-2] ) and (self.proc_name_input.text() not in self.process_names or self.proc_name_input.text() == self.process_name):
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)
