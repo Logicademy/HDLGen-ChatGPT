@@ -339,7 +339,7 @@ class Generator(QWidget):
                                     whenCase=""
                                     for states in stateNames:
                                         whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
-                                    case_syntax = case_syntax.replace("$whenCase", whenCase)
+                                    #case_syntax = case_syntax.replace("$whenCase", whenCase)
 
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
@@ -388,7 +388,7 @@ class Generator(QWidget):
                                             if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
                                                 elsif_syntax = vhdl_root.getElementsByTagName("elsifStatement")[0].firstChild.data
                                                 elsif_syntax = elsif_syntax.replace("$edge", clkEdge)
-                                                if ceInSeq != True:
+                                                if ceInSeq != "":
                                                     clkgen_defaults = "\tif "+ceInSeq+" = '1' then -- enable register\n"+clkgen_defaults+"\tend if;\n"
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
                                                 elsif_syntax = elsif_syntax.replace("$default_assignments",clkgen_defaults)
@@ -424,8 +424,19 @@ class Generator(QWidget):
                                     #if not set(notes) - {'-', ' ', '\t', '\n'}:
                                     if notes == "None":
                                         gen_defaults += ""
+                                        if caseEmpty == False:
+                                            case_syntax = case_syntax.replace("$whenCase", whenCase)
+                                            gen_defaults += "\n" + case_syntax
                                     else:
-                                        gen_defaults += "\n"+ note_syntax
+                                        if caseEmpty == False:
+                                            case_syntax = case_syntax.replace("$whenCase", "\n"+note_syntax)
+                                            gen_defaults += "\n" + case_syntax
+                                        else:
+                                            gen_defaults += "\n" + note_syntax
+
+                                        #gen_defaults += "\n"+ note_syntax
+                                    #if caseEmpty == False:
+                                        #gen_defaults += "\n\tend case;"
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
                                     gen_process += process_syntax + "\n\n"
@@ -1454,7 +1465,7 @@ class Generator(QWidget):
                                     whenCase = ""
                                     for states in stateNames:
                                         whenCase += "\n\t\t" + states + " :" + "\n\t\t\tbegin\n\n\t\t\tend"
-                                    case_syntax = case_syntax.replace("$whenCase", whenCase)
+                                    #case_syntax = case_syntax.replace("$whenCase", whenCase)
                                 if arraySignal == True:
                                     assign_syntax = array_syntax
                                 else:
@@ -1525,7 +1536,7 @@ class Generator(QWidget):
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
                                             else:
                                                 else_syntax = verilog_root.getElementsByTagName("elseStatement")[0].firstChild.data
-                                                if ceInSeq == True:
+                                                if ceInSeq != "":
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
                                                     clkgen_defaults = "\n\t\tif ( "+ceInSeq+" ) // enable register\n\t\t\tbegin"+clkgen_defaults+"\n\t\t\tend"
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
@@ -1553,8 +1564,15 @@ class Generator(QWidget):
                                     #if not set(notes) - {'-', ' ', '\t', '\n'}:
                                     if notes == "None":
                                         gen_defaults += ""
+                                        if caseEmpty == False:
+                                            case_syntax = case_syntax.replace("$whenCase", whenCase)
+                                            gen_defaults += "\n" + case_syntax
                                     else:
-                                        gen_defaults += "\n"+note_syntax
+                                        if caseEmpty == False:
+                                            case_syntax = case_syntax.replace("$whenCase", "\n"+note_syntax)
+                                            gen_defaults += "\n" + case_syntax
+                                        else:
+                                            gen_defaults += "\n" + note_syntax
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
                                     gen_process += process_syntax + "\n\n"

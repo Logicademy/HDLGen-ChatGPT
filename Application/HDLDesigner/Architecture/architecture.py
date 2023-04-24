@@ -454,6 +454,7 @@ class Architecture(QWidget):
                     process_node.appendChild(out_sig_node)
                 note_node = root.createElement("note")
                 note_node.appendChild(root.createTextNode(data[4]))
+                print(data[4])
                 process_node.appendChild(note_node)
                 new_arch_node.appendChild(process_node)
 

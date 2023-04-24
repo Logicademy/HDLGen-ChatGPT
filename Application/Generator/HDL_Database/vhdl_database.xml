@@ -34,6 +34,7 @@
     <ifStatement>if $assignment = '$value' then&#10;$default_assignments$else&#x9;end if;</ifStatement>
     <elseStatement>else &#10;$default_assignments</elseStatement>
     <elsifStatement>elsif $edge(clk) then&#10;$default_assignments</elsifStatement>
+    <caseCopy>&#x9;case $stateType is&#10;</caseCopy>
     <case>&#x9;case $stateType is$whenCase&#10;&#x9;&#x9;when others =>&#10;&#x9;&#x9;&#x9;null;&#10;&#x9;end case;</case>
     <sigAssingn>$output_signal &lt;= $value;</sigAssingn>
     <portAssign>$output_signal => $value</portAssign>
