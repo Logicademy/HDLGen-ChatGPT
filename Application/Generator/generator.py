@@ -1708,8 +1708,13 @@ class Generator(QWidget):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         entity_name, verilog_code, instances, chatgpt_header, chatgpt_verilog = self.generate_verilog()
+        model = self.chatGPTModel
+        model = model.replace("VHDL","Verilog")
+        model = model.replace("-","/")
         chatgpt_header = self.chatGPTHeader.replace("VHDL","Verilog") + "\n" + chatgpt_header
-        chatgpt_verilog = self.chatGPTModel.replace("VHDL","Verilog") + "\n" + chatgpt_verilog
+       #chatgpt_header = model + "\n" + chatgpt_header
+        #chatgpt_verilog = self.chatGPTModel.replace("VHDL","Verilog") + "\n" + chatgpt_verilog
+        chatgpt_verilog = model + "\n" + chatgpt_verilog
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_HDLGen.v")
         chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_verilog_header_ChatGPT.txt")
