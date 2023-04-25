@@ -23,7 +23,7 @@ class Home(QMainWindow):
         self.cornerWidget = QWidget()
         self.generate_btn = QPushButton("Generate model and TB HDL")
         self.generate_btn.setFont(small_text_font)
-        self.testbench_btn = QPushButton("Testbench ChatGPT")
+        self.testbench_btn = QPushButton("Test Plan")
         self.testbench_btn.setFont(small_text_font)
         #self.generate_btn.setFixedHeight(20)
         self.start_vivado_btn = QPushButton("Generate/Open Vivado")

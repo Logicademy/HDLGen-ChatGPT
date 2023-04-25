@@ -17,7 +17,7 @@
     <signalDeclaration>$sig_name</signalDeclaration>
     <portDeclaration>$modeput $size $name;</portDeclaration>
     <intSigDeclaration>reg $int_sig_type $int_sig_name;</intSigDeclaration>
-    <architecture>$int_sig_declaration&#10;&#10;// Start of selected portion&#10;$arch_elements</architecture>
+    <architecture>$int_sig_declaration&#10;&#10;// Start of selected portion&#10;&#10;$arch_elements</architecture>
     <stateNamesDeclarations>parameter $stateName = $bits;</stateNamesDeclarations>
     <arrayPackage>-- Package&#10;library ieee;&#10;use ieee.std_logic_1164.all;&#10;use ieee.numeric_std.all;&#10;package arrayPackage is&#10;$arrays&#10;$Component&#10;end arrayPackage;&#10;package body arrayPackage is&#10;end arrayPackage;&#10;&#10;</arrayPackage>
     <arrayType>type $arrayName is array($arraySize downto 0) of $signalType($arrayLength downto 0);&#10;</arrayType>

@@ -428,11 +428,11 @@ class Generator(QWidget):
                                             case_syntax = case_syntax.replace("$whenCase", whenCase)
                                             gen_defaults += "\n" + case_syntax
                                     else:
-                                        if caseEmpty == False:
-                                            case_syntax = case_syntax.replace("$whenCase", "\n"+note_syntax)
-                                            gen_defaults += "\n" + case_syntax
-                                        else:
-                                            gen_defaults += "\n" + note_syntax
+                                        #if caseEmpty == False:
+                                            #case_syntax = case_syntax.replace("$whenCase", "\n"+note_syntax)
+                                            #gen_defaults += "\n" + case_syntax
+                                        #else:
+                                        gen_defaults += "\n" + note_syntax
 
                                         #gen_defaults += "\n"+ note_syntax
                                     #if caseEmpty == False:
@@ -504,8 +504,8 @@ class Generator(QWidget):
                             gen_instance += instance_syntax + "\n"
 
                         child = next
-                    gen_process = gen_process[:-1]
-                    gen_process += "-- End of selected portion\n"
+                    #gen_process = gen_process[:-1]
+                    gen_process += "-- End of selected portion\n\n"
                     gen_process += gen_seq_process
                     gen_process += gen_instance
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
@@ -849,6 +849,7 @@ class Generator(QWidget):
 
             io_signals = io_signals.rstrip()
             chatgpt_tb = "signal testNo: integer;\n"
+            chatgpt_tb += "signal period: time := 20 ns;\n"
             chatgpt_tb += io_signals
             other_signals = ""
             if clkrst > 0:
@@ -1568,11 +1569,11 @@ class Generator(QWidget):
                                             case_syntax = case_syntax.replace("$whenCase", whenCase)
                                             gen_defaults += "\n" + case_syntax
                                     else:
-                                        if caseEmpty == False:
-                                            case_syntax = case_syntax.replace("$whenCase", "\n"+note_syntax)
-                                            gen_defaults += "\n" + case_syntax
-                                        else:
-                                            gen_defaults += "\n" + note_syntax
+                                        #if caseEmpty == False:
+                                            #case_syntax = case_syntax.replace("$whenCase", "\n"+note_syntax)
+                                            #gen_defaults += "\n" + case_syntax
+                                        #else:
+                                        gen_defaults += "\n" + note_syntax
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
                                     gen_process += process_syntax + "\n\n"
@@ -1688,8 +1689,8 @@ class Generator(QWidget):
                             gen_instance += instance_syntax + "\n"
 
                         child = next
-                    gen_process = gen_process[:-1]
-                    gen_process += "// End of selected portion\n"
+                    #gen_process = gen_process[:-1]
+                    gen_process += "// End of selected portion\n\n"
                     gen_process += gen_seq_process
                     gen_process += gen_instance
                     arch_syntax = verilog_root.getElementsByTagName("architecture")[0].firstChild.data
@@ -1933,6 +1934,7 @@ class Generator(QWidget):
             io_port_map = io_port_map[0:-1]
             io_signals = io_signals.rstrip()
             chatgpt_tb += "integer testNo;\n"
+            chatgpt_tb += "parameter period = 20; // 20 ns\n"
             chatgpt_tb += io_signals
             control_signals = "parameter  period = 20; // 20 ns\n"
             other_signals = ""

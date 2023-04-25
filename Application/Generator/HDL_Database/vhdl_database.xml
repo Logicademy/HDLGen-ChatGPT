@@ -22,7 +22,7 @@
 
     <signalDeclaration>$sig_name : $mode $type;</signalDeclaration>
 
-    <architecture>architecture $arch_name of $comp_name is&#10;$int_sig_declaration&#10;&#10;begin&#10;&#10;-- Start of selected portion&#10;$arch_elements&#10;end $arch_name;</architecture>
+    <architecture>architecture $arch_name of $comp_name is&#10;$int_sig_declaration&#10;&#10;begin&#10;&#10;-- Start of selected portion&#10;&#10;$arch_elements&#10;end $arch_name;</architecture>
 
     <intSigDeclaration>signal $int_sig_name : $int_sig_type;</intSigDeclaration>
 
