@@ -292,6 +292,12 @@ class Generator(QWidget):
                             caseEmpty=True
                             notes = child.getElementsByTagName("note")[0].firstChild.data
                             notes = notes.replace("&#10;", "\n--- ")
+                            notes = notes.replace("&amp;", "&")
+                            notes = notes.replace("&quot;", "\"")
+                            notes = notes.replace("&apos;", "\'")
+                            notes = notes.replace("&lt;", "<")
+                            notes = notes.replace("&#x9;", "\t")
+                            notes = notes.replace("&gt;", ">")
 
                             signalList = ""
 
@@ -472,6 +478,12 @@ class Generator(QWidget):
                                         value = "(others => '0')"
                                     else:
                                         value = str(0)
+                                value = value.replace("&amp;", "&")
+                                value = value.replace("&quot;", "\"")
+                                value = value.replace("&apos;", "\'")
+                                value = value.replace("&lt;", "<")
+                                value = value.replace("&#x9;", "\t")
+                                value = value.replace("&gt;", ">")
                                 assign_syntax = assign_syntax.replace("$value", value)
 
                                 gen_stmts += assign_syntax
@@ -1019,7 +1031,13 @@ class Generator(QWidget):
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')
         tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
         self.note = tb_node.firstChild.nodeValue
-        self.note = self.note.replace("&#10;","\n")
+        self.note = self.note.replace("&#10;", "\n")
+        self.note = self.note.replace("&amp;", "&")
+        self.note = self.note.replace("&quot;", "\"")
+        self.note = self.note.replace("&apos;", "\'")
+        self.note = self.note.replace("&lt;", "<")
+        self.note = self.note.replace("&#x9;", "\t")
+        self.note = self.note.replace("&gt;", ">")
 
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
         chatgpt_tb = self.chatGPTTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
@@ -1413,6 +1431,13 @@ class Generator(QWidget):
                             caseEmpty = True
                             notes = child.getElementsByTagName("note")[0].firstChild.data
                             notes = notes.replace("&#10;", "\n/// ")
+                            notes = notes.replace("&amp;", "&")
+                            notes = notes.replace("&quot;", "\"")
+                            notes = notes.replace("&apos;", "\'")
+                            notes = notes.replace("&lt;", "<")
+                            notes = notes.replace("&#x9;", "\t")
+                            notes = notes.replace("&gt;", ">")
+
                             signalList = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
                                 arraySignal = False
@@ -1651,6 +1676,12 @@ class Generator(QWidget):
                                 else:
                                     assign_syntax = verilog_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     assign_syntax = assign_syntax.replace("$output_signal", signals[0])
+                                    value = value.replace("&amp;", "&")
+                                    value = value.replace("&quot;", "\"")
+                                    value = value.replace("&apos;", "\'")
+                                    value = value.replace("&lt;", "<")
+                                    value = value.replace("&#x9;", "\t")
+                                    value = value.replace("&gt;", ">")
                                     assign_syntax = assign_syntax.replace("$value", value)
 
                                     gen_stmts += assign_syntax
@@ -2093,6 +2124,13 @@ class Generator(QWidget):
         tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
         self.note = tb_node.firstChild.nodeValue
         self.note = self.note.replace("&#10;", "\n")
+        self.note = self.note.replace("&amp;", "&")
+        self.note = self.note.replace("&quot;", "\"")
+        self.note = self.note.replace("&apos;", "\'")
+        self.note = self.note.replace("&lt;", "<")
+        self.note = self.note.replace("&#x9;", "\t")
+        self.note = self.note.replace("&gt;", ">")
+
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
         chatgpt_tb = self.chatGPTTestbench.replace("VHDL","Verilog") + "\n\n" + chatgpt_tb + "\n\n" + self.note
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")

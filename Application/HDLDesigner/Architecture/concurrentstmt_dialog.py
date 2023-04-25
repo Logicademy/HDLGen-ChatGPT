@@ -176,6 +176,12 @@ class ConcurrentStmtDialog(QDialog):
             out_val = temp[1]
             self.out_signals_combo.setCurrentText(out_sig)
             if out_val not in self.input_signals and out_val not in self.internal_signals and out_val != "zero":
+                out_val = out_val.replace("&amp;", "&")
+                out_val = out_val.replace("&quot;", "\"")
+                out_val = out_val.replace("&apos;", "\'")
+                out_val = out_val.replace("&lt;", "<")
+                out_val = out_val.replace("&#x9;", "\t")
+                out_val = out_val.replace("&gt;", ">")
                 self.out_val_input.setText(out_val)
                 self.options_signals_combo.setCurrentText("Custom")
             else:
@@ -195,6 +201,14 @@ class ConcurrentStmtDialog(QDialog):
             output = self.out_signals_combo.currentText()
             if self.options_signals_combo.currentText() == "Custom":
                 value = self.out_val_input.text()
+                value = value.replace("&","&amp;")
+                value = value.replace("\"","&quot;")
+                value = value.replace("\'","&apos;")
+                value = value.replace("<","&lt;")
+                value = value.replace("\t","&#x9;")
+                value = value.replace(">","&gt;")
+
+
             else:
                 value = self.options_signals_combo.currentText()
             out_sig.append(output + "," + value)
