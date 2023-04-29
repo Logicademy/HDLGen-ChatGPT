@@ -534,9 +534,9 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
                     gen_vhdl += gen_library
                     chatgpt_vhdl += gen_library
-                    if self.includeArrays == True:
-                        gen_vhdl += "use work.MainPackage.all;"
-                        chatgpt_vhdl += "use work.MainPackage.all;"
+                    #if self.includeArrays == True:
+                    gen_vhdl += "use work.MainPackage.all;"
+                    chatgpt_vhdl += "use work.MainPackage.all;"
                     # Entity Section placement
                     gen_vhdl += "\n" + gen_entity + "\n\n"
                     chatgpt_vhdl += "\n" + gen_entity + "\n\n"
@@ -550,7 +550,7 @@ class Generator(QWidget):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         entity_name, vhdl_code, instances, chatgpt_header, chatgpt_vhdl = self.generate_vhdl()
-        chatgpt_header = self.chatGPTHeader + "\n" + chatgpt_header
+        chatgpt_header = self.chatGPTHeader + "\n\n" + chatgpt_header
         chatgpt_vhdl = self.chatGPTModel + "\n" + chatgpt_vhdl
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
@@ -645,10 +645,10 @@ class Generator(QWidget):
         wd = wd.replace("\\","/")
         mainPackagePath = "add_files -norecurse  "+ wd
         mainPackagePath = mainPackagePath.replace("Application","Package/mainPackage.vhd")
-        if self.includeArrays == True:
-            tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
-        else:
-            tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","")
+        #if self.includeArrays == True:
+        tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
+        #else:
+            #tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","")
         files=""
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
@@ -996,12 +996,8 @@ class Generator(QWidget):
                     gen_process += "\treport \"Assert and toggle rst\";\n\ttestNo <= 0;\n\trst    <= '1';\n"
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                     gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"#-- <delete (End)\n\n"
-                gen_process += "\n\t-- manually added code START\n"
-                gen_process += "\t-- include testbench stimulus sequence here. Use new testNo for each test set\n"
-                gen_process += "\t-- individual tests. Generate input signal combinations and wait for period.\n"
-                gen_process += "\ttestNo <= 1;\n"
-                gen_process += "\twait for 3*period;\n"
-                gen_process += "\t-- manually added code END\n\n"
+                gen_process += "\n\t-- Add testbench stimulus here START\n\n"
+                gen_process += "\t-- Add testbench stimulus here END\n\n"
                 gen_process += "\t-- Print picosecond (ps) = 1000*ns (nanosecond) time to simulation transcript\n"
                 gen_process += "\t-- Use to find time when simulation ends (endOfSim is TRUE)\n"
                 gen_process += "\t-- Re-run the simulation for this time\n"
@@ -1745,7 +1741,7 @@ class Generator(QWidget):
         model = self.chatGPTModel
         model = model.replace("VHDL","Verilog")
         model = model.replace("-","/")
-        chatgpt_header = self.chatGPTHeader.replace("VHDL","Verilog") + "\n" + chatgpt_header
+        chatgpt_header = self.chatGPTHeader.replace("VHDL","Verilog") + "\n\n" + chatgpt_header
        #chatgpt_header = model + "\n" + chatgpt_header
         #chatgpt_verilog = self.chatGPTModel.replace("VHDL","Verilog") + "\n" + chatgpt_verilog
         chatgpt_verilog = model + "\n" + chatgpt_verilog
@@ -2090,15 +2086,9 @@ class Generator(QWidget):
                 gen_process += "\t#period\n"
                 if clkrst >= 1:
                     gen_process += "\t@(posedge clk);\n"
-                gen_process += "\t// include testbench stimulus sequence here, i.e, input signal combinations\n"
-                gen_process += "\t// manually added code START\n"
-                gen_process += "\t// include testbench stimulus sequence here. Use new testNo for each test set\n"
-                gen_process += "\t// individual tests. Generate input signal combinations and\n"
-                gen_process += "\t// repeat(number of times) #period\n"
-                gen_process += "\ttestNo = 1;\n"
-                gen_process += "\trepeat(2)\n"
-                gen_process += "\t#period"
-                gen_process += "\t// manually added code END\n\n"
+
+                gen_process += "\n\t// Add testbench stimulus here START\n\n"
+                gen_process += "\t// Add testbench stimulus here END\n\n"
                 gen_process += "\t// Print nanosecond (ns) time to simulation transcript\n"
                 gen_process += "\t// Use to find time when simulation ends (endOfSim is TRUE)\n"
                 gen_process += "\t// Re-run the simulation for this time\n"
