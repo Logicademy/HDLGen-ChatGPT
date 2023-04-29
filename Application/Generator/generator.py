@@ -1029,16 +1029,18 @@ class Generator(QWidget):
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')
-        tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
-        self.note = tb_node.firstChild.nodeValue
-        self.note = self.note.replace("&#10;", "\n")
-        self.note = self.note.replace("&amp;", "&")
-        self.note = self.note.replace("&quot;", "\"")
-        self.note = self.note.replace("&apos;", "\'")
-        self.note = self.note.replace("&lt;", "<")
-        self.note = self.note.replace("&#x9;", "\t")
-        self.note = self.note.replace("&gt;", ">")
-
+        if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
+            tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
+            self.note = tb_node.firstChild.nodeValue
+            self.note = self.note.replace("&#10;", "\n")
+            self.note = self.note.replace("&amp;", "&")
+            self.note = self.note.replace("&quot;", "\"")
+            self.note = self.note.replace("&apos;", "\'")
+            self.note = self.note.replace("&lt;", "<")
+            self.note = self.note.replace("&#x9;", "\t")
+            self.note = self.note.replace("&gt;", ">")
+        else:
+            self.note = "No Test Plan Created"
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
         chatgpt_tb = self.chatGPTTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_TB.vhd")
@@ -2121,16 +2123,18 @@ class Generator(QWidget):
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')
-        tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
-        self.note = tb_node.firstChild.nodeValue
-        self.note = self.note.replace("&#10;", "\n")
-        self.note = self.note.replace("&amp;", "&")
-        self.note = self.note.replace("&quot;", "\"")
-        self.note = self.note.replace("&apos;", "\'")
-        self.note = self.note.replace("&lt;", "<")
-        self.note = self.note.replace("&#x9;", "\t")
-        self.note = self.note.replace("&gt;", ">")
-
+        if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
+            tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
+            self.note = tb_node.firstChild.nodeValue
+            self.note = self.note.replace("&#10;", "\n")
+            self.note = self.note.replace("&amp;", "&")
+            self.note = self.note.replace("&quot;", "\"")
+            self.note = self.note.replace("&apos;", "\'")
+            self.note = self.note.replace("&lt;", "<")
+            self.note = self.note.replace("&#x9;", "\t")
+            self.note = self.note.replace("&gt;", ">")
+        else:
+            self.note = "No Test Plan created"
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
         chatgpt_tb = self.chatGPTTestbench.replace("VHDL","Verilog") + "\n\n" + chatgpt_tb + "\n\n" + self.note
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
