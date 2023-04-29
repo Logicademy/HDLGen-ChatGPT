@@ -74,7 +74,7 @@ class Home(QMainWindow):
 
         self.project_manager.vhdl_check.clicked.connect(lambda: self.hdl_designer.update_preview("VHDL"))
         self.project_manager.verilog_check.clicked.connect(lambda: self.hdl_designer.update_preview("Verilog"))
-        self.tabs.currentChanged.connect(self.hdl_designer.compDetails.update_comp_name)
+        #self.tabs.currentChanged.connect(self.hdl_designer.compDetails.update_comp_name)
 
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)

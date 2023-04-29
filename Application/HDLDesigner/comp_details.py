@@ -104,12 +104,12 @@ class CompDetails(QWidget):
         self.input_layout.addWidget(self.comp_name_input, 1, 0, 1, 2)
         self.comp_name_input.setText(ProjectManager.get_proj_name())
         #self.comp_name_input.textChanged.connect(self.enable_save_btn)
-        self.comp_title_input.setText("To be Completed")
+        #self.comp_title_input.setText("To be Completed")
         self.input_layout.addWidget(self.comp_title_label, 2, 0)
         self.input_layout.addWidget(self.comp_title_input, 3, 0, 1, 2)
 
         #self.comp_description_input.setFixedHeight(50)
-        self.comp_description_input.setPlainText("To be Completed")
+        #self.comp_description_input.setPlainText("To be Completed")
         self.input_layout.addWidget(self.comp_description_label, 4, 0)
         self.input_layout.addWidget(self.comp_description_input, 5, 0, 4, 2)
 
@@ -125,21 +125,19 @@ class CompDetails(QWidget):
         self.input_layout.addWidget(self.comp_date_label, 11, 1)
         self.input_layout.addWidget(self.comp_date_picker, 12, 1, 1, 1)
 
-        self.btn_layout.addWidget(self.reset_btn)
+        #self.btn_layout.addWidget(self.reset_btn)
         #self.btn_layout.addWidget(self.save_btn)
 
-
-
+        self.comp_description_input.textChanged.connect(self.save_data)
         self.comp_author_input.textChanged.connect(self.save_data)
         self.comp_name_input.textChanged.connect(self.save_data)
         self.comp_email_input.textChanged.connect(self.save_data)
         self.comp_title_input.textChanged.connect(self.save_data)
         self.comp_company_input.textChanged.connect(self.save_data)
-        self.comp_description_input.textChanged.connect(self.save_data)
         self.comp_date_picker.dateChanged.connect(self.save_data)
         #self.comp_date_picker.textChanged.connect(self.save_data)
         #self.save_btn.clicked.connect(self.save_data)
-        self.reset_btn.clicked.connect(self.reset_comp_details)
+        #self.reset_btn.clicked.connect(self.reset_comp_details)
 
         self.input_layout.addItem(self.vspacer, 13, 0, 1, 2)
         self.input_layout.addLayout(self.btn_layout, 14, 1)
@@ -194,9 +192,7 @@ class CompDetails(QWidget):
                         lines += line + "\n"
                         line = ""
         lines = lines.strip()
-        comp_description = lines#self.comp_description_input.toPlainText()
-        if comp_description == "":
-            comp_description = "To be completed"
+        comp_description = lines
         comp_authors = self.comp_author_input.text().strip()
         if comp_authors == "":
             comp_authors = "To be completed"
@@ -212,7 +208,12 @@ class CompDetails(QWidget):
 
         header[0].getElementsByTagName('compName')[0].firstChild.data = comp_name
         header[0].getElementsByTagName('title')[0].firstChild.data = comp_title
+
+        if comp_description.count('\n') == 0:
+            comp_description=self.comp_description_input.toPlainText()
         comp_description = comp_description.replace("\n", "&#10;")
+        if comp_description == "":
+            comp_description = "To be completed"
         header[0].getElementsByTagName('description')[0].firstChild.data = comp_description
         header[0].getElementsByTagName('authors')[0].firstChild.data = comp_authors
         header[0].getElementsByTagName('company')[0].firstChild.data = comp_company
@@ -242,7 +243,6 @@ class CompDetails(QWidget):
         self.comp_date_picker.setDate(QDate.currentDate())
 
     def load_data(self, proj_dir):
-
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -251,12 +251,16 @@ class CompDetails(QWidget):
 
         comp_name = header[0].getElementsByTagName('compName')[0].firstChild.data
         comp_title = header[0].getElementsByTagName('title')[0].firstChild.data
-        comp_description = header[0].getElementsByTagName('description')[0].firstChild.nodeValue
-        comp_description = comp_description.replace("&#10;", "\n")
+        comp_description = header[0].getElementsByTagName('description')[0].firstChild.data
+
         comp_authors = header[0].getElementsByTagName('authors')[0].firstChild.data
         comp_company = header[0].getElementsByTagName('company')[0].firstChild.data
         comp_email = header[0].getElementsByTagName('email')[0].firstChild.data
         comp_date = header[0].getElementsByTagName('date')[0].firstChild.data
+
+        if comp_description != "null":
+            comp_description = comp_description.replace("&#10;", "\n")
+            self.comp_description_input.setPlainText(comp_description)
 
         if comp_name != "null":
             self.comp_name_input.setText(comp_name)
@@ -264,9 +268,6 @@ class CompDetails(QWidget):
 
         if comp_title != "null":
             self.comp_title_input.setText(comp_title)
-
-        if comp_description != "null":
-            self.comp_description_input.setPlainText(comp_description)
 
         if comp_authors != "null":
             self.comp_author_input.setText(comp_authors)

@@ -31,7 +31,7 @@ class HDLDesigner(QWidget):
         self.tabs.other_class = self
         # Creating a container
         self.container = QWidget()
-        self.compDetails = CompDetails(self.proj_dir)
+        #self.compDetails = CompDetails(self.proj_dir)
         self.project_manager = ProjectManager(self.proj_dir, self)
         self.setup_ui()
         self.hdl = "VHDL"
@@ -45,7 +45,8 @@ class HDLDesigner(QWidget):
         else:
             self.hdl = "VHDL"
     def setup_ui(self):
-        self.compDetails = CompDetails(self.proj_dir)
+        #self.compDetails = CompDetails(self.proj_dir)
+        compDetails = CompDetails(self.proj_dir)
         ioPorts = IOPorts(self.proj_dir)
         self.architecture = Architecture(self.proj_dir)
         internalSignal = InternalSignal(self.proj_dir)
@@ -56,7 +57,8 @@ class HDLDesigner(QWidget):
         self.preview_pane_layout.addWidget(self.preview_label)
         self.preview_pane_layout.addWidget(self.preview_window)
 
-        self.tabs.addTab(self.compDetails, "Component")
+        #self.tabs.addTab(self.compDetails, "Component")
+        self.tabs.addTab(compDetails, "Component")
         self.tabs.addTab(package, "VHDL types")
         self.tabs.addTab(subcomponents, "Sub-components")
         self.tabs.addTab(ioPorts, "Ports")
@@ -70,7 +72,8 @@ class HDLDesigner(QWidget):
         self.setLayout(self.mainLayout)
 
         #self.compDetails.save_btn.clicked.connect(self.update_preview)
-        self.compDetails.save_signal.connect(self.update_preview)
+        #self.compDetails.save_signal.connect(self.update_preview)
+        compDetails.save_signal.connect(self.update_preview)
         #ioPorts.save_signal_btn.clicked.connect(self.update_preview)
         ioPorts.save_signal.connect(self.update_preview)
         ioPorts.save_signal.connect(self.update_arch)
