@@ -257,7 +257,9 @@ class Generator(QWidget):
 
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
+                gen_archs = ""
                 gen_process = ""
+                gen_conc = ""
                 gen_seq_process = ""
                 gen_instance = ""
                 clkAndRst = hdl_design[0].getElementsByTagName('clkAndRst')
@@ -489,7 +491,8 @@ class Generator(QWidget):
                                 gen_stmts += assign_syntax
 
                             conc_syntax = conc_syntax.replace("$statement", gen_stmts)
-                            gen_process += conc_syntax + "\n"
+                            #gen_process += conc_syntax + "\n"
+                            gen_conc += conc_syntax + "\n"
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
                             self.includeArrays = True
@@ -516,10 +519,13 @@ class Generator(QWidget):
                             gen_instance += instance_syntax + "\n"
 
                         child = next
+                    #gen_process += gen_conc
+                    gen_archs += gen_process
+                    gen_archs += gen_conc
                     #gen_process = gen_process[:-1]
-                    gen_process += "-- End of selected portion\n\n"
-                    gen_process += gen_seq_process
-                    gen_process += gen_instance
+                    gen_archs += "-- End of selected portion\n\n"
+                    gen_archs += gen_seq_process
+                    gen_archs += gen_instance
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
                     arch_name_node = arch_node[0].getElementsByTagName("archName")
 
@@ -531,7 +537,7 @@ class Generator(QWidget):
                     gen_arch = arch_syntax.replace("$arch_name", arch_name)
                     gen_arch = gen_arch.replace("$comp_name", entity_name)
                     gen_arch = gen_arch.replace("$int_sig_declaration", gen_int_sig)
-                    gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
+                    gen_arch = gen_arch.replace("$arch_elements", gen_archs[:-1])
                     gen_vhdl += gen_library
                     chatgpt_vhdl += gen_library
                     #if self.includeArrays == True:
@@ -1405,7 +1411,9 @@ class Generator(QWidget):
                 
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
+                gen_archs = ""
                 gen_process = ""
+                gen_conc = ""
                 gen_seq_process = ""
                 gen_instance = ""
                 if array_assign != "":
@@ -1685,7 +1693,7 @@ class Generator(QWidget):
                                     gen_stmts += assign_syntax
 
                                     conc_syntax = conc_syntax.replace("$statement", gen_stmts)
-                            gen_process += conc_syntax + "\n"
+                            gen_conc += conc_syntax + "\n"
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
                             self.includeArrays = True
@@ -1719,13 +1727,15 @@ class Generator(QWidget):
 
                         child = next
                     #gen_process = gen_process[:-1]
-                    gen_process += "// End of selected portion\n\n"
-                    gen_process += gen_seq_process
-                    gen_process += gen_instance
+                    gen_archs += gen_process
+                    gen_archs += gen_conc
+                    gen_archs += "// End of selected portion\n\n"
+                    gen_archs += gen_seq_process
+                    gen_archs += gen_instance
                     arch_syntax = verilog_root.getElementsByTagName("architecture")[0].firstChild.data
 
                     gen_arch = arch_syntax.replace("$int_sig_declaration", gen_int_sig)
-                    gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
+                    gen_arch = gen_arch.replace("$arch_elements", gen_archs[:-1])
                     gen_entity = gen_entity.replace("$arch", indent(gen_arch,'    '))
                     chatgpt_verilog +=  gen_entity + "\n\n"
                     # Entity Section placement
