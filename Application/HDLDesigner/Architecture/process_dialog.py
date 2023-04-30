@@ -548,8 +548,6 @@ class ProcessDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        print(self.process_names)
-        print(self.process_name)
         if self.proc_name_input.text() != "" and (self.proc_name_input.text()+"_p" not in self.process_names or self.proc_name_input.text() == self.process_name[:-2] ) and (self.proc_name_input.text() not in self.process_names or self.proc_name_input.text() == self.process_name):
             self.ok_btn.setEnabled(True)
         else:
@@ -639,8 +637,6 @@ class ProcessDialog(QDialog):
         button = self.sender()
         if button:
             if button.text() == "Edit note":
-                print(self.process_notes)
-                print(type(self.process_notes))
                 add_note = note_Dialog("edit", self.process_notes)
             else:
                 add_note = note_Dialog("add")

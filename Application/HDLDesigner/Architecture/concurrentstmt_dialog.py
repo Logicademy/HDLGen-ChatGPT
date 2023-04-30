@@ -4,6 +4,7 @@ from PySide2.QtGui import *
 import sys
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
+from HDLDesigner.Architecture.note_dialog import note_Dialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -30,7 +31,7 @@ class ConcurrentStmtDialog(QDialog):
         self.internal_signals = []
         self.input_signals = []
         self.output_signals = []
-
+        self.conc_notes = "None"
         self.input_layout = QGridLayout()
 
         self.mainLayout = QVBoxLayout()
@@ -38,6 +39,12 @@ class ConcurrentStmtDialog(QDialog):
         self.conc_name_label = QLabel("Concurrent Statement Name*")
         self.conc_name_label.setStyleSheet(WHITE_COLOR)
         self.conc_name_input = QLineEdit()
+
+        self.add_note_btn = QPushButton("Add note")
+        self.add_note_btn.setFixedSize(80, 25)
+        self.add_note_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         self.out_sig_header_layout = QHBoxLayout()
         self.out_sig_label = QLabel("Assign Signal")
@@ -54,6 +61,8 @@ class ConcurrentStmtDialog(QDialog):
         self.out_signals_combo = QComboBox()
         self.options_signals_combo = QComboBox()
         self.out_val_input = QLineEdit()
+        validator = QIntValidator()
+        self.out_val_input.setValidator(validator)
 
         self.out_sig_layout = QHBoxLayout()
 
@@ -92,10 +101,11 @@ class ConcurrentStmtDialog(QDialog):
 
     def setup_ui(self):
 
-        self.input_layout.addWidget(self.conc_name_label, 0, 0, 1, 3)
-        self.input_layout.addWidget(self.conc_name_input, 1, 0, 1, 3)
-        self.input_layout.addWidget(self.suffix_label, 0, 3, 1, 1)
-        self.input_layout.addWidget(self.suffix_input, 1, 3, 1, 1)
+        self.input_layout.addWidget(self.conc_name_label, 0, 0, 1, 2)
+        self.input_layout.addWidget(self.conc_name_input, 1, 0, 1, 2)
+        self.input_layout.addWidget(self.suffix_label, 0, 2, 1, 1)
+        self.input_layout.addWidget(self.suffix_input, 1, 2, 1, 1)
+        self.input_layout.addWidget(self.add_note_btn, 1, 3, 1, 1, Qt.AlignCenter)
         self.input_layout.addWidget(self.out_sig_label, 3, 0, 1, 1)
         self.input_layout.addWidget(self.out_signals_combo, 4, 0, 1, 1)
         self.input_layout.addWidget(self.options_sig_label,3,1,1,1)
@@ -112,6 +122,7 @@ class ConcurrentStmtDialog(QDialog):
         self.input_frame.setContentsMargins(10, 10, 10, 10)
         self.input_frame.setFixedSize(400, 175)
         self.input_frame.setLayout(self.input_layout)
+        self.add_note_btn.clicked.connect(self.add_conc_note)
         #self.out_signals_combo.currentIndexChanged.connect(self.setName)
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
@@ -169,7 +180,9 @@ class ConcurrentStmtDialog(QDialog):
     def load_conc_data(self, conc_data):
 
         self.conc_name_input.setText(conc_data[1])
-
+        self.conc_notes = conc_data[3]
+        if self.conc_notes != "None":
+            self.add_note_btn.setText("Edit note")
         if len(conc_data[2]) != 0:
             temp = conc_data[2][0].split(",")
             out_sig = temp[0]
@@ -214,6 +227,7 @@ class ConcurrentStmtDialog(QDialog):
             out_sig.append(output + "," + value)
 
         data.append(out_sig)
+        data.append(self.conc_notes)
 
         self.cancelled = False
         self.close()
@@ -231,6 +245,24 @@ class ConcurrentStmtDialog(QDialog):
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)
+
+    def add_conc_note(self):
+        button = self.sender()
+        if button:
+            if button.text() == "Edit note":
+                print(self.conc_notes)
+                add_note = note_Dialog("edit", self.conc_notes)
+            else:
+                add_note = note_Dialog("add")
+            add_note.exec_()
+
+            if not add_note.cancelled:
+                note_data = add_note.get_data()
+                if note_data == "":
+                    self.add_note_btn.setText("Add note")
+                else:
+                    self.add_note_btn.setText("Edit note")
+                self.conc_notes = note_data
 
     def disable_custom_input(self):
         combo = self.sender()

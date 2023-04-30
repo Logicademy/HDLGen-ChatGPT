@@ -143,7 +143,6 @@ class Generator(QWidget):
 
             gen_entity = gen_entity.replace("$signals", gen_signals)
 
-
             # Internal signals
             gen_int_sig = "-- Internal signal declarations"
 
@@ -426,11 +425,7 @@ class Generator(QWidget):
 
                                     #gen_defaults += notes
                                     note_syntax = vhdl_root.getElementsByTagName("note")[0].firstChild.data
-                                    #note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
-                                    #note_syntax = note_syntax.replace("$signalList",signalList)
                                     note_syntax = note_syntax.replace("$notes", notes)
-                                    #if all(char != '-' for char in notes):
-                                    #if not set(notes) - {'-', ' ', '\t', '\n'}:
                                     if notes == "None":
                                         gen_defaults += ""
                                         if caseEmpty == False:
@@ -493,7 +488,21 @@ class Generator(QWidget):
 
                             conc_syntax = conc_syntax.replace("$statement", gen_stmts)
                             #gen_process += conc_syntax + "\n"
-                            gen_conc += conc_syntax + "\n"
+                            gen_conc += conc_syntax
+                            notes = child.getElementsByTagName("note")[0].firstChild.data
+                            if notes != "None":
+                                notes = notes.replace("&#10;", "\n--- ")
+                                notes = notes.replace("&amp;", "&")
+                                notes = notes.replace("&quot;", "\"")
+                                notes = notes.replace("&apos;", "\'")
+                                notes = notes.replace("&lt;", "<")
+                                notes = notes.replace("&#x9;", "\t")
+                                notes = notes.replace("&gt;", ">")
+                                note_syntax = vhdl_root.getElementsByTagName("note")[0].firstChild.data
+                                note_syntax = note_syntax.replace("$notes", notes)
+                                gen_conc += note_syntax + "\n\n"
+                            else:
+                                gen_conc += "\n"
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
                             self.includeArrays = True
@@ -1525,31 +1534,15 @@ class Generator(QWidget):
                                         ceInSeq = signals[3]
                                 else:
                                     signalList += ", "+signals[0]
-                                    #notes += "\n// "+signals[2][5:]
-                                    #notes = notes.replace("&amp;", "&")
-                            #for input_signal in child.getElementsByTagName("inputSignal"):
-                                #if input_signal.firstChild.data == "clk":
-                                    #gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
-                               # elif input_signal.firstChild.data == "rst":
-                                    #gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
-                                #else:
-                                    #gen_in_sig += input_signal.firstChild.data + " or "
-                            #gen_in_sig = gen_in_sig.strip()
-                            #gen_in_sig = gen_in_sig[:-2]
-
-                           # process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
                             process_syntax = process_syntax.replace("$process_label",child.getElementsByTagName("label")[
                                                                         0].firstChild.data)
-                            rstlvl=""
-                            clkEdge = ""
+
                             if gen_defaults != "":
                                 if clkgen_defaults != "":
                                     for clkRst in clkAndRst[0].getElementsByTagName("clkAndRst"):
                                         clkEdge = "posedge"
                                         if clkRst.getElementsByTagName('activeClkEdge')[0].firstChild.data == "H-L":
                                             clkEdge = "negedge"
-                                        #clkif_syntax = verilog_root.getElementsByTagName("clkIfStatement")[0].firstChild.data
-                                        #clkif_syntax = clkif_syntax.replace("$edge", clkEdge)
                                         gen_in_sig = clkEdge + " clk"
                                         if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
                                             if_syntax = verilog_root.getElementsByTagName("ifStatement")[0].firstChild.data
@@ -1584,9 +1577,6 @@ class Generator(QWidget):
                                                                                   clkgen_defaults)
                                                 if_syntax = if_syntax.replace("$else", else_syntax)
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
-                                                #clkgen_defaults = indent(clkgen_defaults,'    ')
-                                                #clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
-                                                #clkgen_defaults = "\t" + clkif_syntax + "\n"
                                         else:
                                             clkgen_defaults = textwrap.dedent(clkgen_defaults)
                                             clkgen_defaults = indent(clkgen_defaults, '    ')
@@ -1595,47 +1585,23 @@ class Generator(QWidget):
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
                                     gen_seq_process += process_syntax + "\n\n"
                                 else:
-                                    #if caseEmpty == False:
-                                        #gen_defaults += "\n" + case_syntax
                                     for input_signal in child.getElementsByTagName("inputSignal"):
                                         gen_in_sig += input_signal.firstChild.data + " or "
                                     gen_in_sig = gen_in_sig.strip()
                                     gen_in_sig = gen_in_sig[:-3]
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
-                                    #note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
-                                    #note_syntax = note_syntax.replace("$signalList",signalList)
                                     note_syntax = note_syntax.replace("$notes", notes)
-                                    #if not set(notes) - {'-', ' ', '\t', '\n'}:
                                     if notes == "None":
                                         gen_defaults += ""
                                         if caseEmpty == False:
                                             case_syntax = case_syntax.replace("$whenCase", whenCase)
                                             gen_defaults += "\n" + case_syntax
                                     else:
-                                        #if caseEmpty == False:
-                                            #case_syntax = case_syntax.replace("$whenCase", "\n"+note_syntax)
-                                            #gen_defaults += "\n" + case_syntax
-                                        #else:
                                         gen_defaults += "\n" + note_syntax
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
                                     gen_process += process_syntax + "\n\n"
-                            #for input_signal in child.getElementsByTagName("inputSignal"):
-                            #    if input_signal.firstChild.data == "clk":
-                            #        gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
-                            #    elif input_signal.firstChild.data == "rst":
-                            #        gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
-                            #    else:
-                            #        gen_in_sig += input_signal.firstChild.data + " or "
-                            #gen_in_sig = gen_in_sig.strip()
-                            #gen_in_sig = gen_in_sig[:-2]
-
-                            #process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
-                           # process_syntax = process_syntax.replace("$process_label",child.getElementsByTagName("label")[
-                                                                        #0].firstChild.data)
-                            #gen_process += process_syntax + "\n\n"
-
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
 
@@ -1695,18 +1661,32 @@ class Generator(QWidget):
                                 else:
                                     assign_syntax = verilog_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     assign_syntax = assign_syntax.replace("$output_signal", signals[0])
-                                    value = value.replace("&amp;", "&")
-                                    value = value.replace("&quot;", "\"")
-                                    value = value.replace("&apos;", "\'")
-                                    value = value.replace("&lt;", "<")
-                                    value = value.replace("&#x9;", "\t")
-                                    value = value.replace("&gt;", ">")
+                                   # value = value.replace("&amp;", "&")
+                                   # value = value.replace("&quot;", "\"")
+                                   # value = value.replace("&apos;", "\'")
+                                   # value = value.replace("&lt;", "<")
+                                   # value = value.replace("&#x9;", "\t")
+                                   # value = value.replace("&gt;", ">")
                                     assign_syntax = assign_syntax.replace("$value", value)
 
                                     gen_stmts += assign_syntax
 
                                     conc_syntax = conc_syntax.replace("$statement", gen_stmts)
-                            gen_conc += conc_syntax + "\n"
+                            gen_conc += conc_syntax
+                            notes = child.getElementsByTagName("note")[0].firstChild.data
+                            if notes != "None":
+                                notes = notes.replace("&#10;", "\n--- ")
+                                notes = notes.replace("&amp;", "&")
+                                notes = notes.replace("&quot;", "\"")
+                                notes = notes.replace("&apos;", "\'")
+                                notes = notes.replace("&lt;", "<")
+                                notes = notes.replace("&#x9;", "\t")
+                                notes = notes.replace("&gt;", ">")
+                                note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
+                                note_syntax = note_syntax.replace("$notes", notes)
+                                gen_conc += note_syntax + "\n"
+                            else:
+                                gen_conc += "\n"
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
                             self.includeArrays = True
