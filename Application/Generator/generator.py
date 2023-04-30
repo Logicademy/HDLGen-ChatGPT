@@ -4,6 +4,7 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 import subprocess
 import sys
+import textwrap
 from textwrap import indent
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
@@ -1516,6 +1517,7 @@ class Generator(QWidget):
                                     clkAssign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
                                     clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
+                                    #clkgen_defaults += "\n\t\t" + clkAssign_syntax
                                     clkgen_defaults += "\n\t\t" + clkAssign_syntax
                                     #if len(signals) == 3:
                                         #signals.append("N/A")
@@ -1525,17 +1527,17 @@ class Generator(QWidget):
                                     signalList += ", "+signals[0]
                                     #notes += "\n// "+signals[2][5:]
                                     #notes = notes.replace("&amp;", "&")
-                            for input_signal in child.getElementsByTagName("inputSignal"):
-                                if input_signal.firstChild.data == "clk":
-                                    gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
-                                elif input_signal.firstChild.data == "rst":
-                                    gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
-                                else:
-                                    gen_in_sig += input_signal.firstChild.data + " or "
-                            gen_in_sig = gen_in_sig.strip()
-                            gen_in_sig = gen_in_sig[:-2]
+                            #for input_signal in child.getElementsByTagName("inputSignal"):
+                                #if input_signal.firstChild.data == "clk":
+                                    #gen_in_sig += clkEdge + " " + input_signal.firstChild.data + " or "
+                               # elif input_signal.firstChild.data == "rst":
+                                    #gen_in_sig += rstlvl + " " + input_signal.firstChild.data + " or "
+                                #else:
+                                    #gen_in_sig += input_signal.firstChild.data + " or "
+                            #gen_in_sig = gen_in_sig.strip()
+                            #gen_in_sig = gen_in_sig[:-2]
 
-                            process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
+                           # process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
                             process_syntax = process_syntax.replace("$process_label",child.getElementsByTagName("label")[
                                                                         0].firstChild.data)
                             rstlvl=""
@@ -1546,8 +1548,9 @@ class Generator(QWidget):
                                         clkEdge = "posedge"
                                         if clkRst.getElementsByTagName('activeClkEdge')[0].firstChild.data == "H-L":
                                             clkEdge = "negedge"
-                                        clkif_syntax = verilog_root.getElementsByTagName("clkIfStatement")[0].firstChild.data
+                                        #clkif_syntax = verilog_root.getElementsByTagName("clkIfStatement")[0].firstChild.data
                                         #clkif_syntax = clkif_syntax.replace("$edge", clkEdge)
+                                        gen_in_sig = clkEdge + " clk"
                                         if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
                                             if_syntax = verilog_root.getElementsByTagName("ifStatement")[0].firstChild.data
                                             if_syntax = if_syntax.replace("$assignment", "rst")
@@ -1557,6 +1560,7 @@ class Generator(QWidget):
                                             if_syntax = if_syntax.replace("$default_assignments",
                                                                           if_gen_defaults)
                                             if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
+                                                gen_in_sig = clkEdge + " clk or " + rstlvl + " rst"
                                                 else_syntax = verilog_root.getElementsByTagName("elseStatement")[
                                                     0].firstChild.data
                                                 if ceInSeq != "":
@@ -1567,6 +1571,7 @@ class Generator(QWidget):
                                                 if_syntax = if_syntax.replace("$else", else_syntax)
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
                                             else:
+                                                gen_in_sig = clkEdge + " clk"
                                                 else_syntax = verilog_root.getElementsByTagName("elseStatement")[0].firstChild.data
                                                 if ceInSeq != "":
                                                     clkgen_defaults = indent(clkgen_defaults, '    ')
@@ -1576,19 +1581,23 @@ class Generator(QWidget):
                                                                                   clkgen_defaults)
                                                 if_syntax = if_syntax.replace("$else", else_syntax)
                                                 clkgen_defaults = "\t" + if_syntax + "\n"
-                                                clkgen_defaults = indent(clkgen_defaults,'    ')
-                                                clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
-                                                clkgen_defaults = "\t" + clkif_syntax + "\n"
+                                                #clkgen_defaults = indent(clkgen_defaults,'    ')
+                                                #clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
+                                                #clkgen_defaults = "\t" + clkif_syntax + "\n"
                                         else:
-                                            clkif_syntax = clkif_syntax.replace("$default_assignments", clkgen_defaults)
-                                            clkgen_defaults = "\t" + clkif_syntax + "\n"
+                                            clkgen_defaults = textwrap.dedent(clkgen_defaults)
+                                            clkgen_defaults = indent(clkgen_defaults, '    ')
                                     clkgen_defaults = clkgen_defaults.rstrip()
+                                    process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
                                     process_syntax = process_syntax.replace("$default_assignments", clkgen_defaults)
                                     gen_seq_process += process_syntax + "\n\n"
                                 else:
                                     #if caseEmpty == False:
                                         #gen_defaults += "\n" + case_syntax
-
+                                    for input_signal in child.getElementsByTagName("inputSignal"):
+                                        gen_in_sig += input_signal.firstChild.data + " or "
+                                    gen_in_sig = gen_in_sig.strip()
+                                    gen_in_sig = gen_in_sig[:-3]
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
                                     #note_syntax = note_syntax.replace("$processName", child.getElementsByTagName("label")[0].firstChild.data)
                                     #note_syntax = note_syntax.replace("$signalList",signalList)
@@ -1606,6 +1615,7 @@ class Generator(QWidget):
                                         #else:
                                         gen_defaults += "\n" + note_syntax
                                     gen_defaults = gen_defaults.rstrip()
+                                    process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
                                     process_syntax = process_syntax.replace("$default_assignments", gen_defaults)
                                     gen_process += process_syntax + "\n\n"
                             #for input_signal in child.getElementsByTagName("inputSignal"):
