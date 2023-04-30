@@ -1554,9 +1554,12 @@ class Generator(QWidget):
                                         if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
                                             if_syntax = verilog_root.getElementsByTagName("ifStatement")[0].firstChild.data
                                             if_syntax = if_syntax.replace("$assignment", "rst")
+                                            lvl = "1"
                                             rstlvl="posedge"
                                             if clkRst.getElementsByTagName('ActiveRstLvl')[0].firstChild.data == '0':
                                                 rstlvl="negedge"
+                                                lvl = "0"
+                                            if_syntax = if_syntax.replace("$lvl", lvl)
                                             if_syntax = if_syntax.replace("$default_assignments",
                                                                           if_gen_defaults)
                                             if clkRst.getElementsByTagName('RstType')[0].firstChild.data == "asynch":
