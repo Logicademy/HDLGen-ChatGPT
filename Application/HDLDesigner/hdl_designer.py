@@ -7,6 +7,7 @@ sys.path.append("..")
 from HDLDesigner.comp_details import CompDetails
 from HDLDesigner.IOPorts.io_ports import IOPorts
 from HDLDesigner.Architecture.architecture import Architecture
+from HDLDesigner.testPlan import TestPlan
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from HDLDesigner.Package.package import Package
 from HDLDesigner.Subcomponents.subcomponents import Subcomponents
@@ -49,6 +50,7 @@ class HDLDesigner(QWidget):
         #compDetails = CompDetails(self.proj_dir)
         ioPorts = IOPorts(self.proj_dir)
         self.architecture = Architecture(self.proj_dir)
+        testplan = TestPlan(self.proj_dir)
         internalSignal = InternalSignal(self.proj_dir)
         package = Package()
         subcomponents = Subcomponents()
@@ -64,6 +66,7 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(ioPorts, "Ports")
         self.tabs.addTab(internalSignal, "Internal Signals")
         self.tabs.addTab(self.architecture, "Architecture")
+        self.tabs.addTab(testplan, "Test Plan")
         font = self.tabs.font()
         font.setPointSize(10)
         self.tabs.setFont(font)
@@ -133,7 +136,7 @@ class VerticalTabWidget(QTabWidget):
         QTabWidget.__init__(self, *args, **kwargs)
         self.setTabBar(TabBar())
         self.setTabPosition(QTabWidget.West)
-        self.currentChanged.connect(self.tab_changed)
+        #self.currentChanged.connect(self.tab_changed)
         self.previous_index = self.currentIndex()
         self.other_class = other_class
     def tab_changed(self, index):
