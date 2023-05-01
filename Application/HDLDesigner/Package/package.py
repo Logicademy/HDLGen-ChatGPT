@@ -36,7 +36,7 @@ class Package(QWidget):
         self.package_list_title_layout = QHBoxLayout()
         self.mainLayout = QVBoxLayout()
 
-        self.package_label = QLabel("mainPackage.vhd")
+        self.package_label = QLabel("Types")
         self.package_label.setFont(title_font)
         self.package_label.setStyleSheet(WHITE_COLOR)
 

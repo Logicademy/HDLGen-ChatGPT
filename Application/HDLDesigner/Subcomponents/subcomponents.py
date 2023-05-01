@@ -37,7 +37,7 @@ class Subcomponents(QWidget):
         self.component_list_layout = QVBoxLayout()
         self.mainLayout = QVBoxLayout()
 
-        self.package_label = QLabel("mainPackage.vhd")
+        self.package_label = QLabel("Sub-components")
         self.package_label.setFont(title_font)
         self.package_label.setStyleSheet(WHITE_COLOR)
 
