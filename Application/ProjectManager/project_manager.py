@@ -277,7 +277,6 @@ class ProjectManager(QWidget):
         path = Path(os.getcwd())
         parent_path = path.parent.absolute()
         self.proj_dir = os.path.join(parent_path, "User_Projects")
-        print(self.proj_dir)
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_name_input.setText("Untitled")
 
@@ -332,7 +331,7 @@ class ProjectManager(QWidget):
 
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
-
+        spec_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "Specification")
         xml_data_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj")
         print("Saving project details at ", xml_data_dir)
 
@@ -351,6 +350,8 @@ class ProjectManager(QWidget):
         projectManager_data = root.createElement('projectManager')
         # Creating main project folder
         os.makedirs(xml_data_dir, exist_ok=True)
+        # Create specification folder
+        os.makedirs(spec_dir, exist_ok=True)
         # Set project name and location details
         # Adding Setting Element
         settings_data = root.createElement('settings')
