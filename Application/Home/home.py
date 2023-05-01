@@ -24,17 +24,12 @@ class Home(QMainWindow):
         self.cornerWidget = QWidget()
         self.generate_btn = QPushButton("Generate model and TB HDL")
         self.generate_btn.setFont(small_text_font)
-        #self.testbench_btn = QPushButton("Test Plan")
-        #self.testbench_btn.setFont(small_text_font)
-        #self.generate_btn.setFixedHeight(20)
         self.start_vivado_btn = QPushButton("Generate/Open Vivado")
         self.start_vivado_btn.setFont(small_text_font)
         self.export_project_btn = QPushButton("Export Project")
         self.export_project_btn.setFont(small_text_font)
-        #self.start_vivado_btn.setFixedHeight(20)
         self.cornerWidgetLayout = QHBoxLayout()
         self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)
-        #self.cornerWidgetLayout.addWidget(self.testbench_btn)
         self.cornerWidgetLayout.addWidget(self.generate_btn)
         self.cornerWidgetLayout.addWidget(self.start_vivado_btn)
         self.cornerWidgetLayout.addWidget(self.export_project_btn)
@@ -68,11 +63,11 @@ class Home(QMainWindow):
         self.tabs.addTab(self.project_manager, "Project Manager")
         self.tabs.addTab(self.hdl_designer, "HDL Designer")
         self.tabs.addTab(Help(), "Help")
+        self.tabs.currentChanged.connect(self.handle_tab_change)
         font = self.tabs.font()
         font.setPointSize(10)
         self.tabs.setFont(font)
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
-        #self.testbench_btn.clicked.connect(self.testbench_btn_clicked)
         self.tabs.setCornerWidget(self.cornerWidget)
         self.start_vivado_btn.clicked.connect(self.start_vivado_btn_clicked)
         self.export_project_btn.clicked.connect(self.export_project)
@@ -163,5 +158,10 @@ class Home(QMainWindow):
         msgBox.setText("Zipped to " + zip_file_name)
         msgBox.exec_()
         print(f"Successfully created {zip_file_name}!")
+
+    def handle_tab_change(self, index):
+        if index != 0:
+            self.project_manager.create_xml()
+
 
 
