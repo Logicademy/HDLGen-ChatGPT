@@ -6,6 +6,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import qtawesome as qta
 import configparser
+import shutil
 from ProjectManager.vivado_help import VivadoHelpDialog
 
 SMALL_SPACING = 10
@@ -60,8 +61,12 @@ class ProjectManager(QWidget):
         self.proj_folder_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-
         self.proj_folder_btn.setFixedSize(50, 22)
+        self.copy_proj_btn = QPushButton("Copy project")
+        self.copy_proj_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+        self.copy_proj_btn.setFixedSize(80, 22)
 
         self.lang_label = QLabel("Languages")
         self.lang_label.setFont(bold_font)
@@ -169,7 +174,8 @@ class ProjectManager(QWidget):
         self.projSettingLayout.addWidget(self.proj_setting_title)
         self.projSettingLayout.addSpacing(SMALL_SPACING)
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 4)
+        self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 3)
+        self.projDetailIpLayout.addWidget(self.copy_proj_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.projDetailIpLayout.addWidget(self.dir_label, 2, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_folder_input, 3, 0, 1, 3)
         self.projDetailIpLayout.addWidget(self.proj_folder_btn, 3, 3, 1, 1, Qt.AlignRight)
@@ -177,6 +183,7 @@ class ProjectManager(QWidget):
 
         self.proj_name_input.textChanged.connect(self.proj_detail_change)
         self.proj_folder_input.textChanged.connect(self.proj_detail_change)
+        self.copy_proj_btn.clicked.connect(self.copy_project)
 
         self.projSettingFrame.setFrameShape(QFrame.StyledPanel)
         self.projSettingFrame.setStyleSheet(".QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}")
@@ -303,7 +310,8 @@ class ProjectManager(QWidget):
 
     def set_proj_dir(self):
         ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
-        self.proj_folder_input.setText(ProjectManager.proj_dir)#self.proj_dir)
+        if ProjectManager.proj_dir:
+            self.proj_folder_input.setText(ProjectManager.proj_dir)
 
     def set_vivado_bat_path(self):
         ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")
@@ -631,3 +639,51 @@ class ProjectManager(QWidget):
             return "VHDL"
         else:
             return "Verilog"
+
+    def copy_project(self):
+        # Get the source file path using a QFileDialog
+        #source_path, _ = QFileDialog.getOpenFileName(None, 'Select File to Copy',
+         #                                            filter="All Files (*);;HDLGen Files (*.hdlgen)")
+        try:
+            source_path = self.proj_dir +"/"+self.proj_name_input.text()+"/HDLGenPrj/"+self.proj_name_input.text()+".hdlgen"
+            # Get the new file name using a QFileDialog
+            new_name, _ = QFileDialog.getSaveFileName(None, 'Enter a New Name for the File', '',
+                                                      'HDLGen Files (*.hdlgen)')
+
+            if new_name:
+                # Remove the .hdlgen extension from the new file name if it has it
+                if new_name.endswith('.hdlgen'):
+                    new_name = new_name[:-7]
+
+                # Create a folder with the same name as the new file name
+                folder_path = os.path.join(os.path.dirname(new_name), os.path.basename(new_name))
+                os.makedirs(folder_path, exist_ok=True)
+
+                # Create a sub-folder called HDLGenPrj
+                sub_folder_path = os.path.join(folder_path, 'HDLGenPrj')
+                os.makedirs(sub_folder_path, exist_ok=True)
+
+                # Get the new name of the file and copy it to the HDLGenPrj folder
+                new_file_name = os.path.join(sub_folder_path, os.path.basename(new_name) + '.hdlgen')
+                shutil.copy(source_path, new_file_name)
+
+                # Open the new file and replace the old file name with the new one
+                with open(new_file_name, 'r+') as f:
+                    content = f.read()
+                    new_content = content.replace(os.path.basename(source_path)[:-7],
+                                                  os.path.basename(new_file_name)[:-7])
+                    f.seek(0)
+                    f.write(new_content)
+                    f.truncate()
+
+                # Print a message when the copy operation is completed
+                print(f'File copied successfully. New file name: {new_file_name}')
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Project copied!")
+                msgBox.exec_()
+        except:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("Error with folder set up")
+            msgBox.exec_()
