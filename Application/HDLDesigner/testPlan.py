@@ -118,13 +118,19 @@ class TestPlan(QWidget):
                 note_data = note_data.replace("&lt;", "<")
                 note_data = note_data.replace("&#x9;", "\t")
                 note_data = note_data.replace("&gt;", ">")
+
+                if note_data!="None":
+                    self.testbench_btn.setText("Edit Test Plan")
+                else:
+                    note_data = "No test plan created"
+                    self.testbench_btn.setText("Add Test Plan")
                 self.testplan_input.setText(note_data)
                 print("Saved test plan")
     def load_data(self, proj_dir):
         self.note = "No test plan created"
 
-        if self.proj_dir is not None:
-            root = minidom.parse(self.proj_dir[0])
+        if proj_dir is not None:
+            root = minidom.parse(proj_dir[0])
             HDLGen = root.documentElement
             hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
             testbench_node = hdlDesign[0].getElementsByTagName('testbench')
@@ -140,5 +146,10 @@ class TestPlan(QWidget):
             note_data = note_data.replace("&lt;", "<")
             note_data = note_data.replace("&#x9;", "\t")
             note_data = note_data.replace("&gt;", ">")
+            if note_data != "None":
+                self.testbench_btn.setText("Edit Test Plan")
+            else:
+                note_data="No test plan created"
+                self.testbench_btn.setText("Add Test Plan")
             self.testplan_input.setText(note_data)
 
