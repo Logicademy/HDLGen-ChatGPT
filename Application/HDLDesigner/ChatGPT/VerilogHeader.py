@@ -53,7 +53,7 @@ class VerilogHeaderDialog(QDialog):
             self.load_data(data)
     def setup_ui(self):
         self.config.read('config.ini')
-        chatGPTDefault = self.config.get('user', 'chatGPTHeader')
+        chatGPTDefault = self.config.get('user', 'VerilogchatGPTHeader')
 
 
         self.ChatGPT_default_input.setPlainText(chatGPTDefault)

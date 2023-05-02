@@ -53,7 +53,7 @@ class VHDLModelDialog(QDialog):
             self.load_data(data)
     def setup_ui(self):
         self.config.read('config.ini')
-        chatGPTDefault = self.config.get('user', 'chatGPTModel')
+        chatGPTDefault = self.config.get('user', 'VHDLchatGPTModel')
 
 
         self.ChatGPT_default_input.setPlainText(chatGPTDefault)
