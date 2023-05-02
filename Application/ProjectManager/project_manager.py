@@ -648,7 +648,7 @@ class ProjectManager(QWidget):
         try:
             source_path = self.proj_dir +"/"+self.proj_name_input.text()+"/HDLGenPrj/"+self.proj_name_input.text()+".hdlgen"
             # Get the new file name using a QFileDialog
-            new_name, _ = QFileDialog.getSaveFileName(None, 'Enter a New Name for the File', '',
+            new_name, _ = QFileDialog.getSaveFileName(None, 'Browse to destination and enter new project name', '',
                                                       'HDLGen Files (*.hdlgen)')
 
             if new_name:
