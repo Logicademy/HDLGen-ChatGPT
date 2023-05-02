@@ -1,0 +1,1037 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Thu Mar 30 12:12:38 2023
+# Process ID: 9304
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent8424 C:\2023\vicilogic\HDLGenTop\HDLGen\User_Projects\seq_FSM\threshold\VHDL\AMDprj\threshold.xpr
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/vivado.log
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+update_compile_order -fileset sources_1
+launch_simulation
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.arraypackage
+Compiling architecture rtl of entity xil_defaultlib.threshold [threshold_default]
+Compiling architecture behave of entity xil_defaultlib.threshold_tb
+Built simulation snapshot threshold_TB_behav
+
+****** Webtalk v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim/xsim.dir/threshold_TB_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim/xsim.dir/threshold_TB_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Thu Mar 30 12:13:00 2023. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2019.1/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Thu Mar 30 12:13:00 2023...
+INFO: [USF-XSim-69] 'elaborate' step finished in '5' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "threshold_TB_behav -key {Behavioral:sim_1:Functional:threshold_TB} -tclbatch {threshold_TB.tcl} -view {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold_TB_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+open_wave_config C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold_TB_behav.wcfg
+source threshold_TB.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+ERROR: Index 32 out of bound 31 downto 0
+Time: 760 ns  Iteration: 2  Process: /threshold_TB/line__142
+  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+
+HDL Line: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd:144
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'threshold_TB_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:08 ; elapsed = 00:00:10 . Memory (MB): peak = 780.688 ; gain = 0.000
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 21300 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+ERROR: Index 32 out of bound 31 downto 0
+Time: 760 ns  Iteration: 2  Process: /threshold_TB/line__142
+  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+
+HDL Line: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd:144
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+step
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd" Line 177
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.arraypackage
+Compiling architecture rtl of entity xil_defaultlib.threshold [threshold_default]
+Compiling architecture behave of entity xil_defaultlib.threshold_tb
+Built simulation snapshot threshold_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+ERROR: Index 32 out of bound 31 downto 0
+Time: 760 ns  Iteration: 2  Process: /threshold_TB/line__142
+  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+
+HDL Line: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd:145
+relaunch_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:08 . Memory (MB): peak = 780.688 ; gain = 0.000
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+step
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd" Line 177
+add_bp {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} 144
+add_bp {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} 145
+run all
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+run all
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+run all
+Stopped at time : 760 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+step
+Stopped at time : 760 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 145
+step
+ERROR: Index 32 out of bound 31 downto 0
+Time: 760 ns  Iteration: 2  Process: /threshold_TB/line__142
+  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+
+HDL Line: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd:145
+step
+ERROR: [Simulator 45-1] A fatal run-time error was detected.  Simulation cannot continue.
+step
+ERROR: [Simulator 45-1] A fatal run-time error was detected.  Simulation cannot continue.
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.arraypackage
+Compiling architecture rtl of entity xil_defaultlib.threshold [threshold_default]
+Compiling architecture behave of entity xil_defaultlib.threshold_tb
+Built simulation snapshot threshold_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+run all
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+run all
+Stopped at time : 760 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+run all
+Stopped at time : 760 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 145
+run all
+ERROR: Index 32 out of bound 31 downto 0
+Time: 760 ns  Iteration: 2  Process: /threshold_TB/line__142
+  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+
+HDL Line: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd:146
+step
+ERROR: [Simulator 45-1] A fatal run-time error was detected.  Simulation cannot continue.
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.arraypackage
+Compiling architecture rtl of entity xil_defaultlib.threshold [threshold_default]
+Compiling architecture behave of entity xil_defaultlib.threshold_tb
+Built simulation snapshot threshold_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+run all
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 144
+run all
+Stopped at time : 0 fs : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 145
+remove_bps -file {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} -line 145
+remove_bps -file {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} -line 144
+add_bp {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} 148
+add_bp {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} 147
+run all
+Stopped at time : 40 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 60 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 80 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 100 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 120 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 140 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 160 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 180 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 200 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 220 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+run all
+Stopped at time : 240 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 147
+remove_bps -file {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} -line 147
+run all
+Stopped at time : 780 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+step
+Stopped at time : 780 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 149
+step
+ERROR: Index 32 out of bound 31 downto 0
+Time: 780 ns  Iteration: 0  Process: /threshold_TB/line__142
+  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+
+HDL Line: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd:149
+step
+ERROR: [Simulator 45-1] A fatal run-time error was detected.  Simulation cannot continue.
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Stopped at time : 780 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.arraypackage
+Compiling architecture rtl of entity xil_defaultlib.threshold [threshold_default]
+Compiling architecture behave of entity xil_defaultlib.threshold_tb
+Built simulation snapshot threshold_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Stopped at time : 780 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 1440 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+step
+Stopped at time : 1440 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 150
+step
+Stopped at time : 1440 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd" Line 107
+step
+Stopped at time : 1440 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd" Line 108
+run all
+Stopped at time : 2100 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 2760 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 3420 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 4080 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 4740 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 5400 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 6060 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+run all
+Stopped at time : 6720 ns : File "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" Line 148
+remove_bps -file {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd} -line 148
+run 21300 ns
+Note: %N Simulation end, time = 24124000 ps
+Time: 24124 ns  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+save_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold_TB_behav.wcfg}
+run all
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.arraypackage
+Compiling architecture rtl of entity xil_defaultlib.threshold [threshold_default]
+Compiling architecture behave of entity xil_defaultlib.threshold_tb
+Built simulation snapshot threshold_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+run all
+Note: %N Simulation end, time = 24124000 ps
+Time: 24124 ns  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+run all
+step
+run all
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 25000 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation end, time = 24124000 ps
+Time: 24124 ns  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'threshold_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj threshold_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'threshold_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.sim/sim_1/behav/xsim'
+"xelab -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 839feab3f631421f8bda59891c8dcc11 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot threshold_TB_behav xil_defaultlib.threshold_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.arraypackage
+Compiling architecture rtl of entity xil_defaultlib.threshold [threshold_default]
+Compiling architecture behave of entity xil_defaultlib.threshold_tb
+Built simulation snapshot threshold_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+run all
+Note: %N Simulation end, time = 24124000 ps
+Time: 24124 ns  Iteration: 0  Process: /threshold_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/testbench/threshold_tb.vhd
+run all
+reset_run synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1
+
+launch_runs synth_1 -jobs 6
+[Thu Mar 30 13:22:07 2023] Launched synth_1...
+Run output will be captured here: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1/runme.log
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg400-1
+Top: threshold
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 1239.551 ; gain = 176.992
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'threshold' [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:84]
+INFO: [Synth 8-226] default block is never used [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:116]
+INFO: [Synth 8-256] done synthesizing module 'threshold' (1#1) [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:84]
+WARNING: [Synth 8-3917] design threshold has port functBus[95] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[94] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[93] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[92] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[91] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[90] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[89] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[88] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[87] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[86] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[85] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[84] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[83] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[82] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[81] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[80] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[79] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[78] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[77] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[76] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[75] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[74] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[73] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[72] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[71] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[70] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[69] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[68] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[67] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[66] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[65] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[64] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[63] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[62] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[61] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[60] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[59] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[58] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[57] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[56] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[55] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[54] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[53] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[52] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[51] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[50] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[49] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[48] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[47] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[46] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[45] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[44] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[43] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[42] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[41] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[40] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[39] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[38] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[37] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[36] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[35] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[34] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[33] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[32] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[31] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[30] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[29] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[28] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[27] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[26] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[25] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[24] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[23] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[22] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[21] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[20] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[19] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[18] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[17] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[16] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[15] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[14] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[13] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[12] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[11] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[10] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[9] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[8] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[7] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[6] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[5] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[4] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[3] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[2] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[1] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[0] driven by constant 0
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[0][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[0][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRB[3][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRB[3][30]
+INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1281.500 ; gain = 218.941
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1281.500 ; gain = 218.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1281.500 ; gain = 218.941
+---------------------------------------------------------------------------------
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-141] Inserted 96 OBUFs to IO ports without IO buffers.
+
+Processing XDC Constraints
+Initializing timing engine
+Completed Processing XDC Constraints
+
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1393.781 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+RTL Elaboration Complete:  : Time (s): cpu = 00:00:15 ; elapsed = 00:00:08 . Memory (MB): peak = 1441.414 ; gain = 378.855
+9 Infos, 196 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:18 ; elapsed = 00:00:12 . Memory (MB): peak = 1441.414 ; gain = 628.184
+reset_run synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1
+
+launch_runs synth_1 -jobs 6
+[Thu Mar 30 13:51:04 2023] Launched synth_1...
+Run output will be captured here: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/AMDprj/threshold.runs/synth_1/runme.log
+refresh_design
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 1471.633 ; gain = 28.914
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'threshold' [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:84]
+INFO: [Synth 8-226] default block is never used [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:116]
+INFO: [Synth 8-256] done synthesizing module 'threshold' (1#1) [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/threshold/VHDL/model/threshold.vhd:84]
+WARNING: [Synth 8-3917] design threshold has port functBus[95] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[94] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[93] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[92] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[91] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[90] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[89] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[88] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[87] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[86] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[85] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[84] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[83] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[82] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[81] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[80] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[79] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[78] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[77] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[76] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[75] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[74] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[73] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[72] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[71] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[70] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[69] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[68] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[67] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[66] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[65] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[64] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[63] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[62] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[61] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[60] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[59] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[58] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[57] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[56] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[55] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[54] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[53] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[52] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[51] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[50] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[49] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[48] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[47] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[46] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[45] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[44] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[43] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[42] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[41] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[40] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[39] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[38] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[37] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[36] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[35] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[34] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[33] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[32] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[31] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[30] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[29] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[28] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[27] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[26] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[25] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[24] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[23] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[22] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[21] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[20] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[19] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[18] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[17] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[16] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[15] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[14] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[13] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[12] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[11] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[10] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[9] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[8] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[7] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[6] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[5] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[4] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[3] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[2] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[1] driven by constant 0
+WARNING: [Synth 8-3917] design threshold has port functBus[0] driven by constant 0
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[3][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[2][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][30]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][29]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][28]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][27]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][26]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][25]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][24]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][23]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][22]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][21]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][20]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][19]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][18]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][17]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][16]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][15]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][14]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][13]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][12]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][11]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][10]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][9]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][8]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][7]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][6]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][5]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][4]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][3]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][2]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[1][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[0][1]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRA[0][0]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRB[3][31]
+WARNING: [Synth 8-3331] design threshold has unconnected port reg4x32_CSRB[3][30]
+INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1496.230 ; gain = 53.512
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1509.133 ; gain = 66.414
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1509.133 ; gain = 66.414
+---------------------------------------------------------------------------------
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-141] Inserted 96 OBUFs to IO ports without IO buffers.
+
+Processing XDC Constraints
+Initializing timing engine
+Completed Processing XDC Constraints
+
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+refresh_design: Time (s): cpu = 00:00:13 ; elapsed = 00:00:06 . Memory (MB): peak = 1555.531 ; gain = 112.812

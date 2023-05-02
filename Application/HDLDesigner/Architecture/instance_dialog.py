@@ -13,20 +13,26 @@ WHITE_COLOR = "color: white"
 
 
 class InstanceDialog(QDialog):
-    def __init__(self, add_or_edit, instance_data = None):
+    def __init__(self, add_or_edit, instanceNames, instance_data = None):
         super().__init__()
 
         if add_or_edit == "add":
             self.setWindowTitle("New instance")
         elif add_or_edit == "edit":
             self.setWindowTitle("Edit instance")
-
+        self.instance_names = instanceNames
+        self.instance_name = ""
+        if instance_data != None:
+            self.instance_name = instance_data[1]
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
 
+        self.comps_names = []
+        self.comps = []
+        self.components = []
         self.internal_signals = []
         self.input_signals = []
         self.output_signals = []
@@ -65,6 +71,11 @@ class InstanceDialog(QDialog):
         self.file_path_label.setStyleSheet(WHITE_COLOR)
         self.file_path_input = QLineEdit()
 
+        self.components_label = QLabel("Components")
+        self.components_label.setStyleSheet(WHITE_COLOR)
+        self.components_combobox = QComboBox()
+
+
         self.browse_btn = QPushButton("Browse")
         self.browse_btn.setFixedSize(60, 25)
         self.browse_btn.setStyleSheet(
@@ -90,32 +101,40 @@ class InstanceDialog(QDialog):
 
         self.cancelled = True
         self.generator = Generator()
+        self.load_data()
         self.setup_ui()
-
-        #self.populate_signals(ProjectManager.get_xml_data_path())
 
         if add_or_edit == "edit" and instance_data != None:
             self.load_instance_data(instance_data)
 
     def setup_ui(self):
 
-        self.out_sig_header_layout.addWidget(self.out_sig_label)
-        self.out_sig_header_layout.addWidget(self.val_label)
+       # self.out_sig_header_layout.addWidget(self.out_sig_label)
+        #self.out_sig_header_layout.addWidget(self.val_label)
 
-        self.out_sig_layout.addLayout(self.out_sig_header_layout)
-        self.out_sig_layout.addWidget(self.list_div)
+       # self.out_sig_layout.addLayout(self.out_sig_header_layout)
+        #self.out_sig_layout.addWidget(self.list_div)
+
+        self.out_sig_table.setFrameStyle(QFrame.NoFrame)
+
+        bold_font = QFont()
+        bold_font.setBold(True)
+
         self.out_sig_table.setFrameStyle(QFrame.NoFrame)
         self.out_sig_table.setColumnCount(2)
         self.out_sig_table.setShowGrid(False)
-        self.out_sig_table.setColumnWidth(0, 125)
-        self.out_sig_table.setColumnWidth(1, 125)
-        self.out_sig_table.horizontalScrollMode()
-        self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.out_sig_table.horizontalScrollBar().hide()
+        self.out_sig_table.setHorizontalHeaderLabels(['Component Signal', 'Top Level Signal'])
         header = self.out_sig_table.horizontalHeader()
-        header.hide()
-        header = self.out_sig_table.verticalHeader()
-        header.hide()
+        header.setSectionsClickable(False)
+        header.setSectionsMovable(False)
+        self.out_sig_table.horizontalHeader().setFont(bold_font)
+        self.out_sig_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.out_sig_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+
+        self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        vert = self.out_sig_table.verticalHeader()
+        vert.hide()
+
         self.out_sig_layout.addWidget(self.out_sig_table)
         self.out_sig_frame.setFrameStyle(QFrame.NoFrame)
         self.out_sig_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
@@ -126,9 +145,11 @@ class InstanceDialog(QDialog):
         self.input_layout.addWidget(self.instance_name_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.suffix_label, 0, 1, 1, 1)
         self.input_layout.addWidget(self.suffix_input, 1, 1, 1, 1)
-        self.input_layout.addWidget(self.file_path_label, 2, 0, 1, 2)
-        self.input_layout.addWidget(self.file_path_input,3, 0, 1, 1)
-        self.input_layout.addWidget(self.browse_btn, 3, 1, 1, 1)
+        #self.input_layout.addWidget(self.file_path_label, 2, 0, 1, 2)
+        #self.input_layout.addWidget(self.file_path_input,3, 0, 1, 1)
+        self.input_layout.addWidget(self.components_label, 2, 0, 1, 2)
+        self.input_layout.addWidget(self.components_combobox,3, 0, 1, 2)
+        #self.input_layout.addWidget(self.browse_btn, 3, 1, 1, 1)
         self.input_layout.addWidget(self.out_sig_frame, 4, 0, 4, 2)
 
 
@@ -143,21 +164,21 @@ class InstanceDialog(QDialog):
         self.input_frame.setLayout(self.input_layout)
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)
-        self.browse_btn.clicked.connect(self.set_comp_path)
-
+        self.components_combobox.currentIndexChanged.connect(self.comp_options)
+        self.populate_signals(ProjectManager.get_xml_data_path())
         self.mainLayout.addWidget(self.input_frame, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
-    def populate_signals(self, proj_dir, comp_dir):
+    def comp_options(self):
+       self.populate_signals(ProjectManager.get_xml_data_path())
+    def populate_signals(self, proj_dir):
         self.input_signals=[]
         self.output_signals=[]
         self.internal_signals=[]
         rows = self.out_sig_table.rowCount()
         for i in range(rows):
             self.out_sig_table.removeRow(0)
-       # self.out_sig_table.removeRow(0)
-        #self.out_sig_table.removeRow(1)
         outputList_flag = 0
         if (proj_dir != None):
             root = minidom.parse(proj_dir)
@@ -187,8 +208,10 @@ class InstanceDialog(QDialog):
 
                 if len(self.output_signals) != 0 and len(self.input_signals) != 0:
                     outputList_flag = 1
-                    self.comp_signals, self.model, self.comp_mode = self.loadComponent(comp_dir)
+
+                    self.comp_signals = self.loadComponent(self.components_combobox.currentText()) #,self.comp_mode
                     for signal in self.comp_signals:
+                        temp = signal.split(",")
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals + self.output_signals
                         out_val_options.insert(0, "Select Signal")
@@ -198,7 +221,7 @@ class InstanceDialog(QDialog):
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
 
-                        self.out_sig_table.setItem(row_position, 0, QTableWidgetItem(signal))
+                        self.out_sig_table.setItem(row_position, 0, QTableWidgetItem(temp[0]))
                         self.out_sig_table.setCellWidget(row_position, 1, out_val_combo)
                    # self.out_sig_layout.addWidget(self.out_sig_table)
                 if outputList_flag == 0:
@@ -206,19 +229,14 @@ class InstanceDialog(QDialog):
                 return
 
         self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
-
-    def set_comp_path(self):
-        comp_path = QFileDialog.getOpenFileName(self,"Select model .vhd file","../User_Projects/", filter="VHDL files (*.vhd)")
-        comp_path = comp_path[0]
-        self.file_path_input.setText(comp_path)
-        self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
     def load_instance_data(self, instance_data):
+        print(instance_data)
         self.instance_name_input.setText(instance_data[1])
-        self.file_path_input.setText(instance_data[4])
-        self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
+        self.components_combobox.setCurrentText(instance_data[2])
+        self.populate_signals(ProjectManager.get_xml_data_path())
         out_sigs = []
         default_vals = []
-        for out_sig in instance_data[2]:
+        for out_sig in instance_data[3]:
             temp = out_sig.split(',')
             out_sigs.append(temp[0])
             default_vals.append(temp[1])
@@ -231,7 +249,7 @@ class InstanceDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.instance_name_input.text() != "":
+        if self.instance_name_input.text() != "" and (self.instance_name_input.text()+"_i" not in self.instance_names or self.instance_name_input.text() == self.instance_name[:-2] ) and (self.instance_name_input.text() not in self.instance_names or self.instance_name_input.text() == self.instance_name):
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setEnabled(False)
@@ -250,37 +268,44 @@ class InstanceDialog(QDialog):
                 default_val = self.out_sig_table.cellWidget(i, 1).currentText()
             else:
                 default_val = self.out_sig_table.cellWidget(i, 1).currentText()
-            sig = self.comp_mode[i].split(" ", 1)
-            out_sigs.append(output + "," + default_val + "," + sig[0] + "," + sig[1])#self.comp_mode[i])
+            out_sigs.append(output + "," + default_val )
+        data.append(self.components_combobox.currentText())
         data.append(out_sigs)
-        data.append(self.model)
-        data.append(self.file_path_input.text())
         self.cancelled = False
         self.close()
         return data
 
-    def loadComponent(self, comp_dir):
-        # Open the VHDL file and read its contents
-        with open(comp_dir, 'r') as file:
-            vhdl_code = file.read()
-        # Use a regular expression to match the port declarations
-        model = os.path.splitext(os.path.basename(comp_dir))[0]
-        start_port_pattern = re.compile(r'entity\s*' + model + '\s*is\s*Port\s*\(', re.IGNORECASE | re.DOTALL)
-        matchStart = start_port_pattern.search(vhdl_code)
-        startEnd = matchStart.end()
-        startStart = matchStart.start()
-        end_port_pattern = re.compile(r'\);\s*end\s*Entity\s*' + model, re.IGNORECASE | re.DOTALL)
-        matchEnd = end_port_pattern.search(vhdl_code)
-        endStart = matchEnd.start()
-        endEnd = matchEnd.end()
+    def loadComponent(self, model):
+        if model != "":
+            i = self.comps_names.index(model)
+            signal_names = self.comps[i]
+        else:
+            signal_names = ""
+        return signal_names#, signal_mode
 
-        asign = vhdl_code[startEnd:endStart]
-        mainPackage = vhdl_code[startStart:endEnd].lower()
-        mainPackage = mainPackage.replace("entity", "component")
-        asign = "\n".join([line for line in asign.splitlines() if line.strip()])
-        signal_names = [line.split(":")[0].strip() for line in asign.splitlines()]
-        signal_mode = [line.split(":")[1].strip().replace(";","") for line in asign.splitlines()]
-        #signal_mode = signal_mode.replace("\t","")
-        #signal_mode = signal_mode.replace("\n","")
+    def load_data(self):
+        self.comps = []
+        self.comps_names = []
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        root = minidom.parse(mainPackageDir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        compPackage = hdlDesign[0].getElementsByTagName("components")
+        comp_nodes = compPackage[0].getElementsByTagName('component')
 
-        return signal_names, model, signal_mode
+        for i in range(0, len(comp_nodes)):
+            model = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
+            self.comps_names.append(model)
+            output_signal_nodes = comp_nodes[i].getElementsByTagName("port")
+
+            output_signals = []
+            for output_signal_node in output_signal_nodes:
+                output_signals.append(output_signal_node.firstChild.data)
+
+            #comp_data = [
+                #output_signals
+            #]
+            self.comps.append(output_signals)#comp_data)
+        self.components_combobox.addItems(self.comps_names)
+
+

@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>mux21_1/VHDL/model</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>mux21_1</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>mux21_1</compName>
+			<title>2-to-1 mux, 1-bit data</title>
+			<description>sel is datapath control signal&amp;#10;muxOut = muxIn0 when sel  = 0&amp;#10;muxOut = muxIn1 when sel  = 1</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>02/04/2023</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>sel</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>datapath control signal</description>
+			</signal>
+			<signal>
+				<name>muxIn1</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>datapath 1 input signal</description>
+			</signal>
+			<signal>
+				<name>muxIn0</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>datapath 0 input signal</description>
+			</signal>
+			<signal>
+				<name>muxOut</name>
+				<mode>out</mode>
+				<type>single bit</type>
+				<description>data out signal</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals/>
+		<architecture>
+			<archName>Combinational</archName>
+			<process>
+				<label>muxOut_p</label>
+				<inputSignal>sel</inputSignal>
+				<inputSignal>muxIn1</inputSignal>
+				<inputSignal>muxIn0</inputSignal>
+				<defaultOutput>muxOut,muxIn0</defaultOutput>
+			</process>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

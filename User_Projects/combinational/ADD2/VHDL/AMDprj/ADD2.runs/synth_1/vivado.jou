@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Wed Mar 29 13:46:29 2023
+# Process ID: 10612
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/AMDprj/ADD2.runs/synth_1
+# Command line: vivado.exe -log ADD2.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source ADD2.tcl
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/AMDprj/ADD2.runs/synth_1/ADD2.vds
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/AMDprj/ADD2.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source ADD2.tcl -notrace

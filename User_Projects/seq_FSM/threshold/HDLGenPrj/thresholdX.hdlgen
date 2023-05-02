@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<verilog_folder>threshold/Verilog/model</verilog_folder>
+		<verilog_folder>threshold/Verilog/testbench</verilog_folder>
+		<verilog_folder>threshold/Verilog/AMDprj</verilog_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>threshold</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>Verilog</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>threshold</compName>
+			<title>Generate a 32-x32-bit threshold array from 32x32-byte source (BRAM) data array</title>
+			<description>Generate a 32-x32-bit threshold array from &amp;#10;- 32x32-byte source (BRAM) data array&amp;#10;- threshVal(7:0)&amp;#10;&amp;#10;Result bit is asserted if souce byte &gt;= threshVal</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>02/04/2023</date>
+		</header>
+		<clkAndRst>
+			<clkAndRst>
+				<activeClkEdge>L-H</activeClkEdge>
+				<rst>Yes</rst>
+				<RstType>asynch</RstType>
+				<ActiveRstLvl>1</ActiveRstLvl>
+			</clkAndRst>
+		</clkAndRst>
+		<entityIOPorts>
+			<signal>
+				<name>ce</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>threshold component enable. Assertion (h) activates the threshold register components.
+</description>
+			</signal>
+			<signal>
+				<name>go</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>Assertion (h) activates threshold finite state machine (FSM)
+</description>
+			</signal>
+			<signal>
+				<name>clk</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>clk signal</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>rst signal</description>
+			</signal>
+		</entityIOPorts>
+		<architecture>
+			<archName>RTL</archName>
+			<process>
+				<label>NSAndOPDecode_p</label>
+				<inputSignal>go</inputSignal>
+
+			</process>
+			<process>
+				<label>stateReg_p</label>
+				<inputSignal>clk</inputSignal>
+				<inputSignal>rst</inputSignal>
+
+			</process>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

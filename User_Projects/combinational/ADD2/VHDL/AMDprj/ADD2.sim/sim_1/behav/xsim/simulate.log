@@ -1,0 +1,20 @@
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation end, time = 100000 ps
+Time: 100 ns  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation end, time = 100000 ps
+Time: 100 ns  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd
+Note: %N Simulation end, time = 100000 ps
+Time: 100 ns  Iteration: 0  Process: /ADD2_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/ADD2/VHDL/testbench/ADD2_tb.vhd

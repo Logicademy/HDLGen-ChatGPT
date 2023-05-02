@@ -1,0 +1,623 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sun Apr  2 22:36:21 2023
+# Process ID: 18248
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent13164 C:\2023\vicilogic\HDLGenTop\HDLGen\User_Projects\multiComponent\memorySys\VHDL\AMDprj\memorySys.xpr
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/vivado.log
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.xpr
+INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
+Current project path is 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj'
+INFO: [Project 1-313] Project file moved from 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/memorySys/VHDL/AMDprj' since last save.
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/Application/HDLDesigner/Package/mainPackage.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd' instead.
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/HDLGen/combinational/mux21_4/VHDL/model/mux21_4.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/model/mux21_4.vhd' instead.
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/HDLGen/memory/reg4x4/VHDL/model/reg4x4.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/model/reg4x4.vhd' instead.
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/HDLGen/combinational/mux21_1/VHDL/model/mux21_1.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_1/VHDL/model/mux21_1.vhd' instead.
+Scanning sources...
+Finished scanning sources
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/Application/HDLDesigner/Package/mainPackage.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd' instead.
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/HDLGen/combinational/mux21_4/VHDL/model/mux21_4.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/model/mux21_4.vhd' instead.
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/HDLGen/memory/reg4x4/VHDL/model/reg4x4.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/model/reg4x4.vhd' instead.
+WARNING: [Project 1-312] File not found as 'C:/2023/vicilogic/HDLGenTop/HDLGen/combinational/mux21_1/VHDL/model/mux21_1.vhd'; using path 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_1/VHDL/model/mux21_1.vhd' instead.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+update_compile_order -fileset sources_1
+launch_simulation
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys'
+ERROR: [VRFC 10-1471] type error near dout_1 ; current type std_logic_vector; expected type reg4x4_array [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd:68]
+ERROR: [VRFC 10-1471] type error near dout_0 ; current type std_logic_vector; expected type reg4x4_array [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd:69]
+ERROR: [VRFC 10-1471] type error near dout ; current type std_logic_vector; expected type reg4x4_array [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd:71]
+ERROR: [VRFC 10-1471] type error near dout_1 ; current type std_logic_vector; expected type reg4x4_array [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd:82]
+ERROR: [VRFC 10-1471] type error near dout_0 ; current type std_logic_vector; expected type reg4x4_array [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd:93]
+ERROR: [VRFC 10-3782] unit 'rtl' ignored due to previous errors [C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd:57]
+INFO: [VRFC 10-3070] VHDL file 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd' ignored due to errors
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-99] Step results log file:'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim/xvhdl.log'
+ERROR: [USF-XSim-62] 'compile' step failed with error(s). Please check the Tcl console output or 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim/xvhdl.log' file for more information.
+ERROR: [Vivado 12-4473] Detected error while running simulation. Please correct the issue and retry this operation.
+ERROR: [Common 17-39] 'launch_simulation' failed due to earlier errors.
+launch_simulation
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/model/reg4x4.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'reg4x4'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "memorySys_TB_behav -key {Behavioral:sim_1:Functional:memorySys_TB} -tclbatch {memorySys_TB.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+source memorySys_TB.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'memorySys_TB_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 785.699 ; gain = 10.703
+open_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/AMDprj/mux21_4_tb_behav.wcfg}
+WARNING: Simulation object /mux21_4_TB/testNo was not found in the design.
+WARNING: Simulation object /mux21_4_TB/endOfSim was not found in the design.
+WARNING: Simulation object /mux21_4_TB/mux21_4_In1 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/mux21_4_In0 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/sel was not found in the design.
+WARNING: Simulation object /mux21_4_TB/mux21_4_Out was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/mux21_4_In1 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/mux21_4_In0 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/sel was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/mux21_4_Out was not found in the design.
+open_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/AMDprj/mux21_4_tb_behav.wcfg}
+WARNING: Simulation object /mux21_4_TB/testNo was not found in the design.
+WARNING: Simulation object /mux21_4_TB/endOfSim was not found in the design.
+WARNING: Simulation object /mux21_4_TB/mux21_4_In1 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/mux21_4_In0 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/sel was not found in the design.
+WARNING: Simulation object /mux21_4_TB/mux21_4_Out was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/mux21_4_In1 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/mux21_4_In0 was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/sel was not found in the design.
+WARNING: Simulation object /mux21_4_TB/UUT/mux21_4_Out was not found in the design.
+open_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys_TB_behav.wcfg}
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 1084 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 1084000 ps
+Time: 1084 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/model/memorySys.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+run 1084 ns
+Note: %N Simulation end, time = 1084000 ps
+Time: 1084 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+run 1084 ns
+Note: %N Simulation end, time = 1084000 ps
+Time: 1084 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 1084 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 1084000 ps
+Time: 1084 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+run 1084 ns
+Note: %N Simulation end, time = 1404000 ps
+Time: 1404 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 1404 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 1404000 ps
+Time: 1404 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 1404 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 1404000 ps
+Time: 1404 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+add_bp {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd} 137
+remove_bps -file {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd} -line 137
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 444000 ps
+Time: 444 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+run 1404 ns
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 1404 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 444000 ps
+Time: 444 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 444 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 444000 ps
+Time: 444 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-54] Inspecting design source files for 'memorySys_TB' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xvhdl --incr --relax -prj memorySys_TB_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'memorySys_TB'
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys.sim/sim_1/behav/xsim'
+"xelab -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log"
+Vivado Simulator 2019.1
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2019.1/bin/unwrapped/win64.o/xelab.exe -wto 549b1655dbab4bf6ae127299484fa1f5 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot memorySys_TB_behav xil_defaultlib.memorySys_TB -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.mainpackage
+Compiling architecture combinational of entity xil_defaultlib.mux21_4 [mux21_4_default]
+Compiling architecture rtl of entity xil_defaultlib.reg4x4 [reg4x4_default]
+Compiling architecture rtl of entity xil_defaultlib.memorySys [memorysys_default]
+Compiling architecture behave of entity xil_defaultlib.memorysys_tb
+Built simulation snapshot memorySys_TB_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+relaunch_sim: Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 797.191 ; gain = 0.000
+run 444 ns
+run 444 ns
+run 444 ns
+run 444 ns
+run 444 ns
+Note: %N Simulation end, time = 2844000 ps
+Time: 2844 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+run 444 ns
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 2844 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 2844000 ps
+Time: 2844 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 2844 ns
+Note: %N Simulation start, time = 0 ps
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation start
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: Assert and toggle rst
+Time: 0 ps  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+Note: %N Simulation end, time = 2844000 ps
+Time: 2844 ns  Iteration: 0  Process: /memorySys_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/testbench/memorySys_TB.vhd
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+add_files -fileset sim_1 -norecurse C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys_TB_behav.wcfg
+export_ip_user_files -of_objects  [get_files C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_1/VHDL/model/mux21_1.vhd] -no_script -reset -force -quiet
+remove_files  C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_1/VHDL/model/mux21_1.vhd
+save_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/multiComponent/memorySys/VHDL/AMDprj/memorySys_TB_behav.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+exit
+INFO: [Common 17-206] Exiting Vivado at Sun Apr  2 23:07:02 2023...

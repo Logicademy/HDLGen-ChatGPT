@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>reg4x4/VHDL/model</vhdl_folder>
+		<vhdl_folder>reg4x4/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>reg4x4/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>reg4x4</name>
+			<location>C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory</location>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>reg4x4</compName>
+			<title>4 digit register memory</title>
+			<description>4 digit register memory&amp;#10;&amp;#10;&amp;#10;&amp;#10;Synchronous write, memory(add) = dIn when we is asserted&amp;#10;Combinational read, dOut = memory(add)&amp;#10;Asynchronous reset, asserted high&amp;#10;Active rising edge clk</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>02/04/2023</date>
+		</header>
+		<clkAndRst>
+			<clkAndRst>
+				<activeClkEdge>L-H</activeClkEdge>
+				<rst>Yes</rst>
+				<RstType>asynch</RstType>
+				<ActiveRstLvl>1</ActiveRstLvl>
+			</clkAndRst>
+		</clkAndRst>
+		<entityIOPorts>
+			<signal>
+				<name>clk</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>clk signal</description>
+			</signal>
+			<signal>
+				<name>rst</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>rst signal</description>
+			</signal>
+			<signal>
+				<name>ce</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>ce chip enable, asserted h</description>
+			</signal>
+			<signal>
+				<name>we</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>we write enable, asserted h</description>
+			</signal>
+			<signal>
+				<name>add</name>
+				<mode>in</mode>
+				<type>bus(1 downto 0)</type>
+				<description>2-bit address</description>
+			</signal>
+			<signal>
+				<name>dIn</name>
+				<mode>in</mode>
+				<type>bus(3 downto 0)</type>
+				<description>dIn data in digit (4 bits)</description>
+			</signal>
+			<signal>
+				<name>dOut</name>
+				<mode>out</mode>
+				<type>bus(3 downto 0)</type>
+				<description>dOut = memory(add), combinational read</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals>
+			<signal>
+				<name>CS</name>
+				<type>reg4x4_Array</type>
+				<description>Current state signal</description>
+			</signal>
+			<signal>
+				<name>NS</name>
+				<type>reg4x4_Array</type>
+				<description>Next state signal</description>
+			</signal>
+		</internalSignals>
+		<architecture>
+			<archName>RTL</archName>
+			<process>
+				<label>stateReg_p</label>
+				<inputSignal>clk</inputSignal>
+				<inputSignal>rst</inputSignal>
+				<defaultOutput>CS,zero,NS</defaultOutput>
+			</process>
+			<process>
+				<label>NSDecode_p</label>
+				<inputSignal>ce</inputSignal>
+				<inputSignal>we</inputSignal>
+				<inputSignal>add</inputSignal>
+				<inputSignal>dIn</inputSignal>
+				<inputSignal>CS</inputSignal>
+				<defaultOutput>NS,</defaultOutput>
+			</process>
+			<concurrentStmt>
+				<label>asgn_dOut_c</label>
+				<statement>dOut,CS</statement>
+			</concurrentStmt>
+		</architecture>
+	</hdlDesign>
+</HDLGen>

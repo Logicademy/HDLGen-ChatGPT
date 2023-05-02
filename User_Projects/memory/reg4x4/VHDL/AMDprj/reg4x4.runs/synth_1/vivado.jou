@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Sun Apr  2 10:33:15 2023
+# Process ID: 23132
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4.runs/synth_1
+# Command line: vivado.exe -log reg4x4.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source reg4x4.tcl
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4.runs/synth_1/reg4x4.vds
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source reg4x4.tcl -notrace

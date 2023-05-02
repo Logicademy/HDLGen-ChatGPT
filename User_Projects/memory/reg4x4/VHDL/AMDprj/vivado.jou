@@ -1,0 +1,34 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Tue Mar 28 12:17:25 2023
+# Process ID: 16308
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent2900 C:\2023\vicilogic\HDLGenTop\HDLGen\User_Projects\memory\reg4x4\VHDL\AMDprj\reg4x4.xpr
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/vivado.log
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4.xpr
+update_compile_order -fileset sources_1
+export_ip_user_files -of_objects  [get_files C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDPrj/reg4x4_tb_behav.wcfg] -no_script -reset -force -quiet
+remove_files  -fileset sim_1 C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDPrj/reg4x4_tb_behav.wcfg
+launch_simulation
+source reg4x4_TB.tcl
+restart
+run 230 ns
+restart
+run 204 ns
+save_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_TB_behav.wcfg}
+add_files -fileset sim_1 -norecurse C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_TB_behav.wcfg
+set_property xsim.view C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_TB_behav.wcfg [get_filesets sim_1]
+open_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_tb_behavK.wcfg}
+close_sim
+launch_simulation
+open_wave_config C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_TB_behav.wcfg
+source reg4x4_TB.tcl
+open_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_tb_behavK.wcfg}
+open_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_tb_behavK.wcfg}
+save_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/memory/reg4x4/VHDL/AMDprj/reg4x4_tb_behavK.wcfg}
+close_sim

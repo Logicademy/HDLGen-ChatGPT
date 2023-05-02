@@ -12,7 +12,7 @@ WHITE_COLOR = "color: white"
 from ProjectManager.project_manager import ProjectManager
 class IOPortDialog(QDialog):
 
-    def __init__(self, add_or_edit, signal_data = None):
+    def __init__(self, add_or_edit, signals_names, signal_data = None):
         super().__init__()
 
         self.input_layout = QGridLayout()
@@ -21,7 +21,10 @@ class IOPortDialog(QDialog):
             self.setWindowTitle("New IO Port")
         elif add_or_edit == "edit":
             self.setWindowTitle("Edit IO Port")
-
+        self.signalNames = signals_names
+        self.signalName=""
+        if signal_data != None:
+            self.signalName = signal_data[0]
         self.mainLayout = QVBoxLayout()
 
         self.sig_name_label = QLabel("Signal Name *")
@@ -44,8 +47,8 @@ class IOPortDialog(QDialog):
         pal = self.sig_type_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_type_input.setPalette(pal)
-        self.sig_type_input.addItem("std_logic")
-        self.sig_type_input.addItem("std_logic_vector")
+        self.sig_type_input.addItem("single bit")
+        self.sig_type_input.addItem("bus")
         self.sig_type_input.addItem(("array"))
 
         self.sig_size_label = QLabel("Size (eg. 32) * ")
@@ -62,7 +65,7 @@ class IOPortDialog(QDialog):
         self.arrayName_input.setPalette(pal)
         self.arrayName_label.setVisible(False)
         self.arrayName_input.setVisible(False)
-        self.arrayName_input.setCurrentText("Create in internal signals")
+        self.arrayName_input.setCurrentText("Create in packages")
 
         self.onlyInt = QIntValidator()
         self.sig_size_input.setValidator(self.onlyInt)
@@ -168,7 +171,7 @@ class IOPortDialog(QDialog):
         if signalDescription == "":
             signalDescription = "to be completed"
         if self.sig_type_input.currentText() == "array":
-            typeValue= self.arrayName_input.currentText()
+            typeValue= "array,"+self.arrayName_input.currentText()
         else:
             typeValue= self.sig_type_input.currentText()
         sig_details = [self.sig_name_input.text().strip().replace(" ", ""),
@@ -185,9 +188,10 @@ class IOPortDialog(QDialog):
         self.sig_name_input.setText(signal_data[0])
         self.sig_mode_input.setCurrentText(signal_data[1])
         sig_type=signal_data[2]
-        if sig_type != "std_logic_vector" and signal_data[2] != "std_logic":
+        if sig_type != "bus" and signal_data[2] != "single bit":
             sig_type = "array"
-            self.arrayName_input.setCurrentText(signal_data[2])
+            arrayname = signal_data[2].split(",")
+            self.arrayName_input.setCurrentText(arrayname[1])
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
         signal_data[4] = signal_data[4].replace("&#10;", "\n")
@@ -198,13 +202,16 @@ class IOPortDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.sig_name_input.text() != "" and self.sig_size_input.text() != "":
+        if self.sig_name_input.text() != "" and self.sig_size_input.text() != "" and (self.sig_name_input.text() not in self.signalNames or (self.sig_name_input.text() == self.signalName and self.sig_name_input.text() != "")):
             self.ok_btn.setEnabled(True)
         else:
-            self.ok_btn.setEnabled(False)
+            if self.sig_name_input.text() != "" and self.sig_type_input.currentText() == "array" and self.arrayName_input.currentText() != "":
+                self.ok_btn.setEnabled(True)
+            else:
+                self.ok_btn.setEnabled(False)
 
     def enable_size_option(self):
-        if self.sig_type_input.currentText() == "std_logic_vector":
+        if self.sig_type_input.currentText() == "bus":
             self.sig_size_input.setEnabled(True)
             self.sig_size_input.clear()
         else:

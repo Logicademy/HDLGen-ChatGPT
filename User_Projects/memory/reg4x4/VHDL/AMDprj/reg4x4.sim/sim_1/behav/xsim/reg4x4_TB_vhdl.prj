@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../../../../../../Application/HDLDesigner/Package/mainPackage.vhd" \
+"../../../../../model/reg4x4.vhd" \
+"../../../../../testbench/reg4x4_tb.vhd" \
+
+# Do not sort compile order
+nosort

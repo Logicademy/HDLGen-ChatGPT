@@ -1,0 +1,35 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Fri Mar 17 09:25:52 2023
+# Process ID: 12728
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent15180 C:\2023\vicilogic\HDLGenTop\HDLGen\User_Projects\threshold\verilog\AMDPrj\threshold.xpr
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj/vivado.log
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj/threshold.xpr
+update_compile_order -fileset sources_1
+launch_simulation
+source singleShot_TB.tcl
+relaunch_sim
+relaunch_sim
+relaunch_sim
+relaunch_sim
+relaunch_sim
+close_sim
+launch_simulation
+source singleShot_TB.tcl
+save_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj/singleShot_TB_behav.wcfg}
+add_files -fileset sim_1 -norecurse C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj/singleShot_TB_behav.wcfg
+set_property xsim.view C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj/singleShot_TB_behav.wcfg [get_filesets sim_1]
+relaunch_sim
+relaunch_sim
+save_wave_config {C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/AMDPrj/singleShot_TB_behav.wcfg}
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+add_files -norecurse C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/threshold/verilog/model/singleShot_ToJB.v
+update_compile_order -fileset sources_1
+close_sim

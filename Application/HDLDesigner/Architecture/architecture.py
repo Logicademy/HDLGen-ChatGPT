@@ -12,22 +12,29 @@ from HDLDesigner.Architecture.process_dialog import ProcessDialog
 from HDLDesigner.Architecture.concurrentstmt_dialog import ConcurrentStmtDialog
 from HDLDesigner.Architecture.instance_dialog import InstanceDialog
 from Generator.generator import Generator
+from HDLDesigner.Architecture.arch_help import ArchHelpDialog
+from PySide2.QtCore import QObject, Signal
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
 ICONS_DIR = "../../Resources/icons/"
 
 class Architecture(QWidget):
-
+    save_signal = Signal(bool)
     def __init__(self, proj_dir):
         super().__init__()
 
         self.proj_dir = proj_dir
         self.all_data = []
         self.comps = []
+        self.processNames = []
+        self.concNames = []
+        self.instanceNames = []
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
+        btn_font = QFont()
+        btn_font.setPointSize(10)
         bold_font = QFont()
         bold_font.setBold(True)
         self.process = ""
@@ -46,32 +53,30 @@ class Architecture(QWidget):
         self.new_proc_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-
+        #self.new_proc_btn.setFont(btn_font)
         self.new_conc_btn = QPushButton("New Concurrent statement")
         self.new_conc_btn.setFixedSize(175, 25)
         self.new_conc_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-
+        #self.new_conc_btn.setFont(btn_font)
         self.new_instance_btn = QPushButton("New Instance")
         self.new_instance_btn.setFixedSize(80, 25)
         self.new_instance_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-
-        self.new_strg_btn = QPushButton("New StateReg")
-        self.new_strg_btn.setFixedSize(100, 25)
-        self.new_strg_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-
-        self.save_btn = QPushButton("Save")
-        self.save_btn.setEnabled(False)
-        self.save_btn.setFixedSize(60, 30)
-        self.save_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+        #self.new_instance_btn.setFont(btn_font)
+        self.arch_info_btn = QPushButton()
+        self.arch_info_btn.setIcon(qta.icon("mdi.help"))
+        self.arch_info_btn.setFixedSize(25, 25)
+        self.arch_info_btn.clicked.connect(self.arch_help_window)
+        #self.save_btn = QPushButton("Save")
+       # self.save_btn.setEnabled(False)
+        #self.save_btn.setFixedSize(60, 30)
+        #self.save_btn.setStyleSheet(
+         #   "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
+         #   " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
+         #   "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
 
         self.name_label = QLabel("Name")
         self.name_label.setFont(bold_font)
@@ -97,7 +102,10 @@ class Architecture(QWidget):
         if proj_dir != None:
             self.load_data(proj_dir)
     def setup_ui(self):
-        self.enable_save_btn()
+        bold_font = QFont()
+        bold_font.setBold(True)
+
+        #self.enable_save_btn()
         self.top_layout.addWidget(self.arch_name_input, 0, 0, 1, 1)
         self.top_layout.addWidget(self.new_proc_btn, 0, 1, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
@@ -105,12 +113,14 @@ class Architecture(QWidget):
         self.new_conc_btn.clicked.connect(self.add_concurrentstmt)
         self.top_layout.addWidget(self.new_instance_btn, 0, 3, 1, 1)
         self.new_instance_btn.clicked.connect(self.add_instance)
+        self.top_layout.addWidget(self.arch_info_btn, 0, 4, 1, 1)
+
 
         self.arch_action_layout.addLayout(self.top_layout)
 
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.main_frame.setFixedSize(500, 400)
+        #self.main_frame.setFixedSize(500, 400)
 
         self.main_frame.setLayout(self.arch_action_layout)
 
@@ -120,51 +130,60 @@ class Architecture(QWidget):
         self.list_header_layout.addWidget(self.type_label, alignment=Qt.AlignLeft)
         self.list_header_layout.addWidget(self.in_sig_label, alignment=Qt.AlignLeft)
         self.list_header_layout.addItem(QSpacerItem(140, 1))
-        self.list_layout.addLayout(self.list_header_layout)
-        self.list_layout.addWidget(self.list_div)
+        #self.list_layout.addLayout(self.list_header_layout)
+        #self.list_layout.addWidget(self.list_div)
 
         self.proc_table.setColumnCount(5)
         self.proc_table.setShowGrid(False)
-        self.proc_table.setColumnWidth(0, 100)
-        self.proc_table.setColumnWidth(1, 75)
-        self.proc_table.setColumnWidth(2, 100)
-        self.proc_table.setColumnWidth(3, 1)
-        self.proc_table.setColumnWidth(4, 1)
-        self.proc_table.horizontalScrollMode()
-        self.proc_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.proc_table.horizontalScrollBar().hide()
+        self.proc_table.setHorizontalHeaderLabels(['Name', ' Type', 'Sensitivity List', '', ''])
         header = self.proc_table.horizontalHeader()
-        header.hide()
-        header = self.proc_table.verticalHeader()
-        header.hide()
+        header.setSectionsClickable(False)
+        header.setSectionsMovable(False)
+        self.proc_table.horizontalHeader().setFont(bold_font)
+        self.proc_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.proc_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.proc_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        #self.proc_table.setColumnWidth(0, 100)
+        #self.proc_table.setColumnWidth(1, 75)
+        #self.proc_table.setColumnWidth(2, 100)
+        self.proc_table.setColumnWidth(3, 10)
+        self.proc_table.setColumnWidth(4, 10)
+        #self.proc_table.horizontalScrollMode()
+        self.proc_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        #self.proc_table.horizontalScrollBar().hide()
+        #header = self.proc_table.horizontalHeader()
+        #header.hide()
+        vert = self.proc_table.verticalHeader()
+        vert.hide()
         self.proc_table.setFrameStyle(QFrame.NoFrame)
         self.list_layout.addWidget(self.proc_table)
 
-
         self.list_frame.setFrameShape(QFrame.StyledPanel)
         self.list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        self.list_frame.setFixedSize(420, 300)
+        #self.list_frame.setFixedSize(420, 300)
         self.list_frame.setLayout(self.list_layout)
 
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
-        self.arch_action_layout.addWidget(self.list_frame, alignment=Qt.AlignCenter)
+        self.arch_action_layout.addWidget(self.list_frame)#, alignment=Qt.AlignCenter)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
-        self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
-        self.save_btn.clicked.connect(self.save_data)
+        #self.arch_action_layout.addWidget(self.save_btn, alignment=Qt.AlignRight)
+        #self.save_btn.clicked.connect(self.save_data)
 
-
-        self.mainLayout.addWidget(self.main_frame, alignment=Qt.AlignCenter)
+        self.mainLayout.addWidget(self.main_frame)#, alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
     def add_proc(self):
-        add_proc = ProcessDialog("add")
+        add_proc = ProcessDialog("add", self.processNames)
         add_proc.exec_()
 
         if not add_proc.cancelled:
             data = add_proc.get_data()
             data.insert(0, "process")
             self.all_data.append(data)
+            self.processNames.append((data[1]))
+            self.instanceNames.append("")
+            self.concNames.append("")
 
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -192,19 +211,25 @@ class Architecture(QWidget):
             self.proc_table.setItem(row_position, 2, QTableWidgetItem(input_signals))
             self.proc_table.setCellWidget(row_position, 3, edit_btn)
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
+            self.save_data()
 
     def edit_proc(self):
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
 
-            proc_dialog = ProcessDialog("edit", self.all_data[row])
+            proc_dialog = ProcessDialog("edit", self.processNames, self.all_data[row])
             proc_dialog.exec_()
 
             if not proc_dialog.cancelled:
                 data = proc_dialog.get_data()
                 data.insert(0, "process")
                 self.proc_table.removeRow(row)
+                dataProcess = self.all_data[row]
+                #if dataProcess[0] == "process":
+                self.processNames.pop(row)
+                self.instanceNames.pop(row)
+                self.concNames.pop(row)
                 self.all_data.pop(row)
 
                 delete_btn = QPushButton()
@@ -218,6 +243,9 @@ class Architecture(QWidget):
                 edit_btn.clicked.connect(self.edit_proc)
 
                 self.all_data.insert(row, data)
+                self.concNames.insert(row, "")
+                self.instanceNames.insert(row, "")
+                self.processNames.insert(row, data[1])
 
                 self.proc_table.insertRow(row)
                 self.proc_table.setRowHeight(row, 5)
@@ -234,14 +262,18 @@ class Architecture(QWidget):
                 self.proc_table.setItem(row, 2, QTableWidgetItem(input_signals))
                 self.proc_table.setCellWidget(row, 3, edit_btn)
                 self.proc_table.setCellWidget(row, 4, delete_btn)
+                self.save_data()
 
     def add_concurrentstmt(self):
-        add_concurrentstmt = ConcurrentStmtDialog("add")
+        add_concurrentstmt = ConcurrentStmtDialog("add", self.concNames)
         add_concurrentstmt.exec_()
 
         if not add_concurrentstmt.cancelled:
             data = add_concurrentstmt.get_data()
             data.insert(0, "concurrentStmt")
+            self.concNames.append((data[1]))
+            self.processNames.append("")
+            self.instanceNames.append("")
             self.all_data.append(data)
 
             delete_btn = QPushButton()
@@ -265,19 +297,24 @@ class Architecture(QWidget):
             self.proc_table.setItem(row_position, 2, QTableWidgetItem("-"))
             self.proc_table.setCellWidget(row_position, 3, edit_btn)
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
+            self.save_data()
 
     def edit_concurrentstmt(self):
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
 
-            edit_concurrentstmt = ConcurrentStmtDialog("edit", self.all_data[row])
+            edit_concurrentstmt = ConcurrentStmtDialog("edit", self.concNames, self.all_data[row])
             edit_concurrentstmt.exec_()
 
             if not edit_concurrentstmt.cancelled:
                 data = edit_concurrentstmt.get_data()
                 data.insert(0, "concurrentStmt")
                 self.proc_table.removeRow(row)
+
+                self.concNames.pop(row)
+                self.instanceNames.pop(row)
+                self.processNames.pop(row)
                 self.all_data.pop(row)
 
                 delete_btn = QPushButton()
@@ -290,6 +327,9 @@ class Architecture(QWidget):
                 edit_btn.clicked.connect(self.edit_concurrentstmt)
 
                 self.all_data.insert(row, data)
+                self.concNames.insert(row, data[1])
+                self.instanceNames.insert(row, "")
+                self.processNames.insert(row, "")
                 self.proc_table.insertRow(row)
                 self.proc_table.setRowHeight(row, 5)
                 self.proc_table.setItem(row, 0, QTableWidgetItem(data[1]))
@@ -297,15 +337,18 @@ class Architecture(QWidget):
                 self.proc_table.setItem(row, 2, QTableWidgetItem("-"))
                 self.proc_table.setCellWidget(row, 3, edit_btn)
                 self.proc_table.setCellWidget(row, 4, delete_btn)
+                self.save_data()
     def add_instance(self):
-        add_instance= InstanceDialog("add")
+        add_instance= InstanceDialog("add", self.instanceNames)
         add_instance.exec_()
 
         if not add_instance.cancelled:
             data = add_instance.get_data()
             data.insert(0, "instance")
             self.all_data.append(data)
-            print(data)
+            self.instanceNames.append((data[1]))
+            self.concNames.append("")
+            self.processNames.append("")
 
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
@@ -328,18 +371,26 @@ class Architecture(QWidget):
             self.proc_table.setItem(row_position, 2, QTableWidgetItem("-"))
             self.proc_table.setCellWidget(row_position, 3, edit_btn)
             self.proc_table.setCellWidget(row_position, 4, delete_btn)
+            self.save_data()
 
     def edit_instance(self):
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
 
-            edit_instance = InstanceDialog("edit", self.all_data[row])
+            edit_instance = InstanceDialog("edit", self.instanceNames, self.all_data[row])
             edit_instance.exec_()
 
             if not edit_instance.cancelled:
                 data = edit_instance.get_data()
                 data.insert(0, "instance")
+                dataInst = self.all_data[row]
+                #print(self.instanceNames)
+                #if dataInst[0] == "instance":
+                self.instanceNames.pop(row)
+                self.processNames.pop(row)
+                self.concNames.pop(row)
+
                 self.proc_table.removeRow(row)
                 self.all_data.pop(row)
 
@@ -353,6 +404,9 @@ class Architecture(QWidget):
                 edit_btn.clicked.connect(self.edit_instance)
 
                 self.all_data.insert(row, data)
+                self.concNames.insert(row, "")
+                self.instanceNames.insert(row, data[1])
+                self.processNames.insert(row, "")
                 self.proc_table.insertRow(row)
                 self.proc_table.setRowHeight(row, 5)
                 self.proc_table.setItem(row, 0, QTableWidgetItem(data[1]))
@@ -360,13 +414,20 @@ class Architecture(QWidget):
                 self.proc_table.setItem(row, 2, QTableWidgetItem("-"))
                 self.proc_table.setCellWidget(row, 3, edit_btn)
                 self.proc_table.setCellWidget(row, 4, delete_btn)
+                self.save_data()
 
     def delete_clicked(self):
         button = self.sender()
         if button:
             row = self.proc_table.indexAt(button.pos()).row()
             self.proc_table.removeRow(row)
+            data=self.all_data[row]
+            self.processNames.pop(row)
+            self.concNames.pop(row)
+            self.instanceNames.pop(row)
             self.all_data.pop(row)
+            self.save_data()
+
 
     def save_data(self):
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -379,17 +440,6 @@ class Architecture(QWidget):
         arch_name = root.createElement("archName")
         arch_name.appendChild(root.createTextNode(self.arch_name_input.text()))
         new_arch_node.appendChild(arch_name)
-
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-
-        rootPackage = minidom.parse(mainPackageDir)
-        HDLGenPackage = rootPackage.documentElement
-        hdlDesignPackage = HDLGenPackage.getElementsByTagName("hdlDesign")
-        new_comp_node = rootPackage.createElement("components")
-
-
-
-
 
         for data in self.all_data:
 
@@ -408,7 +458,9 @@ class Architecture(QWidget):
                     out_sig_node = root.createElement("defaultOutput")
                     out_sig_node.appendChild(root.createTextNode(output_signal))
                     process_node.appendChild(out_sig_node)
-
+                note_node = root.createElement("note")
+                note_node.appendChild(root.createTextNode(data[4]))
+                process_node.appendChild(note_node)
                 new_arch_node.appendChild(process_node)
 
             elif data[0] == "concurrentStmt":
@@ -421,44 +473,27 @@ class Architecture(QWidget):
                     out_sig_node = root.createElement("statement")
                     out_sig_node.appendChild(root.createTextNode(output_signal))
                     conc_node.appendChild(out_sig_node)
-
+                note_node = root.createElement("note")
+                note_node.appendChild(root.createTextNode(data[3]))
+                conc_node.appendChild(note_node)
                 new_arch_node.appendChild(conc_node)
 
             elif data[0] == "instance":
-                comp_node = rootPackage.createElement("component")
                 instance_node = root.createElement("instance")
                 label_node = root.createElement("label")
                 label_node.appendChild(root.createTextNode(data[1]))
                 instance_node.appendChild(label_node)
                 model_node = root.createElement("model")
-                model_node.appendChild(root.createTextNode(data[3]))
-                package_model_node = rootPackage.createElement("model")
-                package_model_node.appendChild(rootPackage.createTextNode(data[3]))
-                comp_node.appendChild(model_node)
-                instance_node.appendChild(package_model_node)
-                dir_node = root.createElement("dir")
-                dir_node.appendChild(root.createTextNode(data[4]))
-                package_dir_node = rootPackage.createElement("dir")
-                package_dir_node.appendChild(rootPackage.createTextNode(data[4]))
-                comp_node.appendChild(package_dir_node)
-                instance_node.appendChild(dir_node)
-                #package_port_name_node = rootPackage.createElement("SignalName")
-                #package_port_name_node.appendChild(rootPackage.createTextNode(data[5]))
-                #comp_node.appendChild(package_port_name_node)
-
-                for output_signal in data[2]:
+                model_node.appendChild(root.createTextNode(data[2]))
+                instance_node.appendChild(model_node)
+                for output_signal in data[3]:
                     out_sig_node = root.createElement("port")
                     out_sig_node.appendChild(root.createTextNode(output_signal))
                     instance_node.appendChild(out_sig_node)
-                    port_node = rootPackage.createElement("port")
-                    temp = output_signal.split(",")
-                    ports = temp[0] + "," + temp[2] + "," + temp[3]
-                    port_node.appendChild(rootPackage.createTextNode(ports))
-                    comp_node.appendChild(port_node)
+                    #temp = output_signal.split(",")
+                    #ports = temp[0] + "," + temp[2] + "," + temp[3]
 
-                new_comp_node.appendChild(comp_node)
                 new_arch_node.appendChild(instance_node)
-        hdlDesignPackage[0].replaceChild(new_comp_node, hdlDesignPackage[0].getElementsByTagName("components")[0])
         hdlDesign[0].replaceChild(new_arch_node, hdlDesign[0].getElementsByTagName("architecture")[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
@@ -466,23 +501,22 @@ class Architecture(QWidget):
         # Writing xml file
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
-
-        xml_str = rootPackage.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
-        # Writing xml file
-        with open(mainPackageDir, "w") as f:
-            f.write(xml_str)
-        print("Successfully saved all the signals!")
         self.generator.generate_mainPackage()
+        hdl=False
+        self.save_signal.emit(hdl)
+        print("Saved process, concurrent or instance")
+
 
     def load_data(self, proj_dir):
+        xml_data_path = ProjectManager.get_xml_data_path()
+        self.updateProcessName(xml_data_path)
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
         arch_node = hdlDesign[0].getElementsByTagName('architecture')
-        #arch_name_node = hdlDesign[0].getElementsByTagName("archName")
-
+        arch_name_node = hdlDesign[0].getElementsByTagName("archName")
+        #self.arch_name_input.setText(arch_name_node[0].firstChild.data)
 
         if len(arch_node) != 0 and arch_node[0].firstChild is not None:
 
@@ -495,7 +529,9 @@ class Architecture(QWidget):
                 if (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "process"):
                     temp_data = []
                     label_val = child.getElementsByTagName("label")[0].firstChild.data
-
+                    self.processNames.append(label_val)
+                    self.concNames.append("")
+                    self.instanceNames.append("")
                     temp_data.append(label_val)
 
                     input_signal_nodes = child.getElementsByTagName("inputSignal")
@@ -513,11 +549,14 @@ class Architecture(QWidget):
                         output_signals.append(output_signal_node.firstChild.data)
 
                     temp_data.append(output_signals)
+                    note = child.getElementsByTagName("note")[0].firstChild.nodeValue
+                    temp_data.append(note)
                     temp_data.insert(0, "process")
                     self.all_data.append(temp_data)
 
+
+
                     delete_btn = QPushButton()
-                    # delete_btn.setIcon(QIcon(ICONS_DIR + "delete.svg"))
                     delete_btn.setIcon(qta.icon("mdi.delete"))
                     delete_btn.setFixedSize(35, 22)
                     delete_btn.clicked.connect(self.delete_clicked)
@@ -548,6 +587,9 @@ class Architecture(QWidget):
 
                     temp_data = []
                     label_val = child.getElementsByTagName("label")[0].firstChild.data
+                    self.concNames.append(label_val)
+                    self.instanceNames.append("")
+                    self.processNames.append("")
 
                     temp_data.append(label_val)
 
@@ -558,6 +600,8 @@ class Architecture(QWidget):
                         output_signals.append(output_signal_node.firstChild.data)
 
                     temp_data.append(output_signals)
+                    note = child.getElementsByTagName("note")[0].firstChild.nodeValue
+                    temp_data.append(note)
                     temp_data.insert(0, "concurrentStmt")
                     self.all_data.append(temp_data)
 
@@ -587,9 +631,7 @@ class Architecture(QWidget):
                 elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
 
                     temp_data = []
-                    label_val = child.getElementsByTagName("label")[0].firstChild.data
 
-                    temp_data.append(label_val)
 
                     output_signal_nodes = child.getElementsByTagName("port")
 
@@ -597,11 +639,16 @@ class Architecture(QWidget):
                     for output_signal_node in output_signal_nodes:
                         output_signals.append(output_signal_node.firstChild.data)
 
-                    temp_data.append(output_signals)
+
                     temp_data.insert(0, "instance")
+                    label_val = child.getElementsByTagName("label")[0].firstChild.data
+                    self.instanceNames.append(label_val)
+                    self.concNames.append("")
+                    self.processNames.append("")
+
+                    temp_data.append(label_val)
                     temp_data.append(child.getElementsByTagName("model")[0].firstChild.data)
-                    temp_data.append(child.getElementsByTagName("dir")[0].firstChild.data)
-                    print(temp_data)
+                    temp_data.append(output_signals)
                     self.all_data.append(temp_data)
 
                     delete_btn = QPushButton()
@@ -639,9 +686,7 @@ class Architecture(QWidget):
         else:
             self.process = "Combin"
             self.arch_name_input.setText('Combinational')
-    def enable_save_btn(self):
-        #if self.arch_name_input.text() != "":
-        if self.arch_name_input.text() != "":
-            self.save_btn.setEnabled(True)
-        else:
-            self.save_btn.setEnabled(False)
+
+    def arch_help_window(self):
+        arch_help_dialog = ArchHelpDialog()
+        arch_help_dialog.exec_()

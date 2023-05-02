@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Tue Mar 28 12:54:50 2023
+# Process ID: 8848
+# Current directory: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/AMDprj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent11656 C:\2023\vicilogic\HDLGenTop\HDLGen\User_Projects\combinational\mux21_4\VHDL\AMDprj\mux21_4.xpr
+# Log file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/AMDprj/vivado.log
+# Journal file: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/AMDprj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/AMDprj/mux21_4.xpr
+INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
+Current project path is 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_4/VHDL/AMDprj'
+INFO: [Project 1-313] Project file moved from 'C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/mux21_4/VHDL/AMDprj' since last save.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Tue Mar 28 12:55:06 2023...
