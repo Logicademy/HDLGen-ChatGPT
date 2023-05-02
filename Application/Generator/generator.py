@@ -19,11 +19,11 @@ class Generator(QWidget):
         self.arrayPackage = ""
         self.includeArrays = False
         self.tcl_path = ""
-        self.config = configparser.ConfigParser()
-        self.config.read('config.ini')
-        self.chatGPTHeader = self.config.get('user', 'chatGPTHeader')
-        self.chatGPTModel = self.config.get('user', 'chatGPTModel')
-        self.chatGPTTestbench = self.config.get('user', 'chatGPTTestbench')
+        #self.config = configparser.ConfigParser()
+        #self.config.read('config.ini')
+        #self.chatGPTHeader = self.config.get('user', 'chatGPTHeader')
+        #self.chatGPTModel = self.config.get('user', 'chatGPTModel')
+        #self.chatGPTTestbench = self.config.get('user', 'chatGPTTestbench')
 
 
     def generate_folders(self):
@@ -562,12 +562,22 @@ class Generator(QWidget):
         return entity_name, gen_vhdl, instances, chatgpt_header, chatgpt_vhdl
 
     def create_vhdl_file(self):
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
+        chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
+        commands_node = chatgpt.getElementsByTagName('commands')[0]
+
+        VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
+        VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         entity_name, vhdl_code, instances, chatgpt_header, chatgpt_vhdl = self.generate_vhdl()
-        chatgpt_header = self.chatGPTHeader + "\n\n" + chatgpt_header
-        chatgpt_vhdl = self.chatGPTModel + "\n" + chatgpt_vhdl
+        chatgpt_header = VHDLHeader + "\n\n" + chatgpt_header
+        chatgpt_vhdl = VHDLModel + "\n\n" + chatgpt_vhdl
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
         chatgpt_header_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_vhdl_header_ChatGPT.txt")
@@ -1053,8 +1063,12 @@ class Generator(QWidget):
             self.note = self.note.replace("&gt;", ">")
         else:
             self.note = "No Test Plan Created"
+        chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
+        commands_node = chatgpt.getElementsByTagName('commands')[0]
+
+        VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
-        chatgpt_tb = self.chatGPTTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
+        chatgpt_tb = VHDLTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_TB.vhd")
         vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_HDLGen_TB.vhd")
         waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", self.entity_name + "_TB_behav.wcfg")
@@ -1740,14 +1754,19 @@ class Generator(QWidget):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+
+        chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
+        commands_node = chatgpt.getElementsByTagName('commands')[0]
+
+        VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
+        VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
         entity_name, verilog_code, instances, chatgpt_header, chatgpt_verilog = self.generate_verilog()
-        model = self.chatGPTModel
-        model = model.replace("VHDL","Verilog")
-        model = model.replace("-","/")
-        chatgpt_header = self.chatGPTHeader.replace("VHDL","Verilog") + "\n\n" + chatgpt_header
-       #chatgpt_header = model + "\n" + chatgpt_header
-        #chatgpt_verilog = self.chatGPTModel.replace("VHDL","Verilog") + "\n" + chatgpt_verilog
-        chatgpt_verilog = model + "\n" + chatgpt_verilog
+        model = VerilogModel
+        chatgpt_header = VerilogHeader + "\n\n" + chatgpt_header
+        chatgpt_verilog = model + "\n\n" + chatgpt_verilog
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_HDLGen.v")
         chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_header_ChatGPT.txt")
@@ -2128,8 +2147,12 @@ class Generator(QWidget):
             self.note = self.note.replace("&gt;", ">")
         else:
             self.note = "No Test Plan created"
+        chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
+        commands_node = chatgpt.getElementsByTagName('commands')[0]
+
+        VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
-        chatgpt_tb = self.chatGPTTestbench.replace("VHDL","Verilog") + "\n\n" + chatgpt_tb + "\n\n" + self.note
+        chatgpt_tb = VerilogTestbench+ "\n\n" + chatgpt_tb + "\n\n" + self.note
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
         verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_HDLGen_TB.v")
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", self.entity_name + "_TB_behav.wcfg")
