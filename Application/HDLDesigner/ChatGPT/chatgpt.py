@@ -30,7 +30,7 @@ class ChatGPT(QWidget):
         title_font.setPointSize(10)
         title_font.setBold(True)
         self.proj_dir = proj_dir
-        self.commands = ["yes","yes","yes","yes","yes","yes"]
+        self.commands = ["None","None","None","None","None","None"]
 
         self.mainLayout = QVBoxLayout()
 
@@ -171,7 +171,7 @@ class ChatGPT(QWidget):
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)
-        print("Saved internal signal(s)")
+        print("Saved ChatGPT commands")
 
     def load_data(self, proj_dir):
         print(proj_dir)

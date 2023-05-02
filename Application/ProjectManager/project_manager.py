@@ -547,6 +547,7 @@ class ProjectManager(QWidget):
             arch_node = root.createElement('architecture')
             hdlDesign_data.appendChild(arch_node)
             hdlDesign_data.appendChild(root.createElement('testbench'))
+            hdlDesign_data.appendChild(root.createElement('chatgpt'))
 
             # converting the doc into a string in xml format
             xml_str = root.toprettyxml(indent="\t")
