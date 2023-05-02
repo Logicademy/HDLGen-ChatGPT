@@ -8,6 +8,7 @@ import qtawesome as qta
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.InternalSignal.int_sig_dialog import IntSignalDialog
+from HDLDesigner.InternalSignal.internal_help import IntHelpDialog
 from PySide2.QtCore import QObject, Signal
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -45,6 +46,10 @@ class InternalSignal(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
+        self.int_info_btn = QPushButton()
+        self.int_info_btn.setIcon(qta.icon("mdi.help"))
+        self.int_info_btn.setFixedSize(25, 25)
+        self.int_info_btn.clicked.connect(self.internal_help_window)
 
         #self.save_signal_btn = QPushButton("Save")
         #self.save_signal_btn.setFixedSize(60, 30)
@@ -83,6 +88,7 @@ class InternalSignal(QWidget):
         # Port List section
         self.port_heading_layout.addWidget(self.io_list_label, alignment=Qt.AlignLeft)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
+        self.port_heading_layout.addWidget(self.int_info_btn, alignment=Qt.AlignRight)
         self.add_btn.clicked.connect(self.add_intSignal)
 
         self.instSig_list_title_layout.addWidget(self.name_label, alignment=Qt.AlignLeft)
@@ -358,7 +364,9 @@ class InternalSignal(QWidget):
         self.save_signal.emit(hdl)
         print("Saved internal signal(s)")
 
-
+    def internal_help_window(self):
+        internal_help_dialog = IntHelpDialog()
+        internal_help_dialog.exec_()
 
     def load_data(self, proj_dir):
 

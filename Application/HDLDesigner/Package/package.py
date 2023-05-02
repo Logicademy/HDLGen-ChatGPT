@@ -8,6 +8,7 @@ import qtawesome as qta
 sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Package.package_dialog import PackageDialog
+from HDLDesigner.Package.package_help import PackHelpDialog
 from Generator.generator import Generator
 
 BLACK_COLOR = "color: black"
@@ -46,6 +47,10 @@ class Package(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
+        self.pack_info_btn = QPushButton()
+        self.pack_info_btn.setIcon(qta.icon("mdi.help"))
+        self.pack_info_btn.setFixedSize(25, 25)
+        self.pack_info_btn.clicked.connect(self.pack_help_window)
         #self.save_signal_btn = QPushButton("Save")
         #self.save_signal_btn.setFixedSize(60, 30)
         #self.save_signal_btn.setStyleSheet(
@@ -72,6 +77,8 @@ class Package(QWidget):
 
         self.package_heading_layout.addWidget(self.package_label, 0, 0, 1, 1)
         self.package_heading_layout.addWidget(self.add_btn, 0, 1, 1, 1)
+        self.package_heading_layout.addWidget(self.pack_info_btn, 0, 2, 1, 1)
+
         self.add_btn.clicked.connect(self.add_package)
 
         self.package_list_layout.setAlignment(Qt.AlignTop)
@@ -234,6 +241,10 @@ class Package(QWidget):
             f.write(xml_str)
         self.generator.generate_mainPackage()
         print("Saved type")
+
+    def pack_help_window(self):
+        pack_help_dialog = PackHelpDialog()
+        pack_help_dialog.exec_()
 
     def load_data(self):
         mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"

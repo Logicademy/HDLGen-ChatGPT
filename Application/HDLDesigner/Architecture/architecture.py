@@ -12,6 +12,7 @@ from HDLDesigner.Architecture.process_dialog import ProcessDialog
 from HDLDesigner.Architecture.concurrentstmt_dialog import ConcurrentStmtDialog
 from HDLDesigner.Architecture.instance_dialog import InstanceDialog
 from Generator.generator import Generator
+from HDLDesigner.Architecture.arch_help import ArchHelpDialog
 from PySide2.QtCore import QObject, Signal
 
 BLACK_COLOR = "color: black"
@@ -65,7 +66,10 @@ class Architecture(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         #self.new_instance_btn.setFont(btn_font)
-
+        self.arch_info_btn = QPushButton()
+        self.arch_info_btn.setIcon(qta.icon("mdi.help"))
+        self.arch_info_btn.setFixedSize(25, 25)
+        self.arch_info_btn.clicked.connect(self.arch_help_window)
         #self.save_btn = QPushButton("Save")
        # self.save_btn.setEnabled(False)
         #self.save_btn.setFixedSize(60, 30)
@@ -109,6 +113,8 @@ class Architecture(QWidget):
         self.new_conc_btn.clicked.connect(self.add_concurrentstmt)
         self.top_layout.addWidget(self.new_instance_btn, 0, 3, 1, 1)
         self.new_instance_btn.clicked.connect(self.add_instance)
+        self.top_layout.addWidget(self.arch_info_btn, 0, 4, 1, 1)
+
 
         self.arch_action_layout.addLayout(self.top_layout)
 
@@ -680,9 +686,7 @@ class Architecture(QWidget):
         else:
             self.process = "Combin"
             self.arch_name_input.setText('Combinational')
-    #def enable_save_btn(self):
-        #if self.arch_name_input.text() != "":
-        #if self.arch_name_input.text() != "":
-        #    self.save_btn.setEnabled(True)
-        #else:
-           # self.save_btn.setEnabled(False)
+
+    def arch_help_window(self):
+        arch_help_dialog = ArchHelpDialog()
+        arch_help_dialog.exec_()

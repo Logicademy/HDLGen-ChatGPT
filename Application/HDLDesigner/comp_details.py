@@ -5,8 +5,10 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 import sys
 import configparser
+import qtawesome as qta
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
+from HDLDesigner.comp_help import CompHelpDialog
 
 
 WHITE_COLOR = "color: white"
@@ -17,17 +19,28 @@ class CompDetails(QWidget):
         super().__init__()
         small_text_font = QFont()
         small_text_font.setPointSize(10)
+        title_font = QFont()
+        title_font.setPointSize(10)
+        title_font.setBold(True)
         self.proj_dir = proj_dir
 
         self.mainLayout = QVBoxLayout()
 
         self.input_layout = QGridLayout()
+        self.comp_label = QLabel("Component")
+        self.comp_label.setFont(title_font)
+        self.comp_label.setStyleSheet(WHITE_COLOR)
 
         self.comp_name_label = QLabel("Component Name*")
         self.comp_name_label.setStyleSheet(WHITE_COLOR)
         self.comp_name_label.setFont(small_text_font)
         self.comp_name_input = QLineEdit()
         self.comp_name_input.setFont(small_text_font)
+
+        self.comp_info_btn = QPushButton()
+        self.comp_info_btn.setIcon(qta.icon("mdi.help"))
+        self.comp_info_btn.setFixedSize(25, 25)
+        self.comp_info_btn.clicked.connect(self.comp_help_window)
 
         self.comp_title_label = QLabel("Single Line Title")
         self.comp_title_label.setStyleSheet(WHITE_COLOR)
@@ -100,30 +113,32 @@ class CompDetails(QWidget):
 
         self.comp_email_input.setText(email)
         self.comp_company_input.setText(company)
-        self.input_layout.addWidget(self.comp_name_label, 0, 0)
-        self.input_layout.addWidget(self.comp_name_input, 1, 0, 1, 2)
+        self.input_layout.addWidget(self.comp_label, 0, 0,1,1)
+        self.input_layout.addWidget(self.comp_info_btn,0,1,alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.comp_name_label, 1, 0)
+        self.input_layout.addWidget(self.comp_name_input, 2, 0, 1, 2)
         self.comp_name_input.setText(ProjectManager.get_proj_name())
         #self.comp_name_input.textChanged.connect(self.enable_save_btn)
         self.comp_title_input.setText("To be Completed")
-        self.input_layout.addWidget(self.comp_title_label, 2, 0)
-        self.input_layout.addWidget(self.comp_title_input, 3, 0, 1, 2)
+        self.input_layout.addWidget(self.comp_title_label, 3, 0)
+        self.input_layout.addWidget(self.comp_title_input, 4, 0, 1, 2)
 
         #self.comp_description_input.setFixedHeight(50)
         self.comp_description_input.setPlainText("To be Completed")
-        self.input_layout.addWidget(self.comp_description_label, 4, 0)
-        self.input_layout.addWidget(self.comp_description_input, 5, 0, 4, 2)
+        self.input_layout.addWidget(self.comp_description_label, 5, 0)
+        self.input_layout.addWidget(self.comp_description_input, 6, 0, 4, 2)
 
-        self.input_layout.addWidget(self.comp_author_label, 9, 0)
-        self.input_layout.addWidget(self.comp_author_input, 10, 0, 1, 1)
+        self.input_layout.addWidget(self.comp_author_label, 10, 0)
+        self.input_layout.addWidget(self.comp_author_input, 11, 0, 1, 1)
 
-        self.input_layout.addWidget(self.comp_company_label, 9, 1)
-        self.input_layout.addWidget(self.comp_company_input, 10, 1, 1, 1)
+        self.input_layout.addWidget(self.comp_company_label, 10, 1)
+        self.input_layout.addWidget(self.comp_company_input, 11, 1, 1, 1)
 
-        self.input_layout.addWidget(self.comp_email_label, 11, 0)
-        self.input_layout.addWidget(self.comp_email_input, 12, 0, 1, 1)
+        self.input_layout.addWidget(self.comp_email_label, 12, 0)
+        self.input_layout.addWidget(self.comp_email_input, 13, 0, 1, 1)
 
-        self.input_layout.addWidget(self.comp_date_label, 11, 1)
-        self.input_layout.addWidget(self.comp_date_picker, 12, 1, 1, 1)
+        self.input_layout.addWidget(self.comp_date_label, 12, 1)
+        self.input_layout.addWidget(self.comp_date_picker, 13, 1, 1, 1)
 
         #self.btn_layout.addWidget(self.reset_btn)
         #self.btn_layout.addWidget(self.save_btn)
@@ -139,8 +154,8 @@ class CompDetails(QWidget):
         #self.save_btn.clicked.connect(self.save_data)
         #self.reset_btn.clicked.connect(self.reset_comp_details)
 
-        self.input_layout.addItem(self.vspacer, 13, 0, 1, 2)
-        self.input_layout.addLayout(self.btn_layout, 14, 1)
+        self.input_layout.addItem(self.vspacer, 14, 0, 1, 2)
+        self.input_layout.addLayout(self.btn_layout, 15, 1)
 
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -231,6 +246,9 @@ class CompDetails(QWidget):
         self.save_signal.emit(hdl)
         print("Saved Component details")
 
+    def comp_help_window(self):
+        comp_help_dialog = CompHelpDialog()
+        comp_help_dialog.exec_()
 
     def reset_comp_details(self):
 

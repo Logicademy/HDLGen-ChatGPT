@@ -3,14 +3,17 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
+import qtawesome as qta
 import sys
 import configparser
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Architecture.note_dialog import note_Dialog
+from HDLDesigner.testPlan_help import TestPlanHelpDialog
 
 
 WHITE_COLOR = "color: white"
+BLACK_COLOR = "color: black"
 
 class TestPlan(QWidget):
     save_signal = Signal(bool)
@@ -18,6 +21,9 @@ class TestPlan(QWidget):
         super().__init__()
         small_text_font = QFont()
         small_text_font.setPointSize(10)
+        title_font = QFont()
+        title_font.setPointSize(10)
+        title_font.setBold(True)
         self.proj_dir = proj_dir
 
         self.mainLayout = QVBoxLayout()
@@ -25,13 +31,27 @@ class TestPlan(QWidget):
         self.input_layout = QGridLayout()
 
         self.testbench_btn = QPushButton("Test Plan")
-        self.testbench_btn.setFont(small_text_font)
+        self.testbench_btn.setFixedSize(160, 25)
+        self.testbench_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
-        self.testplan_label = QLabel("Component Description")
+        self.testplan_label = QLabel("Test Plan")
+        self.testplan_label.setFont(title_font)
         self.testplan_label.setStyleSheet(WHITE_COLOR)
-        self.testplan_label.setFont(small_text_font)
+
+        self.testbench_label = QLabel("Preview")
+        self.testbench_label.setFont(title_font)
+        self.testbench_label.setStyleSheet(BLACK_COLOR)
+
         self.testplan_input = QTextEdit()
         self.testplan_input.setReadOnly(True)
+
+        self.testPlan_info_btn = QPushButton()
+        self.testPlan_info_btn.setIcon(qta.icon("mdi.help"))
+        self.testPlan_info_btn.setFixedSize(25, 25)
+        self.testPlan_info_btn.clicked.connect(self.testPlan_help_window)
+
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
         self.btn_layout = QHBoxLayout()
@@ -49,8 +69,9 @@ class TestPlan(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        # self.enable_save_btn()
-        self.top_layout.addWidget(self.testbench_btn, 0, 0, 1, 1)
+        self.top_layout.addWidget(self.testplan_label, 0, 0, 1, 1)
+        self.top_layout.addWidget(self.testbench_btn, 0, 1, 1, 1)
+        self.top_layout.addWidget(self.testPlan_info_btn, 0, 2, 1, 1)
 
         self.arch_action_layout.addLayout(self.top_layout)
 
@@ -59,6 +80,7 @@ class TestPlan(QWidget):
         # self.main_frame.setFixedSize(500, 400)
 
         self.main_frame.setLayout(self.arch_action_layout)
+        self.list_layout.addWidget(self.testbench_label)
         self.list_layout.addWidget(self.testplan_input)
 
         self.list_frame.setFrameShape(QFrame.StyledPanel)
@@ -152,4 +174,8 @@ class TestPlan(QWidget):
                 note_data="No test plan created"
                 self.testbench_btn.setText("Add Test Plan")
             self.testplan_input.setText(note_data)
+
+    def testPlan_help_window(self):
+        testPlan_help_dialog = TestPlanHelpDialog()
+        testPlan_help_dialog.exec_()
 

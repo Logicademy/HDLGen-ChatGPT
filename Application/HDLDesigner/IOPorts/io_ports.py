@@ -9,6 +9,7 @@ sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.IOPorts.io_port_dialog import IOPortDialog
 from HDLDesigner.IOPorts.sequential_dialog import seqDialog
+from HDLDesigner.IOPorts.port_help import IoHelpDialog
 from PySide2.QtCore import QObject, Signal
 
 from HDLDesigner.Architecture.architecture import Architecture
@@ -57,6 +58,10 @@ class IOPorts(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
+        self.io_info_btn = QPushButton()
+        self.io_info_btn.setIcon(qta.icon("mdi.help"))
+        self.io_info_btn.setFixedSize(25, 25)
+        self.io_info_btn.clicked.connect(self.io_help_window)
        # self.save_signal_btn = QPushButton("Save")
         #self.save_signal_btn.setFixedSize(60, 30)
         #self.save_signal_btn.setStyleSheet(
@@ -100,6 +105,7 @@ class IOPorts(QWidget):
         self.port_heading_layout.addWidget(self.seqSytle_checkBox, alignment=Qt.AlignCenter)
         self.port_heading_layout.addWidget(self.seqSytle_editbtn)
         self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
+        self.port_heading_layout.addWidget(self.io_info_btn, alignment=Qt.AlignRight)
         self.seqSytle_editbtn.setVisible(False)
         self.comb_checkBox.clicked.connect(self.checkBox_clicked)
         self.seqSytle_checkBox.clicked.connect(self.checkBox_clicked)
@@ -423,6 +429,9 @@ class IOPorts(QWidget):
         self.save_signal.emit(hdl)
         print("Saved port signal")
 
+    def io_help_window(self):
+        io_help_dialog = IoHelpDialog()
+        io_help_dialog.exec_()
     def load_data(self, proj_dir):
 
         root = minidom.parse(proj_dir[0])

@@ -9,6 +9,7 @@ sys.path.append("../..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Subcomponents.component_dialog import ComponentDialog
 from Generator.generator import Generator
+from HDLDesigner.Subcomponents.subcomp_help import SubcompHelpDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -42,11 +43,15 @@ class Subcomponents(QWidget):
         self.package_label.setStyleSheet(WHITE_COLOR)
 
         self.add_component_btn = QPushButton("Add component")
-        self.add_component_btn.setFixedSize(80, 25)
+        self.add_component_btn.setFixedSize(120, 25)
         self.add_component_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
+        self.subcomp_info_btn = QPushButton()
+        self.subcomp_info_btn.setIcon(qta.icon("mdi.help"))
+        self.subcomp_info_btn.setFixedSize(25, 25)
+        self.subcomp_info_btn.clicked.connect(self.subcomp_help_window)
         #self.save_signal_btn = QPushButton("Save")
         #self.save_signal_btn.setFixedSize(60, 30)
         #self.save_signal_btn.setStyleSheet(
@@ -72,6 +77,7 @@ class Subcomponents(QWidget):
 
         self.package_heading_layout.addWidget(self.package_label, 0, 0, 1, 1)
         self.package_heading_layout.addWidget(self.add_component_btn, 0, 1, 1, 1)
+        self.package_heading_layout.addWidget(self.subcomp_info_btn, 0, 2, 1, 1)
         self.add_component_btn.clicked.connect(self.add_component)
 
         self.component_list_layout.setAlignment(Qt.AlignTop)
@@ -168,6 +174,10 @@ class Subcomponents(QWidget):
                 self.component_table.setCellWidget(row, 1, edit_btn)
                 self.component_table.setCellWidget(row, 2, delete_btn)
                 self.save_data()
+
+    def subcomp_help_window(self):
+        subcomp_help_dialog = SubcompHelpDialog()
+        subcomp_help_dialog.exec_()
 
     def delete_component_clicked(self):
         button = self.sender()
