@@ -8,6 +8,8 @@ import qtawesome as qta
 import configparser
 import shutil
 from ProjectManager.vivado_help import VivadoHelpDialog
+from ProjectManager.settings_help import SettingsHelpDialog
+from ProjectManager.language_help import LanguageHelpDialog
 
 SMALL_SPACING = 10
 LARGE_SPACING = 30
@@ -40,6 +42,10 @@ class ProjectManager(QWidget):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+
+        self.EDA_top_layout = QGridLayout()
+        self.Settings_top_layout = QGridLayout()
+        self.language_top_layout = QGridLayout()
 
         self.proj_setting_title = QLabel("Project Settings")
         self.proj_setting_title.setFont(title_font)
@@ -117,6 +123,17 @@ class ProjectManager(QWidget):
         self.vivado_info_btn.setIcon(qta.icon("mdi.help"))
         self.vivado_info_btn.setFixedSize(25, 25)
         self.vivado_info_btn.clicked.connect(self.vivado_help_window)
+
+        self.settings_info_btn = QPushButton()
+        self.settings_info_btn.setIcon(qta.icon("mdi.help"))
+        self.settings_info_btn.setFixedSize(25, 25)
+        self.settings_info_btn.clicked.connect(self.settings_help_window)
+
+        self.language_info_btn = QPushButton()
+        self.language_info_btn.setIcon(qta.icon("mdi.help"))
+        self.language_info_btn.setFixedSize(25, 25)
+        self.language_info_btn.clicked.connect(self.language_help_window)
+
         self.note_label = QLabel("Save the project before moving to other tabs")
 
         self.proj_close_btn = QPushButton("Close Project")
@@ -171,7 +188,10 @@ class ProjectManager(QWidget):
             self.fill_default_proj_details()
 
     def setup_ui(self):
-        self.projSettingLayout.addWidget(self.proj_setting_title)
+        #self.projSettingLayout.addWidget(self.proj_setting_title)
+        self.Settings_top_layout.addWidget(self.proj_setting_title, 0, 0, 1, 1)
+        self.Settings_top_layout.addWidget(self.settings_info_btn, 0, 1, 1, 1)
+        self.projSettingLayout.addLayout(self.Settings_top_layout)
         self.projSettingLayout.addSpacing(SMALL_SPACING)
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 3)
@@ -191,14 +211,16 @@ class ProjectManager(QWidget):
         self.leftColLayout.addWidget(self.projSettingFrame)
         self.leftColLayout.addStretch()
 
-        self.edaToolsLayout.addWidget(self.eda_tools_title)
+        self.EDA_top_layout.addWidget(self.eda_tools_title, 0, 0, 1, 1)
+        self.EDA_top_layout.addWidget(self.vivado_info_btn, 0, 1, 1, 1)
+        self.edaToolsLayout.addLayout(self.EDA_top_layout)
         self.edaToolsLayout.addSpacing(SMALL_SPACING)
         self.vivadoToolLayout.addWidget(self.vivado_check, 0, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_ver_label, 0, 2, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_ver_combo, 0, 3, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_label, 1, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_input, 2, 0, 1, 3)
-        self.vivadoToolLayout.addWidget(self.vivado_info_btn, 1, 3, 1, 1, Qt.AlignRight)
+        #self.vivadoToolLayout.addWidget(self.vivado_info_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolLayout.addWidget(self.vivado_select_dir, 2, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolFrame.setLayout(self.vivadoToolLayout)
         self.vivadoToolFrame.setStyleSheet(
@@ -225,7 +247,10 @@ class ProjectManager(QWidget):
 
         self.midColLayout.addWidget(self.edaToolsFrame)
 
-        self.generateLayout.addWidget(self.generate_title)
+        self.language_top_layout.addWidget(self.generate_title, 0, 0, 1, 1)
+        self.language_top_layout.addWidget(self.language_info_btn, 0, 1, 1, 1)
+        self.generateLayout.addLayout(self.language_top_layout)
+        #self.generateLayout.addWidget(self.generate_title)
         self.generateLayout.addSpacing(SMALL_SPACING)
         self.langLayout.addWidget(self.lang_label, 0, 1, 1, 1, Qt.AlignCenter)
         self.langLayout.addWidget(self.vhdl_check, 1, 0, 1, 1)
@@ -636,6 +661,14 @@ class ProjectManager(QWidget):
     def vivado_help_window(self):
         vivado_help_dialog = VivadoHelpDialog()
         vivado_help_dialog.exec_()
+
+    def settings_help_window(self):
+        settings_help_dialog = SettingsHelpDialog()
+        settings_help_dialog.exec_()
+
+    def language_help_window(self):
+        language_help_dialog = LanguageHelpDialog()
+        language_help_dialog.exec_()
     @staticmethod
     def get_hdl():
         if ProjectManager.hdl == "VHDL":

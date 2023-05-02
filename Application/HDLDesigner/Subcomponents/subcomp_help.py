@@ -1,7 +1,7 @@
 import markdown as md
 from PySide2.QtWidgets import *
 
-COMP_HELP_DOC_FILE_PATH = "./HDLDesigner/IOPorts/port_help.md"
+COMP_HELP_DOC_FILE_PATH = "./HDLDesigner/Subcomponents/subcomp_help.md"
 
 
 class SubcompHelpDialog(QDialog):
