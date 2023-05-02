@@ -572,8 +572,8 @@ class Generator(QWidget):
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
         chatgpt_header_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_vhdl_header_ChatGPT.txt")
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_vhdl_ChatGPT.txt")
-        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_vhdl_header_ChatGPT_HDLGen.txt")
-        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_vhdl_ChatGPT_HDLGen.txt")
+        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_vhdl_header_ChatGPT_HDLGen.txt")
+        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_vhdl_ChatGPT_HDLGen.txt")
         overwrite = False
         if os.path.exists(vhdl_file_path):
             msgBox = QMessageBox()
@@ -1059,7 +1059,7 @@ class Generator(QWidget):
         vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_HDLGen_TB.vhd")
         waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", self.entity_name + "_TB_behav.wcfg")
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_TB_ChatGPT.txt")
-        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT",entity_name + "_VHDL_TB_ChatGPT_HDLGen.txt")
+        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen",entity_name + "_VHDL_TB_ChatGPT_HDLGen.txt")
         if os.path.exists(vhdl_tb_path) == False:
             with open(vhdl_tb_path, "w") as f:
                 f.write(vhdl_tb_code)
@@ -1750,10 +1750,10 @@ class Generator(QWidget):
         chatgpt_verilog = model + "\n" + chatgpt_verilog
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_HDLGen.v")
-        chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_verilog_header_ChatGPT.txt")
-        chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_verilog_ChatGPT.txt")
-        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT",entity_name + "_verilog_header_ChatGPT_HDLGen.txt")
-        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT",entity_name + "_verilog_ChatGPT_HDLGen.txt")
+        chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_header_ChatGPT.txt")
+        chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_ChatGPT.txt")
+        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_header_ChatGPT_HDLGen.txt")
+        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_ChatGPT_HDLGen.txt")
         overwrite = False
 
         if os.path.exists(verilog_file_path):
@@ -2133,8 +2133,8 @@ class Generator(QWidget):
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
         verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_HDLGen_TB.v")
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", self.entity_name + "_TB_behav.wcfg")
-        chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_verilog_TB_ChatGPT.txt")
-        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT",entity_name + "_verilog_TB_ChatGPT_HDLGen.txt")
+        chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_TB_ChatGPT.txt")
+        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT","HDLGen",entity_name + "_Verilog_TB_ChatGPT_HDLGen.txt")
         if os.path.exists(verilog_tb_path) == False:
             with open(verilog_tb_path, "w") as f:
                 f.write(verilog_tb_code)
