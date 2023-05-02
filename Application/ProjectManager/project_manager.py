@@ -6,10 +6,12 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import qtawesome as qta
 import configparser
+import webbrowser
 import shutil
 from ProjectManager.vivado_help import VivadoHelpDialog
 from ProjectManager.settings_help import SettingsHelpDialog
 from ProjectManager.language_help import LanguageHelpDialog
+from ProjectManager.projectLink import LinkDialog
 
 SMALL_SPACING = 10
 LARGE_SPACING = 30
@@ -26,10 +28,9 @@ class ProjectManager(QWidget):
 
     def __init__(self, proj_dir, MainWindow):
         super().__init__()
-        print("directory\n")
-        print(os.getcwd())
         ProjectManager.proj_dir = None
         ProjectManager.proj_name = None
+        self.info = ""
         #ProjectManager.hdl = None
         ProjectManager.vivado_bat_path = None
         self.MainWindow = MainWindow
@@ -73,6 +74,13 @@ class ProjectManager(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         self.copy_proj_btn.setFixedSize(80, 22)
+        self.proj_info_label = QLabel("Project Information Link")
+        self.proj_info_label.setStyleSheet(WHITE_COLOR)
+        self.proj_info_link = QPushButton("Project Link")
+        self.proj_info_link.setFixedSize(100,25)
+        self.proj_info_addlink = QPushButton("Add Project Link")
+        self.proj_info_addlink.setFixedSize(120, 25)
+
 
         self.lang_label = QLabel("Languages")
         self.lang_label.setFont(bold_font)
@@ -199,6 +207,9 @@ class ProjectManager(QWidget):
         self.projDetailIpLayout.addWidget(self.dir_label, 2, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_folder_input, 3, 0, 1, 3)
         self.projDetailIpLayout.addWidget(self.proj_folder_btn, 3, 3, 1, 1, Qt.AlignRight)
+        self.projDetailIpLayout.addWidget(self.proj_info_label, 4, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_link, 4, 1, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_addlink, 4, 2, 1, 1)
         self.projSettingLayout.addLayout(self.projDetailIpLayout)
 
         self.proj_name_input.textChanged.connect(self.proj_detail_change)
@@ -291,6 +302,8 @@ class ProjectManager(QWidget):
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
         self.vivado_select_dir.clicked.connect(self.set_vivado_bat_path)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
+        self.proj_info_link.clicked.connect(self.openLink)
+        self.proj_info_addlink.clicked.connect(self.addLink)
 
         self.proj_close_btn.clicked.connect(self.close_project)
         self.proj_save_btn.clicked.connect(self.create_xml)
@@ -384,13 +397,16 @@ class ProjectManager(QWidget):
         # Creating name and location elements to settings
         project_name = root.createElement('name')
         project_loc = root.createElement('location')
+        project_info = root.createElement('info')
         # Inserting project name to the name element
         project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
         # Inserting project location to the location element
         project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir[:-1]))
+        project_info.appendChild(root.createTextNode(self.info))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
         settings_data.appendChild(project_loc)
+        settings_data.appendChild(project_info)
 
         # Creating EDA element
         eda_data = root.createElement('EDA')
@@ -549,6 +565,7 @@ class ProjectManager(QWidget):
             hdlDesign_data.appendChild(root.createElement('testbench'))
             hdlDesign_data.appendChild(root.createElement('chatgpt'))
 
+
             # converting the doc into a string in xml format
             xml_str = root.toprettyxml(indent="\t")
 
@@ -606,6 +623,7 @@ class ProjectManager(QWidget):
 
         proj_name = settings.getElementsByTagName("name")[0].firstChild.data
         proj_loc = settings.getElementsByTagName("location")[0].firstChild.data
+        proj_info = settings.getElementsByTagName("info")[0].firstChild.data
 
         new_xml_path = load_proj_dir[0].split("/")
 
@@ -629,6 +647,7 @@ class ProjectManager(QWidget):
 
         self.proj_name_input.setText(proj_name)
         self.proj_folder_input.setText(proj_loc)
+        self.info=proj_info
 
         eda_data = project_Manager[0].getElementsByTagName("EDA")[0]
         tools_data = eda_data.getElementsByTagName("tool")
@@ -676,6 +695,28 @@ class ProjectManager(QWidget):
             return "VHDL"
         else:
             return "Verilog"
+
+    def addLink(self):
+        add_link = LinkDialog("edit", self.info)
+        add_link.exec_()
+
+        if not add_link.cancelled:
+            add_link = add_link.get_data()
+            self.info = add_link
+    def openLink(self):
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Question)
+        msgBox.setText("Do you trust this link? "+ self.info)
+        msgBox.setWindowTitle("Confirmation")
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msgBox.setDefaultButton(QMessageBox.No)
+        response = msgBox.exec_()
+        if response == QMessageBox.Yes:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("Opening project information link")
+            msgBox.exec_()
+            webbrowser.open(self.info)
 
     def copy_project(self):
         # Get the source file path using a QFileDialog
