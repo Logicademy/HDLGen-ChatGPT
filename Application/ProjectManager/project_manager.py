@@ -78,8 +78,10 @@ class ProjectManager(QWidget):
         self.proj_info_label.setStyleSheet(WHITE_COLOR)
         self.proj_info_link = QPushButton("Project Link")
         self.proj_info_link.setFixedSize(100,25)
+        self.proj_info_link.setEnabled(False)
         self.proj_info_addlink = QPushButton("Add Project Link")
         self.proj_info_addlink.setFixedSize(120, 25)
+
 
 
         self.lang_label = QLabel("Languages")
@@ -142,7 +144,7 @@ class ProjectManager(QWidget):
         self.language_info_btn.setFixedSize(25, 25)
         self.language_info_btn.clicked.connect(self.language_help_window)
 
-        self.note_label = QLabel("Save the project before moving to other tabs")
+
 
         self.proj_close_btn = QPushButton("Close Project")
         self.proj_close_btn.setFixedHeight(50)
@@ -284,7 +286,6 @@ class ProjectManager(QWidget):
         self.rightColLayout.addWidget(self.generateFrame)
         self.rightColLayout.addSpacing(MEDIUM_SPACING)
 
-        self.rightColLayout.addWidget(self.note_label)
 
         self.proj_action_layout.addWidget(self.proj_close_btn)
         self.proj_action_layout.addWidget(self.proj_save_btn)
@@ -648,6 +649,9 @@ class ProjectManager(QWidget):
         self.proj_name_input.setText(proj_name)
         self.proj_folder_input.setText(proj_loc)
         self.info=proj_info
+        if self.info!="None":
+            self.proj_info_addlink.setText("Edit Project Link")
+            self.proj_info_link.setEnabled(True)
 
         eda_data = project_Manager[0].getElementsByTagName("EDA")[0]
         tools_data = eda_data.getElementsByTagName("tool")
@@ -703,6 +707,12 @@ class ProjectManager(QWidget):
         if not add_link.cancelled:
             add_link = add_link.get_data()
             self.info = add_link
+            if self.info != "None":
+                self.proj_info_addlink.setText("Edit Project Link")
+                self.proj_info_link.setEnabled(True)
+            else:
+                self.proj_info_addlink.setText("Add Project Link")
+                self.proj_info_link.setEnabled(False)
     def openLink(self):
         msgBox = QMessageBox()
         msgBox.setIcon(QMessageBox.Question)
