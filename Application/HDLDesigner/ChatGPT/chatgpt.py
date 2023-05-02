@@ -174,7 +174,6 @@ class ChatGPT(QWidget):
         print("Saved ChatGPT commands")
 
     def load_data(self, proj_dir):
-        print(proj_dir)
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
