@@ -318,6 +318,7 @@ class ProjectManager(QWidget):
         self.proj_dir = os.path.join(parent_path, "User_Projects")
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_name_input.setText("Untitled")
+        self.info="None"
 
 
     def proj_detail_change(self):
