@@ -8,7 +8,7 @@ import qtawesome as qta
 import configparser
 import webbrowser
 import shutil
-from ProjectManager.vivado_help import VivadoHelpDialog
+from ProjectManager.eda_help import EDAHelpDialog
 from ProjectManager.settings_help import SettingsHelpDialog
 from ProjectManager.language_help import LanguageHelpDialog
 from ProjectManager.projectLink import LinkDialog
@@ -684,8 +684,8 @@ class ProjectManager(QWidget):
         print("Project successfully loaded!")
 
     def vivado_help_window(self):
-        vivado_help_dialog = VivadoHelpDialog()
-        vivado_help_dialog.exec_()
+        eda_help_dialog = EDAHelpDialog()
+        eda_help_dialog.exec_()
 
     def settings_help_window(self):
         settings_help_dialog = SettingsHelpDialog()

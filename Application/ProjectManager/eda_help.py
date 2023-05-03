@@ -1,10 +1,10 @@
 import markdown as md
 from PySide2.QtWidgets import *
 
-VIVADO_HELP_DOC_FILE_PATH = "./ProjectManager/vivado_help.md"
+VIVADO_HELP_DOC_FILE_PATH = "./ProjectManager/eda_help.md"
 
 
-class VivadoHelpDialog(QDialog):
+class EDAHelpDialog(QDialog):
 
     def __init__(self):
         super().__init__()
@@ -20,7 +20,7 @@ class VivadoHelpDialog(QDialog):
     def setup_ui(self):
 
         # Writing xml file
-        with open(VIVADO_HELP_DOC_FILE_PATH, "r") as f:
+        with open(EDA_HELP_DOC_FILE_PATH, "r") as f:
            doc = md.markdown(f.read(),  extensions=['fenced_code', 'codehilite', 'tables', 'attr_list'])
         self.markdown_view.setHtml(doc)
         self.mainLayout.addWidget(self.markdown_view)
