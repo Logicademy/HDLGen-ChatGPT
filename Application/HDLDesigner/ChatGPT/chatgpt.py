@@ -179,16 +179,17 @@ class ChatGPT(QWidget):
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-        commands_node = chatgpt.getElementsByTagName('commands')[0]
+        if chatgpt.hasChildNodes():
+            commands_node = chatgpt.getElementsByTagName('commands')[0]
 
-        VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
-        VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
-        VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
-        VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
-        VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
-        VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
+            VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
+            VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
+            VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
+            VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
+            VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
+            VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
 
-        self.commands=[VHDLHeader,VerilogHeader,VHDLModel,VerilogModel,VHDLTestbench,VerilogTestbench]
+            self.commands=[VHDLHeader,VerilogHeader,VHDLModel,VerilogModel,VHDLTestbench,VerilogTestbench]
 
     def chatgpt_help_window(self):
         chatgpt_help_dialog = ChatGPTHelpDialog()
