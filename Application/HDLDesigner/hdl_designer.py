@@ -7,7 +7,7 @@ sys.path.append("..")
 from HDLDesigner.comp.comp_details import CompDetails
 from HDLDesigner.IOPorts.io_ports import IOPorts
 from HDLDesigner.Architecture.architecture import Architecture
-from HDLDesigner.testPlan.testPlan import TestPlan
+from HDLDesigner.testplan.testPlan import TestPlan
 from HDLDesigner.ChatGPT.chatgpt import ChatGPT
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from HDLDesigner.Package.package import Package
