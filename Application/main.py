@@ -115,11 +115,12 @@ class HDLGen(QMainWindow):
     def open_project(self):
         self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", "../User_Projects/",
                                                          filter="HDLGen (*.hdlgen)")
-        print("Loading project from ", self.load_proj_dir[0])
+        if self.load_proj_dir[0]:
+            print("Loading project from ", self.load_proj_dir[0])
 
-        self.window = Home(self.load_proj_dir)
-        self.window.showMaximized()
-        self.close()
+            self.window = Home(self.load_proj_dir)
+            self.window.showMaximized()
+            self.close()
 
     def link(self, url_str):
         QDesktopServices.openUrl(QUrl(url_str))
