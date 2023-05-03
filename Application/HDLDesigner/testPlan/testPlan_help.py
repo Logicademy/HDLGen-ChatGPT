@@ -1,7 +1,7 @@
 import markdown as md
 from PySide2.QtWidgets import *
 
-COMP_HELP_DOC_FILE_PATH = "./HDLDesigner/testPlan/testPlan_help.md"
+COMP_HELP_DOC_FILE_PATH = "./HDLDesigner/testPlan/testplan_help.md"
 
 
 class TestPlanHelpDialog(QDialog):

@@ -9,7 +9,7 @@ import configparser
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Architecture.note_dialog import note_Dialog
-from HDLDesigner.testPlan.testPlan_help import TestPlanHelpDialog
+from HDLDesigner.testPlan.testplan_help import TestPlanHelpDialog
 
 
 WHITE_COLOR = "color: white"
