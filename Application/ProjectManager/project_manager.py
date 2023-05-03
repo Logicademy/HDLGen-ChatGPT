@@ -6,8 +6,12 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import qtawesome as qta
 import configparser
+import webbrowser
 import shutil
 from ProjectManager.vivado_help import VivadoHelpDialog
+from ProjectManager.settings_help import SettingsHelpDialog
+from ProjectManager.language_help import LanguageHelpDialog
+from ProjectManager.projectLink import LinkDialog
 
 SMALL_SPACING = 10
 LARGE_SPACING = 30
@@ -24,10 +28,9 @@ class ProjectManager(QWidget):
 
     def __init__(self, proj_dir, MainWindow):
         super().__init__()
-        print("directory\n")
-        print(os.getcwd())
         ProjectManager.proj_dir = None
         ProjectManager.proj_name = None
+        self.info = ""
         #ProjectManager.hdl = None
         ProjectManager.vivado_bat_path = None
         self.MainWindow = MainWindow
@@ -40,6 +43,10 @@ class ProjectManager(QWidget):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+
+        self.EDA_top_layout = QGridLayout()
+        self.Settings_top_layout = QGridLayout()
+        self.language_top_layout = QGridLayout()
 
         self.proj_setting_title = QLabel("Project Settings")
         self.proj_setting_title.setFont(title_font)
@@ -67,6 +74,15 @@ class ProjectManager(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         self.copy_proj_btn.setFixedSize(80, 22)
+        self.proj_info_label = QLabel("Project Information Link")
+        self.proj_info_label.setStyleSheet(WHITE_COLOR)
+        self.proj_info_link = QPushButton("Project Link")
+        self.proj_info_link.setFixedSize(100,25)
+        self.proj_info_link.setEnabled(False)
+        self.proj_info_addlink = QPushButton("Add Project Link")
+        self.proj_info_addlink.setFixedSize(120, 25)
+
+
 
         self.lang_label = QLabel("Languages")
         self.lang_label.setFont(bold_font)
@@ -117,7 +133,18 @@ class ProjectManager(QWidget):
         self.vivado_info_btn.setIcon(qta.icon("mdi.help"))
         self.vivado_info_btn.setFixedSize(25, 25)
         self.vivado_info_btn.clicked.connect(self.vivado_help_window)
-        self.note_label = QLabel("Save the project before moving to other tabs")
+
+        self.settings_info_btn = QPushButton()
+        self.settings_info_btn.setIcon(qta.icon("mdi.help"))
+        self.settings_info_btn.setFixedSize(25, 25)
+        self.settings_info_btn.clicked.connect(self.settings_help_window)
+
+        self.language_info_btn = QPushButton()
+        self.language_info_btn.setIcon(qta.icon("mdi.help"))
+        self.language_info_btn.setFixedSize(25, 25)
+        self.language_info_btn.clicked.connect(self.language_help_window)
+
+
 
         self.proj_close_btn = QPushButton("Close Project")
         self.proj_close_btn.setFixedHeight(50)
@@ -171,7 +198,10 @@ class ProjectManager(QWidget):
             self.fill_default_proj_details()
 
     def setup_ui(self):
-        self.projSettingLayout.addWidget(self.proj_setting_title)
+        #self.projSettingLayout.addWidget(self.proj_setting_title)
+        self.Settings_top_layout.addWidget(self.proj_setting_title, 0, 0, 1, 1)
+        self.Settings_top_layout.addWidget(self.settings_info_btn, 0, 1, 1, 1)
+        self.projSettingLayout.addLayout(self.Settings_top_layout)
         self.projSettingLayout.addSpacing(SMALL_SPACING)
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 3)
@@ -179,6 +209,9 @@ class ProjectManager(QWidget):
         self.projDetailIpLayout.addWidget(self.dir_label, 2, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_folder_input, 3, 0, 1, 3)
         self.projDetailIpLayout.addWidget(self.proj_folder_btn, 3, 3, 1, 1, Qt.AlignRight)
+        self.projDetailIpLayout.addWidget(self.proj_info_label, 4, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_link, 4, 1, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_addlink, 4, 2, 1, 1)
         self.projSettingLayout.addLayout(self.projDetailIpLayout)
 
         self.proj_name_input.textChanged.connect(self.proj_detail_change)
@@ -191,14 +224,16 @@ class ProjectManager(QWidget):
         self.leftColLayout.addWidget(self.projSettingFrame)
         self.leftColLayout.addStretch()
 
-        self.edaToolsLayout.addWidget(self.eda_tools_title)
+        self.EDA_top_layout.addWidget(self.eda_tools_title, 0, 0, 1, 1)
+        self.EDA_top_layout.addWidget(self.vivado_info_btn, 0, 1, 1, 1)
+        self.edaToolsLayout.addLayout(self.EDA_top_layout)
         self.edaToolsLayout.addSpacing(SMALL_SPACING)
         self.vivadoToolLayout.addWidget(self.vivado_check, 0, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_ver_label, 0, 2, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_ver_combo, 0, 3, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_label, 1, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_input, 2, 0, 1, 3)
-        self.vivadoToolLayout.addWidget(self.vivado_info_btn, 1, 3, 1, 1, Qt.AlignRight)
+        #self.vivadoToolLayout.addWidget(self.vivado_info_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolLayout.addWidget(self.vivado_select_dir, 2, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolFrame.setLayout(self.vivadoToolLayout)
         self.vivadoToolFrame.setStyleSheet(
@@ -225,7 +260,10 @@ class ProjectManager(QWidget):
 
         self.midColLayout.addWidget(self.edaToolsFrame)
 
-        self.generateLayout.addWidget(self.generate_title)
+        self.language_top_layout.addWidget(self.generate_title, 0, 0, 1, 1)
+        self.language_top_layout.addWidget(self.language_info_btn, 0, 1, 1, 1)
+        self.generateLayout.addLayout(self.language_top_layout)
+        #self.generateLayout.addWidget(self.generate_title)
         self.generateLayout.addSpacing(SMALL_SPACING)
         self.langLayout.addWidget(self.lang_label, 0, 1, 1, 1, Qt.AlignCenter)
         self.langLayout.addWidget(self.vhdl_check, 1, 0, 1, 1)
@@ -248,7 +286,6 @@ class ProjectManager(QWidget):
         self.rightColLayout.addWidget(self.generateFrame)
         self.rightColLayout.addSpacing(MEDIUM_SPACING)
 
-        self.rightColLayout.addWidget(self.note_label)
 
         self.proj_action_layout.addWidget(self.proj_close_btn)
         self.proj_action_layout.addWidget(self.proj_save_btn)
@@ -266,6 +303,8 @@ class ProjectManager(QWidget):
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
         self.vivado_select_dir.clicked.connect(self.set_vivado_bat_path)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
+        self.proj_info_link.clicked.connect(self.openLink)
+        self.proj_info_addlink.clicked.connect(self.addLink)
 
         self.proj_close_btn.clicked.connect(self.close_project)
         self.proj_save_btn.clicked.connect(self.create_xml)
@@ -279,6 +318,7 @@ class ProjectManager(QWidget):
         self.proj_dir = os.path.join(parent_path, "User_Projects")
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_name_input.setText("Untitled")
+        self.info="None"
 
 
     def proj_detail_change(self):
@@ -359,13 +399,16 @@ class ProjectManager(QWidget):
         # Creating name and location elements to settings
         project_name = root.createElement('name')
         project_loc = root.createElement('location')
+        project_info = root.createElement('info')
         # Inserting project name to the name element
         project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
         # Inserting project location to the location element
         project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir[:-1]))
+        project_info.appendChild(root.createTextNode(self.info))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
         settings_data.appendChild(project_loc)
+        settings_data.appendChild(project_info)
 
         # Creating EDA element
         eda_data = root.createElement('EDA')
@@ -411,14 +454,15 @@ class ProjectManager(QWidget):
             vhdl_model_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/model')
             vhdl_testbench_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/testbench')
             vhdl_ChatGPT_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/ChatGPT')
+            vhdl_ChatGPT_HDLGen_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/ChatGPT/HDLGen')
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
             lang_name = root.createElement('name')
             lang_name.appendChild(root.createTextNode('VHDL'))
             lang_data.appendChild(lang_name)
 
-            vhdl_folders = [vhdl_model_dir, vhdl_testbench_dir,vhdl_ChatGPT_dir]
-            no_of_folders = 3
+            vhdl_folders = [vhdl_model_dir, vhdl_testbench_dir,vhdl_ChatGPT_dir,vhdl_ChatGPT_HDLGen_dir]
+            no_of_folders = 4
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
@@ -446,6 +490,7 @@ class ProjectManager(QWidget):
             verilog_model_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/model')
             verilog_tstbnch_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/testbench')
             verilog_ChatGPT_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/ChatGPT')
+            verilog_ChatGPT_HDLGen_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/ChatGPT/HDLGen')
 
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
@@ -453,8 +498,8 @@ class ProjectManager(QWidget):
             lang_name.appendChild(root.createTextNode('Verilog'))
             lang_data.appendChild(lang_name)
 
-            verilog_folders = [verilog_model_dir, verilog_tstbnch_dir, verilog_ChatGPT_dir]
-            no_of_folders = 3
+            verilog_folders = [verilog_model_dir, verilog_tstbnch_dir, verilog_ChatGPT_dir, verilog_ChatGPT_HDLGen_dir]
+            no_of_folders = 4
 
             # If xilinx is chosen then the xilinxprj folder is added
             if self.vivado_check.isChecked():
@@ -520,6 +565,8 @@ class ProjectManager(QWidget):
             arch_node = root.createElement('architecture')
             hdlDesign_data.appendChild(arch_node)
             hdlDesign_data.appendChild(root.createElement('testbench'))
+            hdlDesign_data.appendChild(root.createElement('chatgpt'))
+
 
             # converting the doc into a string in xml format
             xml_str = root.toprettyxml(indent="\t")
@@ -578,6 +625,7 @@ class ProjectManager(QWidget):
 
         proj_name = settings.getElementsByTagName("name")[0].firstChild.data
         proj_loc = settings.getElementsByTagName("location")[0].firstChild.data
+        proj_info = settings.getElementsByTagName("info")[0].firstChild.data
 
         new_xml_path = load_proj_dir[0].split("/")
 
@@ -601,6 +649,10 @@ class ProjectManager(QWidget):
 
         self.proj_name_input.setText(proj_name)
         self.proj_folder_input.setText(proj_loc)
+        self.info=proj_info
+        if self.info!="None":
+            self.proj_info_addlink.setText("Edit Project Link")
+            self.proj_info_link.setEnabled(True)
 
         eda_data = project_Manager[0].getElementsByTagName("EDA")[0]
         tools_data = eda_data.getElementsByTagName("tool")
@@ -634,12 +686,48 @@ class ProjectManager(QWidget):
     def vivado_help_window(self):
         vivado_help_dialog = VivadoHelpDialog()
         vivado_help_dialog.exec_()
+
+    def settings_help_window(self):
+        settings_help_dialog = SettingsHelpDialog()
+        settings_help_dialog.exec_()
+
+    def language_help_window(self):
+        language_help_dialog = LanguageHelpDialog()
+        language_help_dialog.exec_()
     @staticmethod
     def get_hdl():
         if ProjectManager.hdl == "VHDL":
             return "VHDL"
         else:
             return "Verilog"
+
+    def addLink(self):
+        add_link = LinkDialog("edit", self.info)
+        add_link.exec_()
+
+        if not add_link.cancelled:
+            add_link = add_link.get_data()
+            self.info = add_link
+            if self.info != "None":
+                self.proj_info_addlink.setText("Edit Project Link")
+                self.proj_info_link.setEnabled(True)
+            else:
+                self.proj_info_addlink.setText("Add Project Link")
+                self.proj_info_link.setEnabled(False)
+    def openLink(self):
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Question)
+        msgBox.setText("Do you trust this link? "+ self.info)
+        msgBox.setWindowTitle("Confirmation")
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msgBox.setDefaultButton(QMessageBox.No)
+        response = msgBox.exec_()
+        if response == QMessageBox.Yes:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("Opening project information link")
+            msgBox.exec_()
+            webbrowser.open(self.info)
 
     def copy_project(self):
         # Get the source file path using a QFileDialog

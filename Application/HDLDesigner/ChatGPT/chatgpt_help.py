@@ -1,10 +1,10 @@
 import markdown as md
 from PySide2.QtWidgets import *
 
-COMP_HELP_DOC_FILE_PATH = "./HDLDesigner/comp_help.md"
+COMP_HELP_DOC_FILE_PATH = "./HDLDesigner/ChatGPT/chatgpt_help.md"
 
 
-class CompHelpDialog(QDialog):
+class ChatGPTHelpDialog(QDialog):
 
     def __init__(self):
         super().__init__()

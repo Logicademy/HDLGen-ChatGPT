@@ -1,10 +1,10 @@
 import markdown as md
 from PySide2.QtWidgets import *
 
-COMP_HELP_DOC_FILE_PATH = "./HDLDesigner/comp_help.md"
+VIVADO_HELP_DOC_FILE_PATH = "./ProjectManager/language_help.md"
 
 
-class CompHelpDialog(QDialog):
+class LanguageHelpDialog(QDialog):
 
     def __init__(self):
         super().__init__()
@@ -20,7 +20,7 @@ class CompHelpDialog(QDialog):
     def setup_ui(self):
 
         # Writing xml file
-        with open(COMP_HELP_DOC_FILE_PATH, "r") as f:
+        with open(VIVADO_HELP_DOC_FILE_PATH, "r") as f:
            doc = md.markdown(f.read(),  extensions=['fenced_code', 'codehilite', 'tables', 'attr_list'])
         self.markdown_view.setHtml(doc)
         self.mainLayout.addWidget(self.markdown_view)

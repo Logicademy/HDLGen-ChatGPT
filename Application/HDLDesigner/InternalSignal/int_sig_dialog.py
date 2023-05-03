@@ -214,7 +214,7 @@ class IntSignalDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(400, 400)
+        self.input_frame.setFixedSize(500, 400)
         self.input_frame.setLayout(self.input_layout)
 
         self.sig_type_combo.currentTextChanged.connect(self.sig_type_options)
@@ -379,7 +379,7 @@ class IntSignalDialog(QDialog):
     def enable_ok_btn(self):
         if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
             if self.state_signal_Type_input.currentText() == "bus" or self.state_signal_Type_input.currentText() == "integer":
-                if self.sig_size_input.text() != "" and self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.sig_name_input.text() != ""):
+                if self.sig_size_input.text() != "" and self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
                     self.ok_btn.setEnabled(True)
                 else:
                     self.ok_btn.setEnabled(False)

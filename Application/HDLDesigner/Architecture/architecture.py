@@ -49,7 +49,7 @@ class Architecture(QWidget):
         self.arch_name_input.setStyleSheet(WHITE_COLOR)
 
         self.new_proc_btn = QPushButton("New Process")
-        self.new_proc_btn.setFixedSize(80, 25)
+        self.new_proc_btn.setFixedSize(100, 25)
         self.new_proc_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
@@ -61,7 +61,7 @@ class Architecture(QWidget):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         #self.new_conc_btn.setFont(btn_font)
         self.new_instance_btn = QPushButton("New Instance")
-        self.new_instance_btn.setFixedSize(80, 25)
+        self.new_instance_btn.setFixedSize(100, 25)
         self.new_instance_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")

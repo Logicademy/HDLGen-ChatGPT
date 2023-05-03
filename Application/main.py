@@ -109,8 +109,6 @@ class HDLGen(QMainWindow):
 
     def new_project(self):
         self.window = Home()
-        #self.window.resize(1500, 500)#1000. 5000
-        #self.window.show()
         self.window.showMaximized()
         self.close()
 
@@ -120,8 +118,6 @@ class HDLGen(QMainWindow):
         print("Loading project from ", self.load_proj_dir[0])
 
         self.window = Home(self.load_proj_dir)
-        #self.window.resize(1500, 500)#1000,500
-        #self.window.show()
         self.window.showMaximized()
         self.close()
 
@@ -134,7 +130,6 @@ class HDLGen(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     window = HDLGen()
-    #window.setFixedSize(600, 350)
     window.show()
     app.setStyle('windowsvista')
     app.exec_()

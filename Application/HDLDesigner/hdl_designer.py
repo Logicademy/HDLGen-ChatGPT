@@ -4,11 +4,11 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 import sys
 sys.path.append("..")
-from HDLDesigner.comp_details import CompDetails
+from HDLDesigner.comp.comp_details import CompDetails
 from HDLDesigner.IOPorts.io_ports import IOPorts
 from HDLDesigner.Architecture.architecture import Architecture
-from HDLDesigner.testPlan import TestPlan
-from HDLDesigner.chatgpt import ChatGPT
+from HDLDesigner.testPlan.testPlan import TestPlan
+from HDLDesigner.ChatGPT.chatgpt import ChatGPT
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from HDLDesigner.Package.package import Package
 from HDLDesigner.Subcomponents.subcomponents import Subcomponents
@@ -88,6 +88,7 @@ class HDLDesigner(QWidget):
         internalSignal.save_signal.connect(self.update_preview)
         #self.architecture.save_btn.clicked.connect(self.update_preview)
         self.architecture.save_signal.connect(self.update_preview)
+        chatGPT.save_signal.connect(self.update_preview)
 
     def update_preview(self, hdl):
         if hdl != False:
