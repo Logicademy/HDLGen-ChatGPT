@@ -89,6 +89,7 @@ class note_Dialog(QDialog):
         note_data = note_data.replace("&lt;","<")
         note_data = note_data.replace("&#x9;","\t")
         note_data = note_data.replace("&gt;",">")
+        note_data = note_data.replace("&#44;",",")
         self.note_input.setPlainText(note_data)
 
     def get_data(self):
@@ -119,7 +120,7 @@ class note_Dialog(QDialog):
         data = data.replace("<", "&lt;")
         data = data.replace("\t", "&#x9;")
         data = data.replace(">", "&gt;")
-        data=data.replace(","," ")
+        data=data.replace(",","&#44;")
         if data == "":
             data = "None"
         self.cancelled = False

@@ -140,6 +140,7 @@ class TestPlan(QWidget):
                 note_data = note_data.replace("&lt;", "<")
                 note_data = note_data.replace("&#x9;", "\t")
                 note_data = note_data.replace("&gt;", ">")
+                note_data = note_data.replace("&#44;", ",")
 
                 if note_data!="None":
                     self.testbench_btn.setText("Edit Test Plan")
@@ -168,6 +169,7 @@ class TestPlan(QWidget):
             note_data = note_data.replace("&lt;", "<")
             note_data = note_data.replace("&#x9;", "\t")
             note_data = note_data.replace("&gt;", ">")
+            note_data = note_data.replace(",","&#44;")
             if note_data != "None":
                 self.testbench_btn.setText("Edit Test Plan")
             else:

@@ -300,6 +300,7 @@ class Generator(QWidget):
                             notes = notes.replace("&lt;", "<")
                             notes = notes.replace("&#x9;", "\t")
                             notes = notes.replace("&gt;", ">")
+                            notes = notes.replace("&#44;", ",")
 
                             signalList = ""
 
@@ -498,6 +499,7 @@ class Generator(QWidget):
                                 notes = notes.replace("&lt;", "<")
                                 notes = notes.replace("&#x9;", "\t")
                                 notes = notes.replace("&gt;", ">")
+                                notes = notes.replace("&#44;", ",")
                                 note_syntax = vhdl_root.getElementsByTagName("note")[0].firstChild.data
                                 note_syntax = note_syntax.replace("$notes", notes)
                                 gen_conc += note_syntax + "\n\n"
@@ -580,6 +582,7 @@ class Generator(QWidget):
             VHDLHeader = VHDLHeader.replace("&lt;", "<")
             VHDLHeader = VHDLHeader.replace("&#x9;", "\t")
             VHDLHeader = VHDLHeader.replace("&gt;", ">")
+            VHDLHeader = VHDLHeader.replace("&#44;", ",")
             VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
             VHDLModel = VHDLModel.replace("&#10;", "\n")
             VHDLModel = VHDLModel.replace("&amp;", "&")
@@ -588,6 +591,7 @@ class Generator(QWidget):
             VHDLModel = VHDLModel.replace("&lt;", "<")
             VHDLModel = VHDLModel.replace("&#x9;", "\t")
             VHDLModel = VHDLModel.replace("&gt;", ">")
+            VHDLModel = VHDLModel.replace("&#44;", ",")
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         entity_name, vhdl_code, instances, chatgpt_header, chatgpt_vhdl = self.generate_vhdl()
@@ -1076,6 +1080,7 @@ class Generator(QWidget):
             self.note = self.note.replace("&lt;", "<")
             self.note = self.note.replace("&#x9;", "\t")
             self.note = self.note.replace("&gt;", ">")
+            self.note = self.note.replace("&#44;", ",")
         else:
             self.note = "No Test Plan Created"
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
@@ -1090,6 +1095,7 @@ class Generator(QWidget):
             VHDLTestbench = VHDLTestbench.replace("&lt;", "<")
             VHDLTestbench = VHDLTestbench.replace("&#x9;", "\t")
             VHDLTestbench = VHDLTestbench.replace("&gt;", ">")
+            VHDLTestbench = VHDLTestbench.replace("&#44;", ",")
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
         chatgpt_tb = VHDLTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_TB.vhd")
@@ -1490,6 +1496,7 @@ class Generator(QWidget):
                             notes = notes.replace("&lt;", "<")
                             notes = notes.replace("&#x9;", "\t")
                             notes = notes.replace("&gt;", ">")
+                            notes = notes.replace("&#44;", ",")
 
                             signalList = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
@@ -1719,6 +1726,7 @@ class Generator(QWidget):
                                 notes = notes.replace("&lt;", "<")
                                 notes = notes.replace("&#x9;", "\t")
                                 notes = notes.replace("&gt;", ">")
+                                notes = notes.replace("&#44;", ",")
                                 note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
                                 note_syntax = note_syntax.replace("$notes", notes)
                                 gen_conc += note_syntax + "\n"
@@ -1793,6 +1801,7 @@ class Generator(QWidget):
             VerilogHeader = VerilogHeader.replace("&lt;", "<")
             VerilogHeader = VerilogHeader.replace("&#x9;", "\t")
             VerilogHeader = VerilogHeader.replace("&gt;", ">")
+            VerilogHeader = VerilogHeader.replace("&#44;", ",")
             VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
             VerilogModel = VerilogModel.replace("&#10;", "\n")
             VerilogModel = VerilogModel.replace("&amp;", "&")
@@ -1801,6 +1810,7 @@ class Generator(QWidget):
             VerilogModel = VerilogModel.replace("&lt;", "<")
             VerilogModel = VerilogModel.replace("&#x9;", "\t")
             VerilogModel = VerilogModel.replace("&gt;", ">")
+            VerilogModel = VerilogModel.replace("&#44;", ",")
         entity_name, verilog_code, instances, chatgpt_header, chatgpt_verilog = self.generate_verilog()
         model = VerilogModel
         chatgpt_header = VerilogHeader + "\n\n" + chatgpt_header
@@ -2187,6 +2197,7 @@ class Generator(QWidget):
             self.note = self.note.replace("&lt;", "<")
             self.note = self.note.replace("&#x9;", "\t")
             self.note = self.note.replace("&gt;", ">")
+            self.note = self.note.replace("&#44;", ",")
         else:
             self.note = "No Test Plan created"
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
@@ -2201,6 +2212,7 @@ class Generator(QWidget):
             VerilogTestbench = VerilogTestbench.replace("&lt;", "<")
             VerilogTestbench = VerilogTestbench.replace("&#x9;", "\t")
             VerilogTestbench = VerilogTestbench.replace("&gt;", ">")
+            VerilogTestbench = VerilogTestbench.replace("&#44;", ",")
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
         chatgpt_tb = VerilogTestbench+ "\n\n" + chatgpt_tb + "\n\n" + self.note
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
