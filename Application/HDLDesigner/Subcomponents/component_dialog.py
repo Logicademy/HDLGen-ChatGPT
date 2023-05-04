@@ -38,6 +38,7 @@ class ComponentDialog(QDialog):
         self.component_name_label.setStyleSheet(WHITE_COLOR)
         self.component_name_input = QLabel("Browse to select VHDL Model")
         self.component_name_input.setStyleSheet(WHITE_COLOR)
+        self.component_name_input.setEnabled(False)
 
         self.signal_empty_info = QLabel("No Top level Signals found!\nPlease add input and output signals in Ports")
         self.signal_empty_info.setFixedSize(400, 300)

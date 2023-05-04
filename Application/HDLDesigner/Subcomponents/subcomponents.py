@@ -128,7 +128,7 @@ class Subcomponents(QWidget):
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
             delete_btn.setFixedSize(35, 22)
-            delete_btn.clicked.connect(self.delete_component_clicked)
+            delete_btn.clicked.connect(self.delete_component)
 
             edit_btn = QPushButton()
             edit_btn.setIcon(qta.icon("mdi.pencil"))
@@ -159,7 +159,7 @@ class Subcomponents(QWidget):
                 delete_btn = QPushButton()
                 delete_btn.setIcon(qta.icon("mdi.delete"))
                 delete_btn.setFixedSize(35, 22)
-                delete_btn.clicked.connect(self.delete_component_clicked)
+                delete_btn.clicked.connect(self.delete_component)
 
                 edit_btn = QPushButton()
                 edit_btn.setIcon(qta.icon("mdi.pencil"))
@@ -179,7 +179,7 @@ class Subcomponents(QWidget):
         subcomp_help_dialog = SubcompHelpDialog()
         subcomp_help_dialog.exec_()
 
-    def delete_component_clicked(self):
+    def delete_component(self):
         button = self.sender()
         if button:
             row = self.component_table.indexAt(button.pos()).row()
@@ -249,7 +249,7 @@ class Subcomponents(QWidget):
             delete_btn = QPushButton()
             delete_btn.setIcon(qta.icon("mdi.delete"))
             delete_btn.setFixedSize(35, 22)
-            delete_btn.clicked.connect(self.delete_component_clicked)
+            delete_btn.clicked.connect(self.delete_component)
 
             edit_btn = QPushButton()
             edit_btn.setIcon(qta.icon("mdi.pencil"))

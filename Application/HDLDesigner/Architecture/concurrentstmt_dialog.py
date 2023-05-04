@@ -166,10 +166,10 @@ class ConcurrentStmtDialog(QDialog):
                     self.out_signals_combo.addItems(self.output_signals + self.internal_signals )
                     self.output_signals.pop(0)
 
-                    self.options_signals_combo.addItem("Custom")
+                    self.options_signals_combo.addItem("Binary")
                     self.options_signals_combo.addItem("zero")
                     self.options_signals_combo.addItems(self.internal_signals + self.input_signals)
-                    self.options_signals_combo.currentTextChanged.connect(self.disable_custom_input)
+                    self.options_signals_combo.currentTextChanged.connect(self.disable_Binary_input)
 
                 else:
                     self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
@@ -196,7 +196,7 @@ class ConcurrentStmtDialog(QDialog):
                 out_val = out_val.replace("&#x9;", "\t")
                 out_val = out_val.replace("&gt;", ">")
                 self.out_val_input.setText(out_val)
-                self.options_signals_combo.setCurrentText("Custom")
+                self.options_signals_combo.setCurrentText("Binary")
             else:
                 self.options_signals_combo.setCurrentText(out_val)
                 self.out_val_input.setEnabled(False)
@@ -212,7 +212,7 @@ class ConcurrentStmtDialog(QDialog):
 
         if (self.out_signals_combo.currentText() != "Please select"):
             output = self.out_signals_combo.currentText()
-            if self.options_signals_combo.currentText() == "Custom":
+            if self.options_signals_combo.currentText() == "Binary":
                 value = self.out_val_input.text()
                 value = value.replace("&","&amp;")
                 value = value.replace("\"","&quot;")
@@ -264,10 +264,10 @@ class ConcurrentStmtDialog(QDialog):
                     self.add_note_btn.setText("Edit note")
                 self.conc_notes = note_data
 
-    def disable_custom_input(self):
+    def disable_Binary_input(self):
         combo = self.sender()
         if combo:
-            if combo.currentText() == "Custom":
+            if combo.currentText() == "Binary":
                 self.out_val_input.setEnabled(True)
                 self.out_val_input.setPlaceholderText("Eg. 1")
             else:

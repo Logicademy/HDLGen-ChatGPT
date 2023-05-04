@@ -91,13 +91,13 @@ class TestPlan(QWidget):
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.arch_action_layout.addWidget(self.list_frame)  # , alignment=Qt.AlignCenter)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
-        self.testbench_btn.clicked.connect(self.testbench_btn_clicked)
+        self.testbench_btn.clicked.connect(self.add_testplan)
 
         self.mainLayout.addWidget(self.main_frame)  # , alignment=Qt.AlignCenter)
 
         self.setLayout(self.mainLayout)
 
-    def testbench_btn_clicked(self):
+    def add_testplan(self):
         self.note = ""
         if self.proj_dir is not None:
             root = minidom.parse(self.proj_dir[0])
