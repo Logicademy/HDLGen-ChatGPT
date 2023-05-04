@@ -69,7 +69,7 @@ class Home(QMainWindow):
         self.tabs.setFont(font)
         self.generate_btn.clicked.connect(self.generate_btn_clicked)
         self.tabs.setCornerWidget(self.cornerWidget)
-        self.start_vivado_btn.clicked.connect(self.start_vivado_btn_clicked)
+        self.start_vivado_btn.clicked.connect(self.start_eda_tool)
         self.export_project_btn.clicked.connect(self.export_project)
 
         self.project_manager.vhdl_check.clicked.connect(lambda: self.hdl_designer.update_preview("VHDL"))
@@ -102,7 +102,7 @@ class Home(QMainWindow):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("Verilog and Testbench Generated")
             msgBox.exec_()
-    def start_vivado_btn_clicked(self):
+    def start_eda_tool(self):
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Alert")
         if self.project_manager.vivado_dir_input.text()[-10:] == "vivado.bat":
@@ -161,7 +161,7 @@ class Home(QMainWindow):
 
     def handle_tab_change(self, index):
         if index != 0:
-            self.project_manager.create_xml()
+            self.project_manager.save_xml()
 
 
 

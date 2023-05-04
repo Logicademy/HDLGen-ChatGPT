@@ -8,7 +8,7 @@ import qtawesome as qta
 import configparser
 import webbrowser
 import shutil
-from ProjectManager.vivado_help import VivadoHelpDialog
+from ProjectManager.eda_help import EDAHelpDialog
 from ProjectManager.settings_help import SettingsHelpDialog
 from ProjectManager.language_help import LanguageHelpDialog
 from ProjectManager.projectLink import LinkDialog
@@ -301,15 +301,15 @@ class ProjectManager(QWidget):
 
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
-        self.vivado_select_dir.clicked.connect(self.set_vivado_bat_path)
+        self.vivado_select_dir.clicked.connect(self.get_vivado_dir)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
         self.proj_info_link.clicked.connect(self.openLink)
         self.proj_info_addlink.clicked.connect(self.addLink)
 
         self.proj_close_btn.clicked.connect(self.close_project)
-        self.proj_save_btn.clicked.connect(self.create_xml)
-        self.vhdl_check.clicked.connect(self.create_xml)
-        self.verilog_check.clicked.connect(self.create_xml)
+        self.proj_save_btn.clicked.connect(self.save_xml)
+        self.vhdl_check.clicked.connect(self.save_xml)
+        self.verilog_check.clicked.connect(self.save_xml)
 
     def fill_default_proj_details(self):
 
@@ -352,7 +352,7 @@ class ProjectManager(QWidget):
         if ProjectManager.proj_dir:
             self.proj_folder_input.setText(ProjectManager.proj_dir)
 
-    def set_vivado_bat_path(self):
+    def get_vivado_dir(self):
         ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")
         ProjectManager.vivado_bat_path = ProjectManager.vivado_bat_path[0]
         self.vivado_dir_input.setText(ProjectManager.vivado_bat_path)
@@ -365,7 +365,7 @@ class ProjectManager(QWidget):
         self.intel_dir = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
         self.intel_dir_input.setText(self.intel_dir[0])
 
-    def create_xml(self):
+    def save_xml(self):
 
         ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
 
@@ -684,8 +684,8 @@ class ProjectManager(QWidget):
         print("Project successfully loaded!")
 
     def vivado_help_window(self):
-        vivado_help_dialog = VivadoHelpDialog()
-        vivado_help_dialog.exec_()
+        eda_help_dialog = EDAHelpDialog()
+        eda_help_dialog.exec_()
 
     def settings_help_window(self):
         settings_help_dialog = SettingsHelpDialog()

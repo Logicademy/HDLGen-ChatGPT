@@ -572,9 +572,22 @@ class Generator(QWidget):
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
-
             VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
+            VHDLHeader = VHDLHeader.replace("&#10;", "\n")
+            VHDLHeader = VHDLHeader.replace("&amp;", "&")
+            VHDLHeader = VHDLHeader.replace("&quot;", "\"")
+            VHDLHeader = VHDLHeader.replace("&apos;", "\'")
+            VHDLHeader = VHDLHeader.replace("&lt;", "<")
+            VHDLHeader = VHDLHeader.replace("&#x9;", "\t")
+            VHDLHeader = VHDLHeader.replace("&gt;", ">")
             VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
+            VHDLModel = VHDLModel.replace("&#10;", "\n")
+            VHDLModel = VHDLModel.replace("&amp;", "&")
+            VHDLModel = VHDLModel.replace("&quot;", "\"")
+            VHDLModel = VHDLModel.replace("&apos;", "\'")
+            VHDLModel = VHDLModel.replace("&lt;", "<")
+            VHDLModel = VHDLModel.replace("&#x9;", "\t")
+            VHDLModel = VHDLModel.replace("&gt;", ">")
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         entity_name, vhdl_code, instances, chatgpt_header, chatgpt_vhdl = self.generate_vhdl()
@@ -1069,8 +1082,14 @@ class Generator(QWidget):
         VHDLTestbench = "None"
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
-
             VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
+            VHDLTestbench = VHDLTestbench.replace("&#10;", "\n")
+            VHDLTestbench = VHDLTestbench.replace("&amp;", "&")
+            VHDLTestbench = VHDLTestbench.replace("&quot;", "\"")
+            VHDLTestbench = VHDLTestbench.replace("&apos;", "\'")
+            VHDLTestbench = VHDLTestbench.replace("&lt;", "<")
+            VHDLTestbench = VHDLTestbench.replace("&#x9;", "\t")
+            VHDLTestbench = VHDLTestbench.replace("&gt;", ">")
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
         chatgpt_tb = VHDLTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_TB.vhd")
@@ -1766,9 +1785,22 @@ class Generator(QWidget):
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
-
             VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
+            VerilogHeader = VerilogHeader.replace("&#10;", "\n")
+            VerilogHeader = VerilogHeader.replace("&amp;", "&")
+            VerilogHeader = VerilogHeader.replace("&quot;", "\"")
+            VerilogHeader = VerilogHeader.replace("&apos;", "\'")
+            VerilogHeader = VerilogHeader.replace("&lt;", "<")
+            VerilogHeader = VerilogHeader.replace("&#x9;", "\t")
+            VerilogHeader = VerilogHeader.replace("&gt;", ">")
             VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
+            VerilogModel = VerilogModel.replace("&#10;", "\n")
+            VerilogModel = VerilogModel.replace("&amp;", "&")
+            VerilogModel = VerilogModel.replace("&quot;", "\"")
+            VerilogModel = VerilogModel.replace("&apos;", "\'")
+            VerilogModel = VerilogModel.replace("&lt;", "<")
+            VerilogModel = VerilogModel.replace("&#x9;", "\t")
+            VerilogModel = VerilogModel.replace("&gt;", ">")
         entity_name, verilog_code, instances, chatgpt_header, chatgpt_verilog = self.generate_verilog()
         model = VerilogModel
         chatgpt_header = VerilogHeader + "\n\n" + chatgpt_header
@@ -2162,6 +2194,13 @@ class Generator(QWidget):
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
             VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
+            VerilogTestbench = VerilogTestbench.replace("&#10;", "\n")
+            VerilogTestbench = VerilogTestbench.replace("&amp;", "&")
+            VerilogTestbench = VerilogTestbench.replace("&quot;", "\"")
+            VerilogTestbench = VerilogTestbench.replace("&apos;", "\'")
+            VerilogTestbench = VerilogTestbench.replace("&lt;", "<")
+            VerilogTestbench = VerilogTestbench.replace("&#x9;", "\t")
+            VerilogTestbench = VerilogTestbench.replace("&gt;", ">")
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
         chatgpt_tb = VerilogTestbench+ "\n\n" + chatgpt_tb + "\n\n" + self.note
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
