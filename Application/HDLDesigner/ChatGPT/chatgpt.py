@@ -36,7 +36,7 @@ class ChatGPT(QWidget):
 
         self.input_layout = QGridLayout()
 
-        self.testplan_label = QLabel("Test Plan")
+        self.testplan_label = QLabel("ChatGPT")
         self.testplan_label.setFont(title_font)
         self.testplan_label.setStyleSheet(WHITE_COLOR)
 

@@ -295,15 +295,11 @@ class ProcessDialog(QDialog):
                         checkbox.clicked.connect(self.assignSignal_tick)
 
                         out_val_combo = QComboBox()
-                        out_val_options = self.input_signals + self.internal_signals  # + "select"
+                        out_val_options = self.input_signals + self.internal_signals
                         out_val_options.append("zero")
-                        # out_val_options.append("Binary")
                         out_val_options.insert(0, "Binary")
-                        # out_val_options.insert(1, "zero")
-                        # out_val_options.insert(2, "one")
                         out_val_combo.addItems(out_val_options)
                         out_val_combo.setEnabled(False)
-                        # out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_Binary_input)
                         out_val_input = QLineEdit()
@@ -311,13 +307,6 @@ class ProcessDialog(QDialog):
                         out_val_input.setEnabled(False)
 
                         row_position = self.out_sig_table.rowCount()
-                      #  add_note_btn = QPushButton("Add note")
-                      #  add_note_btn.setFixedSize(80, 25)
-                       # add_note_btn.setEnabled(False)
-                       # add_note_btn.setStyleSheet(
-                      #      "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-                       #     " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-                       # add_note_btn.clicked.connect(self.add_note)
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
 
@@ -364,7 +353,6 @@ class ProcessDialog(QDialog):
 
                     outputList_flag = 1
                     for signal in self.internal_signals:
-                       # self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
                         checkbox.clicked.connect(self.assignSignal_tick)
@@ -372,13 +360,9 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.append("zero")
-                        # out_val_options.append("Binary")
-                        # out_val_options.insert(0, "zero")
-                        # out_val_options.insert(0, "one")
                         out_val_options.insert(0, "Binary")
                         out_val_combo.addItems(out_val_options)
                         out_val_combo.setEnabled(False)
-                        # out_val_options.pop(0)
 
                         out_val_combo.currentTextChanged.connect(self.disable_Binary_input)
                         out_val_input = QLineEdit()
@@ -386,16 +370,6 @@ class ProcessDialog(QDialog):
                         out_val_input.setPlaceholderText("Enter binary value or text")
 
                         row_position = self.out_sig_table.rowCount()
-                        #if self.notes[row_position] != "":
-                        #add_note_btn = QPushButton("Add note")
-                        #add_note_btn.setEnabled(False)
-                        #else:
-                            #add_note_btn = QPushButton("Edit note")
-                        #add_note_btn.setFixedSize(80, 25)
-                       # add_note_btn.setStyleSheet(
-                        #    "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-                        #    " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-                       # add_note_btn.clicked.connect(self.add_note)
                         self.out_sig_table.insertRow(row_position)
                         self.out_sig_table.setRowHeight(row_position, 5)
 
@@ -578,8 +552,7 @@ class ProcessDialog(QDialog):
                     default_val = self.out_sig_table.cellWidget(i, 3).text()
                 else:
                     default_val = self.out_sig_table.cellWidget(i, 2).currentText()
-                #note = self.notes[i]
-                out_sigs.append(output + "," + default_val) #+ ",*note" )#+ note)
+                out_sigs.append(output + "," + default_val)
 
         for i in range(self.CSNS_table.rowCount()):
             if self.CSNS_table.cellWidget(i, 0).checkState() == Qt.Checked:
@@ -606,32 +579,13 @@ class ProcessDialog(QDialog):
 
         if combo:
             row = self.out_sig_table.indexAt(combo.pos()).row()
-            if combo.currentText() == "Binary":
+            if combo.currentText() != "Binary":
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)
                 self.out_sig_table.cellWidget(row, 3).setPlaceholderText("Enter binary value or text")
             else:
                 self.out_sig_table.cellWidget(row, 3).clear()
                 self.out_sig_table.cellWidget(row, 3).setPlaceholderText("")
                 self.out_sig_table.cellWidget(row, 3).setEnabled(False)
-
-    #def add_note(self):
-       # button = self.sender()
-      #  if button:
-
-           # row = self.out_sig_table.indexAt(button.pos()).row()
-          #  if button.text() == "Edit note":
-          #      add_note = note_Dialog("edit", self.notes[row])
-          #  else:
-          #      add_note = note_Dialog("add")
-          #  add_note.exec_()
-
-           # if not add_note.cancelled:
-           #     note_data = add_note.get_data()
-          #      if note_data == "":
-          #          self.out_sig_table.cellWidget(row, 4).setText("Add note")
-          #      else:
-          #          self.out_sig_table.cellWidget(row, 4).setText("Edit note")
-           #     self.notes[row] = note_data
 
     def add_process_note(self):
         button = self.sender()
