@@ -362,6 +362,7 @@ class ProjectManager(QWidget):
         ProjectManager.vivado_bat_path = ProjectManager.vivado_bat_path[0]
         self.vivado_dir_input.setText(ProjectManager.vivado_bat_path)
 
+
     @staticmethod
     def get_vivado_bat_path():
         return ProjectManager.vivado_bat_path
@@ -377,7 +378,7 @@ class ProjectManager(QWidget):
     def save_xml(self):
 
         ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
-
+        ProjectManager.intel_exe_path = self.intel_dir_input.text()
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
         spec_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "Specification")
@@ -679,6 +680,7 @@ class ProjectManager(QWidget):
                 intel_dir_node = tool.getElementsByTagName("dir")
                 if len(intel_dir_node) != 0 and intel_dir_node[0].firstChild is not None:
                     self.intel_dir_input.setText(intel_dir_node[0].firstChild.data)
+                    ProjectManager.intel_exe_path = intel_dir_node[0].firstChild.data
 
         hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]
         hdl_langs = hdl_data.getElementsByTagName("language")

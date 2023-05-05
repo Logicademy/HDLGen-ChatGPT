@@ -819,7 +819,6 @@ class Generator(QWidget):
 
         return 1
     def run_tcl_file(self, lang, edaTool):
-
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         subprocess.Popen("cd " + proj_path, shell=True)
@@ -845,9 +844,15 @@ class Generator(QWidget):
             elif lang == "Verilog":
 
                 tcl_path = proj_path + "\Verilog\Intelprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("Intel Quartus for HDLGen is still a work in progress")
+            msgBox.exec_()
             if os.path.exists(tcl_path):
+
                 start_quartus_cmd = intel_exe_file_path + " -source " + tcl_path
                 subprocess.Popen(start_quartus_cmd, shell=True)
+
             else:
                 msgBox = QMessageBox()
                 msgBox.setWindowTitle("Alert")
