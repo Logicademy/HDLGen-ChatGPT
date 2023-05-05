@@ -126,17 +126,17 @@ class Home(QMainWindow):
             else:
                 msgBox.setText("No vivado.bat path set")
         else:
-            if self.project_manager.intel_dir_input.text()[-11:] == "quartus.exe":
-                if self.project_manager.vhdl_check.isChecked():
-                    msgBox.setText("Starting EDA tool")
-                    msgBox.exec_()
-                    self.generator.run_tcl_file("VHDL", "Quartus")
-                else:
-                    msgBox.setText("Starting EDA tool")
-                    msgBox.exec_()
-                    self.generator.run_tcl_file("Verilog", "Quartus")
+            #if self.project_manager.intel_dir_input.text()[-11:] == "quartus.exe":
+            if self.project_manager.vhdl_check.isChecked():
+                msgBox.setText("Starting EDA tool")
+                msgBox.exec_()
+                self.generator.run_tcl_file("VHDL", "Quartus")
             else:
-                msgBox.setText("No quartus.exe path set")
+                msgBox.setText("Starting EDA tool")
+                msgBox.exec_()
+                self.generator.run_tcl_file("Verilog", "Quartus")
+            #else:
+                #msgBox.setText("No quartus.exe path set")
 
     def export_project(self):
         # Get the base name of the folder
