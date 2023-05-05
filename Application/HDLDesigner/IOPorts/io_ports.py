@@ -204,7 +204,7 @@ class IOPorts(QWidget):
             edit_btn = QPushButton()
             edit_btn.setIcon(qta.icon("mdi.pencil"))
             edit_btn.setFixedSize(35, 22)
-            edit_btn.clicked.connect(self.edit_io_port)
+            edit_btn.clicked.connect(self.edit_signal)
 
             self.port_table.insertRow(row_position)
             self.port_table.setRowHeight(row_position, 5)
@@ -249,7 +249,7 @@ class IOPorts(QWidget):
             edit_btn = QPushButton()
             edit_btn.setIcon(qta.icon("mdi.pencil"))
             edit_btn.setFixedSize(35, 22)
-            edit_btn.clicked.connect(self.edit_io_port)
+            edit_btn.clicked.connect(self.edit_signal)
 
             row_position = self.port_table.rowCount()
             self.port_table.insertRow(row_position)
@@ -320,7 +320,7 @@ class IOPorts(QWidget):
 
 
 
-    def edit_io_port(self):
+    def edit_signal(self):
         button = self.sender()
         if button:
             row = self.port_table.indexAt(button.pos()).row()
@@ -341,7 +341,7 @@ class IOPorts(QWidget):
                 edit_btn = QPushButton()
                 edit_btn.setIcon(qta.icon("mdi.pencil"))
                 edit_btn.setFixedSize(35, 22)
-                edit_btn.clicked.connect(self.edit_io_port)
+                edit_btn.clicked.connect(self.edit_signal)
 
                 self.all_signals.insert(row, signal_data)
                 self.all_signals_names.insert(row, signal_data[0])
@@ -494,7 +494,7 @@ class IOPorts(QWidget):
             edit_btn = QPushButton()
             edit_btn.setIcon(qta.icon("mdi.pencil"))
             edit_btn.setFixedSize(35, 22)
-            edit_btn.clicked.connect(self.edit_io_port)
+            edit_btn.clicked.connect(self.edit_signal)
 
             self.port_table.insertRow(i)
             self.port_table.setRowHeight(i, 5)

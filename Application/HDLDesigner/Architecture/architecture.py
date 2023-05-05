@@ -54,7 +54,7 @@ class Architecture(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         #self.new_proc_btn.setFont(btn_font)
-        self.new_conc_btn = QPushButton("New Concurrent statement")
+        self.new_conc_btn = QPushButton("New Concurrent Statement")
         self.new_conc_btn.setFixedSize(175, 25)
         self.new_conc_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"

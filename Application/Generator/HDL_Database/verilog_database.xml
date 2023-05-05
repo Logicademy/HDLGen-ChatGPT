@@ -35,5 +35,6 @@
     <instance>$instance $instance_label&#10;(&#10;$portAssign&#10;&#x9;);</instance>
     <component>component $model is&#10;port(&#10;$ports&#10;);&#10;end component $model; </component>
     <note>/// $notes&#10;</note>
+    <concNote>/// assign $output_signal = $notes;</concNote>
 
 </verilog>

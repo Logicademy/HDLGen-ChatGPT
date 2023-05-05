@@ -172,7 +172,7 @@ class InternalSignal(QWidget):
                 edit_btn = QPushButton()
                 edit_btn.setIcon(qta.icon("mdi.pencil"))
                 edit_btn.setFixedSize(35, 22)
-                edit_btn.clicked.connect(self.edit_intSign)
+                edit_btn.clicked.connect(self.edit_intSignal)
 
                 row_position = self.intSig_table.rowCount()
                 self.intSig_table.insertRow(row_position)
@@ -207,7 +207,7 @@ class InternalSignal(QWidget):
                     self.intSig_table.setItem(row_position, 0, QTableWidgetItem(intSignal_data[0]))
                 i=i-1
             self.save_data()
-    def edit_intSign(self):
+    def edit_intSignal(self):
         button = self.sender()
         if button:
             row = self.intSig_table.indexAt(button.pos()).row()
@@ -238,7 +238,7 @@ class InternalSignal(QWidget):
                 edit_btn = QPushButton()
                 edit_btn.setIcon(qta.icon("mdi.pencil"))
                 edit_btn.setFixedSize(35, 22)
-                edit_btn.clicked.connect(self.edit_intSign)
+                edit_btn.clicked.connect(self.edit_intSignal)
 
                 row_position = self.intSig_table.rowCount()
                 self.intSig_table.insertRow(row_position)
@@ -388,7 +388,7 @@ class InternalSignal(QWidget):
             edit_btn = QPushButton()
             edit_btn.setIcon(qta.icon("mdi.pencil"))
             edit_btn.setFixedSize(35, 22)
-            edit_btn.clicked.connect(self.edit_intSign)
+            edit_btn.clicked.connect(self.edit_intSignal)
 
             self.intSig_table.setCellWidget(i, 3, edit_btn)
             self.intSig_table.setCellWidget(i, 4, delete_btn)

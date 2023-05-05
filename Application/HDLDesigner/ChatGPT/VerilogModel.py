@@ -53,7 +53,7 @@ class VerilogModelDialog(QDialog):
             self.load_data(data)
     def setup_ui(self):
         self.config.read('config.ini')
-        chatGPTDefault = self.config.get('user', 'VHDLchatGPTModel')
+        chatGPTDefault = self.config.get('user', 'VerilogchatGPTModel')
 
 
         self.ChatGPT_default_input.setPlainText(chatGPTDefault)
@@ -92,6 +92,7 @@ class VerilogModelDialog(QDialog):
         data = data.replace("&lt;","<")
         data = data.replace("&#x9;","\t")
         data = data.replace("&gt;",">")
+        data = data.replace("&#44;", ",")
         self.ChatGPT_model_input.setPlainText(data)
     def get_data(self):
         data = self.ChatGPT_model_input.toPlainText().strip()
@@ -103,7 +104,7 @@ class VerilogModelDialog(QDialog):
         data = data.replace("<", "&lt;")
         data = data.replace("\t", "&#x9;")
         data = data.replace(">", "&gt;")
-        data = data.replace(",", " ")
+        data = data.replace(",", "&#44;")
         if data == "":
             data = "None"
         self.cancelled = False

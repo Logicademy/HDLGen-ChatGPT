@@ -92,6 +92,7 @@ class VHDLTestbenchDialog(QDialog):
         data = data.replace("&lt;","<")
         data = data.replace("&#x9;","\t")
         data = data.replace("&gt;",">")
+        data = data.replace("&#44;", ",")
         self.ChatGPT_testbench_input.setPlainText(data)
     def get_data(self):
         data = self.ChatGPT_testbench_input.toPlainText().strip()
@@ -103,7 +104,7 @@ class VHDLTestbenchDialog(QDialog):
         data = data.replace("<", "&lt;")
         data = data.replace("\t", "&#x9;")
         data = data.replace(">", "&gt;")
-        data = data.replace(",", " ")
+        data = data.replace(",", "&#44;")
         if data == "":
             data = "None"
         self.cancelled = False

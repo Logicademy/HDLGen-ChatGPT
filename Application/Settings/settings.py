@@ -119,7 +119,7 @@ class settingsDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(600, 600)
+        self.input_frame.setFixedSize(600, 200)
         self.input_frame.setLayout(self.input_layout)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
