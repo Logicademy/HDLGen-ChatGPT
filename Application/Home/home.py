@@ -87,7 +87,10 @@ class Home(QMainWindow):
         if self.project_manager.vhdl_check.isChecked():
             self.generator.generate_folders()
             overwrite, instances = self.generator.create_vhdl_file()
-            self.generator.create_tcl_file("VHDL", instances)
+            if self.project_manager.vivado_check.isChecked():
+                self.generator.create_tcl_file("VHDL", instances)
+            else:
+                self.generator.create_quartus_tcl_file("VHDL", instances)
             self.generator.create_testbench_file(overwrite)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
@@ -96,7 +99,10 @@ class Home(QMainWindow):
         elif self.project_manager.verilog_check.isChecked():
             self.generator.generate_folders()
             overwrite, instances = self.generator.create_verilog_file()
-            self.generator.create_tcl_file("Verilog", instances)
+            if self.project_manager.vivado_check.isChecked():
+                self.generator.create_tcl_file("VERiLOG", instances)
+            else:
+                self.generator.create_quartus_tcl_file("VERILOG", instances)
             self.generator.create_verilog_testbench_file(overwrite)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
@@ -105,19 +111,32 @@ class Home(QMainWindow):
     def start_eda_tool(self):
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Alert")
-        if self.project_manager.vivado_dir_input.text()[-10:] == "vivado.bat":
-            if self.project_manager.vhdl_check.isChecked():
-                msgBox.setText("Starting EDA tool")
-                msgBox.exec_()
-                #self.generator.create_tcl_file()
-                self.generator.run_tcl_file("VHDL")
+        if self.project_manager.vivado_check.isChecked():
+            if self.project_manager.vivado_dir_input.text()[-10:] == "vivado.bat":
+                if self.project_manager.vhdl_check.isChecked():
+                    msgBox.setText("Starting EDA tool")
+                    msgBox.exec_()
+                    #self.generator.create_tcl_file()
+                    self.generator.run_tcl_file("VHDL","Vivado")
+                else:
+                    msgBox.setText("Starting EDA tool")
+                    msgBox.exec_()
+                    # self.generator.create_tcl_file()
+                    self.generator.run_tcl_file("Verilog", "Vivado")
             else:
-                msgBox.setText("Starting EDA tool")
-                msgBox.exec_()
-                # self.generator.create_tcl_file()
-                self.generator.run_tcl_file("Verilog")
+                msgBox.setText("No vivado.bat path set")
         else:
-            msgBox.setText("No vivado.bat path set")
+            if self.project_manager.intel_dir_input.text()[-11:] == "quartus.exe":
+                if self.project_manager.vhdl_check.isChecked():
+                    msgBox.setText("Starting EDA tool")
+                    msgBox.exec_()
+                    self.generator.run_tcl_file("VHDL", "Quartus")
+                else:
+                    msgBox.setText("Starting EDA tool")
+                    msgBox.exec_()
+                    self.generator.run_tcl_file("Verilog", "Quartus")
+            else:
+                msgBox.setText("No quartus.exe path set")
 
     def export_project(self):
         # Get the base name of the folder

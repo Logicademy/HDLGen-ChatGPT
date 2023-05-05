@@ -33,6 +33,7 @@ class ProjectManager(QWidget):
         self.info = ""
         #ProjectManager.hdl = None
         ProjectManager.vivado_bat_path = None
+        ProjectManager.intel_exe_path = None
         self.MainWindow = MainWindow
         ProjectManager.xml_data_path = None
 
@@ -102,7 +103,8 @@ class ProjectManager(QWidget):
         self.intel_check = QCheckBox("Intel Quartus")
         self.intel_check.setFont(bold_font)
         self.intel_check.setStyleSheet(BLACK_COLOR)
-        self.intel_check.setEnabled(False)
+
+        #self.intel_check.setEnabled(False)
         self.intel_ver_label = QLabel("Version")
         self.intel_ver_label.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo = QComboBox()
@@ -115,7 +117,7 @@ class ProjectManager(QWidget):
         self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
-        self.vivado_check.setChecked(True)
+        #self.vivado_check.setChecked(True)
         self.vivado_check.setFont(bold_font)
         self.vivado_check.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_label = QLabel("Version")
@@ -182,14 +184,14 @@ class ProjectManager(QWidget):
         self.langLayout = QGridLayout()
 
         self.proj_action_layout = QHBoxLayout()
-        # settingsDir=os.getcwd() + "\Settings\settings.txt"
-        # settings = open(settingsDir, "r")
         config = configparser.ConfigParser()
         config.read('config.ini')
         vivadoPath = config.get('user', 'vivado.bat')
-        # settings.close()
         vivadoPath = vivadoPath.strip()
         self.vivado_dir_input.setText(vivadoPath)
+        quartusPath = config.get('user', 'quartus')
+        quartusPath = quartusPath.strip()
+        self.intel_dir_input.setText(quartusPath)
         self.setup_ui()
 
         if proj_dir != None:
@@ -310,7 +312,10 @@ class ProjectManager(QWidget):
         self.proj_save_btn.clicked.connect(self.save_xml)
         self.vhdl_check.clicked.connect(self.save_xml)
         self.verilog_check.clicked.connect(self.save_xml)
-
+        self.intel_check.clicked.connect(self.edaCheckbox)
+        self.vivado_check.clicked.connect(self.edaCheckbox)
+        self.intel_check.clicked.connect(self.save_xml)
+        self.vivado_check.clicked.connect(self.save_xml)
     def fill_default_proj_details(self):
 
         path = Path(os.getcwd())
@@ -362,9 +367,13 @@ class ProjectManager(QWidget):
         return ProjectManager.vivado_bat_path
 
     def get_intel_dir(self):
-        self.intel_dir = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
-        self.intel_dir_input.setText(self.intel_dir[0])
+        ProjectManager.intel_exe_path = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
+        ProjectManager.intel_exe_path = ProjectManager.intel_exe_path[0]
+        self.intel_dir_input.setText(ProjectManager.intel_exe_path)
 
+    @staticmethod
+    def get_intel_exe_path():
+        return ProjectManager.intel_exe_path
     def save_xml(self):
 
         ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
@@ -776,3 +785,12 @@ class ProjectManager(QWidget):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("Error with folder set up")
             msgBox.exec_()
+
+    def edaCheckbox(self):
+        button = self.sender()
+        if button == self.intel_check:
+            if button.isChecked():
+                self.vivado_check.setChecked(False)
+        else:
+            if button.isChecked():
+                self.intel_check.setChecked(False)
