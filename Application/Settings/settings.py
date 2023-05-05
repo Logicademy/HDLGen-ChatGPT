@@ -40,6 +40,10 @@ class settingsDialog(QDialog):
         self.vivado_label.setStyleSheet(WHITE_COLOR)
         self.vivado_input = QLineEdit()
 
+        self.quartus_label = QLabel("Quartus path")
+        self.quartus_label.setStyleSheet(WHITE_COLOR)
+        self.quartus_input = QLineEdit()
+
         self.ChatGPT_header_label = QLabel("ChatGPT Header Commands")
         self.ChatGPT_header_label.setStyleSheet(WHITE_COLOR)
         self.ChatGPT_header_input = QPlainTextEdit()
@@ -58,6 +62,11 @@ class settingsDialog(QDialog):
         self.browse_btn = QPushButton("Browse")
         self.browse_btn.setFixedSize(60, 25)
         self.browse_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+        self.quartus_browse_btn = QPushButton("Browse")
+        self.quartus_browse_btn.setFixedSize(60, 25)
+        self.quartus_browse_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
@@ -83,6 +92,7 @@ class settingsDialog(QDialog):
     def setup_ui(self):
         self.config.read('config.ini')
         vivadoPath= self.config.get('user', 'vivado.bat')
+        quartusPath = self.config.get('user','quartus')
         author = self.config.get('user', 'author')
         email = self.config.get('user', 'email')
         company = self.config.get('user', 'company')
@@ -91,6 +101,7 @@ class settingsDialog(QDialog):
         #chatGPTTestbench = self.config.get('user', 'chatGPTTestbench')
 
         self.vivado_input.setText(vivadoPath.strip())
+        self.quartus_input.setText(quartusPath.strip())
         self.author_input.setText(author.strip())
         self.email_input.setText(email.strip())
         self.company_input.setText(company.strip())
@@ -106,6 +117,9 @@ class settingsDialog(QDialog):
         self.input_layout.addWidget(self.vivado_label, 2, 0, 1, 3)
         self.input_layout.addWidget(self.vivado_input, 3, 0, 1, 3)
         self.input_layout.addWidget(self.browse_btn, 3, 3, 1, 1)
+        self.input_layout.addWidget(self.quartus_label, 4, 0, 1, 3)
+        self.input_layout.addWidget(self.quartus_input, 5, 0, 1, 3)
+        self.input_layout.addWidget(self.quartus_browse_btn, 5, 3, 1, 1)
         #self.input_layout.addWidget(self.ChatGPT_header_label, 4, 0, 1, 4)
         #self.input_layout.addWidget(self.ChatGPT_header_input, 5, 0, 4, 4)
         #self.input_layout.addWidget(self.ChatGPT_model_label, 9, 0, 1, 4)
@@ -113,13 +127,13 @@ class settingsDialog(QDialog):
         #self.input_layout.addWidget(self.ChatGPT_testbench_label, 14, 0, 1, 4)
         #self.input_layout.addWidget(self.ChatGPT_testbench_input, 15, 0, 4, 4)
 
-        self.input_layout.addWidget(self.cancel_btn, 4, 2, 1, 1, alignment=Qt.AlignRight)#20, 2, 1, 1, alignment=Qt.AlignRight)
-        self.input_layout.addWidget(self.ok_btn, 4, 3, 1, 1, alignment=Qt.AlignRight)#20, 2, 1, 1, alignment=Qt.AlignRight)#20, 3, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.cancel_btn, 6, 2, 1, 1, alignment=Qt.AlignRight)#20, 2, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.ok_btn, 6, 3, 1, 1, alignment=Qt.AlignRight)#20, 2, 1, 1, alignment=Qt.AlignRight)#20, 3, 1, 1, alignment=Qt.AlignRight)
         #self.vivado_input.textChanged.connect(self.enable_ok_btn)
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(600, 200)
+        self.input_frame.setFixedSize(600, 350)
         self.input_frame.setLayout(self.input_layout)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
@@ -127,12 +141,17 @@ class settingsDialog(QDialog):
 
         self.setLayout(self.mainLayout)
         self.browse_btn.clicked.connect(self.set_vivado_bat_path)
+        self.quartus_browse_btn.clicked.connect(self.set_quartus_exe_path)
         self.ok_btn.clicked.connect(self.save)
     def set_vivado_bat_path(self):
         vivado_bat_path = QFileDialog.getOpenFileName(self,"Select Xilinx Vivado Batch file (vivado.bat)","C:/", filter="Batch (*.bat)")
         vivado_bat_path = vivado_bat_path[0]
         self.vivado_input.setText(vivado_bat_path)
 
+    def set_quartus_exe_path(self):
+        quartus_exe_path = QFileDialog.getOpenFileName(self,"Select Quartus Exe file (quartus_map.exe)","C:/", filter="Batch (*.exe)")
+        quartus_exe_path = quartus_exe_path[0]
+        self.quartus_input.setText(quartus_exe_path)
 
     def cancel_selected(self):
         self.cancelled = True
@@ -147,6 +166,8 @@ class settingsDialog(QDialog):
     def save(self):
         if self.vivado_input.text().strip() == "":
             self.vivado_input.setText("To be completed")
+        if self.quartus_input.text().strip() == "":
+            self.quartus_input.setText("To be completed")
         if self.author_input.text().strip() == "":
             self.author_input.setText("To be completed")
         if self.email_input.text().strip() == "":
@@ -159,6 +180,7 @@ class settingsDialog(QDialog):
         self.config.set("user", "email", self.email_input.text())
         self.config.set("user", "company", self.company_input.text())
         self.config.set("user", "vivado.bat", self.vivado_input.text())
+        self.config.set("user", "quartus", self.quartus_input.text())
         #self.config.set("user", "chatGPTHeader", self.ChatGPT_header_input.toPlainText())
         #self.config.set("user", "chatGPTModel", self.ChatGPT_model_input.toPlainText())
         #self.config.set("user", "chatGPTTestbench", self.ChatGPT_testbench_input.toPlainText())

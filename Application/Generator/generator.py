@@ -755,27 +755,109 @@ class Generator(QWidget):
 
         return 1
 
-    def run_tcl_file(self, lang):
+    def create_quartus_tcl_file(self, lang, instances):
+        print("creating tcl")
 
+        proj_name = ProjectManager.get_proj_name()
+        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        if lang == "VHDL":
+            self.tcl_path = proj_path + "/VHDL/IntelPrj/" + self.entity_name + ".tcl"
+            ext = "vhd"
+        else:
+            self.tcl_path = proj_path + "/Verilog/IntelPrj/" + self.entity_name + ".tcl"
+            ext = "v"
+        tcl_database_path = "./Generator/TCL_Database/tcl_database.xml"
+
+        tcl_database = minidom.parse(tcl_database_path)
+        tcl_root = tcl_database.documentElement
+
+        tcl_file_template = tcl_root.getElementsByTagName("quartus_tcl")[0]
+        tcl_file_template = tcl_file_template.firstChild.data
+        comp = self.entity_name
+        tb_file_name = self.entity_name + "_TB"
+        tcl_quartus_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
+        tcl_quartus_code = tcl_quartus_code.replace("$comp_name", comp)
+        wd = os.getcwd()
+        wd = wd.replace("\\", "/")
+        #mainPackagePath = "add_files -norecurse  " + wd
+        #mainPackagePath = mainPackagePath.replace("Application", "Package/mainPackage.vhd")
+        # if self.includeArrays == True:
+        #tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage", mainPackagePath)
+        # else:
+        # tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage","")
+        files = ""
+        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        root = minidom.parse(mainPackageDir)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        components = hdlDesign[0].getElementsByTagName("components")
+        comp_nodes = components[0].getElementsByTagName('component')
+        self.dirs = []
+        # for i in range(0, len(comp_nodes)):
+        #   if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
+        #       dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+        #       self.dirs.append(dir)
+        # if self.dirs is not None:
+        #    for dir in self.dirs:
+        #        files += "add_files -norecurse  "+ dir + " \n"
+        #    tcl_quartus_code = tcl_quartus_code.replace("$files", files)
+        # else:
+        #    tcl_quartus_code = tcl_quartus_code.replace("$files", "")
+        # tcl_quartus_code = tcl_quartus_code.replace("$tb_name", tb_file_name)
+        tcl_quartus_code = tcl_quartus_code.replace("$proj_name", proj_name)
+        # proj_path = "{" + proj_path + "}"
+        tcl_quartus_code = tcl_quartus_code.replace("$proj_dir", proj_path)
+        tcl_quartus_code = tcl_quartus_code.replace("$lang", lang)
+        tcl_quartus_code = tcl_quartus_code.replace("$ext", ext)
+
+
+        # Writing xml file
+        with open(self.tcl_path, "w") as f:
+            f.write(tcl_quartus_code)
+
+        print("TCL file successfully generated at ", self.tcl_path)
+
+        return 1
+    def run_tcl_file(self, lang, edaTool):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         subprocess.Popen("cd " + proj_path, shell=True)
         vivado_bat_file_path = ProjectManager.get_vivado_bat_path()
-
-        if lang == "VHDL":
-            tcl_path=proj_path+"\VHDL\AMDprj\\"+str(ProjectManager.get_proj_name())+".tcl"
-
-        elif lang == "Verilog":
-
-            tcl_path = proj_path + "\Verilog\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
-        if os.path.exists(tcl_path):
-            start_vivado_cmd = vivado_bat_file_path + " -source " + tcl_path
-            subprocess.Popen(start_vivado_cmd, shell=True)
+        intel_exe_file_path = ProjectManager.get_intel_exe_path()
+        if edaTool == "Vivado":
+            if lang == "VHDL":
+                tcl_path=proj_path+"\VHDL\AMDprj\\"+str(ProjectManager.get_proj_name())+".tcl"
+            elif lang == "Verilog":
+                tcl_path = proj_path + "\Verilog\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
+            if os.path.exists(tcl_path):
+                start_vivado_cmd = vivado_bat_file_path + " -source " + tcl_path
+                subprocess.Popen(start_vivado_cmd, shell=True)
+            else:
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Please Generate model and TB HDL")
+                msgBox.exec_()
         else:
+            if lang == "VHDL":
+                tcl_path=proj_path+"\VHDL\Intelprj\\"+str(ProjectManager.get_proj_name())+".tcl"
+
+            elif lang == "Verilog":
+
+                tcl_path = proj_path + "\Verilog\Intelprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("Please Generate model and TB HDL")
+            msgBox.setText("Intel Quartus for HDLGen is still a work in progress")
             msgBox.exec_()
+            if os.path.exists(tcl_path):
+
+                start_quartus_cmd = intel_exe_file_path + " -source " + tcl_path
+                subprocess.Popen(start_quartus_cmd, shell=True)
+
+            else:
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Please Generate model and TB HDL")
+                msgBox.exec_()
 
     def create_vhdl_testbench_code(self):
         tb_code = ""
