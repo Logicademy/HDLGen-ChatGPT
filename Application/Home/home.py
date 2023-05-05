@@ -22,9 +22,9 @@ class Home(QMainWindow):
         self.setWindowTitle("HDLGen V2022.0.1")
 
         self.cornerWidget = QWidget()
-        self.generate_btn = QPushButton("Generate model and TB HDL")
+        self.generate_btn = QPushButton("Generate")
         self.generate_btn.setFont(small_text_font)
-        self.start_vivado_btn = QPushButton("Generate/Open Vivado")
+        self.start_vivado_btn = QPushButton("Open EDA Project")
         self.start_vivado_btn.setFont(small_text_font)
         self.export_project_btn = QPushButton("Export Project")
         self.export_project_btn.setFont(small_text_font)

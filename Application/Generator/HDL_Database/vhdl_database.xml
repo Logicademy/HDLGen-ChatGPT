@@ -42,5 +42,6 @@
     <instance>$instance_label: $instance&#10;port map(&#10;$portAssign&#10;&#x9;);</instance>
     <component>component $model is&#10;port(&#10;$ports&#10;);&#10;end component $model; </component>
     <note>--- $notes</note>
+    <concNote>---$concurrentstmt_label: $output_signal &lt;= $notes;</concNote>
 
 </vhdl>
