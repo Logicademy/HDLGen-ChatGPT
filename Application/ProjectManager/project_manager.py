@@ -121,6 +121,7 @@ class ProjectManager(QWidget):
         #self.vivado_check.setChecked(True)
         self.vivado_check.setFont(bold_font)
         self.vivado_check.setStyleSheet(BLACK_COLOR)
+        self.vivado_check.setChecked(True)
         self.vivado_ver_label = QLabel("Version")
         self.vivado_ver_label.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo = QComboBox()
@@ -670,6 +671,7 @@ class ProjectManager(QWidget):
         for tool in tools_data:
             if tool.getElementsByTagName("name")[0].firstChild.data == "Xilinx Vivado":
                 self.vivado_check.setChecked(True)
+                self.intel_check.setChecked(False)
                 self.vivado_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
                 vivado_dir_node = tool.getElementsByTagName("dir")
                 if vivado_dir_node != 0 and vivado_dir_node[0].firstChild is not None:
@@ -677,6 +679,7 @@ class ProjectManager(QWidget):
                     ProjectManager.vivado_bat_path = vivado_dir_node[0].firstChild.data
             elif tool.getElementsByTagName("name")[0].firstChild.data == "Intel Quartus":
                 self.intel_check.setChecked(True)
+                self.vivado_check.setChecked(False)
                 self.intel_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
                 intel_dir_node = tool.getElementsByTagName("dir")
                 if len(intel_dir_node) != 0 and intel_dir_node[0].firstChild is not None:
