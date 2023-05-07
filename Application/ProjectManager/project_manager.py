@@ -8,6 +8,7 @@ import qtawesome as qta
 import configparser
 import webbrowser
 import shutil
+import zipfile
 from ProjectManager.eda_help import EDAHelpDialog
 from ProjectManager.settings_help import SettingsHelpDialog
 from ProjectManager.language_help import LanguageHelpDialog
@@ -120,6 +121,7 @@ class ProjectManager(QWidget):
         #self.vivado_check.setChecked(True)
         self.vivado_check.setFont(bold_font)
         self.vivado_check.setStyleSheet(BLACK_COLOR)
+        self.vivado_check.setChecked(True)
         self.vivado_ver_label = QLabel("Version")
         self.vivado_ver_label.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo = QComboBox()
@@ -669,6 +671,7 @@ class ProjectManager(QWidget):
         for tool in tools_data:
             if tool.getElementsByTagName("name")[0].firstChild.data == "Xilinx Vivado":
                 self.vivado_check.setChecked(True)
+                self.intel_check.setChecked(False)
                 self.vivado_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
                 vivado_dir_node = tool.getElementsByTagName("dir")
                 if vivado_dir_node != 0 and vivado_dir_node[0].firstChild is not None:
@@ -676,6 +679,7 @@ class ProjectManager(QWidget):
                     ProjectManager.vivado_bat_path = vivado_dir_node[0].firstChild.data
             elif tool.getElementsByTagName("name")[0].firstChild.data == "Intel Quartus":
                 self.intel_check.setChecked(True)
+                self.vivado_check.setChecked(False)
                 self.intel_ver_combo.setCurrentText(tool.getElementsByTagName("version")[0].firstChild.data)
                 intel_dir_node = tool.getElementsByTagName("dir")
                 if len(intel_dir_node) != 0 and intel_dir_node[0].firstChild is not None:
@@ -787,7 +791,46 @@ class ProjectManager(QWidget):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("Error with folder set up")
             msgBox.exec_()
+    def export_project(self):
+        # Get the base name of the folder
+        dir = self.proj_dir +"/"+self.proj_name_input.text()+"/HDLGenPrj/"+self.proj_name_input.text()+".hdlgen"
+        folder_path = os.path.dirname(os.path.dirname(dir))
+        base_name = os.path.basename(folder_path)
+        # Get the directory path of the folder
+        folder_dir = os.path.dirname(folder_path)
 
+        # Prompt the user to enter a zip file name
+        while True:
+            options = QFileDialog.Options()
+           # options |= QFileDialog.DontUseNativeDialog
+            zip_file_name, _ = QFileDialog.getSaveFileName(
+                None, "Export project", os.path.join(folder_dir, f"{base_name}.zip"), "Zip files (*.zip)",
+                options=options
+            )
+            if not zip_file_name:
+                return  # User cancelled
+            if not zip_file_name.endswith(".zip"):
+                zip_file_name += ".zip"
+            break  # Exit the loop
+
+        # Create a ZipFile object
+        zip_file = zipfile.ZipFile(zip_file_name, 'w', zipfile.ZIP_DEFLATED)
+
+        # Walk through the folder and add files to the zip file
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                rel_path = os.path.relpath(file_path, folder_path)
+                zip_file.write(file_path, arcname=rel_path)
+
+        # Close the zip file
+        zip_file.close()
+
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Alert")
+        msgBox.setText("Zipped to " + zip_file_name)
+        msgBox.exec_()
+        print(f"Successfully created {zip_file_name}!")
     def edaCheckbox(self):
         button = self.sender()
         if button == self.intel_check:
