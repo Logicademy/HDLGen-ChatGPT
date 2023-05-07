@@ -34,8 +34,8 @@ class HDLGen(QMainWindow):
         self.button_layout = QVBoxLayout()
         self.info_layout = QVBoxLayout()
 
-        self.open_btn = QPushButton("Open Existing project")
-        self.new_btn = QPushButton("Create New project")
+        self.open_btn = QPushButton("Open Existing Project")
+        self.new_btn = QPushButton("Create New Project")
         self.help_btn = QPushButton("Help")
         self.settings_btn = QPushButton("Settings")
 

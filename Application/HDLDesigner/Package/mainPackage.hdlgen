@@ -1,7 +1,26 @@
 <?xml version="1.0" ?>
 <HDLGen>
 	<hdlDesign>
-		<mainPackage/>
+		<mainPackage>
+			<array>
+				<name>array4x32</name>
+				<depth>4</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>array5x32</name>
+				<depth>5</depth>
+				<width>32</width>
+				<signalType>signed</signalType>
+			</array>
+			<array>
+				<name>array6x32</name>
+				<depth>6</depth>
+				<width>32</width>
+				<signalType>unsigned</signalType>
+			</array>
+		</mainPackage>
 		<components/>
 	</hdlDesign>
 </HDLGen>
