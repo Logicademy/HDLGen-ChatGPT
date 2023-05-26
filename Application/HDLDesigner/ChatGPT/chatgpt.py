@@ -3,6 +3,7 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
+import pyperclip
 import sys
 import qtawesome as qta
 sys.path.append("..")
@@ -31,7 +32,8 @@ class ChatGPT(QWidget):
         title_font.setBold(True)
         self.proj_dir = proj_dir
         self.commands = ["None","None","None","None","None","None"]
-
+        self.proj_path = ""
+        self.entity_name = ""
         self.mainLayout = QVBoxLayout()
 
         self.input_layout = QGridLayout()
@@ -50,24 +52,56 @@ class ChatGPT(QWidget):
         self.header_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.header_VHDL_copy = QPushButton("Copy")
+        self.header_VHDL_copy.setFixedSize(200, 50)
+        self.header_VHDL_copy.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
         self.model_VHDL = QPushButton("VHDL Model Command")
         self.model_VHDL.setFixedSize(200, 50)
         self.model_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.model_VHDL_copy = QPushButton("Copy")
+        self.model_VHDL_copy.setFixedSize(200, 50)
+        self.model_VHDL_copy.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
         self.testbench_VHDL = QPushButton("VHDL Testbench Command")
         self.testbench_VHDL.setFixedSize(200, 50)
         self.testbench_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.tb_VHDL_copy = QPushButton("Copy")
+        self.tb_VHDL_copy.setFixedSize(200, 50)
+        self.tb_VHDL_copy.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
         self.header_Verilog = QPushButton("Verilog Header Command")
         self.header_Verilog.setFixedSize(200, 50)
         self.header_Verilog.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.header_Verilog.setVisible(False)
+
+        self.header_Verilog_copy = QPushButton("Copy")
+        self.header_Verilog_copy.setFixedSize(200, 50)
+        self.header_Verilog_copy.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
         self.model_Verilog = QPushButton("Verilog Model Command")
         self.model_Verilog.setFixedSize(200, 50)
         self.model_Verilog.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.model_Verilog.setVisible(False)
+
+        self.model_Verilog_copy = QPushButton("Copy")
+        self.model_Verilog_copy.setFixedSize(200, 50)
+        self.model_Verilog_copy.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
         self.testbench_Verilog = QPushButton("Verilog Testbench Command")
@@ -75,6 +109,21 @@ class ChatGPT(QWidget):
         self.testbench_Verilog.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.testbench_Verilog.setVisible(False)
+        self.tb_Verilog_copy = QPushButton("Copy")
+        self.tb_Verilog_copy.setFixedSize(200, 50)
+        self.tb_Verilog_copy.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+        self.header_check = QRadioButton("Show")
+        # self.vhdl_check.setChecked(True)
+        self.header_check.setStyleSheet(BLACK_COLOR)
+        self.header_check.setChecked(True)
+        self.model_check = QRadioButton("Show")
+        self.model_check.setStyleSheet(BLACK_COLOR)
+        self.testbench_check = QRadioButton("Show")
+        self.testbench_check.setStyleSheet(BLACK_COLOR)
 
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
@@ -93,15 +142,25 @@ class ChatGPT(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
+
         self.top_layout.addWidget(self.testplan_label, 0, 0, 1, 1)
         self.top_layout.addWidget(self.chatgpt_info_btn, 0, 1, 1, 1)
         self.arch_action_layout.addLayout(self.top_layout)
         self.input_layout.addWidget(self.header_VHDL,0,0)
+        self.input_layout.addWidget(self.header_VHDL_copy, 0, 1)
         self.input_layout.addWidget(self.model_VHDL, 1, 0)
+        self.input_layout.addWidget(self.model_VHDL_copy, 1, 1)
         self.input_layout.addWidget(self.testbench_VHDL, 2, 0)
-        self.input_layout.addWidget(self.header_Verilog, 0, 1)
-        self.input_layout.addWidget(self.model_Verilog, 1, 1)
-        self.input_layout.addWidget(self.testbench_Verilog, 2, 1)
+        self.input_layout.addWidget(self.tb_VHDL_copy, 2, 1)
+        self.input_layout.addWidget(self.header_Verilog, 0, 0)
+        self.input_layout.addWidget(self.header_Verilog_copy, 0, 1)
+        self.input_layout.addWidget(self.model_Verilog, 1, 0)
+        self.input_layout.addWidget(self.model_Verilog_copy, 1, 1)
+        self.input_layout.addWidget(self.testbench_Verilog, 2, 0)
+        self.input_layout.addWidget(self.tb_Verilog_copy, 2, 1)
+        self.input_layout.addWidget(self.header_check, 0,2)
+        self.input_layout.addWidget(self.model_check, 1, 2)
+        self.input_layout.addWidget(self.testbench_check, 2, 2)
 
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -111,6 +170,10 @@ class ChatGPT(QWidget):
         self.model_Verilog.clicked.connect(self.verilog_model_command)
         self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
         self.testbench_Verilog.clicked.connect(self.verilog_testbench_command)
+        self.model_VHDL_copy.clicked.connect(self.model_VHDL_file)
+        self.model_Verilog_copy.clicked.connect(self.model_Verilog_file)
+        self.tb_VHDL_copy.clicked.connect(self.tb_VHDL_file)
+        self.tb_Verilog_copy.clicked.connect(self.tb_Verilog_file)
         self.main_frame.setLayout(self.arch_action_layout)
 
         self.list_frame.setFrameShape(QFrame.StyledPanel)
@@ -174,10 +237,27 @@ class ChatGPT(QWidget):
         print("Saved ChatGPT commands")
 
     def load_data(self, proj_dir):
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+
+
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
+        projectManager = HDLGen.getElementsByTagName("projectManager")
+        HDL = projectManager[0].getElementsByTagName("HDL")[0]
+        if HDL.hasChildNodes():
+            lang_node = HDL.getElementsByTagName('language')[0]
+            lang = lang_node.getElementsByTagName('name')[0].firstChild.data
+            if lang == "VHDL":
+                self.VHDLVisible()
+            else:
+                self.VerilogVisible()
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-
+        header_node = hdlDesign[0].getElementsByTagName("header")
+        if header_node is not None:
+            comp_node = header_node[0].getElementsByTagName("compName")[0]
+            if comp_node.firstChild.data != "null":
+                self.entity_name = comp_node.firstChild.data
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
@@ -248,5 +328,73 @@ class ChatGPT(QWidget):
             verilog_testbench = verilog_testbench.get_data()
             self.commands[5]=verilog_testbench
         self.save_data()
+
+    def model_VHDL_file(self):
+        self.hdl_designer.preview_window.setText("hi")
+        chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
+
+    def model_Verilog_file(self):
+        chatgpt_vhdl_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
+
+    def tb_VHDL_file(self):
+        chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_TB_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
+
+    def tb_Verilog_file(self):
+        chatgpt_vhdl_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_TB_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
+
+    def VHDLVisible(self):
+        print("change to vhdl")
+        self.model_VHDL_copy.setVisible(True)
+        self.model_VHDL.setVisible(True)
+        self.header_VHDL_copy.setVisible(True)
+        self.header_VHDL.setVisible(True)
+        self.tb_VHDL_copy.setVisible(True)
+        self.testbench_VHDL.setVisible(True)
+
+        self.model_Verilog_copy.setVisible(False)
+        self.model_Verilog.setVisible(False)
+        self.header_Verilog_copy.setVisible(False)
+        self.header_Verilog.setVisible(False)
+        self.tb_Verilog_copy.setVisible(False)
+        self.testbench_Verilog.setVisible(False)
+    def VerilogVisible(self):
+        print("change to verilog")
+        self.model_Verilog_copy.setVisible(True)
+        self.model_Verilog.setVisible(True)
+        self.header_Verilog_copy.setVisible(True)
+        self.header_Verilog.setVisible(True)
+        self.tb_Verilog_copy.setVisible(True)
+        self.testbench_Verilog.setVisible(True)
+
+        self.model_VHDL_copy.setVisible(False)
+        self.model_VHDL.setVisible(False)
+        self.header_VHDL_copy.setVisible(False)
+        self.header_VHDL.setVisible(False)
+        self.tb_VHDL_copy.setVisible(False)
+        self.testbench_VHDL.setVisible(False)
+    def copy_file_contents_to_clipboard(self, file_path):
+        try:
+            with open(file_path, 'r') as file:
+                file_contents = file.read()
+                pyperclip.copy(file_contents)
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("File contents copied to clipboard successfully")
+                msgBox.exec_()
+        except FileNotFoundError:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("File not found. Press Generate button")
+            msgBox.exec_()
+        except Exception as e:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("An error occurred. Check terminal for details")
+            msgBox.exec_()
+            print("An error occurred:", str(e))
     
 

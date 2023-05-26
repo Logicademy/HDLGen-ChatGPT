@@ -343,7 +343,6 @@ class IntSignalDialog(QDialog):
                         line = ""
         lines = lines.strip()
         intSignalDescription = lines
-        #intSignalDescription = self.sig_desc_input.toPlainText()#text()
         intSignalDescription = intSignalDescription.replace("\n", "&#10;")
         intSignalDescription = os.linesep.join([
             line for line in intSignalDescription.splitlines()

@@ -471,6 +471,18 @@ class Generator(QWidget):
                                     notes = notes.replace("&#x9;", "\t")
                                     notes = notes.replace("&gt;", ">")
                                     notes = notes.replace("&#44;", ",")
+                                    notes = notes.replace("[","(")
+                                    notes = notes.replace("]", ")")
+                                    notes = notes.replace(":", "downto")
+
+                                    #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    #notes = re.sub(pattern, r'"\1"', notes)
+
+                                    pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    notes = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
+                                        m.group(1)) == 1 else f'"{m.group(1)}"', notes)
+
+
                                     note_syntax = vhdl_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
                                                                       child.getElementsByTagName("label")[
@@ -561,8 +573,6 @@ class Generator(QWidget):
                     #gen_process += gen_conc
                     gen_archs += gen_process
                     gen_archs += gen_conc
-                    #gen_process = gen_process[:-1]
-                    gen_archs += "-- End of selected portion\n\n"
                     gen_archs += gen_seq_process
                     gen_archs += gen_instance
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
@@ -583,8 +593,8 @@ class Generator(QWidget):
                     gen_vhdl += "use work.MainPackage.all;"
                     chatgpt_vhdl += "use work.MainPackage.all;"
                     # Entity Section placement
-                    gen_vhdl += "\n" + gen_entity + "\n\n"
-                    chatgpt_vhdl += "\n" + gen_entity + "\n\n"
+                    gen_vhdl += "\n\n" + gen_entity + "\n\n"
+                    chatgpt_vhdl += "\n\n" + gen_entity + "\n\n"
                     gen_vhdl += gen_arch
                     chatgpt_vhdl += gen_arch
 
@@ -1180,8 +1190,8 @@ class Generator(QWidget):
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
-            self.note = "--- "+tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n---")
+            self.note = tb_node.firstChild.nodeValue
+            self.note = self.note.replace("&#10;", "\n")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")
@@ -1770,13 +1780,24 @@ class Generator(QWidget):
                                 notes = child.getElementsByTagName("note")[0].firstChild.data
                                 if notes != "None":
                                     notes = notes.replace("&#10;", "\n--- ")
-                                    notes = notes.replace("&amp;", "&")
+                                    notes = notes.replace("&amp;", ",")
                                     notes = notes.replace("&quot;", "\"")
                                     notes = notes.replace("&apos;", "\'")
                                     notes = notes.replace("&lt;", "<")
                                     notes = notes.replace("&#x9;", "\t")
                                     notes = notes.replace("&gt;", ">")
                                     notes = notes.replace("&#44;", ",")
+                                    notes = notes.replace("(","[")
+                                    notes = notes.replace(")","]")
+                                    notes = notes.replace("downto",":")
+                                    pattern = r'(?<!:\s)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+
+                                    notes = re.sub(pattern, lambda m: f"1b{m.group(1)}" if len(
+                                        m.group(1)) == 1 else f'{len(m.group(1))}b{m.group(1)}', notes)
+                                    notes = re.sub(r'\s+', '', notes)
+
+                                    pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'#r'\[?(\w+)\s*,\s*(\w+)\]?'
+                                    notes = re.sub(pattern1, r'{\1,\2}', notes)
                                     note_syntax = verilog_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
                                                                       child.getElementsByTagName("label")[
@@ -1839,12 +1860,6 @@ class Generator(QWidget):
                                     else:
                                         assign_syntax = verilog_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                         assign_syntax = assign_syntax.replace("$output_signal", signals[0])
-                                       # value = value.replace("&amp;", "&")
-                                       # value = value.replace("&quot;", "\"")
-                                       # value = value.replace("&apos;", "\'")
-                                       # value = value.replace("&lt;", "<")
-                                       # value = value.replace("&#x9;", "\t")
-                                       # value = value.replace("&gt;", ">")
                                         assign_syntax = assign_syntax.replace("$value", value)
 
                                         gen_stmts += assign_syntax
@@ -1852,21 +1867,7 @@ class Generator(QWidget):
                                         conc_syntax = conc_syntax.replace("$statement", gen_stmts)
                                     gen_conc += conc_syntax
                             gen_conc += "\n"
-                            #notes = child.getElementsByTagName("note")[0].firstChild.data
-                            #if notes != "None":
-                             #   notes = notes.replace("&#10;", "\n--- ")
-                              #  notes = notes.replace("&amp;", "&")
-                               # notes = notes.replace("&quot;", "\"")
-                               # notes = notes.replace("&apos;", "\'")
-                               # notes = notes.replace("&lt;", "<")
-                               # notes = notes.replace("&#x9;", "\t")
-                               # notes = notes.replace("&gt;", ">")
-                               # notes = notes.replace("&#44;", ",")
-                               # note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
-                               # note_syntax = note_syntax.replace("$notes", notes)
-                               # gen_conc += note_syntax + "\n"
-                            #else:
-                             #   gen_conc += "\n"
+
 
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
                             self.includeArrays = True
@@ -1902,7 +1903,6 @@ class Generator(QWidget):
                     #gen_process = gen_process[:-1]
                     gen_archs += gen_process
                     gen_archs += gen_conc
-                    gen_archs += "// End of selected portion\n\n"
                     gen_archs += gen_seq_process
                     gen_archs += gen_instance
                     arch_syntax = verilog_root.getElementsByTagName("architecture")[0].firstChild.data
@@ -2089,9 +2089,6 @@ class Generator(QWidget):
                 UUTEnt_content = re.sub(r"\[componentName]", entity_name, UUTEnt_contents)
                 UUTEnt_content = re.sub(r"\[signal]", name, UUTEnt_content)
 
-                #if type[0:5] == "array":
-                    #size = ""
-                    #type = "array"
                 if type == "single bit":
                     size = ""
                     type = "logic"
@@ -2323,8 +2320,8 @@ class Generator(QWidget):
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
-            self.note = "/// " + tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n---")
+            self.note = tb_node.firstChild.nodeValue
+            self.note = self.note.replace("&#10;", "\n")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")
