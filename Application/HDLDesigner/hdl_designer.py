@@ -154,3 +154,4 @@ class VerticalTabWidget(QTabWidget):
         self.previous_index = index
 
 
+
