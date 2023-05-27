@@ -422,6 +422,7 @@ class ProcessDialog(QDialog):
                 for i in range(0, self.out_sig_table.rowCount()):
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Unchecked)
                 for i in range(self.in_sig_list.count()):
+                    self.in_sig_list.item(i).setCheckState(Qt.Unchecked)
                     self.in_sig_list.item(i).setHidden(True)
                 self.in_sig_list.item(self.input_signals.index("clk")).setHidden(False)
                 self.in_sig_list.item(self.input_signals.index("clk")).setCheckState(Qt.Checked)
@@ -439,12 +440,17 @@ class ProcessDialog(QDialog):
             self.add_note_btn.setVisible(True)
             self.CSNS_frame.hide()
             self.out_sig_frame.show()
+            for i in range(0, self.CSNS_table.rowCount()):
+                self.CSNS_table.cellWidget(i, 0).setCheckState(Qt.Unchecked)
             for i in range(self.in_sig_list.count()):
                 self.in_sig_list.item(i).setHidden(False)
             if self.clkState == True:
                 self.in_sig_list.item(self.input_signals.index("clk")).setHidden(True)
+                self.in_sig_list.item(self.input_signals.index("clk")).setCheckState(Qt.Unchecked)
+
                 if self.rstState == True:
                     self.in_sig_list.item(self.input_signals.index("rst")).setHidden(True)
+                    self.in_sig_list.item(self.input_signals.index("rst")).setCheckState(Qt.Unchecked)
 
     def ceBox_checked(self):
         if self.seq_ceBox.isChecked():
@@ -591,9 +597,9 @@ class ProcessDialog(QDialog):
         button = self.sender()
         if button:
             if button.text() == "Edit note":
-                add_note = note_Dialog("edit", self.process_notes)
+                add_note = note_Dialog("edit","Process Note",self.process_notes)
             else:
-                add_note = note_Dialog("add")
+                add_note = note_Dialog("add","Process Note")
             add_note.exec_()
 
             if not add_note.cancelled:

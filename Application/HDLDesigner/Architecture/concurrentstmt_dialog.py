@@ -2,6 +2,7 @@ from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys
+import re
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Architecture.note_dialog import note_Dialog
@@ -255,13 +256,14 @@ class ConcurrentStmtDialog(QDialog):
         if button:
             if button.text() == "Edit note":
                 print(self.conc_notes)
-                add_note = note_Dialog("edit", self.conc_notes)
+                add_note = note_Dialog("edit", "Concurrent Statement Note",self.conc_notes)
             else:
                 add_note = note_Dialog("add")
             add_note.exec_()
 
             if not add_note.cancelled:
                 note_data = add_note.get_data()
+                note_data = re.sub(r'\s+', ' ', note_data)
                 if note_data == "None":
                     self.add_note_btn.setText("Add note")
                 else:
