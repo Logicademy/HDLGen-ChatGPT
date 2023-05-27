@@ -35,7 +35,11 @@ class VHDLTestbenchDialog(QDialog):
         self.cancel_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-
+        self.reset_btn = QPushButton("Reset")
+        self.reset_btn.setFixedSize(60, 25)
+        self.reset_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         self.ok_btn = QPushButton("Ok")
         self.ok_btn.setFixedSize(60, 25)
@@ -62,7 +66,7 @@ class VHDLTestbenchDialog(QDialog):
         self.input_layout.addWidget(self.ChatGPT_testbench_input, 1, 0, 4, 4)
         #self.input_layout.addWidget(self.ChatGPT_default_label, 5, 0, 1, 4)
         #self.input_layout.addWidget(self.ChatGPT_default_input, 6, 0, 4, 4)
-
+        self.input_layout.addWidget(self.reset_btn, 5, 1, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.cancel_btn, 5, 2, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 5, 3, 1, 1, alignment=Qt.AlignRight)
         self.input_frame.setFrameShape(QFrame.StyledPanel)
@@ -76,7 +80,7 @@ class VHDLTestbenchDialog(QDialog):
 
         self.setLayout(self.mainLayout)
         self.ok_btn.clicked.connect(self.get_data)
-
+        self.reset_btn.clicked.connect(self.reset)
     def cancel_selected(self):
         self.cancelled = True
         self.close()
@@ -113,3 +117,8 @@ class VHDLTestbenchDialog(QDialog):
         self.cancelled = False
         self.close()
         return data
+        
+    def reset(self):
+        self.config.read('config.ini')
+        data = self.config.get('user', 'vhdlchatgpttestbench')
+        self.ChatGPT_testbench_input.setPlainText(data)
