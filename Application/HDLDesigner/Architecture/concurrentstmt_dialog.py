@@ -256,7 +256,7 @@ class ConcurrentStmtDialog(QDialog):
         if button:
             if button.text() == "Edit note":
                 print(self.conc_notes)
-                add_note = note_Dialog("edit", self.conc_notes)
+                add_note = note_Dialog("edit", "Concurrent Statement Note",self.conc_notes)
             else:
                 add_note = note_Dialog("add")
             add_note.exec_()

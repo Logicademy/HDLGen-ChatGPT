@@ -153,7 +153,9 @@ class IntSignalDialog(QDialog):
         self.arrayName_label.setVisible(False)
         self.arrayName_input.setVisible(False)
         self.arrayName_input.setCurrentText("Create in packages")
-
+        self.sig_desc_input.setVisible(True)
+        self.sig_desc_label.setVisible(True)
+        self.stateNames_table.setVisible(False)
         self.input_frame = QFrame()
 
         self.cancelled = True
@@ -221,9 +223,7 @@ class IntSignalDialog(QDialog):
         self.state_signal_Type_input.currentTextChanged.connect(self.state_sig_type_options)
         self.standard_signal_Type_input.currentTextChanged.connect(self.standard_sig_type_options)
         self.intSig_name_input.textChanged.connect(self.updateCSAndNS)
-        self.sig_desc_input.setVisible(True)
-        self.sig_desc_label.setVisible(True)
-        self.stateNames_table.setVisible(False)
+
 
         self.add_btn.clicked.connect(self.add_stateName)
         self.ok_btn.clicked.connect(self.get_data)
@@ -235,7 +235,6 @@ class IntSignalDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def load_sig_data(self, intSig_data):
-        print(intSig_data)
         if intSig_data[1][-24:] == "state signal pair(NS/CS)":
             self.sig_type_combo.setCurrentText(intSig_data[1][-24:])
             self.state_signal_Type_input.setCurrentText(intSig_data[1][:-25])
@@ -364,9 +363,6 @@ class IntSignalDialog(QDialog):
         else:
             data.append(self.all_stateNames)
         data.append(intSignalDescription)
-        print("data printing")
-        print(data)
-        print("data printed")
         self.cancelled = False
         self.close()
         return data
@@ -472,8 +468,9 @@ class IntSignalDialog(QDialog):
             else:
                 self.sig_size_label.setText("Size (eg. 32)*")
         else:
-            self.sig_size_input.setEnabled(False)
             self.sig_size_input.setText("1")
+            self.sig_size_input.setEnabled(False)
+
 
     def state_sig_type_options(self):
         self.enable_ok_btn()
@@ -485,7 +482,6 @@ class IntSignalDialog(QDialog):
             self.sig_size_input.setVisible(True)
             self.sig_size_input.setEnabled(True)
             if self.state_signal_Type_input.currentText() == "integer":
-                print("in integer")
                 self.sig_size_label.setText("Number of values")
             else:
                 self.sig_size_label.setText("Size (eg. 32)*")
@@ -515,7 +511,10 @@ class IntSignalDialog(QDialog):
             self.NS_name_input.setVisible(False)
             self.sig_size_label.setVisible(True)
             self.sig_size_input.setVisible(True)
-            self.sig_size_input.clear()
+            #self.sig_size_input.clear()
+            self.standard_signal_Type_input.setCurrentText("single bit")
+            self.sig_size_input.setText("1")
+            self.sig_size_input.setEnabled(False)
             self.stateNames_table.setVisible(False)
             self.add_btn.setVisible(False)
             self.arrayName_label.setVisible(False)

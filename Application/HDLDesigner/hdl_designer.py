@@ -77,7 +77,7 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(internalSignal, "Internal Signals")
         self.tabs.addTab(self.architecture, "Architecture")
         self.tabs.addTab(testplan, "Test Plan")
-        self.tabs.addTab(self.chatGPT,"ChatGPT")
+        self.tabs.addTab(self.chatGPT,"ChatGPT Message")
         font = self.tabs.font()
         font.setPointSize(10)
         self.tabs.setFont(font)
@@ -112,7 +112,7 @@ class HDLDesigner(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.tbnote = tb_node.firstChild.nodeValue
-            self.tbnote = self.tbnote.replace("&#10;", "\n")
+            #self.tbnote = self.tbnote.replace("&#10;", "\n")
             self.tbnote = self.tbnote.replace("&amp;", "&")
             self.tbnote = self.tbnote.replace("&quot;", "\"")
             self.tbnote = self.tbnote.replace("&apos;", "\'")
@@ -128,10 +128,11 @@ class HDLDesigner(QWidget):
         if hdl != False and hdl != True:
             self.hdl = hdl
         if self.hdl == "VHDL":
-            print("VHDL")
             entity_name, self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_vhdl(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_vhdl_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
+            self.tbnote = self.tbnote.replace("&#10;", "\n---")
+            self.tbnote = "---"+self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
@@ -165,10 +166,11 @@ class HDLDesigner(QWidget):
                 VHDLTestbench = VHDLTestbench.replace("&#44;", ",")
                 self.TBCmd = VHDLTestbench
         elif self.hdl == "Verilog":
-            print("verilog")
             entity_name,self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_verilog(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_verilog_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
+            self.tbnote = self.tbnote.replace("&#10;", "\n///")
+            self.tbnote = "///" + self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data

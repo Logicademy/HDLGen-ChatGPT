@@ -463,6 +463,7 @@ class Generator(QWidget):
                                 #assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 notes = child.getElementsByTagName("note")[0].firstChild.data
                                 if notes != "None":
+                                    notes = re.sub(r'\s+', ' ', notes)
                                     notes = notes.replace("&#10;", "\n--- ")
                                     notes = notes.replace("&amp;", "&")
                                     notes = notes.replace("&quot;", "\"")
@@ -473,8 +474,8 @@ class Generator(QWidget):
                                     notes = notes.replace("&#44;", ",")
                                     notes = notes.replace("[","(")
                                     notes = notes.replace("]", ")")
-                                    notes = notes.replace(":", "downto")
-
+                                    notes = notes.replace(":", " downto ")
+                                    notes = re.sub(r'\s+', ' ', notes)
                                     #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
                                     #notes = re.sub(pattern, r'"\1"', notes)
 
@@ -1191,7 +1192,7 @@ class Generator(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.note = tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n")
+            self.note = self.note.replace("&#10;", "\n---")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")
@@ -1779,6 +1780,7 @@ class Generator(QWidget):
                                 # assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 notes = child.getElementsByTagName("note")[0].firstChild.data
                                 if notes != "None":
+                                    notes = re.sub(r'\s+', '', notes)
                                     notes = notes.replace("&#10;", "\n--- ")
                                     notes = notes.replace("&amp;", ",")
                                     notes = notes.replace("&quot;", "\"")
@@ -1790,11 +1792,12 @@ class Generator(QWidget):
                                     notes = notes.replace("(","[")
                                     notes = notes.replace(")","]")
                                     notes = notes.replace("downto",":")
-                                    pattern = r'(?<!:\s)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+                                    pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+
 
                                     notes = re.sub(pattern, lambda m: f"1b{m.group(1)}" if len(
                                         m.group(1)) == 1 else f'{len(m.group(1))}b{m.group(1)}', notes)
-                                    notes = re.sub(r'\s+', '', notes)
+                                    #notes = re.sub(r'\s+', '', notes)
 
                                     pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'#r'\[?(\w+)\s*,\s*(\w+)\]?'
                                     notes = re.sub(pattern1, r'{\1,\2}', notes)
@@ -2286,9 +2289,9 @@ class Generator(QWidget):
                 gen_process += inputsToZero
                 if clkrst == 2:
                     gen_process += "\trst    = 1'b1;\n"
-                    gen_process += "\t@(posedge clk);\n"
+                    gen_process += "\t# (1.2 * period);\n"
                     gen_process += "\trst   = 1'b0;\n"
-                gen_process += "\t#period\n"
+                gen_process += "\t# (1 * period);\n"
                 if clkrst >= 1:
                     gen_process += "\t@(posedge clk);\n"
 
@@ -2321,7 +2324,7 @@ class Generator(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.note = tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n")
+            self.note = self.note.replace("&#10;", "\n///")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")

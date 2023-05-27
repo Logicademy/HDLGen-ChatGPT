@@ -12,12 +12,12 @@ WHITE_COLOR = "color: white"
 
 class note_Dialog(QDialog):
 
-    def __init__(self, add_or_edit, note_data=None):
+    def __init__(self, add_or_edit, noteType, note_data=None):
         super().__init__()
 
         self.input_layout = QGridLayout()
-        self.setWindowTitle("Signal Note")
-
+        self.setWindowTitle(noteType)
+        self.noteType = noteType
         title_font = QFont()
         title_font.setPointSize(10)
         title_font.setBold(True)
@@ -26,7 +26,7 @@ class note_Dialog(QDialog):
 
         self.mainLayout = QVBoxLayout()
 
-        self.note_label = QLabel("Note")
+        self.note_label = QLabel(noteType)
         self.note_label.setStyleSheet(WHITE_COLOR)
         self.note_input = QPlainTextEdit()
         self.note_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
@@ -66,7 +66,10 @@ class note_Dialog(QDialog):
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
         self.input_frame.setLayout(self.input_layout)
-        self.input_frame.setFixedSize(700, 700)
+        if self.noteType == "Concurrent Statement Note":
+            self.input_frame.setFixedSize(700, 350)
+        else:
+            self.input_frame.setFixedSize(700, 700)
 
         #self.note_input.textChanged.connect(self.enable_ok_btn);
 

@@ -38,7 +38,7 @@ class ChatGPT(QWidget):
 
         self.input_layout = QGridLayout()
 
-        self.testplan_label = QLabel("ChatGPT")
+        self.testplan_label = QLabel("ChatGPT Message")
         self.testplan_label.setFont(title_font)
         self.testplan_label.setStyleSheet(WHITE_COLOR)
 
@@ -116,13 +116,13 @@ class ChatGPT(QWidget):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
-        self.header_check = QRadioButton("Show")
+        self.header_check = QRadioButton("Preview")
         # self.vhdl_check.setChecked(True)
         self.header_check.setStyleSheet(BLACK_COLOR)
         self.header_check.setChecked(True)
-        self.model_check = QRadioButton("Show")
+        self.model_check = QRadioButton("Preview")
         self.model_check.setStyleSheet(BLACK_COLOR)
-        self.testbench_check = QRadioButton("Show")
+        self.testbench_check = QRadioButton("Preview")
         self.testbench_check.setStyleSheet(BLACK_COLOR)
 
         self.top_layout = QGridLayout()

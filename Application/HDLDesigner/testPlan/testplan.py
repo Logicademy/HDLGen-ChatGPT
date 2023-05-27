@@ -109,7 +109,7 @@ class TestPlan(QWidget):
                 self.note = tb_node.firstChild.nodeValue
         button = self.sender()
         if button:
-            add_note = note_Dialog("edit", self.note)
+            add_note = note_Dialog("edit","Test Plan",self.note)
             add_note.exec_()
 
             if not add_note.cancelled:
