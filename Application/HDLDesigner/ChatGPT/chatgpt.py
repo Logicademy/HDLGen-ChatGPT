@@ -170,6 +170,8 @@ class ChatGPT(QWidget):
         self.model_Verilog.clicked.connect(self.verilog_model_command)
         self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
         self.testbench_Verilog.clicked.connect(self.verilog_testbench_command)
+        self.header_VHDL_copy.clicked.connect(self.header_VHDL_file)
+        self.header_Verilog_copy.clicked.connect(self.header_Verilog_file)
         self.model_VHDL_copy.clicked.connect(self.model_VHDL_file)
         self.model_Verilog_copy.clicked.connect(self.model_Verilog_file)
         self.tb_VHDL_copy.clicked.connect(self.tb_VHDL_file)
@@ -328,23 +330,28 @@ class ChatGPT(QWidget):
             verilog_testbench = verilog_testbench.get_data()
             self.commands[5]=verilog_testbench
         self.save_data()
+    def header_VHDL_file(self):
+        chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_header_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
+    def header_Verilog_file(self):
+        chatgpt_verilog_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_header_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
     def model_VHDL_file(self):
-        self.hdl_designer.preview_window.setText("hi")
         chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def model_Verilog_file(self):
-        chatgpt_vhdl_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_ChatGPT.txt")
-        self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
+        chatgpt_verilog_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
 
     def tb_VHDL_file(self):
         chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_TB_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def tb_Verilog_file(self):
-        chatgpt_vhdl_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_TB_ChatGPT.txt")
-        self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
+        chatgpt_verilog_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_TB_ChatGPT.txt")
+        self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
 
     def VHDLVisible(self):
         print("change to vhdl")
