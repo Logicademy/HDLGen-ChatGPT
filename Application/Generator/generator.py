@@ -2291,9 +2291,9 @@ class Generator(QWidget):
                     gen_process += "\trst    = 1'b1;\n"
                     gen_process += "\t# (1.2 * period);\n"
                     gen_process += "\trst   = 1'b0;\n"
-                gen_process += "\t# (1 * period);\n"
-                if clkrst >= 1:
-                    gen_process += "\t@(posedge clk);\n"
+                    gen_process += "\t# (1 * period);\n"
+                if clkrst == 1:
+                    gen_process += "\t# (1.2 * period);\n"
 
                 gen_process += "\n\t// Add testbench stimulus here START\n\n"
                 gen_process += "\t// Add testbench stimulus here END\n\n"
