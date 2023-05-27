@@ -102,7 +102,6 @@ class HDLDesigner(QWidget):
         self.chatGPT.testbench_check.clicked.connect(self.update_preview)
 
     def update_preview(self, hdl):
-        print(hdl)
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
@@ -208,14 +207,11 @@ class HDLDesigner(QWidget):
         elif self.tabs.currentIndex() == 7:
             if self.chatGPT.header_check.isChecked():
                 self.preview_window.setText(self.HeaderCmd + "\n\n" +self.chatgpt_header)
-                print("header")
             elif self.chatGPT.model_check.isChecked():
                 self.preview_window.setText(self.ModelCmd + "\n\n" +self.chatgpt_model)
-                print("model")
             elif self.chatGPT.testbench_check.isChecked():
                 self.chatgpt_tb = self.TBCmd + "\n\n"+self.chatgpt_tb + "\n\n" + self.tbnote
                 self.preview_window.setText(self.chatgpt_tb)
-                print("testbench")
         else:
             self.preview_window.setText(self.code)
     def update_arch(self):

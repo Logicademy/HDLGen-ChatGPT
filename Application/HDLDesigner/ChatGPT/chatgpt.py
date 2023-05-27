@@ -91,7 +91,7 @@ class ChatGPT(QWidget):
         self.header_Verilog_copy.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-
+        self.header_Verilog_copy.setVisible(False)
         self.model_Verilog = QPushButton("Verilog Model Command")
         self.model_Verilog.setFixedSize(200, 50)
         self.model_Verilog.setStyleSheet(
@@ -104,6 +104,7 @@ class ChatGPT(QWidget):
         self.model_Verilog_copy.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        self.model_Verilog_copy.setVisible(False)
         self.testbench_Verilog = QPushButton("Verilog Testbench Command")
         self.testbench_Verilog.setFixedSize(200, 50)
         self.testbench_Verilog.setStyleSheet(
@@ -115,7 +116,7 @@ class ChatGPT(QWidget):
         self.tb_Verilog_copy.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-
+        self.tb_Verilog_copy.setVisible(False)
         self.header_check = QRadioButton("Preview")
         # self.vhdl_check.setChecked(True)
         self.header_check.setStyleSheet(BLACK_COLOR)
@@ -331,30 +332,47 @@ class ChatGPT(QWidget):
             self.commands[5]=verilog_testbench
         self.save_data()
     def header_VHDL_file(self):
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        self.entity_name=ProjectManager.proj_name
         chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_header_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def header_Verilog_file(self):
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        self.entity_name = ProjectManager.proj_name
         chatgpt_verilog_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_header_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
     def model_VHDL_file(self):
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        self.entity_name = ProjectManager.proj_name
         chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def model_Verilog_file(self):
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        self.entity_name = ProjectManager.proj_name
         chatgpt_verilog_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
 
     def tb_VHDL_file(self):
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        self.entity_name = ProjectManager.proj_name
         chatgpt_vhdl_file_path = os.path.join(self.proj_path, "VHDL", "ChatGPT", self.entity_name + "_VHDL_TB_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def tb_Verilog_file(self):
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        self.entity_name = ProjectManager.proj_name
         chatgpt_verilog_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_TB_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
 
     def VHDLVisible(self):
-        print("change to vhdl")
         self.model_VHDL_copy.setVisible(True)
         self.model_VHDL.setVisible(True)
         self.header_VHDL_copy.setVisible(True)
@@ -369,7 +387,6 @@ class ChatGPT(QWidget):
         self.tb_Verilog_copy.setVisible(False)
         self.testbench_Verilog.setVisible(False)
     def VerilogVisible(self):
-        print("change to verilog")
         self.model_Verilog_copy.setVisible(True)
         self.model_Verilog.setVisible(True)
         self.header_Verilog_copy.setVisible(True)

@@ -94,10 +94,10 @@ class ProjectManager(QWidget):
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QRadioButton("Verilog")
         self.verilog_check.setStyleSheet(BLACK_COLOR)
-        self.sverilog_check = QRadioButton("System Verilog")
+        self.sverilog_check = QRadioButton("System Verilog (In development)")
         self.sverilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check.setEnabled(False)
-        self.chisel_check = QRadioButton("Chisel")
+        self.chisel_check = QRadioButton("Chisel (In development)")
         self.chisel_check.setStyleSheet(BLACK_COLOR)
         self.chisel_check.setEnabled(False)
 
