@@ -11,9 +11,15 @@ from Settings.settings import settingsDialog
 
 
 APP_AUTHORS = "Fearghal Morgan, Abishek Bupathi & JP Byrne"
-APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
+#APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
+#APP_DESCRIPTION ="<ul><li>Fast capture and generation of HDL model and testbench templates\n<ul><li>Generation of ChatGPT message, including header and HDL templates \n<ul><li>ChatGPT-directed HDL model and testbench generation\nEDA project creation and launch\n Supports VHDL and Verilog / AMD Xilinx Vivado\nOpen source application"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
-
+APP_DESCRIPTION = "<ul><li>Fast capture and generation of HDL model and testbench templates</li>" \
+                 "<li>Generation of ChatGPT message, including header and HDL templates</li>" \
+                 "<li>ChatGPT-directed HDL model and testbench generation</li>" \
+                 "<li>EDA project creation and launch</li>" \
+                 "<li>Supports VHDL and Verilog / AMD Xilinx Vivado</li>" \
+                 "<li>Open source application</li></ul>"
 class HDLGen(QMainWindow):
 
     def __init__(self):
@@ -23,11 +29,15 @@ class HDLGen(QMainWindow):
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
 
         title_font = QFont()
-        title_font.setPointSize(30)
+        title_font.setPointSize(20)
         title_font.setBold(True)
 
         bold_font = QFont()
+        bold_font.setPointSize(10)
         bold_font.setBold(True)
+
+        text_font = QFont()
+        text_font.setPointSize(10)
 
         # Initializing UI Elements
         self.mainLayout = QHBoxLayout()
@@ -45,15 +55,20 @@ class HDLGen(QMainWindow):
         self.settings_btn.setFixedSize(60, 25)
         self.settings_btn.clicked.connect(self.settings_window)
 
-        self.hdlgen_logo = QLabel("HDLGen")
+        self.hdlgen_logo = QLabel("HDLGen and ChatGPT\nDigital Systems Design\nCapture Automation")
         self.hdlgen_logo.setFont(title_font)
+        self.hdlgen_logo.setAlignment(Qt.AlignCenter)
+
         self.app_description = QLabel(APP_DESCRIPTION)
-        self.github_link = QLabel('<a href="https://github.com/abishek-bupathi/HDLGen">HDLGen GitHub Repository</a>')
+        self.app_description.setFont(text_font)
+        self.github_link = QLabel('<a href=" https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use the HDLGen application, please include the Github reference to our work')
+        self.github_link.setFont(text_font)
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
         self.github_link.linkActivated.connect(self.link)
-        self.vici_description = QLabel(VICI_DESCRIPTION)
-        self.vici_link = QLabel('<a href="https://vicilogic.com">vicilogic.com</a>')
+        #self.vici_description = QLabel(VICI_DESCRIPTION)
+        self.vici_link = QLabel('<a href="https://vicilogic.com">vicilogic.com</a> online learning, assessment and remote hardware prototyping and course builder')
+        self.vici_link.setFont(text_font)
         self.vici_link.linkActivated.connect(self.link)
 
         # Creating a container
@@ -87,7 +102,7 @@ class HDLGen(QMainWindow):
         self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
         self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
-        self.info_layout.addWidget(self.vici_description, alignment=Qt.AlignCenter)
+        #self.info_layout.addWidget(self.vici_description, alignment=Qt.AlignCenter)
 
         self.info_layout.addSpacerItem(QSpacerItem(1, 50))
 

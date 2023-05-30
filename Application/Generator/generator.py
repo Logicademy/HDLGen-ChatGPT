@@ -1362,6 +1362,7 @@ class Generator(QWidget):
         gen_int_sig = ""
         gen_internal_signal_result = ""
         arrayList=[]
+        arrayListIO=[]
         arrayInfo=[]
         array_assign=""
         single_bitList=[]
@@ -1422,6 +1423,8 @@ class Generator(QWidget):
                         if typeName == type[1]:
                             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+                    arrayListIO.append(name)
+                    arrayInfo.append([name, depth, width])
                     bits = int(width)*int(depth)-1
                     width=int(width)-1
                     depth=int(depth)-1
@@ -1435,12 +1438,12 @@ class Generator(QWidget):
                         array_assign += "assign "+name+"["+str(j)+"] = "+name+"_"+str(bits)+"["+str(top)+":"+str(low)+"];\n"
                         top = low -1
                         low = low -width -1
-                    name = name+"_"+str(bits)
+                    #name = name+"_"+str(bits)
 
 
                     self.includeArrays = True
-                    arrayList.append(name)
-                    arrayInfo.append([name, depth, width])
+                    #arrayListIO.append(name)
+                    #arrayInfo.append([name, depth, width])
                 port_declare_syntax = verilog_root.getElementsByTagName("portDeclaration")[0].firstChild.data
 
                 port_declare_syntax = port_declare_syntax.replace("$name", name)
@@ -1662,11 +1665,26 @@ class Generator(QWidget):
                                         array_syntax=""
                                         for arr in arrayInfo:
                                             if arr[0] == signals[0]:
-                                                depth = int(arr[1])+1
+                                                depth = int(arr[1])
                                                 width = int(arr[2])
-                                                for j in range(0, depth):
-                                                    array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // Default assignment"#\n\t"
-                                                    arraySignal=True
+                                                array_syntax = "for (i=0; i<"+str(depth)+"; i++)\n\t\tbegin\n\t\t\t"+signals[0]+ "[i] <= "+str(width)+"'b0;\n\t\tend"
+                                               # for j in range(0, depth):
+                                                    #array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // Default assignment"#\n\t"
+                                                arraySignal=True
+                                    elif signals[0] in arrayListIO:
+                                        array_syntax = ""
+                                        for arr in arrayInfo:
+                                            if arr[0] == signals[0]:
+                                                depth = int(arr[1])
+                                                width = int(arr[2])
+                                                bits = depth*width
+                                                signals[0]=signals[0]+"_"+str(bits)
+                                                array_syntax = "for (i=0; i<" + str(
+                                                    depth) + "; i++)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
+                                                    width) + "'b0;\n\t\tend\n"
+                                                # for j in range(0, depth):
+                                                # array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // Default assignment"#\n\t"
+                                                arraySignal = True
                                     elif signals[0] in single_bitList:
                                         value = "1'b0"
                                     elif signals[0] in busList or signals[0] in signedList or signals[0] in unsignedList:
