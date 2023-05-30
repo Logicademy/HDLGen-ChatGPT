@@ -40,15 +40,15 @@ class ConcurrentStmtDialog(QDialog):
         self.conc_name_label = QLabel("Concurrent Statement Name*")
         self.conc_name_label.setStyleSheet(WHITE_COLOR)
         self.conc_name_input = QLineEdit()
-        self.noteBox = QCheckBox("Note")
+        self.noteBox = QCheckBox("Custom Value")
         self.noteBox.setStyleSheet(WHITE_COLOR)
-        self.note_label = QLabel("Note")
+        self.note_label = QLabel("Custom Value")
         self.note_label.setStyleSheet(WHITE_COLOR)
         self.note_label.setVisible(False)
         self.note_input = QLineEdit()
         self.note_input.setVisible(False)
-        self.add_note_btn = QPushButton("Add note")
-        self.add_note_btn.setFixedSize(80, 25)
+        self.add_note_btn = QPushButton("Add Custom Value")
+        self.add_note_btn.setFixedSize(125, 25)
         self.add_note_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
@@ -122,8 +122,8 @@ class ConcurrentStmtDialog(QDialog):
         self.input_layout.addWidget(self.add_note_btn, 4, 1, 1, 1)
         self.input_layout.addWidget(self.options_sig_label,3,1,1,1)
         self.input_layout.addWidget(self.options_signals_combo, 4, 1, 1, 1)
-        self.input_layout.addWidget(self.val_label, 3, 2, 1, 1)
-        self.input_layout.addWidget(self.out_val_input, 4, 2, 1, 1)
+        #self.input_layout.addWidget(self.val_label, 3, 2, 1, 1)
+        #self.input_layout.addWidget(self.out_val_input, 4, 2, 1, 1)
         self.input_layout.addItem(QSpacerItem(0, 10), 5, 0, 1, 3)
         self.input_layout.addWidget(self.cancel_btn, 6, 1, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 6, 2, 1, 1, alignment=Qt.AlignRight)
@@ -178,10 +178,10 @@ class ConcurrentStmtDialog(QDialog):
                     self.out_signals_combo.addItems(self.output_signals + self.internal_signals )
                     self.output_signals.pop(0)
 
-                    self.options_signals_combo.addItem("Binary")
+                    #self.options_signals_combo.addItem("Binary")
                     self.options_signals_combo.addItem("zero")
                     self.options_signals_combo.addItems(self.internal_signals + self.input_signals)
-                    self.options_signals_combo.currentTextChanged.connect(self.disable_Binary_input)
+                    #self.options_signals_combo.currentTextChanged.connect(self.disable_Binary_input)
 
                 else:
                     self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
@@ -196,22 +196,22 @@ class ConcurrentStmtDialog(QDialog):
         if self.conc_notes != "None":
             self.noteBox.setChecked(True)
             self.add_note_btn.setVisible(True)
-            self.out_val_input.setVisible(False)
-            self.val_label.setVisible(False)
+            #self.out_val_input.setVisible(False)
+           # self.val_label.setVisible(False)
             self.options_sig_label.setVisible(False)
             self.options_signals_combo.setVisible(False)
-            self.add_note_btn.setText("Edit note")
+            self.add_note_btn.setText("Edit Custom Value")
         if len(conc_data[2]) != 0:
             temp = conc_data[2][0].split(",")
             out_sig = temp[0]
             out_val = temp[1]
             self.out_signals_combo.setCurrentText(out_sig)
-            if out_val not in self.input_signals and out_val not in self.internal_signals and out_val != "zero":
-                self.out_val_input.setText(out_val)
-                self.options_signals_combo.setCurrentText("Binary")
-            else:
-                self.options_signals_combo.setCurrentText(out_val)
-                self.out_val_input.setEnabled(False)
+            #if out_val not in self.input_signals and out_val not in self.internal_signals and out_val != "zero":
+                #self.out_val_input.setText(out_val)
+                #self.options_signals_combo.setCurrentText("Binary")
+            #else:
+            self.options_signals_combo.setCurrentText(out_val)
+            self.out_val_input.setEnabled(False)
 
 
     def get_data(self):
@@ -228,12 +228,12 @@ class ConcurrentStmtDialog(QDialog):
             out_sig.append(output+",zero")
         else:
             self.conc_notes = "None"
-            if self.options_signals_combo.currentText() == "Binary":
-                value = self.out_val_input.text()
-                if value == "":
-                    value = "zero"
-            else:
-                value = self.options_signals_combo.currentText()
+            #if self.options_signals_combo.currentText() == "Binary":
+                #value = self.out_val_input.text()
+                #if value == "":
+                    #value = "zero"
+            #else:
+            value = self.options_signals_combo.currentText()
             out_sig.append(output + "," + value)
         data.append(out_sig)
         data.append(self.conc_notes)
@@ -254,20 +254,20 @@ class ConcurrentStmtDialog(QDialog):
     def add_conc_note(self):
         button = self.sender()
         if button:
-            if button.text() == "Edit note":
+            if button.text() == "Edit Custom Value":
                 print(self.conc_notes)
-                add_note = note_Dialog("edit", "Concurrent Statement Note",self.conc_notes)
+                add_note = note_Dialog("edit", "Concurrent Statement Custom Value",self.conc_notes)
             else:
-                add_note = note_Dialog("add")
+                add_note = note_Dialog("add", "Concurrent Statement Custom Value",self.conc_notes)
             add_note.exec_()
 
             if not add_note.cancelled:
                 note_data = add_note.get_data()
                 note_data = re.sub(r'\s+', ' ', note_data)
                 if note_data == "None":
-                    self.add_note_btn.setText("Add note")
+                    self.add_note_btn.setText("Add Custom Value")
                 else:
-                    self.add_note_btn.setText("Edit note")
+                    self.add_note_btn.setText("Edit Custom Value")
                 self.conc_notes = note_data
 
     def note_checked(self):
@@ -275,16 +275,16 @@ class ConcurrentStmtDialog(QDialog):
             #self.note_label.setVisible(True)
             #self.note_input.setVisible(True)
             self.add_note_btn.setVisible(True)
-            self.out_val_input.setVisible(False)
-            self.val_label.setVisible(False)
+            #self.out_val_input.setVisible(False)
+            #self.val_label.setVisible(False)
             self.options_sig_label.setVisible(False)
             self.options_signals_combo.setVisible(False)
         else:
             #self.note_label.setVisible(False)
             #self.note_input.setVisible(False)
             self.add_note_btn.setVisible(False)
-            self.out_val_input.setVisible(True)
-            self.val_label.setVisible(True)
+            #self.out_val_input.setVisible(True)
+            #self.val_label.setVisible(True)
             self.options_sig_label.setVisible(True)
             self.options_signals_combo.setVisible(True)
     def disable_Binary_input(self):

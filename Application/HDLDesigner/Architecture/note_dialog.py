@@ -66,7 +66,7 @@ class note_Dialog(QDialog):
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
         self.input_frame.setLayout(self.input_layout)
-        if self.noteType == "Concurrent Statement Note":
+        if self.noteType == "Concurrent Statement Custom Value":
             self.input_frame.setFixedSize(700, 350)
         else:
             self.input_frame.setFixedSize(700, 700)

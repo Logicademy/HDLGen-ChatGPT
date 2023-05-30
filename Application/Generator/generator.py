@@ -334,11 +334,11 @@ class Generator(QWidget):
                                         value = "(others => '1')"
                                     else:
                                         value = str(1)
-                                elif value.isdigit():
-                                    if value == "1" or value == "0":
-                                        value = "'" + value + "'"
-                                    else:
-                                        value = '"'+value+'"'
+                                #elif value.isdigit():
+                                    #if value == "1" or value == "0":
+                                        #value = "'" + value + "'"
+                                    #else:
+                                        #value = '"'+value+'"'
 
                                 elif stateTypeSig == True and value == CSState:
                                     caseEmpty = False
@@ -349,13 +349,34 @@ class Generator(QWidget):
                                     for states in stateNames:
                                         whenCase +="\n\t\twhen "+ states + "=>" + "\n\t\t\tnull;"
                                     #case_syntax = case_syntax.replace("$whenCase", whenCase)
-
+                                else:
+                                    value = re.sub(r'\s+', ' ', value)
+                                    value = value.replace("&#10;", "\n--- ")
+                                    value = value.replace("&amp;", "&")
+                                    value = value.replace("&quot;", "\"")
+                                    value = value.replace("&apos;", "\'")
+                                    value = value.replace("&lt;", "<")
+                                    value = value.replace("&#x9;", "\t")
+                                    value = value.replace("&gt;", ">")
+                                    value = value.replace("&#44;", ",")
+                                    value = value.replace("[", "(")
+                                    value = value.replace("]", ")")
+                                    value = value.replace(":", " downto ")
+                                    value = value.replace("'", "")
+                                    value = re.sub(r'\s+', ' ', value)
+                                    pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    value = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
+                                        m.group(1)) == 1 else f'"{m.group(1)}"', value)
+                                                                        # pattern1 = r"\((['\"])(\d+)\1\)"
+                                    pattern1 = r"(\(|\w+)(['\"])(\d+)\2\)"
+                                    match = re.search(pattern1, value)
+                                    while match:
+                                        # notes = notes.replace(match.group(), "(" + match.group(2) + ")")
+                                        value = value.replace(match.group(), match.group(1) + match.group(3) + ")")
+                                        match = re.search(pattern1, value)
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
                                 gen_defaults += assign_syntax + "-- Default assignment \n\t"
-                                #if len(signals) == 2:
-                                  #  signals.append("*note")
-                                #if signals[2][0:5] != "*note":
                                 if len(signals) == 4:
                                     clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
@@ -475,6 +496,7 @@ class Generator(QWidget):
                                     notes = notes.replace("[","(")
                                     notes = notes.replace("]", ")")
                                     notes = notes.replace(":", " downto ")
+                                    notes = notes.replace("'", "")
                                     notes = re.sub(r'\s+', ' ', notes)
                                     #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
                                     #notes = re.sub(pattern, r'"\1"', notes)
@@ -483,6 +505,13 @@ class Generator(QWidget):
                                     notes = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
                                         m.group(1)) == 1 else f'"{m.group(1)}"', notes)
 
+                                    #pattern1 = r"\((['\"])(\d+)\1\)"
+                                    pattern1 = r"(\(|\w+)(['\"])(\d+)\2\)"
+                                    match = re.search(pattern1, notes)
+                                    while match:
+                                        #notes = notes.replace(match.group(), "(" + match.group(2) + ")")
+                                        notes = notes.replace(match.group(), match.group(1) + match.group(3) + ")")
+                                        match = re.search(pattern1, notes)
 
                                     note_syntax = vhdl_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
@@ -1658,9 +1687,9 @@ class Generator(QWidget):
                                         value = str(size) + "'b0"
                                     else:
                                         value = str(0)
-                                elif value.isdigit():
-                                    size = len(value)
-                                    value = str(size) + "'b" + value
+                                #elif value.isdigit():
+                                    #size = len(value)
+                                    #value = str(size) + "'b" + value
 
                                 elif stateTypeSig == True and value == CSState:
                                     caseEmpty = False
@@ -1671,6 +1700,44 @@ class Generator(QWidget):
                                     for states in stateNames:
                                         whenCase += "\n\t\t" + states + " :" + "\n\t\t\tbegin\n\n\t\t\tend"
                                     #case_syntax = case_syntax.replace("$whenCase", whenCase)
+                                else:
+                                        value = re.sub(r'\s+', '', value)
+                                        value = value.replace("&#10;", "\n/// ")
+                                        value = value.replace("&amp;", ",")
+                                        value = value.replace("&quot;", "\"")
+                                        value = value.replace("&apos;", "\'")
+                                        value = value.replace("&lt;", "<")
+                                        value = value.replace("&#x9;", "\t")
+                                        value = value.replace("&gt;", ">")
+                                        value = value.replace("&#44;", ",")
+                                        value = value.replace("(", "[")
+                                        value = value.replace(")", "]")
+                                        value = value.replace("downto", ":")
+                                        value = value.replace("'", "")
+
+                                        pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+
+                                        value = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
+                                            m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", value)
+                                        # value = re.sub(r'\s+', '', value)
+
+                                        #pattern2 = r"\[([\d]+)'b([\d]+)]"
+                                        #match = re.search(pattern2, value)
+                                        #while match:
+                                            #value = value.replace(match.group(), "[" + match.group(2) + "]")
+                                            #match = re.search(pattern2, value)
+                                        pattern2 = r"(\[|\w+)([\d]+)'b([\d]+)]"
+                                        match = re.search(pattern2, value)
+                                        while match:
+                                            value = value.replace(match.group(), match.group(1) + match.group(3) + "]")
+                                            match = re.search(pattern2, value)
+
+                                        value = value.replace("'", "_")
+                                        #pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
+                                        pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
+                                        value = re.sub(pattern1, r'{\1,\2}', value)
+                                        value = value.replace("_", "'")
+
                                 if arraySignal == True:
                                     assign_syntax = array_syntax
                                 else:
@@ -1781,7 +1848,7 @@ class Generator(QWidget):
                                 notes = child.getElementsByTagName("note")[0].firstChild.data
                                 if notes != "None":
                                     notes = re.sub(r'\s+', '', notes)
-                                    notes = notes.replace("&#10;", "\n--- ")
+                                    notes = notes.replace("&#10;", "\n/// ")
                                     notes = notes.replace("&amp;", ",")
                                     notes = notes.replace("&quot;", "\"")
                                     notes = notes.replace("&apos;", "\'")
@@ -1792,15 +1859,33 @@ class Generator(QWidget):
                                     notes = notes.replace("(","[")
                                     notes = notes.replace(")","]")
                                     notes = notes.replace("downto",":")
+                                    notes = notes.replace("'","")
                                     pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
 
 
-                                    notes = re.sub(pattern, lambda m: f"1b{m.group(1)}" if len(
-                                        m.group(1)) == 1 else f'{len(m.group(1))}b{m.group(1)}', notes)
+                                    notes = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
+                                        m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", notes)
                                     #notes = re.sub(r'\s+', '', notes)
 
-                                    pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'#r'\[?(\w+)\s*,\s*(\w+)\]?'
+
+                                    pattern2 = r"(\[|\w+)([\d]+)'b([\d]+)]"
+                                    match = re.search(pattern2, notes)
+                                    while match:
+                                        notes = notes.replace(match.group(), match.group(1) + match.group(3) + "]")
+                                        match = re.search(pattern2, notes)
+                                    #pattern2 = r"(\d+)'b"
+                                    #match = re.search(pattern2, notes)
+                                    #while match:
+                                        #modified_match = ""
+                                        #if match.start() > 0 and notes[match.start() - 1].isdigit():
+                                            #modified_match = match.group(1)
+                                        #notes = notes[:match.start()] + modified_match + notes[match.end():]
+                                        #match = re.search(pattern2, notes)
+                                    notes = notes.replace("'", "_")
+                                    #pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'  # r'\[?(\w+)\s*,\s*(\w+)\]?'
+                                    pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
                                     notes = re.sub(pattern1, r'{\1,\2}', notes)
+                                    notes = notes.replace("_","'")
                                     note_syntax = verilog_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
                                                                       child.getElementsByTagName("label")[

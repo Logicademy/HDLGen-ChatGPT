@@ -135,7 +135,7 @@ class ProcessDialog(QDialog):
         self.out_sig_table.setFrameStyle(QFrame.NoFrame)
         self.out_sig_table.setColumnCount(5)
         self.out_sig_table.setShowGrid(False)
-        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Binary Value', ''])
+        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Value', ''])
         header = self.out_sig_table.horizontalHeader()
         header.setSectionsClickable(False)
         header.setSectionsMovable(False)
@@ -297,13 +297,13 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.append("zero")
-                        out_val_options.insert(0, "Binary")
+                        out_val_options.insert(0, "Custom")
                         out_val_combo.addItems(out_val_options)
                         out_val_combo.setEnabled(False)
 
-                        out_val_combo.currentTextChanged.connect(self.disable_Binary_input)
+                        out_val_combo.currentTextChanged.connect(self.disable_Custom_input)
                         out_val_input = QLineEdit()
-                        out_val_input.setPlaceholderText("Enter binary value or text")
+                        out_val_input.setPlaceholderText("Enter Custom Value")
                         out_val_input.setEnabled(False)
 
                         row_position = self.out_sig_table.rowCount()
@@ -326,7 +326,7 @@ class ProcessDialog(QDialog):
                         CSout_val_combo.addItems(CSout_val_options)
                         # CSout_val_options.pop(0)
 
-                        #CSout_val_combo.currentTextChanged.connect(self.disable_Binary_input)
+                        #CSout_val_combo.currentTextChanged.connect(self.disable_Custom_input)
 
                         onRst_val_combo = QComboBox()
                         onRst_val_options = self.input_signals + self.internal_signals  # + "select" + "zero"
@@ -337,7 +337,7 @@ class ProcessDialog(QDialog):
                         onRst_val_combo.addItems(onRst_val_options)
                         # onRst_val_options.pop(0)
 
-                        # onRst_val_combo.currentTextChanged.connect(self.disable_Binary_input)
+                        # onRst_val_combo.currentTextChanged.connect(self.disable_Custom_input)
                         row_positionCSNS = self.CSNS_table.rowCount()
                         self.CSNS_table.insertRow(row_positionCSNS)
                         self.CSNS_table.setRowHeight(row_positionCSNS, 5)
@@ -360,14 +360,14 @@ class ProcessDialog(QDialog):
                         out_val_combo = QComboBox()
                         out_val_options = self.input_signals + self.internal_signals
                         out_val_options.append("zero")
-                        out_val_options.insert(0, "Binary")
+                        out_val_options.insert(0, "Custom")
                         out_val_combo.addItems(out_val_options)
                         out_val_combo.setEnabled(False)
 
-                        out_val_combo.currentTextChanged.connect(self.disable_Binary_input)
+                        out_val_combo.currentTextChanged.connect(self.disable_Custom_input)
                         out_val_input = QLineEdit()
                         out_val_input.setEnabled(False)
-                        out_val_input.setPlaceholderText("Enter binary value or text")
+                        out_val_input.setPlaceholderText("Enter Custom Value")
 
                         row_position = self.out_sig_table.rowCount()
                         self.out_sig_table.insertRow(row_position)
@@ -499,10 +499,20 @@ class ProcessDialog(QDialog):
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Checked)
                     self.out_sig_table.cellWidget(i, 2).setCurrentText(
                         default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
-                    if self.out_sig_table.cellWidget(i, 2).currentText() == "Binary":
+                    if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
                         self.out_sig_table.cellWidget(i, 3).setEnabled(True)
-                        self.out_sig_table.cellWidget(i, 3).setText(
-                            default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
+                        dataText=default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())]
+                        dataText = dataText.replace("&#10;", "\n")
+                        dataText = dataText.replace("&amp;", "&")
+                        dataText = dataText.replace("&amp;", "&")
+                        dataText = dataText.replace("&quot;", "\"")
+                        dataText = dataText.replace("&apos;", "\'")
+                        dataText = dataText.replace("&lt;", "<")
+                        dataText = dataText.replace("&#x9;", "\t")
+                        dataText = dataText.replace("&gt;", ">")
+                        dataText = dataText.replace("&#44;", ",")
+                        self.out_sig_table.cellWidget(i, 3).setText(dataText)
+                            #default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
                     else:
                         self.out_sig_table.cellWidget(i, 3).clear()
                         self.out_sig_table.cellWidget(i, 3).setPlaceholderText("")
@@ -554,8 +564,17 @@ class ProcessDialog(QDialog):
         for i in range(self.out_sig_table.rowCount()):
             if self.out_sig_table.cellWidget(i, 0).checkState() == Qt.Checked:
                 output = self.out_sig_table.item(i, 1).text()
-                if self.out_sig_table.cellWidget(i, 2).currentText() == "Binary":
+                if self.out_sig_table.cellWidget(i, 2).currentText() == "Custom":
                     default_val = self.out_sig_table.cellWidget(i, 3).text()
+                    default_val = default_val.replace("&", "&amp;")
+                    default_val = default_val.replace("\n", "&#10;")
+                    default_val = default_val.replace("\"", "&quot;")
+                    default_val = default_val.replace("\'", "&apos;")
+                    default_val = default_val.replace("\n", "&#10;")
+                    default_val = default_val.replace("<", "&lt;")
+                    default_val = default_val.replace("\t", "&#x9;")
+                    default_val = default_val.replace(">", "&gt;")
+                    default_val = default_val.replace(",", "&#44;")
                 else:
                     default_val = self.out_sig_table.cellWidget(i, 2).currentText()
                 out_sigs.append(output + "," + default_val)
@@ -580,14 +599,14 @@ class ProcessDialog(QDialog):
         self.close()
         return data
 
-    def disable_Binary_input(self):
+    def disable_Custom_input(self):
         combo = self.sender()
 
         if combo:
             row = self.out_sig_table.indexAt(combo.pos()).row()
-            if combo.currentText() != "Binary":
+            if combo.currentText() == "Custom":
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)
-                self.out_sig_table.cellWidget(row, 3).setPlaceholderText("Enter binary value or text")
+                self.out_sig_table.cellWidget(row, 3).setPlaceholderText("Enter Custom Value")
             else:
                 self.out_sig_table.cellWidget(row, 3).clear()
                 self.out_sig_table.cellWidget(row, 3).setPlaceholderText("")
