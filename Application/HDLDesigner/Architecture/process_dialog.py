@@ -62,8 +62,8 @@ class ProcessDialog(QDialog):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
         self.set_ce.setVisible(False)
 
-        self.add_note_btn = QPushButton("Add note")
-        self.add_note_btn.setFixedSize(80, 25)
+        self.add_note_btn = QPushButton("Add Non Default Logic")
+        self.add_note_btn.setFixedSize(150, 25)
         self.add_note_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
@@ -133,9 +133,9 @@ class ProcessDialog(QDialog):
         self.in_sig_frame.setFixedWidth(175)
 
         self.out_sig_table.setFrameStyle(QFrame.NoFrame)
-        self.out_sig_table.setColumnCount(5)
+        self.out_sig_table.setColumnCount(4)
         self.out_sig_table.setShowGrid(False)
-        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Value', ''])
+        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Default Value'])
         header = self.out_sig_table.horizontalHeader()
         header.setSectionsClickable(False)
         header.setSectionsMovable(False)
@@ -145,7 +145,7 @@ class ProcessDialog(QDialog):
         self.out_sig_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.out_sig_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
         #self.out_sig_table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
-        self.out_sig_table.setColumnWidth(4, 80)
+        #self.out_sig_table.setColumnWidth(4, 80)
 
         self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         vert = self.out_sig_table.verticalHeader()
@@ -605,18 +605,18 @@ class ProcessDialog(QDialog):
     def add_process_note(self):
         button = self.sender()
         if button:
-            if button.text() == "Edit note":
-                add_note = note_Dialog("edit","Process Note",self.process_notes)
+            if button.text() == "Edit Non Default Logic":
+                add_note = note_Dialog("edit","Process Non Default Logic",self.process_notes)
             else:
-                add_note = note_Dialog("add","Process Note")
+                add_note = note_Dialog("add","Process Non Default Logic")
             add_note.exec_()
 
             if not add_note.cancelled:
                 note_data = add_note.get_data()
                 if note_data == "":
-                    self.add_note_btn.setText("Add note")
+                    self.add_note_btn.setText("Add Non Default Logic")
                 else:
-                    self.add_note_btn.setText("Edit note")
+                    self.add_note_btn.setText("Edit Non Default Logic")
                 self.process_notes = note_data
 
     def add_ce(self):
