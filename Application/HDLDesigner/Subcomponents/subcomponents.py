@@ -188,7 +188,8 @@ class Subcomponents(QWidget):
             self.comps_names.pop(row)
             self.save_data()
     def save_data(self):
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
 
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
@@ -224,41 +225,50 @@ class Subcomponents(QWidget):
         print("Saved sub component")
 
     def load_data(self):
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-        root = minidom.parse(mainPackageDir)
-        HDLGen = root.documentElement
-        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-        compPackage = hdlDesign[0].getElementsByTagName("components")
-        comp_nodes = compPackage[0].getElementsByTagName('component')
+        if self.comps:
+            for row in range(0, self.component_table.rowCount()):
+                self.component_table.removeRow(0)
+                self.comps.pop(0)
+                self.comps_names.pop(0)
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        try:
+            root = minidom.parse(mainPackageDir)
+            HDLGen = root.documentElement
+            hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+            compPackage = hdlDesign[0].getElementsByTagName("components")
+            comp_nodes = compPackage[0].getElementsByTagName('component')
 
-        for i in range(0, len(comp_nodes)):
-            model = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
-            directory = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
-            self.comps_names.append(model)
-            output_signal_nodes = comp_nodes[i].getElementsByTagName("port")
+            for i in range(0, len(comp_nodes)):
+                model = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
+                directory = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+                self.comps_names.append(model)
+                output_signal_nodes = comp_nodes[i].getElementsByTagName("port")
 
-            output_signals = []
-            for output_signal_node in output_signal_nodes:
-                output_signals.append(output_signal_node.firstChild.data)
+                output_signals = []
+                for output_signal_node in output_signal_nodes:
+                    output_signals.append(output_signal_node.firstChild.data)
 
-            comp_data = [
-                model,
-                directory,
-                output_signals
-            ]
-            delete_btn = QPushButton()
-            delete_btn.setIcon(qta.icon("mdi.delete"))
-            delete_btn.setFixedSize(35, 22)
-            delete_btn.clicked.connect(self.delete_component)
+                comp_data = [
+                    model,
+                    directory,
+                    output_signals
+                ]
+                delete_btn = QPushButton()
+                delete_btn.setIcon(qta.icon("mdi.delete"))
+                delete_btn.setFixedSize(35, 22)
+                delete_btn.clicked.connect(self.delete_component)
 
-            edit_btn = QPushButton()
-            edit_btn.setIcon(qta.icon("mdi.pencil"))
-            edit_btn.setFixedSize(35, 22)
-            edit_btn.clicked.connect(self.edit_component)
+                edit_btn = QPushButton()
+                edit_btn.setIcon(qta.icon("mdi.pencil"))
+                edit_btn.setFixedSize(35, 22)
+                edit_btn.clicked.connect(self.edit_component)
 
-            self.component_table.insertRow(i)
-            self.component_table.setRowHeight(i, 5)
-            self.component_table.setItem(i, 0, QTableWidgetItem(comp_data[0]))
-            self.component_table.setCellWidget(i, 1, edit_btn)
-            self.component_table.setCellWidget(i, 2, delete_btn)
-            self.comps.append(comp_data)
+                self.component_table.insertRow(i)
+                self.component_table.setRowHeight(i, 5)
+                self.component_table.setItem(i, 0, QTableWidgetItem(comp_data[0]))
+                self.component_table.setCellWidget(i, 1, edit_btn)
+                self.component_table.setCellWidget(i, 2, delete_btn)
+                self.comps.append(comp_data)
+        except:
+            print("")

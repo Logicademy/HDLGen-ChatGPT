@@ -1,7 +1,0 @@
-|mux21_1
-sel => muxOut.OUTPUTSELECT
-muxIn1 => muxOut.DATAB
-muxIn0 => muxOut.DATAA
-muxOut << muxOut.DB_MAX_OUTPUT_PORT_TYPE
-
-

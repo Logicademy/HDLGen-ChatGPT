@@ -96,8 +96,8 @@ class IOPortDialog(QDialog):
         self.cancelled = True
         self.arrays=[]
         self.setup_ui()
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")

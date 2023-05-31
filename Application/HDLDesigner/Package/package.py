@@ -72,6 +72,7 @@ class Package(QWidget):
         self.load_data()
 
     def setup_ui(self):
+
         bold_font = QFont()
         bold_font.setBold(True)
 
@@ -205,9 +206,10 @@ class Package(QWidget):
             self.save_data()
 
     def save_data(self):
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
+
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         mainPackage = root.createElement("mainPackage")
@@ -247,47 +249,56 @@ class Package(QWidget):
         pack_help_dialog.exec_()
 
     def load_data(self):
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-        root = minidom.parse(mainPackageDir)
-        HDLGen = root.documentElement
-        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-        mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
-        array_nodes = mainPackage[0].getElementsByTagName('array')
+        if self.arrays:
+            for row in range(0, self.package_table.rowCount()):
+                self.package_table.removeRow(0)
+                self.arrays.pop(0)
+                self.arrays_names.pop(0)
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        try:
+            root = minidom.parse(mainPackageDir)
+            HDLGen = root.documentElement
+            hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+            mainPackage = hdlDesign[0].getElementsByTagName("mainPackage")
+            array_nodes = mainPackage[0].getElementsByTagName('array')
 
-        for i in range(0, len(array_nodes)):
-            name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
-            depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
-            width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
-            sigType = array_nodes[i].getElementsByTagName('signalType')[0].firstChild.data
-            self.arrays_names.append(name)
+            for i in range(0, len(array_nodes)):
+                name = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
+                depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
+                width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+                sigType = array_nodes[i].getElementsByTagName('signalType')[0].firstChild.data
+                self.arrays_names.append(name)
 
-            loaded_array_data = [
-                name,
-                depth,
-                width,
-                sigType
-            ]
+                loaded_array_data = [
+                    name,
+                    depth,
+                    width,
+                    sigType
+                ]
 
-            delete_btn = QPushButton()
-            delete_btn.setIcon(qta.icon("mdi.delete"))
-            delete_btn.setFixedSize(35, 22)
-            delete_btn.clicked.connect(self.delete_clicked)
+                delete_btn = QPushButton()
+                delete_btn.setIcon(qta.icon("mdi.delete"))
+                delete_btn.setFixedSize(35, 22)
+                delete_btn.clicked.connect(self.delete_clicked)
 
-            edit_btn = QPushButton()
-            edit_btn.setIcon(qta.icon("mdi.pencil"))
-            edit_btn.setFixedSize(35, 22)
-            edit_btn.clicked.connect(self.edit_package)
+                edit_btn = QPushButton()
+                edit_btn.setIcon(qta.icon("mdi.pencil"))
+                edit_btn.setFixedSize(35, 22)
+                edit_btn.clicked.connect(self.edit_package)
 
-            self.package_table.insertRow(i)
-            self.package_table.setRowHeight(i, 5)
-            depth = QTableWidgetItem(loaded_array_data[1])
-            depth.setTextAlignment(Qt.AlignCenter)
-            width = QTableWidgetItem(loaded_array_data[2])
-            width.setTextAlignment(Qt.AlignCenter)
-            self.package_table.setItem(i, 0, QTableWidgetItem(loaded_array_data[0]))
-            self.package_table.setItem(i, 1, depth)
-            self.package_table.setItem(i, 2, width)
-            self.package_table.setItem(i, 3, QTableWidgetItem(loaded_array_data[3]))
-            self.package_table.setCellWidget(i, 4, edit_btn)
-            self.package_table.setCellWidget(i, 5, delete_btn)
-            self.arrays.append(loaded_array_data)
+                self.package_table.insertRow(i)
+                self.package_table.setRowHeight(i, 5)
+                depth = QTableWidgetItem(loaded_array_data[1])
+                depth.setTextAlignment(Qt.AlignCenter)
+                width = QTableWidgetItem(loaded_array_data[2])
+                width.setTextAlignment(Qt.AlignCenter)
+                self.package_table.setItem(i, 0, QTableWidgetItem(loaded_array_data[0]))
+                self.package_table.setItem(i, 1, depth)
+                self.package_table.setItem(i, 2, width)
+                self.package_table.setItem(i, 3, QTableWidgetItem(loaded_array_data[3]))
+                self.package_table.setCellWidget(i, 4, edit_btn)
+                self.package_table.setCellWidget(i, 5, delete_btn)
+                self.arrays.append(loaded_array_data)
+        except:
+            print("")

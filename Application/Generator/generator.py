@@ -82,6 +82,8 @@ class Generator(QWidget):
         stateTypesList = ""
         gen_int_sig = ""
         gen_internal_signal_result = ""
+        portSignals=[]
+        internalSignals=[]
         arrayList=[]
         single_bitList=[]
         busList=[]
@@ -102,6 +104,7 @@ class Generator(QWidget):
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
                 name = signal.getElementsByTagName('name')[0].firstChild.data
+                portSignals.append(name)
                 type = signal.getElementsByTagName('type')[0].firstChild.data
                 if type[0:6] == "array,":
                     type = type.split(",")
@@ -162,6 +165,7 @@ class Generator(QWidget):
                     gen_int_sig += "\n" + stateType_syntax
                 for signal in int_sig_node[0].getElementsByTagName("signal"):
                     name = signal.getElementsByTagName('name')[0].firstChild.data
+                    internalSignals.append(name)
                     type = signal.getElementsByTagName('type')[0].firstChild.data
 
                     if type == "Enumerated type state signal pair(NS/CS)":
@@ -334,6 +338,8 @@ class Generator(QWidget):
                                         value = "(others => '1')"
                                     else:
                                         value = str(1)
+                                elif value in portSignals or value in internalSignals:
+                                    value = value
                                 #elif value.isdigit():
                                     #if value == "1" or value == "0":
                                         #value = "'" + value + "'"
@@ -757,16 +763,19 @@ class Generator(QWidget):
         tb_file_name = self.entity_name + "_TB"
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", comp)
-        wd = os.getcwd()
-        wd = wd.replace("\\","/")
-        mainPackagePath = "add_files -norecurse  "+ wd
-        mainPackagePath = mainPackagePath.replace("Application","Package/mainPackage.vhd")
+        #wd = os.getcwd()
+        #wd = wd.replace("\\","/")
+        mainPackagePath = "add_files -norecurse  "
+        #mainPackagePath = mainPackagePath.replace("Application","Package/mainPackage.vhd")
+        mainPackagePath = mainPackagePath + ProjectManager.get_proj_environment() + "/Package/mainPackage.vhd"
+        mainPackagePath = mainPackagePath.replace("\\", "/")
         #if self.includeArrays == True:
         tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
         #else:
             #tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","")
         files=""
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -823,14 +832,16 @@ class Generator(QWidget):
         tcl_quartus_code = tcl_quartus_code.replace("$comp_name", comp)
         wd = os.getcwd()
         wd = wd.replace("\\", "/")
-        #mainPackagePath = "add_files -norecurse  " + wd
-        #mainPackagePath = mainPackagePath.replace("Application", "Package/mainPackage.vhd")
+        mainPackagePath = "add_files -norecurse  " #+ wd
+        mainPackagePath = mainPackagePath + ProjectManager.get_proj_environment() + "/Package/mainPackage.vhd"
+        mainPackagePath = mainPackagePath.replace("\\", "/")
         # if self.includeArrays == True:
         #tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage", mainPackagePath)
         # else:
         # tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage","")
         files = ""
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "/Package/MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1225,7 +1236,7 @@ class Generator(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.note = tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n---")
+            self.note = self.note.replace("&#10;", "\n")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")
@@ -1291,7 +1302,8 @@ class Generator(QWidget):
         # Parsing the xml file
         vhdl_database = minidom.parse(vhdl_database_path)
         vhdl_root = vhdl_database.documentElement
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1337,8 +1349,9 @@ class Generator(QWidget):
 
         array_vhdl_code = array_vhdl_code.replace("$Component", comp)
         # Creating arrayPackage file
-        array_vhdl_file_path = os.getcwd()
-        array_vhdl_file_path = array_vhdl_file_path.replace("Application","Package\MainPackage.vhd",)
+        #array_vhdl_file_path = os.getcwd()
+        #array_vhdl_file_path = array_vhdl_file_path.replace("Application","Package\MainPackage.vhd",)
+        array_vhdl_file_path = ProjectManager.get_proj_environment() + "\Package\MainPackage.vhd"
         print(array_vhdl_file_path)
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
@@ -1384,9 +1397,12 @@ class Generator(QWidget):
         self.includeArrays = False
         portSignals=[]
         internalSignals=[]
+        portNames=[]
+        internalnames=[]
         instances = []
         stateTypeSig = False
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1403,6 +1419,7 @@ class Generator(QWidget):
 
                 portData=[name,type,mode]
                 portSignals.append(portData)
+                portNames.append(name)
                 if type == "single bit":
                     single_bitList.append(name)
                     type = ""
@@ -1513,6 +1530,7 @@ class Generator(QWidget):
                     type = signal.getElementsByTagName('type')[0].firstChild.data
                     internalData = [name, type]
                     internalSignals.append(internalData)
+                    internalnames.append(name)
                     if type == "Enumerated type state signal pair(NS/CS)":
                         type = ""
                         if name[0:2] == "CS":
@@ -1709,6 +1727,8 @@ class Generator(QWidget):
                                         value = str(size) + "'b0"
                                     else:
                                         value = str(0)
+                                elif value in portNames or value in internalnames:
+                                    value = value
                                 #elif value.isdigit():
                                     #size = len(value)
                                     #value = str(size) + "'b" + value
@@ -1899,14 +1919,6 @@ class Generator(QWidget):
                                     while match:
                                         notes = notes.replace(match.group(), match.group(1) + match.group(3) + "]")
                                         match = re.search(pattern2, notes)
-                                    #pattern2 = r"(\d+)'b"
-                                    #match = re.search(pattern2, notes)
-                                    #while match:
-                                        #modified_match = ""
-                                        #if match.start() > 0 and notes[match.start() - 1].isdigit():
-                                            #modified_match = match.group(1)
-                                        #notes = notes[:match.start()] + modified_match + notes[match.end():]
-                                        #match = re.search(pattern2, notes)
                                     notes = notes.replace("'", "_")
                                     #pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'  # r'\[?(\w+)\s*,\s*(\w+)\]?'
                                     pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
@@ -2147,7 +2159,8 @@ class Generator(QWidget):
         header_node = hdl_design[0].getElementsByTagName("header")
         comp_node = header_node[0].getElementsByTagName("compName")[0]
         entity_name = comp_node.firstChild.data
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -2231,8 +2244,8 @@ class Generator(QWidget):
                         if typeName == type[1]:
                             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
-                    arrayInfo=[name,depth,width]
-                    arrayList.append(arrayInfo)
+                        arrayInfo=[name,depth,width]
+                        arrayList.append(arrayInfo)
                     bits = int(width)*int(depth)-1
                     type = "array"
                     size = "[" + str(bits) + ":0]"
@@ -2435,7 +2448,7 @@ class Generator(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.note = tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n///")
+            self.note = self.note.replace("&#10;", "\n")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")

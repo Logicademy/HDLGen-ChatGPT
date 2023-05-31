@@ -31,12 +31,15 @@ class ProjectManager(QWidget):
         super().__init__()
         ProjectManager.proj_dir = None
         ProjectManager.proj_name = None
+        ProjectManager.proj_enviro = None
         self.info = ""
+        self.startApp = True
         #ProjectManager.hdl = None
         ProjectManager.vivado_bat_path = None
         ProjectManager.intel_exe_path = None
         self.MainWindow = MainWindow
         ProjectManager.xml_data_path = None
+        ProjectManager.package_xml_data_path = None
 
         # Initializing Widgets
 
@@ -62,15 +65,24 @@ class ProjectManager(QWidget):
 
         self.name_label = QLabel('Project Name*')
         self.name_label.setStyleSheet("color: white;")
+        self.enviro_label = QLabel('Project Environment*')
+        self.enviro_label.setStyleSheet("color: white;")
         self.dir_label = QLabel('Project Directory*')
         self.dir_label.setStyleSheet("color: white;")
         self.proj_folder_input = QLineEdit()
+        self.proj_enviro_input = QLineEdit()
         self.proj_name_input = QLineEdit()
         self.proj_folder_btn = QPushButton("Browse")
         self.proj_folder_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+        self.proj_enviro_btn = QPushButton("Browse")
+        self.proj_enviro_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         self.proj_folder_btn.setFixedSize(50, 22)
+        self.proj_enviro_btn.setFixedSize(50, 22)
+
         self.copy_proj_btn = QPushButton("Copy project")
         self.copy_proj_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
@@ -200,6 +212,7 @@ class ProjectManager(QWidget):
             self.load_proj_data(proj_dir)
         else:
             self.fill_default_proj_details()
+        self.startApp=False
 
     def setup_ui(self):
         #self.projSettingLayout.addWidget(self.proj_setting_title)
@@ -210,16 +223,23 @@ class ProjectManager(QWidget):
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 3)
         self.projDetailIpLayout.addWidget(self.copy_proj_btn, 1, 3, 1, 1, Qt.AlignRight)
-        self.projDetailIpLayout.addWidget(self.dir_label, 2, 0, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_folder_input, 3, 0, 1, 3)
-        self.projDetailIpLayout.addWidget(self.proj_folder_btn, 3, 3, 1, 1, Qt.AlignRight)
-        self.projDetailIpLayout.addWidget(self.proj_info_label, 4, 0, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_info_link, 4, 1, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_info_addlink, 4, 2, 1, 1)
+        self.projDetailIpLayout.addWidget(self.enviro_label, 2, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_enviro_input, 3, 0, 1, 3)
+        self.projDetailIpLayout.addWidget(self.proj_enviro_btn, 3, 3, 1, 1, Qt.AlignRight)
+
+        self.projDetailIpLayout.addWidget(self.dir_label, 4, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_folder_input, 5, 0, 1, 3)
+        self.projDetailIpLayout.addWidget(self.proj_folder_btn, 5, 3, 1, 1, Qt.AlignRight)
+        self.projDetailIpLayout.addWidget(self.proj_info_label, 6, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_link, 6, 1, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_addlink, 6, 2, 1, 1)
         self.projSettingLayout.addLayout(self.projDetailIpLayout)
 
         self.proj_name_input.textChanged.connect(self.proj_detail_change)
+        self.proj_enviro_input.textChanged.connect(self.proj_detail_change)
         self.proj_folder_input.textChanged.connect(self.proj_detail_change)
+        self.proj_folder_input.textChanged.connect(self.proj_folder_change)
+
         self.copy_proj_btn.clicked.connect(self.copy_project)
 
         self.projSettingFrame.setFrameShape(QFrame.StyledPanel)
@@ -305,6 +325,7 @@ class ProjectManager(QWidget):
 
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
+        self.proj_enviro_btn.clicked.connect(self.set_proj_environment)
         self.vivado_select_dir.clicked.connect(self.get_vivado_dir)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
         self.proj_info_link.clicked.connect(self.openLink)
@@ -322,8 +343,11 @@ class ProjectManager(QWidget):
 
         path = Path(os.getcwd())
         parent_path = path.parent.absolute()
+        self.proj_enviro = os.path.join(parent_path, "User_Projects")
         self.proj_dir = os.path.join(parent_path, "User_Projects")
+        #self.proj_dir = #"User_Projects"
         self.proj_folder_input.setText(self.proj_dir)
+        self.proj_enviro_input.setText(self.proj_enviro)
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
@@ -335,16 +359,50 @@ class ProjectManager(QWidget):
             ProjectManager.proj_name = self.proj_name_input.text()
             # Getting project location from the text field
             ProjectManager.proj_dir = self.proj_folder_input.text() + "/"
-
+            ProjectManager.proj_dir=ProjectManager.proj_dir.replace("\\", "/")
+            ProjectManager.proj_enviro = self.proj_enviro_input.text()
+            ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
             ProjectManager.xml_data_path = self.proj_dir + self.proj_name + "/" + "HDLGenPrj" + "/" + self.proj_name + ".hdlgen"
+            ProjectManager.xml_data_path = ProjectManager.xml_data_path.replace("\\", "/")
+            ProjectManager.package_xml_data_path = self.proj_enviro + "\Package\mainPackage.hdlgen"
+            ProjectManager.package_xml_data_path = ProjectManager.package_xml_data_path.replace("\\", "/")
 
             self.proj_save_btn.setEnabled(True)
         else:
             self.proj_save_btn.setEnabled(False)
 
+    def proj_folder_change(self):
+        if self.startApp != True:
+            if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
+                print(ProjectManager.proj_enviro)
+                while not ProjectManager.proj_enviro in self.proj_folder_input.text():
+                    msgBox = QMessageBox()
+                    msgBox.setWindowTitle("Alert")
+                    msgBox.setText(
+                        "Project Folder is not in Project Environment. Do you want to change Project Environment or Project Folder")
+                    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+                    msgBox.setDefaultButton(QMessageBox.No)
+                    msgBox.setButtonText(QMessageBox.Yes, "Environment")
+                    msgBox.setButtonText(QMessageBox.No, "Folder")
+                    choice = msgBox.exec()
+                    if choice == QMessageBox.Yes:
+                        self.set_proj_environment()
+                    else:
+                        self.set_proj_dir()
+
+                    self.proj_save_btn.setEnabled(True)
+            else:
+                self.proj_save_btn.setEnabled(False)
+
+
+
     @staticmethod
     def get_xml_data_path():
         return ProjectManager.xml_data_path
+
+    @staticmethod
+    def get_package_xml_data_path():
+        return ProjectManager.package_xml_data_path
 
     @staticmethod
     def get_proj_name():
@@ -357,6 +415,7 @@ class ProjectManager(QWidget):
     def set_proj_dir(self):
         ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         if ProjectManager.proj_dir:
+            ProjectManager.proj_dir = ProjectManager.proj_dir.replace("\\", "/")
             self.proj_folder_input.setText(ProjectManager.proj_dir)
 
     def get_vivado_dir(self):
@@ -369,6 +428,16 @@ class ProjectManager(QWidget):
     def get_vivado_bat_path():
         return ProjectManager.vivado_bat_path
 
+    @staticmethod
+    def get_proj_environment():
+        return ProjectManager.proj_enviro
+    def set_proj_environment(self):
+        ProjectManager.proj_enviro = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", self.proj_enviro)
+        if ProjectManager.proj_enviro:
+            ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
+            self.proj_enviro_input.setText(ProjectManager.proj_enviro)
+           # self.proj_folder_input.setText(os.path.basename(os.path.normpath(ProjectManager.proj_enviro)))
+            self.proj_folder_input.setText(ProjectManager.proj_enviro)
     def get_intel_dir(self):
         ProjectManager.intel_exe_path = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
         ProjectManager.intel_exe_path = ProjectManager.intel_exe_path[0]
@@ -388,6 +457,17 @@ class ProjectManager(QWidget):
         print("Saving project details at ", xml_data_dir)
 
         temp_xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
+
+        # Creating XML doc
+        rootPack = minidom.Document()
+        # Creating XML top Element
+        HDLGen_data_pack = rootPack.createElement('HDLGen')
+        rootPack.appendChild(HDLGen_data_pack)
+        # Creating hdlDesign tag
+        hdlDesign_data_pack= rootPack.createElement('hdlDesign')
+        HDLGen_data_pack.appendChild(hdlDesign_data_pack)
+        hdlDesign_data_pack.appendChild(rootPack.createElement('mainPackage'))
+        hdlDesign_data_pack.appendChild(rootPack.createElement('components'))
 
         # Creating XML doc
         root = minidom.Document()
@@ -410,15 +490,18 @@ class ProjectManager(QWidget):
         projectManager_data.appendChild(settings_data)
         # Creating name and location elements to settings
         project_name = root.createElement('name')
+        project_env = root.createElement('environment')
         project_loc = root.createElement('location')
         project_info = root.createElement('info')
         # Inserting project name to the name element
         project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
+        project_env.appendChild(root.createTextNode(ProjectManager.proj_enviro))
         # Inserting project location to the location element
         project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir[:-1]))
         project_info.appendChild(root.createTextNode(self.info))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
+        settings_data.appendChild(project_env)
         settings_data.appendChild(project_loc)
         settings_data.appendChild(project_info)
 
@@ -609,7 +692,15 @@ class ProjectManager(QWidget):
                 f.write(xml_str)
 
         ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
-
+        ProjectManager.package_xml_data_path = ProjectManager.proj_enviro + "\Package\mainPackage.hdlgen"
+        if not os.path.exists(ProjectManager.package_xml_data_path):
+            if not os.path.exists(ProjectManager.proj_enviro + "\Package\\"):
+                print("here")
+                os.makedirs(ProjectManager.proj_enviro + "\Package\\")
+            # converting the doc into a string in xml format
+            package_xml_str = rootPack.toprettyxml(indent="\t")
+            with open(ProjectManager.package_xml_data_path, "w") as f:
+                f.write(package_xml_str)
         print("Successfully saved!")
 
     def close_project(self):
@@ -621,6 +712,14 @@ class ProjectManager(QWidget):
         self.window.show()
         #self.window.showMaximized()
         print("Project Closed!")
+
+    def find_project_folder_directory(self, dir, enviro):
+        while dir != os.path.dirname(dir):
+            if os.path.basename(dir) == enviro:
+                return dir
+            dir = os.path.dirname(dir)
+        return None
+
 
     def load_proj_data(self, load_proj_dir):
 
@@ -636,6 +735,7 @@ class ProjectManager(QWidget):
         settings = project_Manager[0].getElementsByTagName("settings")[0]
 
         proj_name = settings.getElementsByTagName("name")[0].firstChild.data
+        proj_env = settings.getElementsByTagName("environment")[0].firstChild.data
         proj_loc = settings.getElementsByTagName("location")[0].firstChild.data
         proj_info = settings.getElementsByTagName("info")[0].firstChild.data
 
@@ -655,11 +755,27 @@ class ProjectManager(QWidget):
             # Writing xml file
             with open(load_proj_dir[0], "w") as f:
                 f.write(xml_str)
+            new_proj_env = os.path.basename(os.path.normpath(proj_env))
+            print(new_proj_env)
+
+            # Split the string into individual directory components
+            directories = new_proj_loc.split("/")
+
+            # Find the index of the last occurrence of "User_Projects" in the directories list
+            index = len(directories) - 1 - directories[::-1].index(new_proj_env)
+
+            # Reconstruct the directory path by joining the components until the "User_Projects" folder
+            new_proj_env = "/".join(directories[:index + 1])
+
+            if new_proj_env is None:
+                new_proj_env = new_proj_loc
 
             proj_loc = new_proj_loc
+            proj_env = new_proj_env
 
 
         self.proj_name_input.setText(proj_name)
+        self.proj_enviro_input.setText(proj_env)
         self.proj_folder_input.setText(proj_loc)
         self.info=proj_info
         if self.info!="None":

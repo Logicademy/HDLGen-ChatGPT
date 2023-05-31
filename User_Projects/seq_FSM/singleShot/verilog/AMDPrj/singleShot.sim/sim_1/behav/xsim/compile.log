@@ -1,4 +1,0 @@
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/singleShot/verilog/model/singleShot.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module singleShot
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/singleShot/verilog/testbench/singleShot_TB.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module singleShot_TB

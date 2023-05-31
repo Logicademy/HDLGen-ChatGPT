@@ -15,7 +15,7 @@ WHITE_COLOR = "color: white"
 class InstanceDialog(QDialog):
     def __init__(self, add_or_edit, instanceNames, instance_data = None):
         super().__init__()
-
+        print(instanceNames)
         if add_or_edit == "add":
             self.setWindowTitle("New instance")
         elif add_or_edit == "edit":
@@ -286,7 +286,8 @@ class InstanceDialog(QDialog):
     def load_data(self):
         self.comps = []
         self.comps_names = []
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")

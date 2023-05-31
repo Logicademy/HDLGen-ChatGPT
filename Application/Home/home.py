@@ -51,7 +51,7 @@ class Home(QMainWindow):
 
 
     def setup_ui(self):
-
+        print(self.proj_dir)
         load_data = False
 
         if self.proj_dir is not None:
@@ -147,6 +147,15 @@ class Home(QMainWindow):
     def handle_tab_change(self, index):
         if index != 0:
             self.project_manager.save_xml()
+            self.hdl_designer.package.load_data()
+            self.hdl_designer.subcomponents.load_data()
+            self.hdl_designer.compDetails.save_data()
+            self.hdl_designer.compDetails.save_data()
+            self.hdl_designer.ioPorts.save_data()
+            self.hdl_designer.architecture.save_data()
+            self.hdl_designer.chatGPT.save_data()
+            self.hdl_designer.internalSignal.save_data()
+
 
 
 
