@@ -372,16 +372,22 @@ class Generator(QWidget):
                                     value = value.replace(":", " downto ")
                                     value = value.replace("'", "")
                                     value = re.sub(r'\s+', ' ', value)
-                                    pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+
+                                    #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    pattern = r'(?<!downto\s)(?<!\d)([01]+)(?!\d)(?!\s*downto)'
                                     value = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
                                         m.group(1)) == 1 else f'"{m.group(1)}"', value)
-                                                                        # pattern1 = r"\((['\"])(\d+)\1\)"
+                                                                      # pattern1 = r"\((['\"])(\d+)\1\)"
                                     pattern1 = r"(\(|\w+)(['\"])(\d+)\2\)"
                                     match = re.search(pattern1, value)
                                     while match:
-                                        # notes = notes.replace(match.group(), "(" + match.group(2) + ")")
                                         value = value.replace(match.group(), match.group(1) + match.group(3) + ")")
                                         match = re.search(pattern1, value)
+                                    pattern2 = r"[^\s]+['\"]\d+['\"]"
+                                    value = re.sub(pattern2,
+                                                    lambda match: match.group(0).replace("'", "").replace('"', ""),
+                                                    value)
+
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
                                 gen_defaults += assign_syntax + "-- Default assignment \n\t"
@@ -511,7 +517,9 @@ class Generator(QWidget):
                                     #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
                                     #notes = re.sub(pattern, r'"\1"', notes)
 
-                                    pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    pattern = r'(?<!downto\s)(?<!\d)([01]+)(?!\d)(?!\s*downto)'
+
                                     notes = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
                                         m.group(1)) == 1 else f'"{m.group(1)}"', notes)
 
@@ -522,7 +530,10 @@ class Generator(QWidget):
                                         #notes = notes.replace(match.group(), "(" + match.group(2) + ")")
                                         notes = notes.replace(match.group(), match.group(1) + match.group(3) + ")")
                                         match = re.search(pattern1, notes)
-
+                                    pattern2 = r"[^\s]+['\"]\d+['\"]"
+                                    notes = re.sub(pattern2,
+                                                   lambda match: match.group(0).replace("'", "").replace('"', ""),
+                                                   notes)
                                     note_syntax = vhdl_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
                                                                       child.getElementsByTagName("label")[
@@ -637,6 +648,35 @@ class Generator(QWidget):
                     chatgpt_vhdl += "\n\n" + gen_entity + "\n\n"
                     gen_vhdl += gen_arch
                     chatgpt_vhdl += gen_arch
+                    gen_vhdl = gen_vhdl.replace("&#10;", "\n")
+                    gen_vhdl = gen_vhdl.replace("&amp;", "&")
+                    gen_vhdl = gen_vhdl.replace("&amp;", "&")
+                    gen_vhdl = gen_vhdl.replace("&quot;", "\"")
+                    gen_vhdl = gen_vhdl.replace("&apos;", "\'")
+                    gen_vhdl = gen_vhdl.replace("&lt;", "<")
+                    gen_vhdl = gen_vhdl.replace("&#x9;", "\t")
+                    gen_vhdl = gen_vhdl.replace("&gt;", ">")
+                    gen_vhdl = gen_vhdl.replace("&#44;", ",")
+
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&#10;", "\n")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&amp;", "&")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&amp;", "&")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&quot;", "\"")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&apos;", "\'")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&lt;", "<")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&#x9;", "\t")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&gt;", ">")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&#44;", ",")
+
+                    chatgpt_header = chatgpt_header.replace("&#10;", "\n")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&quot;", "\"")
+                    chatgpt_header = chatgpt_header.replace("&apos;", "\'")
+                    chatgpt_header = chatgpt_header.replace("&lt;", "<")
+                    chatgpt_header = chatgpt_header.replace("&#x9;", "\t")
+                    chatgpt_header = chatgpt_header.replace("&gt;", ">")
+                    chatgpt_header = chatgpt_header.replace("&#44;", ",")
 
         return entity_name, gen_vhdl, instances, chatgpt_header, chatgpt_vhdl
 
@@ -1223,6 +1263,7 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     tb_code += gen_arch
+
                     #chatgpt_tb += gen_arch
         return entity_name, tb_code, wcfg, chatgpt_tb
 
@@ -1352,7 +1393,6 @@ class Generator(QWidget):
         #array_vhdl_file_path = os.getcwd()
         #array_vhdl_file_path = array_vhdl_file_path.replace("Application","Package\MainPackage.vhd",)
         array_vhdl_file_path = ProjectManager.get_proj_environment() + "\Package\MainPackage.vhd"
-        print(array_vhdl_file_path)
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
             f.write(array_vhdl_code)
@@ -1759,8 +1799,8 @@ class Generator(QWidget):
                                         value = value.replace("downto", ":")
                                         value = value.replace("'", "")
 
-                                        pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
-
+                                        #pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+                                        pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
                                         value = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
                                             m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", value)
                                         # value = re.sub(r'\s+', '', value)
@@ -1775,6 +1815,11 @@ class Generator(QWidget):
                                         while match:
                                             value = value.replace(match.group(), match.group(1) + match.group(3) + "]")
                                             match = re.search(pattern2, value)
+                                        pattern3 = r"(\w+)(\d+'b)(\d+)"
+                                        match = re.search(pattern3, value)
+                                        while match:
+                                            value = value.replace(match.group(), match.group(1) + match.group(3) )
+                                            match = re.search(pattern3, value)
 
                                         value = value.replace("'", "_")
                                         #pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
@@ -1906,8 +1951,8 @@ class Generator(QWidget):
                                     notes = notes.replace("}", "]")
                                     notes = notes.replace("downto",":")
                                     notes = notes.replace("'","")
-                                    pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
-
+                                    #pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+                                    pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
 
                                     notes = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
                                         m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", notes)
@@ -1919,6 +1964,11 @@ class Generator(QWidget):
                                     while match:
                                         notes = notes.replace(match.group(), match.group(1) + match.group(3) + "]")
                                         match = re.search(pattern2, notes)
+                                    pattern3 = r"(\w+)(\d+'b)(\d+)"
+                                    match = re.search(pattern3, notes)
+                                    while match:
+                                        notes = notes.replace(match.group(), match.group(1) + match.group(3))
+                                        match = re.search(pattern3, notes)
                                     notes = notes.replace("'", "_")
                                     #pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'  # r'\[?(\w+)\s*,\s*(\w+)\]?'
                                     pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
@@ -2039,6 +2089,35 @@ class Generator(QWidget):
                     chatgpt_verilog +=  gen_entity + "\n\n"
                     # Entity Section placement
                     gen_verilog +=  gen_entity + "\n\n"
+                    gen_verilog = gen_verilog.replace("&#10;", "\n")
+                    gen_verilog = gen_verilog.replace("&amp;", "&")
+                    gen_verilog = gen_verilog.replace("&amp;", "&")
+                    gen_verilog = gen_verilog.replace("&quot;", "\"")
+                    gen_verilog = gen_verilog.replace("&apos;", "\'")
+                    gen_verilog = gen_verilog.replace("&lt;", "<")
+                    gen_verilog = gen_verilog.replace("&#x9;", "\t")
+                    gen_verilog = gen_verilog.replace("&gt;", ">")
+                    gen_verilog = gen_verilog.replace("&#44;", ",")
+
+                    chatgpt_header = chatgpt_header.replace("&#10;", "\n")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&quot;", "\"")
+                    chatgpt_header = chatgpt_header.replace("&apos;", "\'")
+                    chatgpt_header = chatgpt_header.replace("&lt;", "<")
+                    chatgpt_header = chatgpt_header.replace("&#x9;", "\t")
+                    chatgpt_header = chatgpt_header.replace("&gt;", ">")
+                    chatgpt_header = chatgpt_header.replace("&#44;", ",")
+
+                    chatgpt_verilog = chatgpt_verilog.replace("&#10;", "\n")
+                    chatgpt_verilog = chatgpt_verilog.replace("&amp;", "&")
+                    chatgpt_verilog = chatgpt_verilog.replace("&amp;", "&")
+                    chatgpt_verilog = chatgpt_verilog.replace("&quot;", "\"")
+                    chatgpt_verilog = chatgpt_verilog.replace("&apos;", "\'")
+                    chatgpt_verilog = chatgpt_verilog.replace("&lt;", "<")
+                    chatgpt_verilog = chatgpt_verilog.replace("&#x9;", "\t")
+                    chatgpt_verilog = chatgpt_verilog.replace("&gt;", ">")
+                    chatgpt_verilog = chatgpt_verilog.replace("&#44;", ",")
 
         return entity_name, gen_verilog, instances, chatgpt_header, chatgpt_verilog
 
@@ -2238,6 +2317,8 @@ class Generator(QWidget):
                     size = ""
                     type = "logic"
                 else:
+                    depth=0
+                    width=0
                     type = type.split(",")
                     for i in range(0, len(array_nodes)):
                         typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data

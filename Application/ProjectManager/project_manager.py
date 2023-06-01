@@ -67,7 +67,7 @@ class ProjectManager(QWidget):
         self.name_label.setStyleSheet("color: white;")
         self.enviro_label = QLabel('Project Environment*')
         self.enviro_label.setStyleSheet("color: white;")
-        self.dir_label = QLabel('Project Directory*')
+        self.dir_label = QLabel('Project Folder*')
         self.dir_label.setStyleSheet("color: white;")
         self.proj_folder_input = QLineEdit()
         self.proj_enviro_input = QLineEdit()
@@ -326,6 +326,7 @@ class ProjectManager(QWidget):
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
         self.proj_enviro_btn.clicked.connect(self.set_proj_environment)
+        self.proj_enviro_btn.clicked.connect(self.proj_enviro_change)
         self.vivado_select_dir.clicked.connect(self.get_vivado_dir)
         self.intel_select_dir.clicked.connect(self.get_intel_dir)
         self.proj_info_link.clicked.connect(self.openLink)
@@ -351,10 +352,15 @@ class ProjectManager(QWidget):
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
-
+    def proj_enviro_change(self):
+        if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file and will result in inncorrect HDL. You need to re add them in Types and Subcomponent tabs")
+            msgBox.exec_()
     def proj_detail_change(self):
 
-        if self.proj_name_input.text() != "" and self.proj_folder_input.text() != "":
+        if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             # Getting project name from the text field
             ProjectManager.proj_name = self.proj_name_input.text()
             # Getting project location from the text field
@@ -366,15 +372,14 @@ class ProjectManager(QWidget):
             ProjectManager.xml_data_path = ProjectManager.xml_data_path.replace("\\", "/")
             ProjectManager.package_xml_data_path = self.proj_enviro + "\Package\mainPackage.hdlgen"
             ProjectManager.package_xml_data_path = ProjectManager.package_xml_data_path.replace("\\", "/")
-
             self.proj_save_btn.setEnabled(True)
+
         else:
             self.proj_save_btn.setEnabled(False)
 
     def proj_folder_change(self):
         if self.startApp != True:
             if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
-                print(ProjectManager.proj_enviro)
                 while not ProjectManager.proj_enviro in self.proj_folder_input.text():
                     msgBox = QMessageBox()
                     msgBox.setWindowTitle("Alert")
@@ -695,7 +700,6 @@ class ProjectManager(QWidget):
         ProjectManager.package_xml_data_path = ProjectManager.proj_enviro + "\Package\mainPackage.hdlgen"
         if not os.path.exists(ProjectManager.package_xml_data_path):
             if not os.path.exists(ProjectManager.proj_enviro + "\Package\\"):
-                print("here")
                 os.makedirs(ProjectManager.proj_enviro + "\Package\\")
             # converting the doc into a string in xml format
             package_xml_str = rootPack.toprettyxml(indent="\t")
@@ -756,7 +760,6 @@ class ProjectManager(QWidget):
             with open(load_proj_dir[0], "w") as f:
                 f.write(xml_str)
             new_proj_env = os.path.basename(os.path.normpath(proj_env))
-            print(new_proj_env)
 
             # Split the string into individual directory components
             directories = new_proj_loc.split("/")

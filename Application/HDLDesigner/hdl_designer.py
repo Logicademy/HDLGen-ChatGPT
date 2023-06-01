@@ -55,7 +55,6 @@ class HDLDesigner(QWidget):
         else:
             self.hdl = "VHDL"
     def setup_ui(self):
-        print(self.proj_dir)
         self.compDetails = CompDetails(self.proj_dir)
         self.ioPorts = IOPorts(self.proj_dir)
         self.architecture = Architecture(self.proj_dir)
@@ -130,8 +129,8 @@ class HDLDesigner(QWidget):
             entity_name, self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_vhdl(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_vhdl_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            self.tbnote = self.tbnote.replace("&#10;", "\n---")
-            self.tbnote = "---"+self.tbnote
+            self.tbnote = self.tbnote.replace("&#10;", "\n")
+            self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
@@ -168,8 +167,8 @@ class HDLDesigner(QWidget):
             entity_name,self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_verilog(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_verilog_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            self.tbnote = self.tbnote.replace("&#10;", "\n///")
-            self.tbnote = "///" + self.tbnote
+            self.tbnote = self.tbnote.replace("&#10;", "\n")
+            self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
