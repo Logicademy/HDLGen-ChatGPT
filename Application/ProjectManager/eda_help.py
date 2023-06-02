@@ -1,7 +1,7 @@
 import markdown as md
 from PySide2.QtWidgets import *
 
-VIVADO_HELP_DOC_FILE_PATH = "./ProjectManager/eda_help.md"
+EDA_HELP_DOC_FILE_PATH = "./ProjectManager/eda_help.md"
 
 
 class EDAHelpDialog(QDialog):
