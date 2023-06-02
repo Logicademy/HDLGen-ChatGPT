@@ -158,7 +158,7 @@ class ComponentDialog(QDialog):
         self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
     def load_component_data(self, component_data):
         self.component_name_input.setText(component_data[0])
-        self.file_path_input.setText(component_data[1])
+        self.file_path_input.setText(ProjectManager.get_proj_environment()+component_data[1])
         signals = []
         mode = []
         type = []
@@ -210,7 +210,9 @@ class ComponentDialog(QDialog):
             signals.append(signal + "," + mode + "," + type)
 
         data.append(self.component_name_input.text())
-        data.append(self.file_path_input.text())
+        dir = self.file_path_input.text()
+        dir = dir.replace(ProjectManager.get_proj_environment(),"")
+        data.append(dir)
         data.append(signals)
         self.cancelled = False
         self.close()

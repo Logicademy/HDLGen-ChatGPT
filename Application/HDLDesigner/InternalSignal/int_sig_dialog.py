@@ -161,7 +161,8 @@ class IntSignalDialog(QDialog):
         self.cancelled = True
         self.arrays = []
         self.setup_ui()
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
 
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
@@ -312,6 +313,15 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
                 i=i+1
         intSig_data[3] = intSig_data[3].replace("&#10;", "\n")
+        intSig_data[3] = intSig_data[3].replace("&amp;", "&")
+        intSig_data[3] = intSig_data[3].replace("&amp;", "&")
+        intSig_data[3] = intSig_data[3].replace("&quot;", "\"")
+        intSig_data[3] = intSig_data[3].replace("&apos;", "\'")
+        intSig_data[3] = intSig_data[3].replace("&lt;", "<")
+        intSig_data[3] = intSig_data[3].replace("&#x9;", "\t")
+        intSig_data[3] = intSig_data[3].replace("&gt;", ">")
+        intSig_data[3] = intSig_data[3].replace("&#44;", ",")
+
         self.sig_desc_input.setPlainText(intSig_data[3])
 
     def makeIdeal(self):
@@ -342,7 +352,17 @@ class IntSignalDialog(QDialog):
                         line = ""
         lines = lines.strip()
         intSignalDescription = lines
+        intSignalDescription = intSignalDescription.replace("&", "&amp;")
         intSignalDescription = intSignalDescription.replace("\n", "&#10;")
+        intSignalDescription = intSignalDescription.replace("\"", "&quot;")
+        intSignalDescription = intSignalDescription.replace("\'", "&apos;")
+        intSignalDescription = intSignalDescription.replace("\n", "&#10;")
+        intSignalDescription = intSignalDescription.replace("<", "&lt;")
+        intSignalDescription = intSignalDescription.replace("\t", "&#x9;")
+        intSignalDescription = intSignalDescription.replace(">", "&gt;")
+        intSignalDescription = intSignalDescription.replace(",", "&#44;")
+
+
         intSignalDescription = os.linesep.join([
             line for line in intSignalDescription.splitlines()
             if line.strip() != ''

@@ -1,5 +1,0 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/Application/HDLDesigner/Package/mainPackage.vhd" into library xil_defaultlib
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/singleShot/VHDL/model/singleShot.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'singleShot'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/singleShot/VHDL/testbench/singleShot_tb.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'singleShot_TB'

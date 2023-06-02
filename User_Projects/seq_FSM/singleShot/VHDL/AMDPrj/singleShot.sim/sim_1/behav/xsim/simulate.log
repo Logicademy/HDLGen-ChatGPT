@@ -1,8 +1,0 @@
-Vivado Simulator 2019.1
-Time resolution is 1 ps
-Note: %N Simulation start, time = 0 ps
-Time: 0 ps  Iteration: 0  Process: /singleShot_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/singleShot/VHDL/testbench/singleShot_tb.vhd
-Note: Assert and toggle rst
-Time: 0 ps  Iteration: 0  Process: /singleShot_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/singleShot/VHDL/testbench/singleShot_tb.vhd
-Note: %N Simulation end, time = 344000 ps
-Time: 344 ns  Iteration: 0  Process: /singleShot_TB/stim_p  File: C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/seq_FSM/singleShot/VHDL/testbench/singleShot_tb.vhd

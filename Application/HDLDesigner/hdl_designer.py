@@ -56,14 +56,13 @@ class HDLDesigner(QWidget):
             self.hdl = "VHDL"
     def setup_ui(self):
         self.compDetails = CompDetails(self.proj_dir)
-        #compDetails = CompDetails(self.proj_dir)
-        ioPorts = IOPorts(self.proj_dir)
+        self.ioPorts = IOPorts(self.proj_dir)
         self.architecture = Architecture(self.proj_dir)
-        testplan = TestPlan(self.proj_dir)
+        self.testplan = TestPlan(self.proj_dir)
         self.chatGPT = ChatGPT(self.proj_dir)
-        internalSignal = InternalSignal(self.proj_dir)
-        package = Package()
-        subcomponents = Subcomponents()
+        self.internalSignal = InternalSignal(self.proj_dir)
+        self.package = Package()
+        self.subcomponents = Subcomponents()
 
         self.preview_window.setReadOnly(True)
         self.preview_pane_layout.addWidget(self.preview_label)
@@ -71,12 +70,12 @@ class HDLDesigner(QWidget):
 
         self.tabs.addTab(self.compDetails, "Component")
         #self.tabs.addTab(compDetails, "Component")
-        self.tabs.addTab(package, "VHDL types")
-        self.tabs.addTab(subcomponents, "Sub-components")
-        self.tabs.addTab(ioPorts, "Ports")
-        self.tabs.addTab(internalSignal, "Internal Signals")
+        self.tabs.addTab(self.package, "Types")
+        self.tabs.addTab(self.subcomponents, "Sub-components")
+        self.tabs.addTab(self.ioPorts, "Ports")
+        self.tabs.addTab(self.internalSignal, "Internal Signals")
         self.tabs.addTab(self.architecture, "Architecture")
-        self.tabs.addTab(testplan, "Test Plan")
+        self.tabs.addTab(self.testplan, "Test Plan")
         self.tabs.addTab(self.chatGPT,"ChatGPT Message")
         font = self.tabs.font()
         font.setPointSize(10)
@@ -89,11 +88,11 @@ class HDLDesigner(QWidget):
         self.compDetails.save_signal.connect(self.update_preview)
         #compDetails.save_signal.connect(self.update_preview)
         #ioPorts.save_signal_btn.clicked.connect(self.update_preview)
-        ioPorts.save_signal.connect(self.update_preview)
-        ioPorts.save_signal.connect(self.update_arch)
+        self.ioPorts.save_signal.connect(self.update_preview)
+        self.ioPorts.save_signal.connect(self.update_arch)
         #ioPorts.save_signal_btn.clicked.connect(self.update_arch)
         #internalSignal.save_signal_btn.clicked.connect(self.update_preview)
-        internalSignal.save_signal.connect(self.update_preview)
+        self.internalSignal.save_signal.connect(self.update_preview)
         #self.architecture.save_btn.clicked.connect(self.update_preview)
         self.architecture.save_signal.connect(self.update_preview)
         self.chatGPT.save_signal.connect(self.update_preview)
@@ -130,8 +129,8 @@ class HDLDesigner(QWidget):
             entity_name, self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_vhdl(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_vhdl_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            self.tbnote = self.tbnote.replace("&#10;", "\n---")
-            self.tbnote = "---"+self.tbnote
+            self.tbnote = self.tbnote.replace("&#10;", "\n")
+            self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
@@ -168,8 +167,8 @@ class HDLDesigner(QWidget):
             entity_name,self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_verilog(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_verilog_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            self.tbnote = self.tbnote.replace("&#10;", "\n///")
-            self.tbnote = "///" + self.tbnote
+            self.tbnote = self.tbnote.replace("&#10;", "\n")
+            self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data

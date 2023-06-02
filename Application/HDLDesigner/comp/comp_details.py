@@ -226,7 +226,16 @@ class CompDetails(QWidget):
 
         if comp_description.count('\n') == 0:
             comp_description=self.comp_description_input.toPlainText()
+        comp_description = comp_description.replace("&", "&amp;")
         comp_description = comp_description.replace("\n", "&#10;")
+        comp_description = comp_description.replace("\"", "&quot;")
+        comp_description = comp_description.replace("\'", "&apos;")
+        comp_description = comp_description.replace("\n", "&#10;")
+        comp_description = comp_description.replace("<", "&lt;")
+        comp_description = comp_description.replace("\t", "&#x9;")
+        comp_description = comp_description.replace(">", "&gt;")
+        comp_description = comp_description.replace(",", "&#44;")
+
         if comp_description == "":
             comp_description = "To be completed"
         header[0].getElementsByTagName('description')[0].firstChild.data = comp_description
@@ -278,6 +287,14 @@ class CompDetails(QWidget):
 
         if comp_description != "null":
             comp_description = comp_description.replace("&#10;", "\n")
+            comp_description = comp_description.replace("&amp;", "&")
+            comp_description = comp_description.replace("&amp;", "&")
+            comp_description = comp_description.replace("&quot;", "\"")
+            comp_description = comp_description.replace("&apos;", "\'")
+            comp_description = comp_description.replace("&lt;", "<")
+            comp_description = comp_description.replace("&#x9;", "\t")
+            comp_description = comp_description.replace("&gt;", ">")
+            comp_description = comp_description.replace("&#44;", ",")
             self.comp_description_input.setPlainText(comp_description)
 
         if comp_name != "null":

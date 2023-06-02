@@ -1,7 +1,0 @@
-Running: xsim.dir/threshold_TB_behav/xsimk.exe -simmode gui -wdb threshold_TB_behav.wdb -simrunnum 0 -socket 51490
-Design successfully loaded
-Design Loading Memory Usage: 5932 KB (Peak: 5932 KB)
-Design Loading CPU Usage: 15 ms
-Simulation completed
-Simulation Memory Usage: 7144 KB (Peak: 7144 KB)
-Simulation CPU Usage: 31 ms

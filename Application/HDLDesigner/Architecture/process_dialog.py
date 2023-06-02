@@ -62,8 +62,8 @@ class ProcessDialog(QDialog):
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
         self.set_ce.setVisible(False)
 
-        self.add_note_btn = QPushButton("Add note")
-        self.add_note_btn.setFixedSize(80, 25)
+        self.add_note_btn = QPushButton("Add Non Default Logic")
+        self.add_note_btn.setFixedSize(150, 25)
         self.add_note_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
@@ -133,9 +133,9 @@ class ProcessDialog(QDialog):
         self.in_sig_frame.setFixedWidth(175)
 
         self.out_sig_table.setFrameStyle(QFrame.NoFrame)
-        self.out_sig_table.setColumnCount(5)
+        self.out_sig_table.setColumnCount(4)
         self.out_sig_table.setShowGrid(False)
-        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Value', ''])
+        self.out_sig_table.setHorizontalHeaderLabels(['','Output Signals', 'Default Value', 'Custom Default Value'])
         header = self.out_sig_table.horizontalHeader()
         header.setSectionsClickable(False)
         header.setSectionsMovable(False)
@@ -145,7 +145,7 @@ class ProcessDialog(QDialog):
         self.out_sig_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.out_sig_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
         #self.out_sig_table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
-        self.out_sig_table.setColumnWidth(4, 80)
+        #self.out_sig_table.setColumnWidth(4, 80)
 
         self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         vert = self.out_sig_table.verticalHeader()
@@ -466,32 +466,21 @@ class ProcessDialog(QDialog):
         default_vals = []
         clk_default_vals = []
         ce_default_vals = []
-        #notes = []
         self.process_notes = process_data[4]
         if self.process_notes != "None":
             self.add_note_btn.setText("Edit note")
         for out_sig in process_data[3]:
             temp = out_sig.split(',')
-            # fix for older projects
-            #if len(temp) == 2:
-               # temp.append("*note")
             out_sigs.append(temp[0])
             default_vals.append(temp[1])
-            #if temp[2][0:5] != "*note":
             if len(temp) == 4:
-                #if len(temp) == 3:
-                  #  temp.append("N/A")
                 clk_default_vals.append(temp[2])
                 ce_default_vals.append(temp[3])
-            #else:
-             #   notes.append(temp[2][5:])
 
         for i in range(0, self.out_sig_table.rowCount()):
-           # self.notes.append("")
             if self.out_sig_table.item(i, 1).text() in out_sigs:
                 self.out_sig_table.cellWidget(i, 2).setEnabled(True)
                 self.out_sig_table.cellWidget(i, 3).setEnabled(True)
-#                self.out_sig_table.cellWidget(i, 4).setEnabled(True)
                 if not clk_default_vals:
                    # self.notes[i] = notes[out_sigs.index(self.out_sig_table.item(i, 1).text())]
                    # if self.notes[i] != "":
@@ -603,6 +592,7 @@ class ProcessDialog(QDialog):
         combo = self.sender()
 
         if combo:
+            self.out_sig_table.indexAt(combo.pos())
             row = self.out_sig_table.indexAt(combo.pos()).row()
             if combo.currentText() == "Custom":
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)
@@ -615,18 +605,18 @@ class ProcessDialog(QDialog):
     def add_process_note(self):
         button = self.sender()
         if button:
-            if button.text() == "Edit note":
-                add_note = note_Dialog("edit","Process Note",self.process_notes)
+            if button.text() == "Edit Non Default Logic":
+                add_note = note_Dialog("edit","Process Non Default Logic",self.process_notes)
             else:
-                add_note = note_Dialog("add","Process Note")
+                add_note = note_Dialog("add","Process Non Default Logic")
             add_note.exec_()
 
             if not add_note.cancelled:
                 note_data = add_note.get_data()
                 if note_data == "":
-                    self.add_note_btn.setText("Add note")
+                    self.add_note_btn.setText("Add Non Default Logic")
                 else:
-                    self.add_note_btn.setText("Edit note")
+                    self.add_note_btn.setText("Edit Non Default Logic")
                 self.process_notes = note_data
 
     def add_ce(self):

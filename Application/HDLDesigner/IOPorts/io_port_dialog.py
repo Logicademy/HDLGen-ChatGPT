@@ -96,8 +96,8 @@ class IOPortDialog(QDialog):
         self.cancelled = True
         self.arrays=[]
         self.setup_ui()
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -167,7 +167,16 @@ class IOPortDialog(QDialog):
                         line = ""
         lines=lines.strip()
         signalDescription=lines
+        signalDescription = signalDescription.replace("&", "&amp;")
         signalDescription = signalDescription.replace("\n", "&#10;")
+        signalDescription = signalDescription.replace("\"", "&quot;")
+        signalDescription = signalDescription.replace("\'", "&apos;")
+        signalDescription = signalDescription.replace("\n", "&#10;")
+        signalDescription = signalDescription.replace("<", "&lt;")
+        signalDescription = signalDescription.replace("\t", "&#x9;")
+        signalDescription = signalDescription.replace(">", "&gt;")
+        signalDescription = signalDescription.replace(",", "&#44;")
+
         if signalDescription == "":
             signalDescription = "to be completed"
         if self.sig_type_input.currentText() == "array":
@@ -195,6 +204,15 @@ class IOPortDialog(QDialog):
         self.sig_type_input.setCurrentText(sig_type)
         self.sig_size_input.setText(signal_data[3])
         signal_data[4] = signal_data[4].replace("&#10;", "\n")
+        signal_data[4] = signal_data[4].replace("&amp;", "&")
+        signal_data[4] = signal_data[4].replace("&amp;", "&")
+        signal_data[4] = signal_data[4].replace("&quot;", "\"")
+        signal_data[4] = signal_data[4].replace("&apos;", "\'")
+        signal_data[4] = signal_data[4].replace("&lt;", "<")
+        signal_data[4] = signal_data[4].replace("&#x9;", "\t")
+        signal_data[4] = signal_data[4].replace("&gt;", ">")
+        signal_data[4] = signal_data[4].replace("&#44;", ",")
+
         self.sig_description_input.setPlainText(signal_data[4])
 
     def cancel_selected(self):

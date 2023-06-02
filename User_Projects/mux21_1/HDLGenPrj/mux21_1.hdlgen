@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>mux21_1/VHDL/model</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/ChatGPT</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/ChatGPT/HDLGen</vhdl_folder>
+		<vhdl_folder>mux21_1/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>mux21_1</name>
+			<environment>C:/Users/User/HDLGen/User_Projects</environment>
+			<location>C:/Users/User/HDLGen/User_Projects</location>
+			<info>None</info>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>mux21_1</compName>
+			<title>2-to-1 mux, 1-bit data</title>
+			<description>sel is datapath control signal&amp;#10;muxOut = muxIn0 when sel  = 0&amp;#10;muxOut = muxIn1 when sel  = 1</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>02/06/2023</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>muxIn0</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>datapath 0 input signal</description>
+			</signal>
+			<signal>
+				<name>muxIn1</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>datapath 1 input signal</description>
+			</signal>
+			<signal>
+				<name>muxOut</name>
+				<mode>out</mode>
+				<type>single bit</type>
+				<description>data out signal</description>
+			</signal>
+			<signal>
+				<name>sel</name>
+				<mode>in</mode>
+				<type>single bit</type>
+				<description>datapath select&amp;#10;0 selects muxOut = muxIn0 (default)&amp;#10;1 selects muxOut = muxIn1</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals/>
+		<architecture>
+			<archName>Combinational</archName>
+			<process>
+				<label>muxOut_p</label>
+				<inputSignal>muxIn0</inputSignal>
+				<inputSignal>muxIn1</inputSignal>
+				<inputSignal>sel</inputSignal>
+				<defaultOutput>muxOut,muxIn0</defaultOutput>
+				<note>if sel = 1 muxOut = muxIn1</note>
+			</process>
+		</architecture>
+		<testbench>
+			<TBNote>TestNo &amp;#x9;Input signals                      &amp;#x9; delay       &amp;#x9;Output signals Note&amp;#10;&amp;#x9;sel    &amp;#x9;muxIn1      &amp;#x9;muxIn0      &amp;#x9;&amp;#x9;muxOut         &amp;#x9;&amp;#10;        &amp;#x9;binary &amp;#x9;binary &amp;#x9;binary&amp;#x9;                    binary&amp;#10;1&amp;#x9;0&amp;#x9;0&amp;#x9;0&amp;#x9;(1*period)  &amp;#x9;0&amp;#x9; &amp;#10;2&amp;#x9;0&amp;#x9;0&amp;#x9;1&amp;#x9;(1*period)  &amp;#x9;1&amp;#x9;  &amp;#10;3&amp;#x9;0&amp;#x9;1&amp;#x9;0&amp;#x9;(1*period)  &amp;#x9;0&amp;#x9; &amp;#10;4&amp;#x9;0&amp;#x9;1&amp;#x9;1&amp;#x9;(1*period)  &amp;#x9;1&amp;#x9;&amp;#10;5&amp;#x9;1&amp;#x9;0&amp;#x9;0&amp;#x9;(1*period)  &amp;#x9;0&amp;#x9;datapath 1 active &amp;#10;6&amp;#x9;1&amp;#x9;0&amp;#x9;1&amp;#x9;(1*period)  &amp;#x9;0&amp;#x9;&amp;#10;7&amp;#x9;1&amp;#x9;1&amp;#x9;0&amp;#x9;(1*period)  &amp;#x9;1&amp;#x9;datapath 1 active &amp;#10;8&amp;#x9;1&amp;#x9;1&amp;#x9;1&amp;#x9;(1*period)  &amp;#x9;1</TBNote>
+		</testbench>
+		<chatgpt>
+			<commands>
+				<VHDLHeader>This is a VHDL model header section&amp;#10;Improve formatting of the signal dictionary descriptions&amp;#10;Output in a formatted code box</VHDLHeader>
+				<VerilogHeader>This is a Verilog model header section&amp;#10;Improve formatting of the signal dictionary descriptions&amp;#10;Output in a formatted code box</VerilogHeader>
+				<VHDLModel>Complete the following VHDL model&amp;#44; and output in a code box&amp;#10;For each line containing the prefix &amp;apos;---&amp;apos;&amp;#44; replace with generated VHDL code for the logic described&amp;#44; and remove the &amp;apos;---&amp;apos;&amp;#10;In VHDL processes&amp;#44; place the modified line containing suffix &amp;apos;-- Default assignment&amp;apos; immediately before the VHDL statements generated for lines containing prefix &amp;apos;---&amp;apos;&amp;#10;Do not include any assignments which duplicate the signal assignment values&amp;#44; for assignments labelled &amp;apos;-- Default assignment&amp;apos;&amp;#10;Leave all labels unchanged</VHDLModel>
+				<VerilogModel>Complete the following Verilog model&amp;#44; for always statements&amp;#44; and output in a code box&amp;#10;For each line containing the prefix &amp;apos;///&amp;apos;&amp;#44; replace with generated VHDL code for the logic described&amp;#44; and remove the &amp;apos;///&amp;apos;&amp;#10;In VHDL processes&amp;#44; place the modified line containing suffix &amp;apos;-- Default assignment&amp;apos; immediately before the VHDL statements generated for lines containing prefix &amp;apos;---&amp;apos;&amp;#10;Do not include any assignments which duplicate the signal assignment values&amp;#44; for assignments labelled &amp;apos;// Default assignment&amp;apos;&amp;#10;Leave all labels unchanged</VerilogModel>
+				<VHDLTestbench>Generate VHDL stimulus for the signal assignment sequence defined in the table&amp;#44; where the signal value in the table does not contain a &amp;apos;-&amp;apos;&amp;#10;Use the input signal radix format specified in table row 3&amp;#10;Do not output the lines containing prefix &amp;apos;---&amp;apos;&amp;#10;Each subsequent row represents a change in signal values at a particular time&amp;#44; indicated by the &amp;quot;delay&amp;quot; column&amp;#10;Include a delay by the amount (in units of signal period) in the delay column  after all of the signal assignments for each test have been applied&amp;#10;Do not add any delay statements that are not included in the table&amp;#10;Include comment&amp;#44; with the Note field at the start of each test&amp;#10;Do not include a note describing the signal input values&amp;#10;Test the output signal values in the column&amp;#44; and output a message if the test fails&amp;#10;Output stim_p process code&amp;#44; in a formatted code box  including testNo</VHDLTestbench>
+				<VerilogTestbench>Generate VERILOG stimulus for the signal assignment sequence defined in the table&amp;#44; where the signal value in the table does not contain a &amp;apos;-&amp;apos;&amp;#10;Each subsequent row represents a change in signal values at a particular time  indicated by the &amp;quot;delay&amp;quot; column.&amp;#10;Use the input signal radix format specified in table row 3&amp;#10;Do not output the lines containing prefix &amp;apos;///&amp;apos;&amp;#10;Include a &amp;quot;# (delay value)&amp;quot;&amp;#44; after the signal assignments for the row have been applied&amp;#44; with delay value = the value in the row delay column. Include the delay value in brackets.&amp;#10;Include a comment with the &amp;apos;Note&amp;apos; field&amp;#44; at the start of each test&amp;#10;Test the output signal values with the values in the &amp;apos;Output signals&amp;apos; column&amp;#44; and output a message if the test fails&amp;#10;Output the stim_p process code&amp;#44; in a formatted code box&amp;#44; including testNo</VerilogTestbench>
+			</commands>
+		</chatgpt>
+	</hdlDesign>
+</HDLGen>

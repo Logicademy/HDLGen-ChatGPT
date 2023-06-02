@@ -1,4 +1,0 @@
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_1/verilog/model/mux21_1.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module mux21_1
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/2023/vicilogic/HDLGenTop/HDLGen/User_Projects/combinational/mux21_1/verilog/testbench/mux21_1_tb.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module mux21_1_TB

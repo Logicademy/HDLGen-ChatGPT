@@ -82,6 +82,8 @@ class Generator(QWidget):
         stateTypesList = ""
         gen_int_sig = ""
         gen_internal_signal_result = ""
+        portSignals=[]
+        internalSignals=[]
         arrayList=[]
         single_bitList=[]
         busList=[]
@@ -102,6 +104,7 @@ class Generator(QWidget):
 
             for signal in io_port_node[0].getElementsByTagName('signal'):
                 name = signal.getElementsByTagName('name')[0].firstChild.data
+                portSignals.append(name)
                 type = signal.getElementsByTagName('type')[0].firstChild.data
                 if type[0:6] == "array,":
                     type = type.split(",")
@@ -162,6 +165,7 @@ class Generator(QWidget):
                     gen_int_sig += "\n" + stateType_syntax
                 for signal in int_sig_node[0].getElementsByTagName("signal"):
                     name = signal.getElementsByTagName('name')[0].firstChild.data
+                    internalSignals.append(name)
                     type = signal.getElementsByTagName('type')[0].firstChild.data
 
                     if type == "Enumerated type state signal pair(NS/CS)":
@@ -334,6 +338,8 @@ class Generator(QWidget):
                                         value = "(others => '1')"
                                     else:
                                         value = str(1)
+                                elif value in portSignals or value in internalSignals:
+                                    value = value
                                 #elif value.isdigit():
                                     #if value == "1" or value == "0":
                                         #value = "'" + value + "'"
@@ -361,19 +367,27 @@ class Generator(QWidget):
                                     value = value.replace("&#44;", ",")
                                     value = value.replace("[", "(")
                                     value = value.replace("]", ")")
+                                    value = value.replace("{", "(")
+                                    value = value.replace("}", ")")
                                     value = value.replace(":", " downto ")
                                     value = value.replace("'", "")
                                     value = re.sub(r'\s+', ' ', value)
-                                    pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+
+                                    #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    pattern = r'(?<!downto\s)(?<!\d)([01]+)(?!\d)(?!\s*downto)'
                                     value = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
                                         m.group(1)) == 1 else f'"{m.group(1)}"', value)
-                                                                        # pattern1 = r"\((['\"])(\d+)\1\)"
+                                                                      # pattern1 = r"\((['\"])(\d+)\1\)"
                                     pattern1 = r"(\(|\w+)(['\"])(\d+)\2\)"
                                     match = re.search(pattern1, value)
                                     while match:
-                                        # notes = notes.replace(match.group(), "(" + match.group(2) + ")")
                                         value = value.replace(match.group(), match.group(1) + match.group(3) + ")")
                                         match = re.search(pattern1, value)
+                                    pattern2 = r"[^\s]+['\"]\d+['\"]"
+                                    value = re.sub(pattern2,
+                                                    lambda match: match.group(0).replace("'", "").replace('"', ""),
+                                                    value)
+
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
                                 gen_defaults += assign_syntax + "-- Default assignment \n\t"
@@ -495,13 +509,17 @@ class Generator(QWidget):
                                     notes = notes.replace("&#44;", ",")
                                     notes = notes.replace("[","(")
                                     notes = notes.replace("]", ")")
+                                    notes = notes.replace("{", "(")
+                                    notes = notes.replace("}", ")")
                                     notes = notes.replace(":", " downto ")
                                     notes = notes.replace("'", "")
                                     notes = re.sub(r'\s+', ' ', notes)
                                     #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
                                     #notes = re.sub(pattern, r'"\1"', notes)
 
-                                    pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    #pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                                    pattern = r'(?<!downto\s)(?<!\d)([01]+)(?!\d)(?!\s*downto)'
+
                                     notes = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
                                         m.group(1)) == 1 else f'"{m.group(1)}"', notes)
 
@@ -512,7 +530,10 @@ class Generator(QWidget):
                                         #notes = notes.replace(match.group(), "(" + match.group(2) + ")")
                                         notes = notes.replace(match.group(), match.group(1) + match.group(3) + ")")
                                         match = re.search(pattern1, notes)
-
+                                    pattern2 = r"[^\s]+['\"]\d+['\"]"
+                                    notes = re.sub(pattern2,
+                                                   lambda match: match.group(0).replace("'", "").replace('"', ""),
+                                                   notes)
                                     note_syntax = vhdl_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
                                                                       child.getElementsByTagName("label")[
@@ -627,6 +648,35 @@ class Generator(QWidget):
                     chatgpt_vhdl += "\n\n" + gen_entity + "\n\n"
                     gen_vhdl += gen_arch
                     chatgpt_vhdl += gen_arch
+                    gen_vhdl = gen_vhdl.replace("&#10;", "\n")
+                    gen_vhdl = gen_vhdl.replace("&amp;", "&")
+                    gen_vhdl = gen_vhdl.replace("&amp;", "&")
+                    gen_vhdl = gen_vhdl.replace("&quot;", "\"")
+                    gen_vhdl = gen_vhdl.replace("&apos;", "\'")
+                    gen_vhdl = gen_vhdl.replace("&lt;", "<")
+                    gen_vhdl = gen_vhdl.replace("&#x9;", "\t")
+                    gen_vhdl = gen_vhdl.replace("&gt;", ">")
+                    gen_vhdl = gen_vhdl.replace("&#44;", ",")
+
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&#10;", "\n")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&amp;", "&")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&amp;", "&")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&quot;", "\"")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&apos;", "\'")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&lt;", "<")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&#x9;", "\t")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&gt;", ">")
+                    chatgpt_vhdl = chatgpt_vhdl.replace("&#44;", ",")
+
+                    chatgpt_header = chatgpt_header.replace("&#10;", "\n")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&quot;", "\"")
+                    chatgpt_header = chatgpt_header.replace("&apos;", "\'")
+                    chatgpt_header = chatgpt_header.replace("&lt;", "<")
+                    chatgpt_header = chatgpt_header.replace("&#x9;", "\t")
+                    chatgpt_header = chatgpt_header.replace("&gt;", ">")
+                    chatgpt_header = chatgpt_header.replace("&#44;", ",")
 
         return entity_name, gen_vhdl, instances, chatgpt_header, chatgpt_vhdl
 
@@ -753,16 +803,19 @@ class Generator(QWidget):
         tb_file_name = self.entity_name + "_TB"
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", comp)
-        wd = os.getcwd()
-        wd = wd.replace("\\","/")
-        mainPackagePath = "add_files -norecurse  "+ wd
-        mainPackagePath = mainPackagePath.replace("Application","Package/mainPackage.vhd")
+        #wd = os.getcwd()
+        #wd = wd.replace("\\","/")
+        mainPackagePath = "add_files -norecurse  "
+        #mainPackagePath = mainPackagePath.replace("Application","Package/mainPackage.vhd")
+        mainPackagePath = mainPackagePath + ProjectManager.get_proj_environment() + "/Package/mainPackage.vhd"
+        mainPackagePath = mainPackagePath.replace("\\", "/")
         #if self.includeArrays == True:
         tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
         #else:
             #tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage","")
         files=""
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -819,14 +872,16 @@ class Generator(QWidget):
         tcl_quartus_code = tcl_quartus_code.replace("$comp_name", comp)
         wd = os.getcwd()
         wd = wd.replace("\\", "/")
-        #mainPackagePath = "add_files -norecurse  " + wd
-        #mainPackagePath = mainPackagePath.replace("Application", "Package/mainPackage.vhd")
+        mainPackagePath = "add_files -norecurse  " #+ wd
+        mainPackagePath = mainPackagePath + ProjectManager.get_proj_environment() + "/Package/mainPackage.vhd"
+        mainPackagePath = mainPackagePath.replace("\\", "/")
         # if self.includeArrays == True:
         #tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage", mainPackagePath)
         # else:
         # tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage","")
         files = ""
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "/Package/MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1208,6 +1263,7 @@ class Generator(QWidget):
                     gen_arch = gen_arch.replace("$arch_elements", gen_process[:-1])
 
                     tb_code += gen_arch
+
                     #chatgpt_tb += gen_arch
         return entity_name, tb_code, wcfg, chatgpt_tb
 
@@ -1221,7 +1277,7 @@ class Generator(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.note = tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n---")
+            self.note = self.note.replace("&#10;", "\n")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")
@@ -1287,7 +1343,8 @@ class Generator(QWidget):
         # Parsing the xml file
         vhdl_database = minidom.parse(vhdl_database_path)
         vhdl_root = vhdl_database.documentElement
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1333,9 +1390,9 @@ class Generator(QWidget):
 
         array_vhdl_code = array_vhdl_code.replace("$Component", comp)
         # Creating arrayPackage file
-        array_vhdl_file_path = os.getcwd()
-        array_vhdl_file_path = array_vhdl_file_path.replace("Application","Package\MainPackage.vhd",)
-        print(array_vhdl_file_path)
+        #array_vhdl_file_path = os.getcwd()
+        #array_vhdl_file_path = array_vhdl_file_path.replace("Application","Package\MainPackage.vhd",)
+        array_vhdl_file_path = ProjectManager.get_proj_environment() + "\Package\MainPackage.vhd"
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
             f.write(array_vhdl_code)
@@ -1362,6 +1419,7 @@ class Generator(QWidget):
         gen_int_sig = ""
         gen_internal_signal_result = ""
         arrayList=[]
+        arrayListIO=[]
         arrayInfo=[]
         array_assign=""
         single_bitList=[]
@@ -1379,9 +1437,12 @@ class Generator(QWidget):
         self.includeArrays = False
         portSignals=[]
         internalSignals=[]
+        portNames=[]
+        internalnames=[]
         instances = []
         stateTypeSig = False
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1398,6 +1459,7 @@ class Generator(QWidget):
 
                 portData=[name,type,mode]
                 portSignals.append(portData)
+                portNames.append(name)
                 if type == "single bit":
                     single_bitList.append(name)
                     type = ""
@@ -1422,6 +1484,8 @@ class Generator(QWidget):
                         if typeName == type[1]:
                             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
+                    arrayListIO.append(name)
+                    arrayInfo.append([name, depth, width])
                     bits = int(width)*int(depth)-1
                     width=int(width)-1
                     depth=int(depth)-1
@@ -1435,12 +1499,12 @@ class Generator(QWidget):
                         array_assign += "assign "+name+"["+str(j)+"] = "+name+"_"+str(bits)+"["+str(top)+":"+str(low)+"];\n"
                         top = low -1
                         low = low -width -1
-                    name = name+"_"+str(bits)
+                    #name = name+"_"+str(bits)
 
 
                     self.includeArrays = True
-                    arrayList.append(name)
-                    arrayInfo.append([name, depth, width])
+                    #arrayListIO.append(name)
+                    #arrayInfo.append([name, depth, width])
                 port_declare_syntax = verilog_root.getElementsByTagName("portDeclaration")[0].firstChild.data
 
                 port_declare_syntax = port_declare_syntax.replace("$name", name)
@@ -1506,6 +1570,7 @@ class Generator(QWidget):
                     type = signal.getElementsByTagName('type')[0].firstChild.data
                     internalData = [name, type]
                     internalSignals.append(internalData)
+                    internalnames.append(name)
                     if type == "Enumerated type state signal pair(NS/CS)":
                         type = ""
                         if name[0:2] == "CS":
@@ -1662,11 +1727,26 @@ class Generator(QWidget):
                                         array_syntax=""
                                         for arr in arrayInfo:
                                             if arr[0] == signals[0]:
-                                                depth = int(arr[1])+1
+                                                depth = int(arr[1])
                                                 width = int(arr[2])
-                                                for j in range(0, depth):
-                                                    array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // Default assignment"#\n\t"
-                                                    arraySignal=True
+                                                array_syntax = "for (i=0; i<"+str(depth)+"; i++)\n\t\tbegin\n\t\t\t"+signals[0]+ "[i] <= "+str(width)+"'b0;\n\t\tend"
+                                               # for j in range(0, depth):
+                                                    #array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // Default assignment"#\n\t"
+                                                arraySignal=True
+                                    elif signals[0] in arrayListIO:
+                                        array_syntax = ""
+                                        for arr in arrayInfo:
+                                            if arr[0] == signals[0]:
+                                                depth = int(arr[1])
+                                                width = int(arr[2])
+                                                bits = depth*width
+                                                signals[0]=signals[0]+"_"+str(bits)
+                                                array_syntax = "for (i=0; i<" + str(
+                                                    depth) + "; i++)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
+                                                    width) + "'b0;\n\t\tend\n"
+                                                # for j in range(0, depth):
+                                                # array_syntax+=signals[0]+"["+str(j)+"] <= "+ str(width) +"'b0; // Default assignment"#\n\t"
+                                                arraySignal = True
                                     elif signals[0] in single_bitList:
                                         value = "1'b0"
                                     elif signals[0] in busList or signals[0] in signedList or signals[0] in unsignedList:
@@ -1687,6 +1767,8 @@ class Generator(QWidget):
                                         value = str(size) + "'b0"
                                     else:
                                         value = str(0)
+                                elif value in portNames or value in internalnames:
+                                    value = value
                                 #elif value.isdigit():
                                     #size = len(value)
                                     #value = str(size) + "'b" + value
@@ -1712,11 +1794,13 @@ class Generator(QWidget):
                                         value = value.replace("&#44;", ",")
                                         value = value.replace("(", "[")
                                         value = value.replace(")", "]")
+                                        value = value.replace("{","[")
+                                        value = value.replace("}", "]")
                                         value = value.replace("downto", ":")
                                         value = value.replace("'", "")
 
-                                        pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
-
+                                        #pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+                                        pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
                                         value = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
                                             m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", value)
                                         # value = re.sub(r'\s+', '', value)
@@ -1731,6 +1815,11 @@ class Generator(QWidget):
                                         while match:
                                             value = value.replace(match.group(), match.group(1) + match.group(3) + "]")
                                             match = re.search(pattern2, value)
+                                        pattern3 = r"(\w+)(\d+'b)(\d+)"
+                                        match = re.search(pattern3, value)
+                                        while match:
+                                            value = value.replace(match.group(), match.group(1) + match.group(3) )
+                                            match = re.search(pattern3, value)
 
                                         value = value.replace("'", "_")
                                         #pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
@@ -1858,10 +1947,12 @@ class Generator(QWidget):
                                     notes = notes.replace("&#44;", ",")
                                     notes = notes.replace("(","[")
                                     notes = notes.replace(")","]")
+                                    notes = notes.replace("{", "[")
+                                    notes = notes.replace("}", "]")
                                     notes = notes.replace("downto",":")
                                     notes = notes.replace("'","")
-                                    pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
-
+                                    #pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+                                    pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
 
                                     notes = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
                                         m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", notes)
@@ -1873,14 +1964,11 @@ class Generator(QWidget):
                                     while match:
                                         notes = notes.replace(match.group(), match.group(1) + match.group(3) + "]")
                                         match = re.search(pattern2, notes)
-                                    #pattern2 = r"(\d+)'b"
-                                    #match = re.search(pattern2, notes)
-                                    #while match:
-                                        #modified_match = ""
-                                        #if match.start() > 0 and notes[match.start() - 1].isdigit():
-                                            #modified_match = match.group(1)
-                                        #notes = notes[:match.start()] + modified_match + notes[match.end():]
-                                        #match = re.search(pattern2, notes)
+                                    pattern3 = r"(\w+)(\d+'b)(\d+)"
+                                    match = re.search(pattern3, notes)
+                                    while match:
+                                        notes = notes.replace(match.group(), match.group(1) + match.group(3))
+                                        match = re.search(pattern3, notes)
                                     notes = notes.replace("'", "_")
                                     #pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'  # r'\[?(\w+)\s*,\s*(\w+)\]?'
                                     pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
@@ -2001,6 +2089,35 @@ class Generator(QWidget):
                     chatgpt_verilog +=  gen_entity + "\n\n"
                     # Entity Section placement
                     gen_verilog +=  gen_entity + "\n\n"
+                    gen_verilog = gen_verilog.replace("&#10;", "\n")
+                    gen_verilog = gen_verilog.replace("&amp;", "&")
+                    gen_verilog = gen_verilog.replace("&amp;", "&")
+                    gen_verilog = gen_verilog.replace("&quot;", "\"")
+                    gen_verilog = gen_verilog.replace("&apos;", "\'")
+                    gen_verilog = gen_verilog.replace("&lt;", "<")
+                    gen_verilog = gen_verilog.replace("&#x9;", "\t")
+                    gen_verilog = gen_verilog.replace("&gt;", ">")
+                    gen_verilog = gen_verilog.replace("&#44;", ",")
+
+                    chatgpt_header = chatgpt_header.replace("&#10;", "\n")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&amp;", "&")
+                    chatgpt_header = chatgpt_header.replace("&quot;", "\"")
+                    chatgpt_header = chatgpt_header.replace("&apos;", "\'")
+                    chatgpt_header = chatgpt_header.replace("&lt;", "<")
+                    chatgpt_header = chatgpt_header.replace("&#x9;", "\t")
+                    chatgpt_header = chatgpt_header.replace("&gt;", ">")
+                    chatgpt_header = chatgpt_header.replace("&#44;", ",")
+
+                    chatgpt_verilog = chatgpt_verilog.replace("&#10;", "\n")
+                    chatgpt_verilog = chatgpt_verilog.replace("&amp;", "&")
+                    chatgpt_verilog = chatgpt_verilog.replace("&amp;", "&")
+                    chatgpt_verilog = chatgpt_verilog.replace("&quot;", "\"")
+                    chatgpt_verilog = chatgpt_verilog.replace("&apos;", "\'")
+                    chatgpt_verilog = chatgpt_verilog.replace("&lt;", "<")
+                    chatgpt_verilog = chatgpt_verilog.replace("&#x9;", "\t")
+                    chatgpt_verilog = chatgpt_verilog.replace("&gt;", ">")
+                    chatgpt_verilog = chatgpt_verilog.replace("&#44;", ",")
 
         return entity_name, gen_verilog, instances, chatgpt_header, chatgpt_verilog
 
@@ -2121,7 +2238,8 @@ class Generator(QWidget):
         header_node = hdl_design[0].getElementsByTagName("header")
         comp_node = header_node[0].getElementsByTagName("compName")[0]
         entity_name = comp_node.firstChild.data
-        mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -2199,14 +2317,16 @@ class Generator(QWidget):
                     size = ""
                     type = "logic"
                 else:
+                    depth=0
+                    width=0
                     type = type.split(",")
                     for i in range(0, len(array_nodes)):
                         typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
                         if typeName == type[1]:
                             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
-                    arrayInfo=[name,depth,width]
-                    arrayList.append(arrayInfo)
+                        arrayInfo=[name,depth,width]
+                        arrayList.append(arrayInfo)
                     bits = int(width)*int(depth)-1
                     type = "array"
                     size = "[" + str(bits) + ":0]"
@@ -2409,7 +2529,7 @@ class Generator(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.note = tb_node.firstChild.nodeValue
-            self.note = self.note.replace("&#10;", "\n///")
+            self.note = self.note.replace("&#10;", "\n")
             self.note = self.note.replace("&amp;", "&")
             self.note = self.note.replace("&quot;", "\"")
             self.note = self.note.replace("&apos;", "\'")
