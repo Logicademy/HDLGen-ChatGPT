@@ -88,6 +88,7 @@ class ProjectManager(QWidget):
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
         self.copy_proj_btn.setFixedSize(80, 22)
+        self.copy_proj_btn.setVisible(False)
         self.proj_info_label = QLabel("Project Information Link")
         self.proj_info_label.setStyleSheet(WHITE_COLOR)
         self.proj_info_link = QPushButton("Project Link")
@@ -356,7 +357,7 @@ class ProjectManager(QWidget):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file and will result in inncorrect HDL. You need to re add them in Types and Subcomponent tabs")
+            msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file and will result in inncorrect HDL. You may need to re add them in Types and Subcomponent tabs in the new enviroment")
             msgBox.exec_()
     def proj_detail_change(self):
 

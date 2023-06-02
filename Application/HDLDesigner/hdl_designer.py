@@ -70,7 +70,7 @@ class HDLDesigner(QWidget):
 
         self.tabs.addTab(self.compDetails, "Component")
         #self.tabs.addTab(compDetails, "Component")
-        self.tabs.addTab(self.package, "VHDL types")
+        self.tabs.addTab(self.package, "Types")
         self.tabs.addTab(self.subcomponents, "Sub-components")
         self.tabs.addTab(self.ioPorts, "Ports")
         self.tabs.addTab(self.internalSignal, "Internal Signals")
