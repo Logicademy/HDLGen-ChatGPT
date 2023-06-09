@@ -207,6 +207,7 @@ class ProjectManager(QWidget):
         quartusPath = config.get('user', 'quartus')
         quartusPath = quartusPath.strip()
         self.intel_dir_input.setText(quartusPath)
+        self.config = configparser.ConfigParser()
         self.setup_ui()
 
         if proj_dir != None:
@@ -342,22 +343,27 @@ class ProjectManager(QWidget):
         self.intel_check.clicked.connect(self.save_xml)
         self.vivado_check.clicked.connect(self.save_xml)
     def fill_default_proj_details(self):
+        self.config.read('config.ini')
+        self.proj_enviro = self.config.get('user', 'recentEnviro')
+        self.proj_dir = self.proj_enviro
+        if not os.path.exists(self.proj_enviro):
+            path = Path(os.getcwd())
+            parent_path = path.parent.absolute()
+            self.proj_enviro = os.path.join(parent_path, "User_Projects")
+            self.proj_dir = os.path.join(parent_path, "User_Projects")
+            #self.proj_dir = #"User_Projects"
 
-        path = Path(os.getcwd())
-        parent_path = path.parent.absolute()
-        self.proj_enviro = os.path.join(parent_path, "User_Projects")
-        self.proj_dir = os.path.join(parent_path, "User_Projects")
-        #self.proj_dir = #"User_Projects"
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_enviro_input.setText(self.proj_enviro)
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
+
     def proj_enviro_change(self):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file and will result in inncorrect HDL. You may need to re add them in Types and Subcomponent tabs in the new enviroment")
+            msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file. You may need to re add them in Types and Subcomponent tabs in the new enviroment")
             msgBox.exec_()
     def proj_detail_change(self):
 
@@ -706,6 +712,14 @@ class ProjectManager(QWidget):
             package_xml_str = rootPack.toprettyxml(indent="\t")
             with open(ProjectManager.package_xml_data_path, "w") as f:
                 f.write(package_xml_str)
+        self.config.read('config.ini')
+        self.config.set("user", "recentEnviro", self.proj_enviro_input.text())
+        with open('config.ini', 'w') as configfile:
+            self.config.write(configfile)
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Alert")
+        msgBox.setText("Project Saved")
+        msgBox.exec_()
         print("Successfully saved!")
 
     def close_project(self):
@@ -815,7 +829,10 @@ class ProjectManager(QWidget):
             elif hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
                 self.verilog_check.setChecked(True)
                 ProjectManager.hdl = "Verilog"
-
+        self.config.read('config.ini')
+        self.config.set("user", "recentEnviro", self.proj_enviro_input.text())
+        with open('config.ini', 'w') as configfile:
+            self.config.write(configfile)
         print("Project successfully loaded!")
 
     def vivado_help_window(self):

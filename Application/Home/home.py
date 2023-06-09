@@ -8,6 +8,7 @@ from ProjectManager.project_manager import ProjectManager
 from Generator.generator import Generator
 from Help.help import Help
 from HDLDesigner.hdl_designer import HDLDesigner
+from ProjectManager.generate_dialog import GenerationDialog
 from HDLDesigner.Architecture.note_dialog import note_Dialog
 from xml.dom import minidom
 
@@ -86,30 +87,33 @@ class Home(QMainWindow):
         self.setCentralWidget(self.container)
 
     def generate_btn_clicked(self):
-        if self.project_manager.vhdl_check.isChecked():
-            self.generator.generate_folders()
-            overwrite, instances = self.generator.create_vhdl_file()
-            if self.project_manager.vivado_check.isChecked():
-                self.generator.create_tcl_file("VHDL", instances)
-            else:
-                self.generator.create_quartus_tcl_file("VHDL", instances)
-            self.generator.create_testbench_file(overwrite)
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle("Alert")
-            msgBox.setText("VHDL and Testbench Generated")
-            msgBox.exec_()
-        elif self.project_manager.verilog_check.isChecked():
-            self.generator.generate_folders()
-            overwrite, instances = self.generator.create_verilog_file()
-            if self.project_manager.vivado_check.isChecked():
-                self.generator.create_tcl_file("VERiLOG", instances)
-            else:
-                self.generator.create_quartus_tcl_file("VERILOG", instances)
-            self.generator.create_verilog_testbench_file(overwrite)
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle("Alert")
-            msgBox.setText("Verilog and Testbench Generated")
-            msgBox.exec_()
+        gen = GenerationDialog()
+        gen.exec_()
+        if not gen.cancelled:
+            if self.project_manager.vhdl_check.isChecked():
+                self.generator.generate_folders()
+                instances = self.generator.create_vhdl_file(gen.get_selected_files())
+                if self.project_manager.vivado_check.isChecked():
+                    self.generator.create_tcl_file("VHDL", instances)
+                else:
+                    self.generator.create_quartus_tcl_file("VHDL", instances)
+                self.generator.create_testbench_file(gen.get_selected_files())
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Selected Files Generated")
+                msgBox.exec_()
+            elif self.project_manager.verilog_check.isChecked():
+                self.generator.generate_folders()
+                instances = self.generator.create_verilog_file(gen.get_selected_files())
+                if self.project_manager.vivado_check.isChecked():
+                    self.generator.create_tcl_file("VERiLOG", instances)
+                else:
+                    self.generator.create_quartus_tcl_file("VERILOG", instances)
+                self.generator.create_verilog_testbench_file(gen.get_selected_files())
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Verilog and Testbench Generated")
+                msgBox.exec_()
     def start_eda_tool(self):
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Alert")

@@ -152,7 +152,10 @@ class Package(QWidget):
             self.package_table.setItem(row_position, 0, QTableWidgetItem(array_data[0]))
             self.package_table.setItem(row_position, 1, depth)
             self.package_table.setItem(row_position, 2, width)
-            self.package_table.setItem(row_position, 3, QTableWidgetItem(array_data[3]))
+            sig_type = array_data[3]
+            if sig_type == "std_logic_vector":
+                sig_type = "bus"
+            self.package_table.setItem(row, 3, QTableWidgetItem(sig_type))
             self.package_table.setCellWidget(row_position, 4, edit_btn)
             self.package_table.setCellWidget(row_position, 5, delete_btn)
             self.save_data()
@@ -191,7 +194,10 @@ class Package(QWidget):
                 self.package_table.setItem(row, 0, QTableWidgetItem(array_data[0]))
                 self.package_table.setItem(row, 1, depth)
                 self.package_table.setItem(row, 2, width)
-                self.package_table.setItem(row, 3, QTableWidgetItem(array_data[3]))
+                sig_type = array_data[3]
+                if sig_type == "std_logic_vector":
+                    sig_type = "bus"
+                self.package_table.setItem(row, 3, QTableWidgetItem(sig_type))
                 self.package_table.setCellWidget(row, 4, edit_btn)
                 self.package_table.setCellWidget(row, 5, delete_btn)
                 self.save_data()
@@ -296,7 +302,10 @@ class Package(QWidget):
                 self.package_table.setItem(i, 0, QTableWidgetItem(loaded_array_data[0]))
                 self.package_table.setItem(i, 1, depth)
                 self.package_table.setItem(i, 2, width)
-                self.package_table.setItem(i, 3, QTableWidgetItem(loaded_array_data[3]))
+                sig_type = loaded_array_data[3]
+                if sig_type == "std_logic_vector":
+                    sig_type = "bus"
+                self.package_table.setItem(i, 3, QTableWidgetItem(sig_type))
                 self.package_table.setCellWidget(i, 4, edit_btn)
                 self.package_table.setCellWidget(i, 5, delete_btn)
                 self.arrays.append(loaded_array_data)
