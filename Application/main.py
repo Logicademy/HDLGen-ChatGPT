@@ -1,4 +1,4 @@
-import sys
+import os
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
@@ -8,6 +8,7 @@ sys.path.append(".")
 from Home.home import Home
 from Help.help import HelpDialog
 from Settings.settings import settingsDialog
+import configparser
 
 
 APP_AUTHORS = "Fearghal Morgan, Abishek Bupathi & JP Byrne"
@@ -61,7 +62,7 @@ class HDLGen(QMainWindow):
 
         self.app_description = QLabel(APP_DESCRIPTION)
         self.app_description.setFont(text_font)
-        self.github_link = QLabel('<a href=" https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use the HDLGen application, please include the Github reference to our work')
+        self.github_link = QLabel('<a href="https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use the HDLGen application, please include the Github reference to our work')
         self.github_link.setFont(text_font)
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
@@ -73,7 +74,7 @@ class HDLGen(QMainWindow):
 
         # Creating a container
         self.container = QWidget()
-
+        self.config = configparser.ConfigParser()
         self.setup_ui()
 
     def setup_ui(self):
@@ -128,7 +129,13 @@ class HDLGen(QMainWindow):
         self.close()
 
     def open_project(self):
-        self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", "../User_Projects/",
+        self.config.read('config.ini')
+        lastDir = self.config.get('user', 'recentEnviro')
+        if not os.path.exists(lastDir):
+            lastDir = "../User_Projects/"
+        #self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", "../User_Projects/",
+                                                         #filter="HDLGen (*.hdlgen)")
+        self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", lastDir,
                                                          filter="HDLGen (*.hdlgen)")
         if self.load_proj_dir[0]:
             print("Loading project from ", self.load_proj_dir[0])

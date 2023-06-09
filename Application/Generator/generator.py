@@ -297,6 +297,7 @@ class Generator(QWidget):
                             ceInSeq=""
                             caseEmpty=True
                             notes = child.getElementsByTagName("note")[0].firstChild.data
+                            notes = re.sub(r'\s+', ' ', notes)
                             notes = notes.replace("&#10;", "\n--- ")
                             notes = notes.replace("&amp;", "&")
                             notes = notes.replace("&quot;", "\"")
@@ -305,6 +306,28 @@ class Generator(QWidget):
                             notes = notes.replace("&#x9;", "\t")
                             notes = notes.replace("&gt;", ">")
                             notes = notes.replace("&#44;", ",")
+                            notes = notes.replace("[", "(")
+                            notes = notes.replace("]", ")")
+                            notes = notes.replace("{", "(")
+                            notes = notes.replace("}", ")")
+                            notes = notes.replace(":", " downto ")
+                            notes = notes.replace("'", "")
+                            notes = re.sub(r'\s+', ' ', notes)
+
+                            # pattern = r'(?<!downto\s)(?<!\d)(\d+)(?!\d)(?!\s*downto)'
+                            pattern = r'(?<!downto\s)(?<!\d)([01]+)(?!\d)(?!\s*downto)'
+                            notes = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
+                                m.group(1)) == 1 else f'"{m.group(1)}"', notes)
+                            # pattern1 = r"\((['\"])(\d+)\1\)"
+                            pattern1 = r"(\(|\w+)(['\"])(\d+)\2\)"
+                            match = re.search(pattern1, notes)
+                            while match:
+                                notes = notes.replace(match.group(), match.group(1) + match.group(3) + ")")
+                                match = re.search(pattern1, notes)
+                            pattern2 = r"[^\s]+['\"]\d+['\"]"
+                            notes = re.sub(pattern2,
+                                           lambda match: match.group(0).replace("'", "").replace('"', ""),
+                                           notes)
 
                             signalList = ""
 
@@ -680,7 +703,7 @@ class Generator(QWidget):
 
         return entity_name, gen_vhdl, instances, chatgpt_header, chatgpt_vhdl
 
-    def create_vhdl_file(self):
+    def create_vhdl_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
@@ -720,63 +743,99 @@ class Generator(QWidget):
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_ChatGPT.txt")
         chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_header_ChatGPT_HDLGen.txt")
         chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_ChatGPT_HDLGen.txt")
-        overwrite = False
-        if os.path.exists(vhdl_file_path):
-            msgBox = QMessageBox()
-            msgBox.setIcon(QMessageBox.Question)
-            msgBox.setText("Do you want to overwrite manually edited file?")
-            msgBox.setWindowTitle("Confirmation")
-            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-            msgBox.setDefaultButton(QMessageBox.No)
-            response = msgBox.exec_()
-            if response == QMessageBox.Yes:
-                overwrite = True
+        #overwrite = False
+        if "0" in filesNumber:
+         # Writing xml file
+         with open(vhdl_file_path, "w") as f:
+           f.write(vhdl_code)
+         print("VHDL Model successfully generated at ", vhdl_file_path)
+        if "1" in filesNumber:
+         # Writing xml file
+         with open(vhdl_file_HDLGen_path, "w") as f:
+           f.write(vhdl_code)
+         print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
+        if "4" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_header_file_path, "w") as f:
+           f.write(chatgpt_header)
+         print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
+        if "5" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_header_HDLGen_file_path, "w") as f:
+             f.write(chatgpt_header)
+         print("ChatGPT VHDL header successfully generated at ", chatgpt_header_HDLGen_file_path)
+        if "6" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_vhdl_file_path, "w") as f:
+           f.write(chatgpt_vhdl)
+         print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
+        if "7" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_header_HDLGen_file_path, "w") as f:
+             f.write(chatgpt_vhdl)
+         print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
+
+
+
+
+
+        #if os.path.exists(vhdl_file_path):
+           # msgBox = QMessageBox()
+           # msgBox.setIcon(QMessageBox.Question)
+           # msgBox.setText("Do you want to overwrite manually edited file?")
+           # msgBox.setWindowTitle("Confirmation")
+           # msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+           # msgBox.setDefaultButton(QMessageBox.No)
+            #response = msgBox.exec_()
+           # if response == QMessageBox.Yes:
+                #overwrite = True
                 # Writing xml file
-                with open(vhdl_file_path, "w") as f:
-                    f.write(vhdl_code)
-                print("VHDL Model successfully generated at ", vhdl_file_path)
+               # with open(vhdl_file_path, "w") as f:
+                 #   f.write(vhdl_code)
+               # print("VHDL Model successfully generated at ", vhdl_file_path)
 
-                with open(chatgpt_header_file_path, "w") as f:
-                    f.write(chatgpt_header)
+               # with open(chatgpt_header_file_path, "w") as f:
+               #     f.write(chatgpt_header)
 
-                print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
+              #  print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
 
-                with open(chatgpt_vhdl_file_path, "w") as f:
-                    f.write(chatgpt_vhdl)
+              #  with open(chatgpt_vhdl_file_path, "w") as f:
+                #    f.write(chatgpt_vhdl)
 
-                print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
+              #  print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
 
-        else:
-            with open(vhdl_file_path, "w") as f:
-                f.write(vhdl_code)
-            print("VHDL Model successfully generated at ", vhdl_file_path)
-            with open(chatgpt_header_file_path, "w") as f:
-                f.write(chatgpt_header)
+        #else:
+           # with open(vhdl_file_path, "w") as f:
+               # f.write(vhdl_code)
+           # print("VHDL Model successfully generated at ", vhdl_file_path)
+           # with open(chatgpt_header_file_path, "w") as f:
+               # f.write(chatgpt_header)
 
-            print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
+           # print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
 
-            with open(chatgpt_vhdl_file_path, "w") as f:
-                f.write(chatgpt_vhdl)
+           # with open(chatgpt_vhdl_file_path, "w") as f:
+               # f.write(chatgpt_vhdl)
 
-            print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
+           # print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
 
 
-        with open(vhdl_file_HDLGen_path, "w") as f:
-            f.write(vhdl_code)
+       # with open(vhdl_file_HDLGen_path, "w") as f:
+            #f.write(vhdl_code)
 
-        print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
+       # print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
 
-        with open(chatgpt_header_HDLGen_file_path, "w") as f:
-            f.write(chatgpt_header)
+        #with open(chatgpt_header_HDLGen_file_path, "w") as f:
+            #f.write(chatgpt_header)
 
-        print("ChatGPT VHDL header successfully generated at ", chatgpt_header_HDLGen_file_path)
+        #print("ChatGPT VHDL header successfully generated at ", chatgpt_header_HDLGen_file_path)
 
-        with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
-            f.write(chatgpt_vhdl)
+        #with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
+          #  f.write(chatgpt_vhdl)
 
-        print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
+        #print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
         self.entity_name = entity_name
-        return overwrite, instances
+        #return overwrite, instances
+        return instances
 
 
     def create_tcl_file(self, lang, instances):
@@ -1244,8 +1303,8 @@ class Generator(QWidget):
                     gen_process += "\treport \"Assert and toggle rst\";\n\ttestNo <= 0;\n\trst    <= '1';\n"
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                     gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"#-- <delete (End)\n\n"
-                gen_process += "\n\t-- Add testbench stimulus here START\n\t-- If copying a stim_p process generated by ChatGPT,\n\t-- delete the following lines from the beginning of the pasted code\n\t-- stim_p: process\n\t-- begin\n\n"
-                gen_process += "\t-- Add testbench stimulus here END\n\t-- If copying a stim_p process generated by ChatGPT, \n\t-- delete the following lines from the pasted code\n\t--  wait;\n\t--  end process stim_p;\n\n"
+                gen_process += "\n\t-- START Add testbench stimulus here\n\t-- === If copying a stim_p process generated by ChatGPT, delete the following lines from the beginning of the pasted code\n\t-- === Delete the -- === notes\n\t-- === stim_p: process\n\t-- === begin\n\n"
+                gen_process += "\n\t-- ==== If copying a stim_p process generated by ChatGPT, delete the following lines from the pasted code\n\t-- === wait;\n\t-- === end process stim_p;\n\t-- === end process stim_p;\n\n\t-- END Add testbench stimulus here\n"
                 gen_process += "\t-- Print picosecond (ps) = 1000*ns (nanosecond) time to simulation transcript\n"
                 gen_process += "\t-- Use to find time when simulation ends (endOfSim is TRUE)\n"
                 gen_process += "\t-- Re-run the simulation for this time\n"
@@ -1267,7 +1326,7 @@ class Generator(QWidget):
                     #chatgpt_tb += gen_arch
         return entity_name, tb_code, wcfg, chatgpt_tb
 
-    def create_testbench_file(self, overwrite):
+    def create_testbench_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         root = minidom.parse(proj_path+"/HDLGenPrj/"+proj_name+".hdlgen")
@@ -1307,35 +1366,61 @@ class Generator(QWidget):
         waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", self.entity_name + "_TB_behav.wcfg")
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_TB_ChatGPT.txt")
         chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen",entity_name + "_VHDL_TB_ChatGPT_HDLGen.txt")
-        if os.path.exists(vhdl_tb_path) == False:
-            with open(vhdl_tb_path, "w") as f:
-                f.write(vhdl_tb_code)
-            print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
 
-            with open(chatgpt_vhdl_file_path, "w") as f:
-                f.write(chatgpt_tb)
-            print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
+        if "2" in filesNumber:
+         # Writing xml file
+         with open(vhdl_tb_path, "w") as f:
+             f.write(vhdl_tb_code)
+         print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
+        if "3" in filesNumber:
+         # Writing xml file
+         with open(vhdl_tb_HDLGen_path, "w") as f:
+             f.write(vhdl_tb_code)
+         print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
+        if "8" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_vhdl_file_path, "w") as f:
+             f.write(chatgpt_tb)
+         print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
+        if "9" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
+             f.write(chatgpt_tb)
+         print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
+        if "10" in filesNumber:
+            with open(waveform_path, "w") as f:
+                f.write(waveform)
+            print("Waveform file successfully generated at ", waveform_path)
 
-        if overwrite == True:
+        #if os.path.exists(vhdl_tb_path) == False:
+            #with open(vhdl_tb_path, "w") as f:
+                #f.write(vhdl_tb_code)
+            #print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
+
+           # with open(chatgpt_vhdl_file_path, "w") as f:
+           #     f.write(chatgpt_tb)
+           # print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
+
+        #if overwrite == True:
             # Writing xml file
-            with open(vhdl_tb_path, "w") as f:
-                f.write(vhdl_tb_code)
-            print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
+          #  with open(vhdl_tb_path, "w") as f:
+          #      f.write(vhdl_tb_code)
+          #  print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
 
-            with open(chatgpt_vhdl_file_path, "w") as f:
-                f.write(chatgpt_tb)
-            print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
-        with open(vhdl_tb_HDLGen_path, "w") as f:
-            f.write(vhdl_tb_code)
-        print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
+          #  with open(chatgpt_vhdl_file_path, "w") as f:
+          #      f.write(chatgpt_tb)
+          #  print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
+       # with open(vhdl_tb_HDLGen_path, "w") as f:
+         #   f.write(vhdl_tb_code)
+       # print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
 
-        with open(waveform_path, "w") as f:
-            f.write(waveform)
-        print("Waveform file successfully generated at ", waveform_path)
+      #  with open(waveform_path, "w") as f:
+          #  f.write(waveform)
+       # print("Waveform file successfully generated at ", waveform_path)
 
-        with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
-            f.write(chatgpt_tb)
-        print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
+       # with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
+          #  f.write(chatgpt_tb)
+       # print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
     def generate_mainPackage(self):
         gen_arrays =""
         comp = ""
@@ -1702,14 +1787,50 @@ class Generator(QWidget):
                             ceInSeq=""
                             caseEmpty = True
                             notes = child.getElementsByTagName("note")[0].firstChild.data
+                            notes = re.sub(r'\s+', ' ', notes)
                             notes = notes.replace("&#10;", "\n/// ")
-                            notes = notes.replace("&amp;", "&")
+                            notes = notes.replace("&amp;", ",")
                             notes = notes.replace("&quot;", "\"")
                             notes = notes.replace("&apos;", "\'")
                             notes = notes.replace("&lt;", "<")
                             notes = notes.replace("&#x9;", "\t")
                             notes = notes.replace("&gt;", ">")
                             notes = notes.replace("&#44;", ",")
+                            notes = notes.replace("(", "[")
+                            notes = notes.replace(")", "]")
+                            notes = notes.replace("{", "[")
+                            notes = notes.replace("}", "]")
+                            notes = notes.replace("downto", ":")
+                            notes = notes.replace("'", "")
+
+                            # pattern = r'(?<!:)(?<!\d)(\d+)(?!\d)(?!\s*:)'
+                            pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
+                            notes = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
+                                m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", notes)
+                            # notes = re.sub(r'\s+', '', notes)
+
+                            # pattern2 = r"\[([\d]+)'b([\d]+)]"
+                            # match = re.search(pattern2, notes)
+                            # while match:
+                            # notes = notes.replace(match.group(), "[" + match.group(2) + "]")
+                            # match = re.search(pattern2, notes)
+                            pattern2 = r"(\[|\w+)([\d]+)'b([\d]+)]"
+                            match = re.search(pattern2, notes)
+                            while match:
+                                notes = notes.replace(match.group(), match.group(1) + match.group(3) + "]")
+                                match = re.search(pattern2, notes)
+                            pattern3 = r"(\w+)(\d+'b)(\d+)"
+                            match = re.search(pattern3, notes)
+                            while match:
+                                notes = notes.replace(match.group(), match.group(1) + match.group(3))
+                                match = re.search(pattern3, notes)
+
+                            notes = notes.replace("'", "_")
+                            # pattern1 = r'\[?(\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
+                            pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
+                            notes = re.sub(pattern1, r'{\1,\2}', notes)
+                            notes = notes.replace("_", "'")
+
 
                             signalList = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
@@ -2121,7 +2242,7 @@ class Generator(QWidget):
 
         return entity_name, gen_verilog, instances, chatgpt_header, chatgpt_verilog
 
-    def create_verilog_file(self):
+    def create_verilog_file(self, filesNumber):
 
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
@@ -2161,60 +2282,40 @@ class Generator(QWidget):
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_ChatGPT.txt")
         chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_header_ChatGPT_HDLGen.txt")
         chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_ChatGPT_HDLGen.txt")
-        overwrite = False
 
-        if os.path.exists(verilog_file_path):
-            msgBox = QMessageBox()
-            msgBox.setIcon(QMessageBox.Question)
-            msgBox.setText("Do you want to overwrite manually edited file?")
-            msgBox.setWindowTitle("Confirmation")
-            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-            msgBox.setDefaultButton(QMessageBox.No)
-            response = msgBox.exec_()
-            if response == QMessageBox.Yes:
-                overwrite = True
-                # Writing xml file
-                with open(verilog_file_path, "w") as f:
-                    f.write(verilog_code)
-                with open(chatgpt_header_file_path, "w") as f:
-                    f.write(chatgpt_header)
-
-                print("ChatGPT Verilog header successfully generated at ", chatgpt_header_file_path)
-
-                with open(chatgpt_verilog_file_path, "w") as f:
-                    f.write(chatgpt_verilog)
-
-                print("ChatGPT Verilog model successfully generated at ", chatgpt_verilog_file_path)
-
-        else:
+        if "0" in filesNumber:
             # Writing xml file
             with open(verilog_file_path, "w") as f:
                 f.write(verilog_code)
-            with open(verilog_file_path, "w") as f:
+            print("Verilog Model successfully generated at ", verilog_file_path)
+        if "1" in filesNumber:
+            # Writing xml file
+            with open(verilog_file_HDLGen_path, "w") as f:
                 f.write(verilog_code)
-
+            print("Verilog HDLGen Model successfully generated at ", verilog_file_HDLGen_path)
+        if "4" in filesNumber:
+            # Writing xml file
             with open(chatgpt_header_file_path, "w") as f:
                 f.write(chatgpt_header)
-
             print("ChatGPT Verilog header successfully generated at ", chatgpt_header_file_path)
+        if "5" in filesNumber:
+            # Writing xml file
+            with open(chatgpt_header_HDLGen_file_path, "w") as f:
+                f.write(chatgpt_header)
+            print("ChatGPT Verilog header successfully generated at ", chatgpt_header_HDLGen_file_path)
+        if "6" in filesNumber:
+            # Writing xml file
             with open(chatgpt_verilog_file_path, "w") as f:
                 f.write(chatgpt_verilog)
-
             print("ChatGPT Verilog model successfully generated at ", chatgpt_verilog_file_path)
+        if "7" in filesNumber:
+            # Writing xml file
+            with open(chatgpt_header_HDLGen_file_path, "w") as f:
+                f.write(chatgpt_verilog)
+            print("ChatGPT Verilog model successfully generated at ", chatgpt_verilog_HDLGen_file_path)
 
-        with open(verilog_file_HDLGen_path, "w") as f:
-            f.write(verilog_code)
-        print("Verilog HDLGen Model successfully generated at ", verilog_file_HDLGen_path)
-
-        with open(chatgpt_header_HDLGen_file_path, "w") as f:
-            f.write(chatgpt_header)
-        print("ChatGPT verilog header successfully generated at ", chatgpt_header_HDLGen_file_path)
-
-        with open(chatgpt_verilog_HDLGen_file_path, "w") as f:
-            f.write(chatgpt_verilog)
-        print("ChatGPT verilog model successfully generated at ", chatgpt_verilog_HDLGen_file_path)
         self.entity_name = entity_name
-        return overwrite, instances
+        return instances
     def create_verilog_testbench_code(self):
         tb_code = ""
         chatgpt_tb=""
@@ -2500,8 +2601,8 @@ class Generator(QWidget):
                 if clkrst == 1:
                     gen_process += "\t# (1.2 * period);\n"
 
-                gen_process += "\n\t// Add testbench stimulus here START\n\t// If copying stim_p testbench code, generated by ChatGPT, \n\t// delete the following lines from the beginning of the pasted code (if they exist)\n\t// integer testNo;\n\t// parameter period = 20; // 20 ns\n\t// reg, wire, declarations  ....\n\t// initial begin\n\n"
-                gen_process += "\t// Add testbench stimulus here END\n\t// If copying a stim_p process generated by ChatGPT, \n\t// delete the following lines from the end of the pasted code \n\t//   begin	end\n\n"
+                gen_process += "\n\t// Add testbench stimulus here START\n\n\t// === If copying stim_p testbench code, generated by ChatGPT, \n\t// === delete the following lines from the beginning of the pasted code (if they exist)\n\t// === integer testNo;\n\t// === parameter period = 20; // 20 ns\n\t// === reg, wire, declarations  ....\n\t// === initial begin\n\t// === Delete the -- === notes\n\n"
+                gen_process += "\t// === If copying a stim_p process generated by ChatGPT, \n\t// === delete the following lines from the end of the pasted code \n\t// === begin end\n\t// === Delete the -- === notes\n\n\t// Add testbench stimulus here END\n\n"
                 gen_process += "\t// Print nanosecond (ns) time to simulation transcript\n"
                 gen_process += "\t// Use to find time when simulation ends (endOfSim is TRUE)\n"
                 gen_process += "\t// Re-run the simulation for this time\n"
@@ -2519,7 +2620,7 @@ class Generator(QWidget):
                 #chatgpt_tb += gen_arch
         return entity_name, tb_code, wcfg, chatgpt_tb
 
-    def create_verilog_testbench_file(self, overwrite):
+    def create_verilog_testbench_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         root = minidom.parse(proj_path+"/HDLGenPrj/"+proj_name+".hdlgen")
@@ -2559,33 +2660,27 @@ class Generator(QWidget):
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", self.entity_name + "_TB_behav.wcfg")
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_TB_ChatGPT.txt")
         chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT","HDLGen",entity_name + "_Verilog_TB_ChatGPT_HDLGen.txt")
-        if os.path.exists(verilog_tb_path) == False:
-            with open(verilog_tb_path, "w") as f:
-                f.write(verilog_tb_code)
-            print("Verilog Testbench file successfully generated at ", verilog_tb_path)
-
-            with open(chatgpt_verilog_file_path, "w") as f:
-                f.write(chatgpt_tb)
-            print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)
-
-        if overwrite == True:
-            # Writing xml file
-            with open(verilog_tb_path, "w") as f:
-                f.write(verilog_tb_code)
-            print("Verilog Testbench file successfully generated at ", verilog_tb_path)
-
-            with open(chatgpt_verilog_file_path, "w") as f:
-                f.write(chatgpt_tb)
-            print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)
-
-        with open(verilog_tb_HDLGen_path, "w") as f:
-            f.write(verilog_tb_code)
-        print("Verilog Testbench HDLGen file successfully generated at ", verilog_tb_HDLGen_path)
-
-        with open(waveform_path, "w") as f:
-            f.write(waveform)
-        print("Waveform file successfully generated at ", waveform_path)
-
-        with open(chatgpt_verilog_HDLGen_file_path, "w") as f:
-            f.write(chatgpt_tb)
-        print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_HDLGen_file_path)
+        if "2" in filesNumber:
+         # Writing xml file
+         with open(verilog_tb_path, "w") as f:
+             f.write(verilog_tb_code)
+         print("Verilog Testbench file successfully generated at ", verilog_tb_path)
+        if "3" in filesNumber:
+         # Writing xml file
+         with open(verilog_tb_HDLGen_path, "w") as f:
+             f.write(verilog_tb_code)
+         print("Verilog Testbench HDLGen file successfully generated at ", verilog_tb_HDLGen_path)
+        if "8" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_verilog_file_path, "w") as f:
+             f.write(chatgpt_tb)
+         print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)
+        if "9" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_verilog_HDLGen_file_path, "w") as f:
+             f.write(chatgpt_tb)
+         print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_HDLGen_file_path)
+        if "10" in filesNumber:
+            with open(waveform_path, "w") as f:
+                f.write(waveform)
+            print("Waveform file successfully generated at ", waveform_path)

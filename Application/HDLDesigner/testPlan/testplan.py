@@ -25,6 +25,7 @@ class TestPlan(QWidget):
         title_font.setPointSize(10)
         title_font.setBold(True)
         self.proj_dir = proj_dir
+        self.note=""
 
         self.mainLayout = QVBoxLayout()
 
@@ -98,7 +99,7 @@ class TestPlan(QWidget):
         self.setLayout(self.mainLayout)
 
     def add_testplan(self):
-        self.note = ""
+        #self.note = ""
         if self.proj_dir is not None:
             root = minidom.parse(self.proj_dir[0])
             HDLGen = root.documentElement
@@ -148,6 +149,7 @@ class TestPlan(QWidget):
                     note_data = "No test plan created"
                     self.testbench_btn.setText("Add Test Plan")
                 self.testplan_input.setText(note_data)
+                self.note = note_data
                 print("Saved test plan")
     def load_data(self, proj_dir):
         self.note = "No test plan created"
@@ -176,6 +178,7 @@ class TestPlan(QWidget):
                 note_data="No test plan created"
                 self.testbench_btn.setText("Add Test Plan")
             self.testplan_input.setText(note_data)
+            self.note = note_data
 
     def testPlan_help_window(self):
         testPlan_help_dialog = TestPlanHelpDialog()

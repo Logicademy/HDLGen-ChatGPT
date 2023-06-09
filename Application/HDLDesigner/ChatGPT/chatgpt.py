@@ -47,7 +47,7 @@ class ChatGPT(QWidget):
         self.chatgpt_info_btn.setFixedSize(25, 25)
         self.chatgpt_info_btn.clicked.connect(self.chatgpt_help_window)
 
-        self.header_VHDL = QPushButton("VHDL Header Command")
+        self.header_VHDL = QPushButton("VHDL Title Section Command")
         self.header_VHDL.setFixedSize(200,50)
         self.header_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
@@ -79,7 +79,7 @@ class ChatGPT(QWidget):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
-        self.header_Verilog = QPushButton("Verilog Header Command")
+        self.header_Verilog = QPushButton("Verilog Title Section Command")
         self.header_Verilog.setFixedSize(200, 50)
         self.header_Verilog.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"

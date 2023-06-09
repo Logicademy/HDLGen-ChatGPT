@@ -27,7 +27,7 @@ class PackageDialog(QDialog):
         bold_font.setBold(True)
 
         self.mainLayout = QVBoxLayout()
-        self.sig_types = [ "std_logic_vector", "signed", "unsigned"]
+        self.sig_types = [ "bus", "signed", "unsigned"]
         self.array_name_label = QLabel("Array Name*")
         self.array_name_label.setStyleSheet(WHITE_COLOR)
         self.array_name_input = QLineEdit()
@@ -119,10 +119,16 @@ class PackageDialog(QDialog):
         self.array_name_input.setText(array_data[0])
         self.arraySize_input.setText(array_data[1])
         self.arrayLength_input.setText(array_data[2])
-        self.sig_type_combo.setCurrentText(array_data[3])
+        sig_type = array_data[3]
+        if sig_type == "std_logic_vector":
+            sig_type = "bus"
+        self.sig_type_combo.setCurrentText(sig_type)
 
     def get_data(self):
-        data = [self.array_name_input.text().strip(), self.arraySize_input.text().strip(), self.arrayLength_input.text().strip(), self.sig_type_combo.currentText()]
+        sig_type = self.sig_type_combo.currentText()
+        if sig_type == "bus":
+            sig_type = "std_logic_vector"
+        data = [self.array_name_input.text().strip(), self.arraySize_input.text().strip(), self.arrayLength_input.text().strip(), sig_type]#self.sig_type_combo.currentText()]
         print(data)
         self.cancelled = False
         self.close()

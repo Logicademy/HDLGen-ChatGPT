@@ -50,7 +50,7 @@ class settingsDialog(QDialog):
         self.quartus_label.setStyleSheet(WHITE_COLOR)
         self.quartus_input = QLineEdit()
 
-        self.header_VHDL = QPushButton("VHDL Header Command")
+        self.header_VHDL = QPushButton("VHDL Title Section Command")
         self.header_VHDL.setFixedSize(200, 25)
         self.header_VHDL.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
@@ -65,7 +65,7 @@ class settingsDialog(QDialog):
         self.testbench_VHDL.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-        self.header_Verilog = QPushButton("Verilog Header Command")
+        self.header_Verilog = QPushButton("Verilog Title Section Command")
         self.header_Verilog.setFixedSize(200, 25)
         self.header_Verilog.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"

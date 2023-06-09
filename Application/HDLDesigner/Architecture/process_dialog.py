@@ -468,7 +468,7 @@ class ProcessDialog(QDialog):
         ce_default_vals = []
         self.process_notes = process_data[4]
         if self.process_notes != "None":
-            self.add_note_btn.setText("Edit note")
+            self.add_note_btn.setText("Edit Non Default Logic")
         for out_sig in process_data[3]:
             temp = out_sig.split(',')
             out_sigs.append(temp[0])
