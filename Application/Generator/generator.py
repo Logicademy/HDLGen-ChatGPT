@@ -738,101 +738,73 @@ class Generator(QWidget):
         chatgpt_header = VHDLHeader + "\n\n" + chatgpt_header
         chatgpt_vhdl = VHDLModel + "\n\n" + chatgpt_vhdl
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
-        vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_HDLGen.vhd")
+        vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_backup.vhd")
         chatgpt_header_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_header_ChatGPT.txt")
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_ChatGPT.txt")
-        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_header_ChatGPT_HDLGen.txt")
-        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_ChatGPT_HDLGen.txt")
-        #overwrite = False
+        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_header_ChatGPT_backup.txt")
+        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_ChatGPT_backup.txt")
+
         if "0" in filesNumber:
          # Writing xml file
          with open(vhdl_file_path, "w") as f:
            f.write(vhdl_code)
          print("VHDL Model successfully generated at ", vhdl_file_path)
         if "1" in filesNumber:
-         # Writing xml file
-         with open(vhdl_file_HDLGen_path, "w") as f:
-           f.write(vhdl_code)
-         print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
+            base_name, extension = os.path.splitext(vhdl_file_HDLGen_path)
+            new_filename = vhdl_file_HDLGen_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
+            # Writing xml file
+            with open(new_filename, "w") as f:
+                f.write(vhdl_code)
+            print("VHDL Backup Model successfully generated at ", new_filename)
         if "4" in filesNumber:
          # Writing xml file
          with open(chatgpt_header_file_path, "w") as f:
            f.write(chatgpt_header)
          print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
         if "5" in filesNumber:
-         # Writing xml file
-         with open(chatgpt_header_HDLGen_file_path, "w") as f:
-             f.write(chatgpt_header)
-         print("ChatGPT VHDL header successfully generated at ", chatgpt_header_HDLGen_file_path)
+            base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
+            new_filename = chatgpt_header_HDLGen_file_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
+            # Writing xml file
+            with open(new_filename, "w") as f:
+                f.write(chatgpt_header)
+            print("ChatGPT VHDL header successfully generated at ", new_filename)
+
         if "6" in filesNumber:
          # Writing xml file
          with open(chatgpt_vhdl_file_path, "w") as f:
            f.write(chatgpt_vhdl)
          print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
         if "7" in filesNumber:
-         # Writing xml file
-         with open(chatgpt_header_HDLGen_file_path, "w") as f:
-             f.write(chatgpt_vhdl)
-         print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
-
-
-
-
-
-        #if os.path.exists(vhdl_file_path):
-           # msgBox = QMessageBox()
-           # msgBox.setIcon(QMessageBox.Question)
-           # msgBox.setText("Do you want to overwrite manually edited file?")
-           # msgBox.setWindowTitle("Confirmation")
-           # msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-           # msgBox.setDefaultButton(QMessageBox.No)
-            #response = msgBox.exec_()
-           # if response == QMessageBox.Yes:
-                #overwrite = True
-                # Writing xml file
-               # with open(vhdl_file_path, "w") as f:
-                 #   f.write(vhdl_code)
-               # print("VHDL Model successfully generated at ", vhdl_file_path)
-
-               # with open(chatgpt_header_file_path, "w") as f:
-               #     f.write(chatgpt_header)
-
-              #  print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
-
-              #  with open(chatgpt_vhdl_file_path, "w") as f:
-                #    f.write(chatgpt_vhdl)
-
-              #  print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
-
-        #else:
-           # with open(vhdl_file_path, "w") as f:
-               # f.write(vhdl_code)
-           # print("VHDL Model successfully generated at ", vhdl_file_path)
-           # with open(chatgpt_header_file_path, "w") as f:
-               # f.write(chatgpt_header)
-
-           # print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
-
-           # with open(chatgpt_vhdl_file_path, "w") as f:
-               # f.write(chatgpt_vhdl)
-
-           # print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
-
-
-       # with open(vhdl_file_HDLGen_path, "w") as f:
-            #f.write(vhdl_code)
-
-       # print("VHDL HDLGen Model successfully generated at ", vhdl_file_HDLGen_path)
-
-        #with open(chatgpt_header_HDLGen_file_path, "w") as f:
-            #f.write(chatgpt_header)
-
-        #print("ChatGPT VHDL header successfully generated at ", chatgpt_header_HDLGen_file_path)
-
-        #with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
-          #  f.write(chatgpt_vhdl)
-
-        #print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
+            base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
+            new_filename = chatgpt_vhdl_HDLGen_file_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
+            # Writing xml file
+            with open(new_filename, "w") as f:
+                f.write(chatgpt_vhdl)
+            print("ChatGPT VHDL model successfully generated at ", new_filename)
         self.entity_name = entity_name
         #return overwrite, instances
         return instances
@@ -887,7 +859,7 @@ class Generator(QWidget):
                 self.dirs.append(dir)
         if self.dirs is not None:
             for dir in self.dirs:
-                files += "add_files -norecurse  "+ dir + " \n"
+                files += "add_files -norecurse  "+ ProjectManager.get_proj_environment() + dir + " \n"
             tcl_vivado_code = tcl_vivado_code.replace("$files", files)
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$files", "")
@@ -1361,11 +1333,11 @@ class Generator(QWidget):
             VHDLTestbench = VHDLTestbench.replace("&#44;", ",")
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
         chatgpt_tb = VHDLTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
-        vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_TB.vhd")
-        vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", self.entity_name + "_HDLGen_TB.vhd")
-        waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", self.entity_name + "_TB_behav.wcfg")
+        vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", entity_name + "_TB.vhd")
+        vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", entity_name + "_TB_backup.vhd")
+        waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", entity_name + "_TB_behav.wcfg")
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_TB_ChatGPT.txt")
-        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen",entity_name + "_VHDL_TB_ChatGPT_HDLGen.txt")
+        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen",entity_name + "_VHDL_TB_ChatGPT_backup.txt")
 
         if "2" in filesNumber:
          # Writing xml file
@@ -1373,54 +1345,45 @@ class Generator(QWidget):
              f.write(vhdl_tb_code)
          print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
         if "3" in filesNumber:
-         # Writing xml file
-         with open(vhdl_tb_HDLGen_path, "w") as f:
-             f.write(vhdl_tb_code)
-         print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
+            base_name, extension = os.path.splitext(vhdl_tb_HDLGen_path)
+            new_filename = vhdl_tb_HDLGen_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
+            # Writing xml file
+            with open(new_filename, "w") as f:
+                f.write(vhdl_tb_code)
+            print("VHDL Testbench HDLGen file successfully generated at ", new_filename)
         if "8" in filesNumber:
          # Writing xml file
          with open(chatgpt_vhdl_file_path, "w") as f:
              f.write(chatgpt_tb)
          print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
         if "9" in filesNumber:
-         # Writing xml file
-         with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
-             f.write(chatgpt_tb)
-         print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
+            base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
+            new_filename = chatgpt_vhdl_HDLGen_file_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
+            # Writing xml file
+            with open(new_filename, "w") as f:
+                f.write(chatgpt_tb)
+            print("Verilog Testbench ChatGPT file successfully generated at ", new_filename)
         if "10" in filesNumber:
             with open(waveform_path, "w") as f:
                 f.write(waveform)
             print("Waveform file successfully generated at ", waveform_path)
 
-        #if os.path.exists(vhdl_tb_path) == False:
-            #with open(vhdl_tb_path, "w") as f:
-                #f.write(vhdl_tb_code)
-            #print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
-
-           # with open(chatgpt_vhdl_file_path, "w") as f:
-           #     f.write(chatgpt_tb)
-           # print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
-
-        #if overwrite == True:
-            # Writing xml file
-          #  with open(vhdl_tb_path, "w") as f:
-          #      f.write(vhdl_tb_code)
-          #  print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
-
-          #  with open(chatgpt_vhdl_file_path, "w") as f:
-          #      f.write(chatgpt_tb)
-          #  print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
-       # with open(vhdl_tb_HDLGen_path, "w") as f:
-         #   f.write(vhdl_tb_code)
-       # print("VHDL Testbench HDLGen file successfully generated at ", vhdl_tb_HDLGen_path)
-
-      #  with open(waveform_path, "w") as f:
-          #  f.write(waveform)
-       # print("Waveform file successfully generated at ", waveform_path)
-
-       # with open(chatgpt_vhdl_HDLGen_file_path, "w") as f:
-          #  f.write(chatgpt_tb)
-       # print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_HDLGen_file_path)
     def generate_mainPackage(self):
         gen_arrays =""
         comp = ""
@@ -2277,42 +2240,73 @@ class Generator(QWidget):
         chatgpt_header = VerilogHeader + "\n\n" + chatgpt_header
         chatgpt_verilog = model + "\n\n" + chatgpt_verilog
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
-        verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_HDLGen.v")
+        verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_backup.v")
         chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_header_ChatGPT.txt")
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_ChatGPT.txt")
-        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_header_ChatGPT_HDLGen.txt")
-        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_ChatGPT_HDLGen.txt")
+        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_header_ChatGPT_backup.txt")
+        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_ChatGPT_backup.txt")
 
         if "0" in filesNumber:
             # Writing xml file
             with open(verilog_file_path, "w") as f:
                 f.write(verilog_code)
-            print("Verilog Model successfully generated at ", verilog_file_path)
+            print("VHDL Model successfully generated at ", verilog_file_path)
         if "1" in filesNumber:
+            base_name, extension = os.path.splitext(verilog_file_HDLGen_path)
+            new_filename = verilog_file_HDLGen_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
             # Writing xml file
-            with open(verilog_file_HDLGen_path, "w") as f:
+            with open(new_filename, "w") as f:
                 f.write(verilog_code)
-            print("Verilog HDLGen Model successfully generated at ", verilog_file_HDLGen_path)
+            print("VHDL Backup Model successfully generated at ", new_filename)
         if "4" in filesNumber:
             # Writing xml file
             with open(chatgpt_header_file_path, "w") as f:
                 f.write(chatgpt_header)
-            print("ChatGPT Verilog header successfully generated at ", chatgpt_header_file_path)
+            print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
         if "5" in filesNumber:
+            base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
+            new_filename = chatgpt_header_HDLGen_file_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
             # Writing xml file
-            with open(chatgpt_header_HDLGen_file_path, "w") as f:
+            with open(new_filename, "w") as f:
                 f.write(chatgpt_header)
-            print("ChatGPT Verilog header successfully generated at ", chatgpt_header_HDLGen_file_path)
+            print("ChatGPT VHDL header successfully generated at ", new_filename)
+
         if "6" in filesNumber:
             # Writing xml file
             with open(chatgpt_verilog_file_path, "w") as f:
                 f.write(chatgpt_verilog)
-            print("ChatGPT Verilog model successfully generated at ", chatgpt_verilog_file_path)
+            print("ChatGPT VHDL model successfully generated at ", chatgpt_verilog_file_path)
         if "7" in filesNumber:
+            base_name, extension = os.path.splitext(chatgpt_verilog_HDLGen_file_path)
+            new_filename = chatgpt_verilog_HDLGen_file_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
             # Writing xml file
-            with open(chatgpt_header_HDLGen_file_path, "w") as f:
+            with open(new_filename, "w") as f:
                 f.write(chatgpt_verilog)
-            print("ChatGPT Verilog model successfully generated at ", chatgpt_verilog_HDLGen_file_path)
+            print("ChatGPT VHDL model successfully generated at ", new_filename)
 
         self.entity_name = entity_name
         return instances
@@ -2655,31 +2649,51 @@ class Generator(QWidget):
             VerilogTestbench = VerilogTestbench.replace("&#44;", ",")
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
         chatgpt_tb = VerilogTestbench+ "\n\n" + chatgpt_tb + "\n\n" + self.note
-        verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_TB.v")
-        verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", self.entity_name + "_HDLGen_TB.v")
-        waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", self.entity_name + "_TB_behav.wcfg")
+        verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", entity_name + "_TB.v")
+        verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", entity_name + "_TB_backup.v")
+        waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", entity_name + "_TB_behav.wcfg")
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_TB_ChatGPT.txt")
-        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT","HDLGen",entity_name + "_Verilog_TB_ChatGPT_HDLGen.txt")
+        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT","HDLGen",entity_name + "_Verilog_TB_ChatGPT_backup.txt")
         if "2" in filesNumber:
          # Writing xml file
          with open(verilog_tb_path, "w") as f:
              f.write(verilog_tb_code)
          print("Verilog Testbench file successfully generated at ", verilog_tb_path)
         if "3" in filesNumber:
-         # Writing xml file
-         with open(verilog_tb_HDLGen_path, "w") as f:
-             f.write(verilog_tb_code)
-         print("Verilog Testbench HDLGen file successfully generated at ", verilog_tb_HDLGen_path)
+            base_name, extension = os.path.splitext(verilog_tb_HDLGen_path)
+            new_filename = verilog_tb_HDLGen_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
+            # Writing xml file
+            with open(new_filename, "w") as f:
+                f.write(verilog_tb_code)
+            print("Verilog Testbench HDLGen file successfully generated at ", new_filename)
         if "8" in filesNumber:
          # Writing xml file
          with open(chatgpt_verilog_file_path, "w") as f:
              f.write(chatgpt_tb)
          print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)
         if "9" in filesNumber:
-         # Writing xml file
-         with open(chatgpt_verilog_HDLGen_file_path, "w") as f:
-             f.write(chatgpt_tb)
-         print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_HDLGen_file_path)
+            base_name, extension = os.path.splitext(chatgpt_verilog_HDLGen_file_path)
+            new_filename = chatgpt_verilog_HDLGen_file_path
+            print(new_filename)
+            if os.path.isfile(new_filename):
+                # File already exists, modify the name
+                index = 1
+                while os.path.isfile(new_filename):
+                    index += 1
+                    new_filename = f"{base_name}_{index}{extension}"
+            print(new_filename)
+            # Writing xml file
+            with open(new_filename, "w") as f:
+                f.write(chatgpt_tb)
+            print("Verilog Testbench ChatGPT file successfully generated at ", new_filename)
         if "10" in filesNumber:
             with open(waveform_path, "w") as f:
                 f.write(waveform)

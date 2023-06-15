@@ -6,6 +6,7 @@ from PySide2.QtGui import *
 import sys
 
 sys.path.append("..")
+import configparser
 from ProjectManager.project_manager import ProjectManager
 from Generator.generator import Generator
 
@@ -76,6 +77,7 @@ class ComponentDialog(QDialog):
 
         self.cancelled = True
         self.generator = Generator()
+        self.config = configparser.ConfigParser()
         self.setup_ui()
 
         #self.populate_signals(ProjectManager.get_xml_data_path())
@@ -152,10 +154,15 @@ class ComponentDialog(QDialog):
 
 
     def set_comp_path(self):
-        comp_path = QFileDialog.getOpenFileName(self,"Select model .vhd file","../User_Projects/", filter="VHDL files (*.vhd)")
+        self.config.read('config.ini')
+        lastDir = self.config.get('user', 'recentEnviro')
+        if not os.path.exists(lastDir):
+            lastDir = "../User_Projects/"
+        comp_path = QFileDialog.getOpenFileName(self,"Select model .vhd file",lastDir, filter="VHDL files (*.vhd)")
         comp_path = comp_path[0]
-        self.file_path_input.setText(comp_path)
-        self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
+        if comp_path != "":
+            self.file_path_input.setText(comp_path)
+            self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
     def load_component_data(self, component_data):
         self.component_name_input.setText(component_data[0])
         self.file_path_input.setText(ProjectManager.get_proj_environment()+component_data[1])

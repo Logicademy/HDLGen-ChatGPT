@@ -12,6 +12,7 @@ from HDLDesigner.ChatGPT.chatgpt import ChatGPT
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from HDLDesigner.Package.package import Package
 from HDLDesigner.Subcomponents.subcomponents import Subcomponents
+from HDLDesigner.Generate.generation import Gen
 from Generator.generator import Generator
 from ProjectManager.project_manager import ProjectManager
 
@@ -60,6 +61,7 @@ class HDLDesigner(QWidget):
         self.architecture = Architecture(self.proj_dir)
         self.testplan = TestPlan(self.proj_dir)
         self.chatGPT = ChatGPT(self.proj_dir)
+        self.generate = Gen(self.proj_dir)
         self.internalSignal = InternalSignal(self.proj_dir)
         self.package = Package()
         self.subcomponents = Subcomponents()
@@ -77,6 +79,7 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(self.architecture, "Architecture")
         self.tabs.addTab(self.testplan, "Test Plan")
         self.tabs.addTab(self.chatGPT,"ChatGPT Message")
+        self.tabs.addTab(self.generate, "Generate")
         font = self.tabs.font()
         font.setPointSize(10)
         self.tabs.setFont(font)
