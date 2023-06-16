@@ -250,7 +250,7 @@ class Home(QMainWindow):
             self.hdl_designer.compDetails.save_data()
             self.hdl_designer.ioPorts.save_data()
             self.hdl_designer.architecture.save_data()
-            self.hdl_designer.chatGPT.save_data()
+            self.hdl_designer.generate.save_data()
             self.hdl_designer.internalSignal.save_data()
 
 

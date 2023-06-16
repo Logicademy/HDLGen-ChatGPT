@@ -41,14 +41,19 @@ class Gen(QWidget):
         self.entity_name = ""
         self.mainLayout = QVBoxLayout()
         self.modelFrame = QFrame()
+        self.headerModelFrame = QFrame()
         self.chatgptModelFrame = QFrame()
         self.testbenchFrame = QFrame()
+        self.headerTestbenchFrame = QFrame()
         self.chatgptTestbenchFrame = QFrame()
+        self.titleFrame = QFrame()
+        self.headerTitleFrame = QFrame()
+        self.chatgptTitleFrame = QFrame()
         
         
         self.input_layout = QGridLayout()
 
-        self.testplan_label = QLabel("ChatGPT Message")
+        self.testplan_label = QLabel("Generate")
         self.testplan_label.setFont(title_font)
         self.testplan_label.setStyleSheet(WHITE_COLOR)
 
@@ -57,6 +62,38 @@ class Gen(QWidget):
         self.chatgpt_info_btn.setFixedSize(25, 25)
         self.chatgpt_info_btn.clicked.connect(self.chatgpt_help_window)
 
+        self.chatgpt_title_label = QLabel("ChatGPT Message Header")
+        self.chatgpt_title_label.setStyleSheet(BLACK_COLOR)
+        self.chatgpt_title_label.setFont(small_text_font)
+        self.chatgpt_title_label.setFixedSize(200, 50)
+
+        self.msg_title_label = QLabel("ChatGPT Message")
+        self.msg_title_label.setStyleSheet(BLACK_COLOR)
+        self.msg_title_label.setFont(small_text_font)
+
+        self.generate_chatgpt_title = QPushButton("Generate file and Copy")
+
+        self.generate_chatgpt_title.setFixedSize(200, 50)
+        self.generate_chatgpt_title.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+        self.chatgpt_title_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
+        self.chatgpt_title_bk_checkBox.setStyleSheet(BLACK_COLOR)
+
+        self.delete_bk_title_chatgpt = QPushButton("Delete backups")
+        self.delete_bk_title_chatgpt.setFixedSize(200, 50)
+        self.delete_bk_title_chatgpt.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+        self.chatgpt_loc_title = QPushButton("Go to folder")
+        self.chatgpt_loc_title.setFixedSize(200, 50)
+        self.chatgpt_loc_title.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+
         self.model_label = QLabel("HDL Model Template")
         self.model_label.setStyleSheet(BLACK_COLOR)
         self.model_label.setFont(small_text_font)
@@ -64,6 +101,11 @@ class Gen(QWidget):
         self.chatgpt_model_label = QLabel("ChatGPT Message Header")
         self.chatgpt_model_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_model_label.setFont(small_text_font)
+        self.chatgpt_model_label.setFixedSize(200, 50)
+
+        self.msg_model_label = QLabel("ChatGPT Message")
+        self.msg_model_label.setStyleSheet(BLACK_COLOR)
+        self.msg_model_label.setFont(small_text_font)
 
         self.generate_model = QPushButton("Generate")
         self.generate_model.setFixedSize(200, 50)
@@ -74,7 +116,7 @@ class Gen(QWidget):
         self.model_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.model_bk_checkBox.setStyleSheet(BLACK_COLOR)
 
-        self.generate_chatgpt_model = QPushButton("Generate & Copy")
+        self.generate_chatgpt_model = QPushButton("Generate file and Copy")
         self.generate_chatgpt_model.setFixedSize(200, 50)
         self.generate_chatgpt_model.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
@@ -86,6 +128,12 @@ class Gen(QWidget):
         self.delete_bk_model = QPushButton("Delete backups")
         self.delete_bk_model.setFixedSize(200, 50)
         self.delete_bk_model.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+        self.delete_bk_model_chatgpt = QPushButton("Delete backups")
+        self.delete_bk_model_chatgpt.setFixedSize(200, 50)
+        self.delete_bk_model_chatgpt.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
@@ -109,6 +157,11 @@ class Gen(QWidget):
         self.chatgpt_testbench_label = QLabel("ChatGPT Message Header")
         self.chatgpt_testbench_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_testbench_label.setFont(small_text_font)
+        self.chatgpt_testbench_label.setFixedSize(200, 50)
+
+        self.msg_testbench_label = QLabel("ChatGPT Message")
+        self.msg_testbench_label.setStyleSheet(BLACK_COLOR)
+        self.msg_testbench_label.setFont(small_text_font)
 
         self.generate_testbench = QPushButton("Generate")
         self.generate_testbench.setFixedSize(200, 50)
@@ -122,7 +175,7 @@ class Gen(QWidget):
         self.wcfg_checkBox = QCheckBox("Waveform Configuration File")
         self.wcfg_checkBox.setStyleSheet(BLACK_COLOR)
 
-        self.generate_chatgpt_testbench = QPushButton("Generate & Copy")
+        self.generate_chatgpt_testbench = QPushButton("Generate file and Copy")
         self.generate_chatgpt_testbench.setFixedSize(200, 50)
         self.generate_chatgpt_testbench.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
@@ -134,6 +187,12 @@ class Gen(QWidget):
         self.delete_bk_testbench = QPushButton("Delete backups")
         self.delete_bk_testbench.setFixedSize(200, 50)
         self.delete_bk_testbench.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+        self.delete_bk_testbench_chatgpt = QPushButton("Delete backups")
+        self.delete_bk_testbench_chatgpt.setFixedSize(200, 50)
+        self.delete_bk_testbench_chatgpt.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
@@ -149,35 +208,35 @@ class Gen(QWidget):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
-        self.header_VHDL = QPushButton("VHDL Title Section Command")
-        self.header_VHDL.setFixedSize(200, 50)
-        self.header_VHDL.setStyleSheet(
+        self.title_VHDL = QPushButton("Edit")
+        self.title_VHDL.setFixedSize(200, 50)
+        self.title_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
-        self.model_VHDL = QPushButton("VHDL Model Command")
+        self.model_VHDL = QPushButton("Edit")
         self.model_VHDL.setFixedSize(200, 50)
         self.model_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
 
-        self.testbench_VHDL = QPushButton("VHDL Testbench Command")
+        self.testbench_VHDL = QPushButton("Edit")
         self.testbench_VHDL.setFixedSize(200, 50)
         self.testbench_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
 
-        self.header_Verilog = QPushButton("Verilog Title Section Command")
-        self.header_Verilog.setFixedSize(200, 50)
-        self.header_Verilog.setStyleSheet(
+        self.title_Verilog = QPushButton("Edit")
+        self.title_Verilog.setFixedSize(200, 50)
+        self.title_Verilog.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-        self.header_Verilog.setVisible(False)
+        self.title_Verilog.setVisible(False)
 
 
-        self.model_Verilog = QPushButton("Verilog Model Command")
+        self.model_Verilog = QPushButton("Edit")
         self.model_Verilog.setFixedSize(200, 50)
         self.model_Verilog.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
@@ -185,21 +244,45 @@ class Gen(QWidget):
         self.model_Verilog.setVisible(False)
 
 
-        self.testbench_Verilog = QPushButton("Verilog Testbench Command")
+        self.testbench_Verilog = QPushButton("Edit")
         self.testbench_Verilog.setFixedSize(200, 50)
         self.testbench_Verilog.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
         self.testbench_Verilog.setVisible(False)
 
-        self.header_check = QRadioButton("Preview")
-        # self.vhdl_check.setChecked(True)
-        self.header_check.setStyleSheet(BLACK_COLOR)
-        self.header_check.setChecked(True)
+        self.header_title_check = QRadioButton("Preview")
+        self.header_title_check.setStyleSheet(BLACK_COLOR)
+        self.header_model_check = QRadioButton("Preview")
+        self.header_model_check.setStyleSheet(BLACK_COLOR)
+        self.header_model_check.setChecked(True)
+        self.header_testbench_check = QRadioButton("Preview")
+        self.header_testbench_check.setStyleSheet(BLACK_COLOR)
+        self.header_testbench_check.setChecked(True)
         self.model_check = QRadioButton("Preview")
         self.model_check.setStyleSheet(BLACK_COLOR)
         self.testbench_check = QRadioButton("Preview")
         self.testbench_check.setStyleSheet(BLACK_COLOR)
+        self.msg_model_check = QRadioButton("Preview")
+        self.msg_model_check.setStyleSheet(BLACK_COLOR)
+        self.msg_title_check = QRadioButton("Preview")
+        self.msg_title_check.setStyleSheet(BLACK_COLOR)
+        self.msg_testbench_check = QRadioButton("Preview")
+        self.msg_testbench_check.setStyleSheet(BLACK_COLOR)
+
+        self.model_button_group = QButtonGroup()
+        self.model_button_group.addButton(self.header_model_check)
+        self.model_button_group.addButton(self.msg_model_check)
+        self.model_button_group.addButton(self.model_check)
+
+        self.testbench_button_group = QButtonGroup()
+        self.testbench_button_group.addButton(self.header_testbench_check)
+        self.testbench_button_group.addButton(self.msg_testbench_check)
+        self.testbench_button_group.addButton(self.testbench_check)
+
+        self.title_button_group = QButtonGroup()
+        self.title_button_group.addButton(self.header_title_check)
+        self.title_button_group.addButton(self.msg_title_check)
 
         self.top_layout = QGridLayout()
         self.arch_action_layout = QVBoxLayout()
@@ -225,8 +308,8 @@ class Gen(QWidget):
         self.arch_action_layout.addLayout(self.top_layout)
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.header_VHDL.clicked.connect(self.vhdl_header_command)
-        self.header_Verilog.clicked.connect(self.verilog_header_command)
+        self.title_VHDL.clicked.connect(self.vhdl_header_command)
+        self.title_Verilog.clicked.connect(self.verilog_header_command)
         self.model_VHDL.clicked.connect(self.vhdl_model_command)
         self.model_Verilog.clicked.connect(self.verilog_model_command)
         self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
@@ -243,13 +326,13 @@ class Gen(QWidget):
         self.HDLModel = QFrame()
         self.HDLModel.setFrameShape(QFrame.StyledPanel)
         self.HDLModel.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
-        self.HDLModel.setContentsMargins(40,40,40,40)
+        #self.HDLModel.setContentsMargins(40,40,40,40)
 
 
         self.HDLTB = QFrame()
         self.HDLTB.setFrameShape(QFrame.StyledPanel)
         self.HDLTB.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
-        self.HDLTB.setContentsMargins(40, 40, 40, 40)
+        #self.HDLTB.setContentsMargins(40, 40, 40, 40)
 
         self.HDLTitle = QFrame()
 
@@ -262,6 +345,7 @@ class Gen(QWidget):
         # Create layouts for each tab
         self.HDLModelLayout = QVBoxLayout(self.HDLModel)
         self.HDLModel.setLayout(self.HDLModelLayout)
+        self.header_msg_model_layout = QGridLayout()
         self.ModelLayout = QGridLayout()
         self.ChatgptModelLayout = QGridLayout()
         
@@ -269,27 +353,47 @@ class Gen(QWidget):
         #self.TBLayout = QGridLayout(self.HDLTB)
         self.HDLTestbenchLayout = QVBoxLayout(self.HDLTB)
         self.HDLTB.setLayout(self.HDLTestbenchLayout)
+        self.header_msg_testbench_layout = QGridLayout()
         self.TestbenchLayout = QGridLayout()
         self.ChatgptTestbenchLayout = QGridLayout()
 
-        self.TitleLayout = QGridLayout(self.HDLTitle)
+        #self.TitleLayout = QGridLayout(self.HDLTitle)
+        self.HDLTitleLayout = QVBoxLayout(self.HDLTitle)
+        self.HDLTitle.setLayout(self.HDLTitleLayout)
+        self.header_msg_title_layout = QGridLayout()
+        self.ChatgptTitleLayout = QGridLayout()
 
         self.ModelLayout.addWidget(self.model_label, 0, 0)
         self.ModelLayout.addWidget(self.loc_model, 0, 1)
+        self.ModelLayout.addWidget(self.model_check, 2, 0)
         self.ModelLayout.addWidget(self.generate_model, 1, 0)
-        self.ModelLayout.addWidget(self.model_bk_checkBox, 1, 1)
+        self.ModelLayout.addWidget(self.model_bk_checkBox, 2, 1)
+        self.ModelLayout.addWidget(self.delete_bk_model, 1, 1)
         self.modelFrame.setLayout(self.ModelLayout)
         self.modelFrame.setStyleSheet(
             ".QFrame{background-color: white; border-radius: 5px;}")
 
-        self.ChatgptModelLayout.addWidget(self.chatgpt_model_label, 0, 0)
-        self.ChatgptModelLayout.addWidget(self.chatgpt_loc_model, 0, 1)
-        self.ChatgptModelLayout.addWidget(self.model_VHDL, 1, 0)
-        self.ChatgptModelLayout.addWidget(self.generate_chatgpt_model, 2, 0)
-        self.ChatgptModelLayout.addWidget(self.model_Verilog, 1, 0)
-        self.ChatgptModelLayout.addWidget(self.chatgpt_model_bk_checkBox, 1, 1)
-        self.ChatgptModelLayout.addWidget(self.delete_bk_model, 2, 1)
+        self.header_msg_model_layout.addWidget(self.chatgpt_model_label, 0, 0)
+        self.header_msg_model_layout.addWidget(self.header_model_check, 1, 0)
+        self.header_msg_model_layout.addWidget(self.model_VHDL, 0, 1)
+        self.header_msg_model_layout.addWidget(self.model_Verilog, 0, 1)
+        self.headerModelFrame.setLayout(self.header_msg_model_layout)
+        self.headerModelFrame.setStyleSheet(
+            ".QFrame{background-color: white; border-radius: 5px;}")
+        self.headerModelBorderFrame = QFrame()
+        self.headerModelBorderFrame.setStyleSheet(
+            ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
+        self.headerModelBorderFrameLayout = QVBoxLayout(self.headerModelBorderFrame)
+        self.headerModelBorderFrameLayout.addWidget(self.headerModelFrame)
+        self.HDLModelLayout.addWidget(self.headerModelBorderFrame)
+        self.HDLModelLayout.addSpacing(MEDIUM_SPACING)
 
+        self.ChatgptModelLayout.addWidget(self.msg_model_label, 0, 0)
+        self.ChatgptModelLayout.addWidget(self.chatgpt_loc_model, 0, 1)
+        self.ChatgptModelLayout.addWidget(self.msg_model_check, 2, 0)
+        self.ChatgptModelLayout.addWidget(self.generate_chatgpt_model, 1, 0)
+        self.ChatgptModelLayout.addWidget(self.chatgpt_model_bk_checkBox, 2, 1)
+        self.ChatgptModelLayout.addWidget(self.delete_bk_model_chatgpt, 1, 1)
         self.chatgptModelFrame.setLayout(self.ChatgptModelLayout)
         self.chatgptModelFrame.setStyleSheet(
             ".QFrame{background-color: white; border-radius: 5px;}")
@@ -312,19 +416,37 @@ class Gen(QWidget):
         self.TestbenchLayout.addWidget(self.testbench_label, 0, 0)
         self.TestbenchLayout.addWidget(self.loc_testbench, 0, 1)
         self.TestbenchLayout.addWidget(self.generate_testbench, 1, 0)
-        self.TestbenchLayout.addWidget(self.testbench_bk_checkBox, 1, 1)
+        self.TestbenchLayout.addWidget(self.testbench_bk_checkBox, 3, 1)
+        self.TestbenchLayout.addWidget(self.testbench_check, 2, 0)
         self.TestbenchLayout.addWidget(self.wcfg_checkBox, 2, 1)
+        self.TestbenchLayout.addWidget(self.delete_bk_testbench, 1, 1)
         self.testbenchFrame.setLayout(self.TestbenchLayout)
         self.testbenchFrame.setStyleSheet(
             ".QFrame{background-color: white; border-radius: 5px;}")
 
-        self.ChatgptTestbenchLayout.addWidget(self.chatgpt_testbench_label, 3, 0)
-        self.ChatgptTestbenchLayout.addWidget(self.chatgpt_loc_testbench, 3, 1)
-        self.ChatgptTestbenchLayout.addWidget(self.testbench_VHDL, 4, 0)
-        self.ChatgptTestbenchLayout.addWidget(self.generate_chatgpt_testbench, 5, 0)
-        self.ChatgptTestbenchLayout.addWidget(self.testbench_Verilog, 4, 0)
-        self.ChatgptTestbenchLayout.addWidget(self.chatgpt_testbench_bk_checkBox, 4, 1)
-        self.ChatgptTestbenchLayout.addWidget(self.delete_bk_testbench, 5, 1)
+        self.header_msg_testbench_layout.addWidget(self.chatgpt_testbench_label, 0, 0)
+        self.header_msg_testbench_layout.addWidget(self.header_testbench_check, 1, 0)
+        self.header_msg_testbench_layout.addWidget(self.testbench_VHDL, 0, 1)
+        self.header_msg_testbench_layout.addWidget(self.testbench_Verilog, 0, 1)
+        self.headerTestbenchFrame.setLayout(self.header_msg_testbench_layout)
+        self.headerTestbenchFrame.setStyleSheet(
+            ".QFrame{background-color: white; border-radius: 5px;}")
+        self.headerTestbenchBorderFrame = QFrame()
+        self.headerTestbenchBorderFrame.setStyleSheet(
+            ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
+        self.headerTestbenchBorderFrameLayout = QVBoxLayout(self.headerTestbenchBorderFrame)
+        self.headerTestbenchBorderFrameLayout.addWidget(self.headerTestbenchFrame)
+        self.HDLTestbenchLayout.addWidget(self.headerTestbenchBorderFrame)
+        self.HDLTestbenchLayout.addSpacing(MEDIUM_SPACING)
+
+        self.ChatgptTestbenchLayout.addWidget(self.msg_testbench_label, 0, 0)
+        self.ChatgptTestbenchLayout.addWidget(self.chatgpt_loc_testbench, 0, 1)
+        #self.ChatgptTestbenchLayout.addWidget(self.testbench_VHDL, 4, 0)
+        self.ChatgptTestbenchLayout.addWidget(self.generate_chatgpt_testbench, 1, 0)
+        #self.ChatgptTestbenchLayout.addWidget(self.testbench_Verilog, 4, 0)
+        self.ChatgptTestbenchLayout.addWidget(self.chatgpt_testbench_bk_checkBox, 2, 1)
+        self.ChatgptTestbenchLayout.addWidget(self.msg_testbench_check, 2, 0)
+        self.ChatgptTestbenchLayout.addWidget(self.delete_bk_testbench_chatgpt, 1, 1)
 
         self.chatgptTestbenchFrame.setLayout(self.ChatgptTestbenchLayout)
         self.chatgptTestbenchFrame.setStyleSheet(
@@ -346,8 +468,54 @@ class Gen(QWidget):
         self.chatgptTestbenchBorderFrameLayout.addWidget(self.chatgptTestbenchFrame)
         self.HDLTestbenchLayout.addWidget(self.chatgptTestbenchBorderFrame)
 
-        self.TitleLayout.addWidget(self.header_VHDL, 1,0)
-        self.TitleLayout.addWidget(self.header_Verilog, 1, 0)
+        self.header_msg_title_layout.addWidget(self.chatgpt_title_label, 0, 0)
+        self.header_msg_title_layout.addWidget(self.header_title_check, 1, 0)
+        self.header_msg_title_layout.addWidget(self.title_VHDL, 0, 1)
+        self.header_msg_title_layout.addWidget(self.title_Verilog, 0, 1)
+        self.headerTitleFrame.setLayout(self.header_msg_title_layout)
+        self.headerTitleFrame.setStyleSheet(
+            ".QFrame{background-color: white; border-radius: 5px;}")
+        self.headerTitleBorderFrame = QFrame()
+        self.headerTitleBorderFrame.setStyleSheet(
+            ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
+        self.headerTitleBorderFrameLayout = QVBoxLayout(self.headerTitleBorderFrame)
+        self.headerTitleBorderFrameLayout.addWidget(self.headerTitleFrame)
+        self.HDLTitleLayout.addWidget(self.headerTitleBorderFrame)
+        self.HDLTitleLayout.addSpacing(MEDIUM_SPACING)
+
+        self.ChatgptTitleLayout.addWidget(self.msg_title_label, 0, 0)
+        self.ChatgptTitleLayout.addWidget(self.chatgpt_loc_title, 0, 1)
+        # self.ChatgptTitleLayout.addWidget(self.title_VHDL, 4, 0)
+        self.ChatgptTitleLayout.addWidget(self.generate_chatgpt_title, 1, 0)
+        # self.ChatgptTitleLayout.addWidget(self.title_Verilog, 4, 0)
+        self.ChatgptTitleLayout.addWidget(self.chatgpt_title_bk_checkBox, 2, 1)
+        self.ChatgptTitleLayout.addWidget(self.msg_title_check, 2, 0)
+        self.ChatgptTitleLayout.addWidget(self.delete_bk_title_chatgpt, 1, 1)
+
+        self.chatgptTitleFrame.setLayout(self.ChatgptTitleLayout)
+        self.chatgptTitleFrame.setStyleSheet(
+            ".QFrame{background-color: white; border-radius: 5px;}")
+        self.titleBorderFrame = QFrame()
+        self.titleBorderFrame.setStyleSheet(
+            ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
+        self.titleBorderFrameLayout = QVBoxLayout(self.titleBorderFrame)
+        self.titleBorderFrameLayout.addWidget(self.titleFrame)
+
+        #self.HDLTitleLayout.addWidget(self.titleBorderFrame)
+        # self.HDLModelLayout.addWidget(self.modelFrame)
+        #self.HDLTitleLayout.addSpacing(MEDIUM_SPACING)
+
+        self.chatgptTitleBorderFrame = QFrame()
+        self.chatgptTitleBorderFrame.setStyleSheet(
+            ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
+        self.chatgptTitleBorderFrameLayout = QVBoxLayout(self.chatgptTitleBorderFrame)
+        self.chatgptTitleBorderFrameLayout.addWidget(self.chatgptTitleFrame)
+        self.HDLTitleLayout.addWidget(self.chatgptTitleBorderFrame)
+
+
+
+        #self.TitleLayout.addWidget(self.header_VHDL, 1,0)
+        #self.TitleLayout.addWidget(self.header_Verilog, 1, 0)
 
         self.input_layout.addWidget(self.tab_widget)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
@@ -568,20 +736,20 @@ class Gen(QWidget):
 
     def VHDLVisible(self):
         self.model_VHDL.setVisible(True)
-        self.header_VHDL.setVisible(True)
+        self.title_VHDL.setVisible(True)
         self.testbench_VHDL.setVisible(True)
 
         self.model_Verilog.setVisible(False)
-        self.header_Verilog.setVisible(False)
+        self.title_Verilog.setVisible(False)
         self.testbench_Verilog.setVisible(False)
 
     def VerilogVisible(self):
         self.model_Verilog.setVisible(True)
-        self.header_Verilog.setVisible(True)
+        self.title_Verilog.setVisible(True)
         self.testbench_Verilog.setVisible(True)
 
         self.model_VHDL.setVisible(False)
-        self.header_VHDL.setVisible(False)
+        self.title_VHDL.setVisible(False)
         self.testbench_VHDL.setVisible(False)
 
     def copy_file_contents_to_clipboard(self, file_path):
