@@ -5,7 +5,6 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 import pyperclip
 import sys
-import subprocess
 import qtawesome as qta
 
 sys.path.append("..")
@@ -253,6 +252,7 @@ class Gen(QWidget):
 
         self.header_title_check = QRadioButton("Preview")
         self.header_title_check.setStyleSheet(BLACK_COLOR)
+        self.header_title_check.setChecked(True)
         self.header_model_check = QRadioButton("Preview")
         self.header_model_check.setStyleSheet(BLACK_COLOR)
         self.header_model_check.setChecked(True)
@@ -530,10 +530,7 @@ class Gen(QWidget):
         #self.generate_testbench.clicked.connect(self.HDL_testbench_generate)
         #self.generate_chatgpt_testbench.clicked.connect(self.chatgpt_testbench_generate)
 
-        self.loc_model.clicked.connect(self.open_model_folder)
-        self.chatgpt_loc_model.clicked.connect(self.open_chatgpt_folder)
-        self.loc_testbench.clicked.connect(self.open_testbench_folder)
-        self.chatgpt_loc_testbench.clicked.connect(self.open_chatgpt_folder)
+
 
     def save_data(self):
 
@@ -773,15 +770,7 @@ class Gen(QWidget):
             msgBox.exec_()
             print("An error occurred:", str(e))
 
-    def open_file_explorer(self,path):
-        if sys.platform == 'win32':
-            subprocess.Popen(f'explorer {os.path.realpath(path)}')
-        elif sys.platform == 'darwin':
-            subprocess.Popen(['open', path])
-        elif sys.platform == 'linux':
-            subprocess.Popen(['xdg-open', path])
-        else:
-            print(f"Unsupported platform: {sys.platform}")
+
     def open_model_folder(self):
         if self.model_VHDL.isVisible():
             path = self.proj_path+"/VHDL/model"

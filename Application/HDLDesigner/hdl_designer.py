@@ -240,9 +240,12 @@ class HDLDesigner(QWidget):
                     self.preview_window.setText(chatgpt_tb)
                     self.preview_label.setText("ChatGPT message, to generate final HDL testbench")
             elif self.generate.tab_widget.currentIndex() == 2:
-                self.preview_window.setText("no")
-                #if self.generate.header_check.isChecked():
-                    #self.preview_window.setText(self.HeaderCmd + "\n\n" +self.chatgpt_header)
+                if self.generate.header_title_check.isChecked():
+                    self.preview_label.setText("ChatGPT Message Header Preview")
+                    self.preview_window.setText(self.HeaderCmd) #+ "\n\n" +self.chatgpt_header)
+                elif self.generate.msg_title_check.isChecked():
+                    self.preview_label.setText("ChatGPT message, to generate final HDL title")
+                    self.preview_window.setText(self.HeaderCmd+ "\n\n" +self.chatgpt_header)
         else:
             self.preview_window.setText(self.code)
             self.preview_label.setText("HDL Model Preview")

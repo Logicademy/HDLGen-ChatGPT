@@ -741,8 +741,8 @@ class Generator(QWidget):
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_backup.vhd")
         chatgpt_header_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_header_ChatGPT.txt")
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_ChatGPT.txt")
-        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_header_ChatGPT_backup.txt")
-        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen", entity_name + "_VHDL_ChatGPT_backup.txt")
+        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","Backups", entity_name + "_VHDL_header_ChatGPT_backup.txt")
+        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","Backups", entity_name + "_VHDL_ChatGPT_backup.txt")
 
         if "0" in filesNumber:
          # Writing xml file
@@ -1337,7 +1337,7 @@ class Generator(QWidget):
         vhdl_tb_HDLGen_path = os.path.join(proj_path, "VHDL", "testbench", entity_name + "_TB_backup.vhd")
         waveform_path = os.path.join(proj_path, "VHDL", "AMDprj", entity_name + "_TB_behav.wcfg")
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_TB_ChatGPT.txt")
-        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","HDLGen",entity_name + "_VHDL_TB_ChatGPT_backup.txt")
+        chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","Backups",entity_name + "_VHDL_TB_ChatGPT_backup.txt")
 
         if "2" in filesNumber:
          # Writing xml file
@@ -2243,8 +2243,8 @@ class Generator(QWidget):
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_backup.v")
         chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_header_ChatGPT.txt")
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_ChatGPT.txt")
-        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_header_ChatGPT_backup.txt")
-        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "HDLGen",entity_name + "_Verilog_ChatGPT_backup.txt")
+        chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "Backups",entity_name + "_Verilog_header_ChatGPT_backup.txt")
+        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "Backups",entity_name + "_Verilog_ChatGPT_backup.txt")
 
         if "0" in filesNumber:
             # Writing xml file
@@ -2653,7 +2653,7 @@ class Generator(QWidget):
         verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", entity_name + "_TB_backup.v")
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", entity_name + "_TB_behav.wcfg")
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_TB_ChatGPT.txt")
-        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT","HDLGen",entity_name + "_Verilog_TB_ChatGPT_backup.txt")
+        chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT","Backups",entity_name + "_Verilog_TB_ChatGPT_backup.txt")
         if "2" in filesNumber:
          # Writing xml file
          with open(verilog_tb_path, "w") as f:

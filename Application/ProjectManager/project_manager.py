@@ -610,7 +610,7 @@ class ProjectManager(QWidget):
             vhdl_model_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/model')
             vhdl_testbench_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/testbench')
             vhdl_ChatGPT_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/ChatGPT')
-            vhdl_ChatGPT_HDLGen_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/ChatGPT/HDLGen')
+            vhdl_ChatGPT_HDLGen_dir = root.createTextNode(ProjectManager.proj_name + '/VHDL/ChatGPT/Backups')
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
             lang_name = root.createElement('name')
@@ -646,7 +646,7 @@ class ProjectManager(QWidget):
             verilog_model_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/model')
             verilog_tstbnch_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/testbench')
             verilog_ChatGPT_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/ChatGPT')
-            verilog_ChatGPT_HDLGen_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/ChatGPT/HDLGen')
+            verilog_ChatGPT_HDLGen_dir = root.createTextNode(ProjectManager.proj_name + '/Verilog/ChatGPT/Backups')
 
             lang_data = root.createElement('language')
             hdl_data.appendChild(lang_data)
