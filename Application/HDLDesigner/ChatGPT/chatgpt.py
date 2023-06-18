@@ -15,6 +15,7 @@ from HDLDesigner.ChatGPT.VerilogModel import VerilogModelDialog
 from HDLDesigner.ChatGPT.VHDLTestbench import VHDLTestbenchDialog
 from HDLDesigner.ChatGPT.VerilogTestbench import VerilogTestbenchDialog
 from ProjectManager.project_manager import ProjectManager
+from Generator.generator import Generator
 
 
 WHITE_COLOR = "color: white"
@@ -135,6 +136,7 @@ class ChatGPT(QWidget):
         self.list_frame = QFrame()
         self.main_frame = QFrame()
         self.input_frame = QFrame()
+        self.generator = Generator()
         self.setup_ui()
         if proj_dir != None:
             self.load_data(proj_dir)
@@ -332,6 +334,8 @@ class ChatGPT(QWidget):
             self.commands[5]=verilog_testbench
         self.save_data()
     def header_VHDL_file(self):
+        self.generator.generate_folders()
+        self.generator.create_vhdl_file("4")
         proj_name = ProjectManager.get_proj_name()
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         self.entity_name=ProjectManager.proj_name
@@ -339,12 +343,16 @@ class ChatGPT(QWidget):
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def header_Verilog_file(self):
+        self.generator.generate_folders()
+        self.generator.create_verilog_file("4")
         proj_name = ProjectManager.get_proj_name()
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         self.entity_name = ProjectManager.proj_name
         chatgpt_verilog_file_path = os.path.join(self.proj_path, "Verilog", "ChatGPT", self.entity_name + "_Verilog_header_ChatGPT.txt")
         self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
     def model_VHDL_file(self):
+        self.generator.generate_folders()
+        self.generator.create_vhdl_file("6")
         proj_name = ProjectManager.get_proj_name()
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         self.entity_name = ProjectManager.proj_name
@@ -352,6 +360,8 @@ class ChatGPT(QWidget):
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def model_Verilog_file(self):
+        self.generator.generate_folders()
+        self.generator.create_verilog_file("6")
         proj_name = ProjectManager.get_proj_name()
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         self.entity_name = ProjectManager.proj_name
@@ -359,6 +369,8 @@ class ChatGPT(QWidget):
         self.copy_file_contents_to_clipboard(chatgpt_verilog_file_path)
 
     def tb_VHDL_file(self):
+        self.generator.generate_folders()
+        self.generator.create_testbench_file("8")
         proj_name = ProjectManager.get_proj_name()
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         self.entity_name = ProjectManager.proj_name
@@ -366,6 +378,8 @@ class ChatGPT(QWidget):
         self.copy_file_contents_to_clipboard(chatgpt_vhdl_file_path)
 
     def tb_Verilog_file(self):
+        self.generator.generate_folders()
+        self.generator.create_verilog_testbench_file("8")
         proj_name = ProjectManager.get_proj_name()
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         self.entity_name = ProjectManager.proj_name

@@ -12,6 +12,7 @@ from HDLDesigner.ChatGPT.chatgpt import ChatGPT
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from HDLDesigner.Package.package import Package
 from HDLDesigner.Subcomponents.subcomponents import Subcomponents
+from HDLDesigner.Generate.generation import Gen
 from Generator.generator import Generator
 from ProjectManager.project_manager import ProjectManager
 
@@ -59,7 +60,8 @@ class HDLDesigner(QWidget):
         self.ioPorts = IOPorts(self.proj_dir)
         self.architecture = Architecture(self.proj_dir)
         self.testplan = TestPlan(self.proj_dir)
-        self.chatGPT = ChatGPT(self.proj_dir)
+        #self.chatGPT = ChatGPT(self.proj_dir)
+        self.generate = Gen(self.proj_dir)
         self.internalSignal = InternalSignal(self.proj_dir)
         self.package = Package()
         self.subcomponents = Subcomponents()
@@ -76,7 +78,8 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(self.internalSignal, "Internal Signals")
         self.tabs.addTab(self.architecture, "Architecture")
         self.tabs.addTab(self.testplan, "Test Plan")
-        self.tabs.addTab(self.chatGPT,"ChatGPT Message")
+        #self.tabs.addTab(self.chatGPT,"ChatGPT Message")
+        self.tabs.addTab(self.generate, "Generate")
         font = self.tabs.font()
         font.setPointSize(10)
         self.tabs.setFont(font)
@@ -95,10 +98,20 @@ class HDLDesigner(QWidget):
         self.internalSignal.save_signal.connect(self.update_preview)
         #self.architecture.save_btn.clicked.connect(self.update_preview)
         self.architecture.save_signal.connect(self.update_preview)
-        self.chatGPT.save_signal.connect(self.update_preview)
-        self.chatGPT.header_check.clicked.connect(self.update_preview)
-        self.chatGPT.model_check.clicked.connect(self.update_preview)
-        self.chatGPT.testbench_check.clicked.connect(self.update_preview)
+        #self.chatGPT.save_signal.connect(self.update_preview)
+        #self.chatGPT.header_check.clicked.connect(self.update_preview)
+        #self.chatGPT.model_check.clicked.connect(self.update_preview)
+        #self.chatGPT.testbench_check.clicked.connect(self.update_preview)
+        self.generate.save_signal.connect(self.update_preview)
+        self.generate.header_title_check.clicked.connect(self.update_preview)
+        self.generate.msg_title_check.clicked.connect(self.update_preview)
+        self.generate.header_model_check.clicked.connect(self.update_preview)
+        self.generate.model_check.clicked.connect(self.update_preview)
+        self.generate.msg_model_check.clicked.connect(self.update_preview)
+        self.generate.header_testbench_check.clicked.connect(self.update_preview)
+        self.generate.testbench_check.clicked.connect(self.update_preview)
+        self.generate.msg_testbench_check.clicked.connect(self.update_preview)
+        self.generate.tab_widget.currentChanged.connect(self.update_preview)
 
     def update_preview(self, hdl):
         proj_name = ProjectManager.get_proj_name()
@@ -110,7 +123,7 @@ class HDLDesigner(QWidget):
         if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
             tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
             self.tbnote = tb_node.firstChild.nodeValue
-            #self.tbnote = self.tbnote.replace("&#10;", "\n")
+            self.tbnote = self.tbnote.replace("&#10;", "\n")
             self.tbnote = self.tbnote.replace("&amp;", "&")
             self.tbnote = self.tbnote.replace("&quot;", "\"")
             self.tbnote = self.tbnote.replace("&apos;", "\'")
@@ -129,8 +142,8 @@ class HDLDesigner(QWidget):
             entity_name, self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_vhdl(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_vhdl_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            self.tbnote = self.tbnote.replace("&#10;", "\n")
-            self.tbnote = self.tbnote
+            #self.tbnote = self.tbnote.replace("&#10;", "\n")
+            #self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
@@ -167,8 +180,8 @@ class HDLDesigner(QWidget):
             entity_name,self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_verilog(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_verilog_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            self.tbnote = self.tbnote.replace("&#10;", "\n")
-            self.tbnote = self.tbnote
+            #self.tbnote = self.tbnote.replace("&#10;", "\n")
+            #self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
@@ -203,16 +216,39 @@ class HDLDesigner(QWidget):
                 self.TBCmd = VerilogTestbench
         if self.tabs.currentIndex() == 6:
             self.preview_window.setText(self.tb_code)
+            self.preview_label.setText("HDL Testbench Preview")
         elif self.tabs.currentIndex() == 7:
-            if self.chatGPT.header_check.isChecked():
-                self.preview_window.setText(self.HeaderCmd + "\n\n" +self.chatgpt_header)
-            elif self.chatGPT.model_check.isChecked():
-                self.preview_window.setText(self.ModelCmd + "\n\n" +self.chatgpt_model)
-            elif self.chatGPT.testbench_check.isChecked():
-                self.chatgpt_tb = self.TBCmd + "\n\n"+self.chatgpt_tb + "\n\n" + self.tbnote
-                self.preview_window.setText(self.chatgpt_tb)
+            if self.generate.tab_widget.currentIndex() == 0:
+                if self.generate.model_check.isChecked():
+                    self.preview_label.setText("HDL Model Preview")
+                    self.preview_window.setText(self.code)
+                elif self.generate.header_model_check.isChecked():
+                    self.preview_label.setText("ChatGPT Message Header Preview")
+                    self.preview_window.setText(self.ModelCmd)
+                elif self.generate.msg_model_check.isChecked():
+                    self.preview_label.setText("ChatGPT message, to generate final HDL model")
+                    self.preview_window.setText(self.ModelCmd + "\n\n" +self.chatgpt_model)
+            elif self.generate.tab_widget.currentIndex() == 1:
+                if self.generate.header_testbench_check.isChecked():
+                    self.preview_label.setText("ChatGPT Message Header Preview")
+                    self.preview_window.setText(self.TBCmd)
+                elif self.generate.testbench_check.isChecked():
+                    self.preview_window.setText(self.tb_code)
+                    self.preview_label.setText("HDL Testbench Preview")
+                elif self.generate.msg_testbench_check.isChecked():
+                    chatgpt_tb = self.TBCmd + "\n\n" + self.chatgpt_tb + "\n\n" + self.tbnote
+                    self.preview_window.setText(chatgpt_tb)
+                    self.preview_label.setText("ChatGPT message, to generate final HDL testbench")
+            elif self.generate.tab_widget.currentIndex() == 2:
+                if self.generate.header_title_check.isChecked():
+                    self.preview_label.setText("ChatGPT Message Header Preview")
+                    self.preview_window.setText(self.HeaderCmd) #+ "\n\n" +self.chatgpt_header)
+                elif self.generate.msg_title_check.isChecked():
+                    self.preview_label.setText("ChatGPT message, to generate final HDL title")
+                    self.preview_window.setText(self.HeaderCmd+ "\n\n" +self.chatgpt_header)
         else:
             self.preview_window.setText(self.code)
+            self.preview_label.setText("HDL Model Preview")
     def update_arch(self):
         xml_data_path = ProjectManager.get_xml_data_path()
         self.architecture.updateProcessName(xml_data_path)
