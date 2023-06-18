@@ -350,6 +350,8 @@ class ProjectManager(QWidget):
         #self.proj_save_btn.clicked.connect(self.save_xml)
         self.vhdl_check.clicked.connect(self.save_xml)
         self.verilog_check.clicked.connect(self.save_xml)
+        self.vhdl_check.clicked.connect(self.named_edit_done)
+        self.verilog_check.clicked.connect(self.named_edit_done)
         self.intel_check.clicked.connect(self.edaCheckbox)
         self.vivado_check.clicked.connect(self.edaCheckbox)
         self.intel_check.clicked.connect(self.save_xml)
@@ -377,9 +379,14 @@ class ProjectManager(QWidget):
         else:
             self.name_change_btn.setText("Edit Name")
             self.proj_name_input.setReadOnly(True)  # Enable QLineEdit
-            self.proj_name_input.setFocus()  # Set focus to QLineEdit
+            #self.proj_name_input.setFocus()  # Set focus to QLineEdit
             self.save_xml()
-
+    def named_edit_done(self):
+        if self.name_change_btn.text() == "Done":
+            self.name_change_btn.setText("Edit Name")
+            self.proj_name_input.setReadOnly(True)  # Enable QLineEdit
+            #self.proj_name_input.setFocus()  # Set focus to QLineEdit
+            self.save_xml()
 
     def proj_enviro_change(self):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
@@ -449,6 +456,7 @@ class ProjectManager(QWidget):
         return ProjectManager.proj_dir
 
     def set_proj_dir(self):
+        self.named_edit_done()
         #ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         file = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         if file != "":
@@ -460,6 +468,7 @@ class ProjectManager(QWidget):
             #ProjectManager.proj_dir = self.proj_folder_input.text()
 
     def get_vivado_dir(self):
+        self.named_edit_done()
         file = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")
         file = file[0]
         #ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")
@@ -481,6 +490,7 @@ class ProjectManager(QWidget):
     def get_proj_environment():
         return ProjectManager.proj_enviro
     def set_proj_environment(self):
+        self.named_edit_done()
         file = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", self.proj_enviro)
         #ProjectManager.proj_enviro = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", self.proj_enviro)
         if file != "":
@@ -492,6 +502,7 @@ class ProjectManager(QWidget):
             self.proj_folder_input.setText(ProjectManager.proj_enviro)
             self.save_xml()
     def get_intel_dir(self):
+        self.named_edit_done()
         file = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
         file = file[0]
         if file != "":
@@ -899,6 +910,7 @@ class ProjectManager(QWidget):
             return "Verilog"
 
     def addLink(self):
+        self.named_edit_done()
         add_link = LinkDialog("edit", self.info)
         add_link.exec_()
 
@@ -912,6 +924,7 @@ class ProjectManager(QWidget):
                 self.proj_info_addlink.setText("Add Project Link")
                 self.proj_info_link.setEnabled(False)
     def openLink(self):
+        self.named_edit_done()
         msgBox = QMessageBox()
         msgBox.setIcon(QMessageBox.Question)
         msgBox.setText("Do you trust this link? "+ self.info)
@@ -974,6 +987,7 @@ class ProjectManager(QWidget):
             msgBox.setText("Error with folder set up")
             msgBox.exec_()
     def export_project(self):
+        self.named_edit_done()
         # Get the base name of the folder
         dir = self.proj_dir +"/"+self.proj_name_input.text()+"/HDLGenPrj/"+self.proj_name_input.text()+".hdlgen"
         folder_path = os.path.dirname(os.path.dirname(dir))
@@ -1014,6 +1028,7 @@ class ProjectManager(QWidget):
         msgBox.exec_()
         print(f"Successfully created {zip_file_name}!")
     def edaCheckbox(self):
+        self.named_edit_done()
         button = self.sender()
         if button == self.intel_check:
             if button.isChecked():

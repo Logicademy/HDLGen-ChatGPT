@@ -1,6 +1,7 @@
 import os
 import re
 from xml.dom import minidom
+import pyperclip
 from PySide2.QtWidgets import *
 import subprocess
 import sys
@@ -8,7 +9,7 @@ import textwrap
 from textwrap import indent
 sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
-import configparser
+
 
 class Generator(QWidget):
 
@@ -768,6 +769,7 @@ class Generator(QWidget):
          # Writing xml file
          with open(chatgpt_header_file_path, "w") as f:
            f.write(chatgpt_header)
+         pyperclip.copy(chatgpt_header)
          print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
         if "5" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
@@ -789,6 +791,7 @@ class Generator(QWidget):
          # Writing xml file
          with open(chatgpt_vhdl_file_path, "w") as f:
            f.write(chatgpt_vhdl)
+         pyperclip.copy(chatgpt_vhdl)
          print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
         if "7" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
@@ -1363,6 +1366,8 @@ class Generator(QWidget):
          # Writing xml file
          with open(chatgpt_vhdl_file_path, "w") as f:
              f.write(chatgpt_tb)
+         pyperclip.copy(chatgpt_tb)
+
          print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
         if "9" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
@@ -2270,6 +2275,7 @@ class Generator(QWidget):
             # Writing xml file
             with open(chatgpt_header_file_path, "w") as f:
                 f.write(chatgpt_header)
+            pyperclip.copy(chatgpt_header)
             print("ChatGPT VHDL header successfully generated at ", chatgpt_header_file_path)
         if "5" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
@@ -2291,6 +2297,7 @@ class Generator(QWidget):
             # Writing xml file
             with open(chatgpt_verilog_file_path, "w") as f:
                 f.write(chatgpt_verilog)
+            pyperclip.copy(chatgpt_verilog)
             print("ChatGPT VHDL model successfully generated at ", chatgpt_verilog_file_path)
         if "7" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_verilog_HDLGen_file_path)
@@ -2678,6 +2685,8 @@ class Generator(QWidget):
          # Writing xml file
          with open(chatgpt_verilog_file_path, "w") as f:
              f.write(chatgpt_tb)
+         pyperclip.copy(chatgpt_tb)
+
          print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)
         if "9" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_verilog_HDLGen_file_path)
@@ -2698,3 +2707,24 @@ class Generator(QWidget):
             with open(waveform_path, "w") as f:
                 f.write(waveform)
             print("Waveform file successfully generated at ", waveform_path)
+
+    def copy_file_contents_to_clipboard(self, file_path):
+        try:
+            with open(file_path, 'r') as file:
+                file_contents = file.read()
+                pyperclip.copy(file_contents)
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("File contents copied to clipboard successfully")
+                msgBox.exec_()
+        except FileNotFoundError:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("File not found. Press Generate button")
+            msgBox.exec_()
+        except Exception as e:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("An error occurred. Check terminal for details")
+            msgBox.exec_()
+            print("An error occurred:", str(e))

@@ -5,6 +5,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 import pyperclip
 import sys
+import configparser
 import qtawesome as qta
 
 sys.path.append("..")
@@ -35,7 +36,22 @@ class Gen(QWidget):
         title_font.setPointSize(10)
         title_font.setBold(True)
         self.proj_dir = proj_dir
-        self.commands = ["None", "None", "None", "None", "None", "None"]
+        #self.commands = ["None", "None", "None", "None", "None", "None"]
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')
+        VHDLHeader = self.config.get('user', 'vhdlchatgptheader')
+        VerilogHeader = self.config.get('user', 'verilogchatgptheader')
+        VHDLModel = self.config.get('user', 'vhdlchatgptmodel')
+        VerilogModel = self.config.get('user', 'verilogchatgptmodel')
+        VHDLTestbench = self.config.get('user', 'vhdlchatgpttestbench')
+        VerilogTestbench = self.config.get('user', 'verilogchatgpttestbench')
+        VHDLHeader = self.remove_blank_lines(VHDLHeader)
+        VerilogHeader = self.remove_blank_lines(VerilogHeader)
+        VHDLModel = self.remove_blank_lines(VHDLModel)
+        VerilogModel = self.remove_blank_lines(VerilogModel)
+        VHDLTestbench = self.remove_blank_lines(VHDLTestbench)
+        VerilogTestbench = self.remove_blank_lines(VerilogTestbench)
+        self.commands = [VHDLHeader, VerilogHeader, VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
         self.proj_path = ""
         self.entity_name = ""
         self.mainLayout = QVBoxLayout()
@@ -299,6 +315,8 @@ class Gen(QWidget):
         if proj_dir != None:
             self.load_data(proj_dir)
 
+
+
     def setup_ui(self):
         bold_font = QFont()
         bold_font.setBold(True)
@@ -530,7 +548,10 @@ class Gen(QWidget):
         #self.generate_testbench.clicked.connect(self.HDL_testbench_generate)
         #self.generate_chatgpt_testbench.clicked.connect(self.chatgpt_testbench_generate)
 
-
+    def remove_blank_lines(self, text):
+        lines = text.split("\n")  # Split the string into lines
+        non_empty_lines = [line for line in lines if line.strip()]  # Remove blank lines
+        return "\n".join(non_empty_lines)
 
     def save_data(self):
 
@@ -544,26 +565,32 @@ class Gen(QWidget):
         commands_node = root.createElement('commands')
 
         VHDLHeader_node = root.createElement('VHDLHeader')
+        self.commands[0] = self.commands[0].replace("\n", "&#10;" )
         VHDLHeader_node.appendChild(root.createTextNode(self.commands[0]))
         commands_node.appendChild(VHDLHeader_node)
 
         VerilogHeader_node = root.createElement('VerilogHeader')
+        self.commands[1] = self.commands[1].replace("\n", "&#10;")
         VerilogHeader_node.appendChild(root.createTextNode(self.commands[1]))
         commands_node.appendChild(VerilogHeader_node)
 
         VHDLModel_node = root.createElement('VHDLModel')
+        self.commands[2] = self.commands[2].replace("\n", "&#10;")
         VHDLModel_node.appendChild(root.createTextNode(self.commands[2]))
         commands_node.appendChild(VHDLModel_node)
 
         VerilogModel_node = root.createElement('VerilogModel')
+        self.commands[3] = self.commands[3].replace("\n", "&#10;")
         VerilogModel_node.appendChild(root.createTextNode(self.commands[3]))
         commands_node.appendChild(VerilogModel_node)
 
         VHDLTestbench_node = root.createElement('VHDLTestbench')
+        self.commands[4] = self.commands[4].replace("\n", "&#10;")
         VHDLTestbench_node.appendChild(root.createTextNode(self.commands[4]))
         commands_node.appendChild(VHDLTestbench_node)
 
         VerilogTestbench_node = root.createElement('VerilogTestbench')
+        self.commands[5] = self.commands[5].replace("\n", "&#10;")
         VerilogTestbench_node.appendChild(root.createTextNode(self.commands[5]))
         commands_node.appendChild(VerilogTestbench_node)
 

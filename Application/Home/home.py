@@ -48,7 +48,7 @@ class Home(QMainWindow):
         self.container = QWidget()
 
         self.proj_dir = proj_dir
-        self.proj_folder = os.path.abspath(os.path.join(os.path.abspath(os.path.join(self.proj_dir[0], "..")), ".."))
+
         self.generator = Generator()
         self.project_manager = ProjectManager(self.proj_dir, self)
 
@@ -149,14 +149,20 @@ class Home(QMainWindow):
             self.generator.create_testbench_file(files)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("Generated")
+            if "8" in files or "9" in files:
+                msgBox.setText("Generated and Copied to clipboard")
+            else:
+                msgBox.setText("Generated")
             msgBox.exec_()
         elif self.project_manager.verilog_check.isChecked():
             self.generator.generate_folders()
             self.generator.create_verilog_testbench_file(files)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("Generated")
+            if "8" in files or "9" in files:
+                msgBox.setText("Generated and Copied to clipboard")
+            else:
+                msgBox.setText("Generated")
             msgBox.exec_()
     def model_generate(self, files):
         if self.project_manager.vhdl_check.isChecked():
@@ -168,7 +174,11 @@ class Home(QMainWindow):
                 self.generator.create_quartus_tcl_file("VHDL", instances)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("Generated")
+            print(files)
+            if "4" in files or "5" in files or "6" in files or "7" in files:
+                msgBox.setText("Generated and Copied to clipboard")
+            else:
+                msgBox.setText("Generated")
             msgBox.exec_()
         elif self.project_manager.verilog_check.isChecked():
             self.generator.generate_folders()
@@ -179,32 +189,38 @@ class Home(QMainWindow):
                 self.generator.create_quartus_tcl_file("VERILOG", instances)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("Generated")
+            if "4" in files or "5" in files or "6" in files or "7" in files:
+                msgBox.setText("Generated and Copied to clipboard")
+            else:
+                msgBox.setText("Generated")
             msgBox.exec_()
 
     def open_model_folder(self):
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(),self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/model"
+            path = proj_folder+"/VHDL/model"
             self.open_file_explorer(path)
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/model"
+            path = proj_folder+"/Verilog/model"
             self.open_file_explorer(path)
 
     def open_chatgpt_folder(self):
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/ChatGPT"
+            path = proj_folder+"/VHDL/ChatGPT"
             self.open_file_explorer(path)
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/ChatGPT"
+            path = proj_folder+"/Verilog/ChatGPT"
             print(path)
             self.open_file_explorer(path)
 
     def open_testbench_folder(self):
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/testbench"
+            path = proj_folder+"/VHDL/testbench"
             self.open_file_explorer(path)
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/testbench"
+            path = proj_folder+"/Verilog/testbench"
             self.open_file_explorer(path)
 
     def generate_btn_clicked(self):
@@ -239,12 +255,13 @@ class Home(QMainWindow):
     def delete_title_msg_backups(self):
         backup_files = ""
         bk = False
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/ChatGPT/Backups"
+            path = proj_folder+"/VHDL/ChatGPT/Backups"
             backup_files = glob.glob(os.path.join(path,self.project_manager.get_proj_name() + "_VHDL_header_ChatGPT_backup_*.txt"))
             backup_files.append(os.path.join(path,self.project_manager.get_proj_name() + "_VHDL_header_ChatGPT_backup.txt"))
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/ChatGPT/Backups"
+            path = proj_folder+"/Verilog/ChatGPT/Backups"
             backup_files = glob.glob(os.path.join(path, self.project_manager.get_proj_name() + "_Verilog_header_ChatGPT_backup_*.txt"))
             backup_files.append(os.path.join(path, self.project_manager.get_proj_name() + "_Verilog_header_ChatGPT_backup.txt"))
         if backup_files:
@@ -276,12 +293,13 @@ class Home(QMainWindow):
     def delete_model_msg_backups(self):
         backup_files = ""
         bk=False
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/ChatGPT/Backups"
+            path = proj_folder+"/VHDL/ChatGPT/Backups"
             backup_files = glob.glob(os.path.join(path,self.project_manager.get_proj_name() + "_VHDL_ChatGPT_backup_*.txt"))
             backup_files.append(os.path.join(path,self.project_manager.get_proj_name() + "_VHDL_ChatGPT_backup.txt"))
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/ChatGPT/Backups"
+            path = proj_folder+"/Verilog/ChatGPT/Backups"
             backup_files = glob.glob(os.path.join(path, self.project_manager.get_proj_name() + "_Verilog_ChatGPT_backup_*.txt"))
             backup_files.append(os.path.join(path, self.project_manager.get_proj_name() + "_Verilog_ChatGPT_backup.txt"))
         if backup_files:
@@ -313,12 +331,13 @@ class Home(QMainWindow):
     def delete_testbench_msg_backups(self):
         backup_files = ""
         bk = False
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/ChatGPT/Backups"
+            path = proj_folder+"/VHDL/ChatGPT/Backups"
             backup_files = glob.glob(os.path.join(path,self.project_manager.get_proj_name() + "_VHDL_TB_ChatGPT_backup_*.txt"))
             backup_files.append(os.path.join(path,self.project_manager.get_proj_name() + "_VHDL_TB_ChatGPT_backup.txt"))
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/ChatGPT/Backups"
+            path = proj_folder+"/Verilog/ChatGPT/Backups"
             backup_files = glob.glob(os.path.join(path, self.project_manager.get_proj_name() + "_Verilog_TB_ChatGPT_backup_*.txt"))
             backup_files.append(os.path.join(path, self.project_manager.get_proj_name() + "_Verilog_TB_ChatGPT_backup.txt"))
         if backup_files:
@@ -350,12 +369,13 @@ class Home(QMainWindow):
     def delete_model_backups(self):
         backup_files = ""
         bk=False
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/model"
+            path = proj_folder+"/VHDL/model"
             backup_files = glob.glob(os.path.join(path,self.project_manager.get_proj_name() + "_backup_*.vhd"))
             backup_files.append(os.path.join(path,self.project_manager.get_proj_name() + "_backup.vhd"))
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/model"
+            path = proj_folder+"/Verilog/model"
             backup_files = glob.glob(os.path.join(path, self.project_manager.get_proj_name() + "_backup_*.v"))
             backup_files.append(os.path.join(path, self.project_manager.get_proj_name() + "_backup.v"))
         if backup_files:
@@ -387,12 +407,13 @@ class Home(QMainWindow):
     def delete_testbench_backups(self):
         backup_files = ""
         bk = False
+        proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
         if self.project_manager.vhdl_check.isChecked():
-            path = self.proj_folder+"/VHDL/testbench"
+            path = proj_folder+"/VHDL/testbench"
             backup_files = glob.glob(os.path.join(path,self.project_manager.get_proj_name() + "_TB_backup_*.vhd"))
             backup_files.append(os.path.join(path,self.project_manager.get_proj_name() + "_TB_backup.vhd"))
         elif self.project_manager.verilog_check.isChecked():
-            path = self.proj_folder+"/Verilog/testbench"
+            path = proj_folder+"/Verilog/testbench"
             backup_files = glob.glob(os.path.join(path, self.project_manager.get_proj_name() + "_TB_backup_*.v"))
             backup_files.append(os.path.join(path, self.project_manager.get_proj_name() + "_TB_backup.v"))
         if backup_files:
@@ -420,26 +441,6 @@ class Home(QMainWindow):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("No Testbench Backup Files found")
             msgBox.exec_()
-    def copy_file_contents_to_clipboard(self, file_path):
-        try:
-            with open(file_path, 'r') as file:
-                file_contents = file.read()
-                pyperclip.copy(file_contents)
-                msgBox = QMessageBox()
-                msgBox.setWindowTitle("Alert")
-                msgBox.setText("File contents copied to clipboard successfully")
-                msgBox.exec_()
-        except FileNotFoundError:
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle("Alert")
-            msgBox.setText("File not found. Press Generate button")
-            msgBox.exec_()
-        except Exception as e:
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle("Alert")
-            msgBox.setText("An error occurred. Check terminal for details")
-            msgBox.exec_()
-            print("An error occurred:", str(e))
 
     def open_file_explorer(self,path):
         if not os.path.exists(path):
@@ -493,6 +494,7 @@ class Home(QMainWindow):
 
 
     def handle_tab_change(self, index):
+        self.project_manager.named_edit_done()
         if index != 0:
             self.project_manager.save_xml()
             self.hdl_designer.package.load_data()
