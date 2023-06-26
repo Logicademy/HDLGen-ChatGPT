@@ -150,7 +150,7 @@ class Home(QMainWindow):
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
             if "8" in files or "9" in files:
-                msgBox.setText("Generated and Copied to clipboard")
+                msgBox.setText("Generated and copied to clipboard.\nPaste in ChatGPT to generate complete HDL testbench")
             else:
                 msgBox.setText("Generated")
             msgBox.exec_()
@@ -160,7 +160,7 @@ class Home(QMainWindow):
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
             if "8" in files or "9" in files:
-                msgBox.setText("Generated and Copied to clipboard")
+                msgBox.setText("Generated and copied to clipboard.\nPaste in ChatGPT to generate complete HDL testbench")
             else:
                 msgBox.setText("Generated")
             msgBox.exec_()
@@ -175,8 +175,10 @@ class Home(QMainWindow):
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
             print(files)
-            if "4" in files or "5" in files or "6" in files or "7" in files:
-                msgBox.setText("Generated and Copied to clipboard")
+            if "4" in files or "5" in files:
+                msgBox.setText("Generated and copied to clipboard.\nPaste in ChatGPT to generate complete HDL model")
+            elif "6" in files or "7" in files:
+                msgBox.setText("Generated and copied to clipboard.\nPaste in ChatGPT to generate complete HDL title")
             else:
                 msgBox.setText("Generated")
             msgBox.exec_()
@@ -184,13 +186,13 @@ class Home(QMainWindow):
             self.generator.generate_folders()
             instances = self.generator.create_verilog_file(files)
             if self.project_manager.vivado_check.isChecked():
-                self.generator.create_tcl_file("VERiLOG", instances)
+                self.generator.create_tcl_file("Verilog", instances)
             else:
-                self.generator.create_quartus_tcl_file("VERILOG", instances)
+                self.generator.create_quartus_tcl_file("Verilog", instances)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
             if "4" in files or "5" in files or "6" in files or "7" in files:
-                msgBox.setText("Generated and Copied to clipboard")
+                msgBox.setText("Generated and copied to clipboard.\nPaste in ChatGPT to generate complete HDL model")
             else:
                 msgBox.setText("Generated")
             msgBox.exec_()
@@ -243,9 +245,9 @@ class Home(QMainWindow):
                 self.generator.generate_folders()
                 instances = self.generator.create_verilog_file(gen.get_selected_files())
                 if self.project_manager.vivado_check.isChecked():
-                    self.generator.create_tcl_file("VERILOG", instances)
+                    self.generator.create_tcl_file("Verilog", instances)
                 else:
-                    self.generator.create_quartus_tcl_file("VERILOG", instances)
+                    self.generator.create_quartus_tcl_file("Verilog", instances)
                 self.generator.create_verilog_testbench_file(gen.get_selected_files())
                 msgBox = QMessageBox()
                 msgBox.setWindowTitle("Alert")

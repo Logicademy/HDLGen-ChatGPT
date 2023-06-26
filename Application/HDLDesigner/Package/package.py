@@ -155,7 +155,7 @@ class Package(QWidget):
             sig_type = array_data[3]
             if sig_type == "std_logic_vector":
                 sig_type = "bus"
-            self.package_table.setItem(row, 3, QTableWidgetItem(sig_type))
+            self.package_table.setItem(row_position, 3, QTableWidgetItem(sig_type))
             self.package_table.setCellWidget(row_position, 4, edit_btn)
             self.package_table.setCellWidget(row_position, 5, delete_btn)
             self.save_data()

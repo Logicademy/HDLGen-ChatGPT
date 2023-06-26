@@ -12,8 +12,6 @@ import configparser
 
 
 APP_AUTHORS = "Fearghal Morgan, Abishek Bupathi & JP Byrne"
-#APP_DESCRIPTION = "Open-source application wizard to generate \ndigital logic component FPGA design projects, \nHDL models, HDL testbenches and TCL scripts"
-#APP_DESCRIPTION ="<ul><li>Fast capture and generation of HDL model and testbench templates\n<ul><li>Generation of ChatGPT message, including header and HDL templates \n<ul><li>ChatGPT-directed HDL model and testbench generation\nEDA project creation and launch\n Supports VHDL and Verilog / AMD Xilinx Vivado\nOpen source application"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
 APP_DESCRIPTION = "<ul><li>Fast capture and generation of HDL model and testbench templates</li>" \
                  "<li>Generation of ChatGPT message, including header and HDL templates</li>" \

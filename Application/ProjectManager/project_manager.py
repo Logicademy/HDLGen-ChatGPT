@@ -65,7 +65,7 @@ class ProjectManager(QWidget):
 
         self.name_label = QLabel('Project Name*')
         self.name_label.setStyleSheet("color: white;")
-        self.name_change_btn = QPushButton("Edit Name")
+        self.name_change_btn = QPushButton("Edit")
         self.name_change_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
@@ -259,6 +259,8 @@ class ProjectManager(QWidget):
         self.projSettingFrame.setStyleSheet(".QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}")
         self.projSettingFrame.setLayout(self.projSettingLayout)
         self.leftColLayout.addWidget(self.projSettingFrame)
+        self.leftColLayout.addWidget(self.proj_close_btn)
+        # self.rightColLayout.addLayout(self.proj_action_layout)
         self.leftColLayout.addStretch()
 
         self.EDA_top_layout.addWidget(self.eda_tools_title, 0, 0, 1, 1)
@@ -321,12 +323,12 @@ class ProjectManager(QWidget):
         self.generateFrame.setLayout(self.generateLayout)
 
         self.rightColLayout.addWidget(self.generateFrame)
-        self.rightColLayout.addSpacing(MEDIUM_SPACING)
+        #self.rightColLayout.addSpacing(MEDIUM_SPACING)
 
 
-        self.proj_action_layout.addWidget(self.proj_close_btn)
+        #self.proj_action_layout.addWidget(self.proj_close_btn)
         #self.proj_action_layout.addWidget(self.proj_save_btn)
-        self.rightColLayout.addLayout(self.proj_action_layout)
+        #self.rightColLayout.addLayout(self.proj_action_layout)
 
         self.mainLayout.addLayout(self.leftColLayout)
         self.mainLayout.addSpacing(MEDIUM_SPACING)
@@ -374,16 +376,16 @@ class ProjectManager(QWidget):
 
     def name_edit(self):
         if self.proj_name_input.isReadOnly():
-            self.name_change_btn.setText("Done")
+            self.name_change_btn.setText("Save")
             self.proj_name_input.setReadOnly(False)  # Disable QLineEdit
         else:
-            self.name_change_btn.setText("Edit Name")
+            self.name_change_btn.setText("Edit")
             self.proj_name_input.setReadOnly(True)  # Enable QLineEdit
             #self.proj_name_input.setFocus()  # Set focus to QLineEdit
             self.save_xml()
     def named_edit_done(self):
-        if self.name_change_btn.text() == "Done":
-            self.name_change_btn.setText("Edit Name")
+        if self.name_change_btn.text() == "Save":
+            self.name_change_btn.setText("Edit")
             self.proj_name_input.setReadOnly(True)  # Enable QLineEdit
             #self.proj_name_input.setFocus()  # Set focus to QLineEdit
             self.save_xml()
