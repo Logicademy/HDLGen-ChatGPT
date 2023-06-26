@@ -136,7 +136,7 @@ class HDLDesigner(QWidget):
         else:
             self.tbnote = "No Test Plan Created"
 
-        if hdl != False and hdl != True:
+        if hdl != False and hdl != True and not isinstance(hdl, (int, float)):
             self.hdl = hdl
         if self.hdl == "VHDL":
             entity_name, self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_vhdl(self)

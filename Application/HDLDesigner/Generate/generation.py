@@ -68,25 +68,25 @@ class Gen(QWidget):
         
         self.input_layout = QGridLayout()
 
-        self.testplan_label = QLabel("Generate")
-        self.testplan_label.setFont(title_font)
-        self.testplan_label.setStyleSheet(WHITE_COLOR)
+        self.gen_label = QLabel("Generate VHDL")
+        self.gen_label.setFont(title_font)
+        self.gen_label.setStyleSheet(WHITE_COLOR)
 
         self.chatgpt_info_btn = QPushButton()
         self.chatgpt_info_btn.setIcon(qta.icon("mdi.help"))
         self.chatgpt_info_btn.setFixedSize(25, 25)
         self.chatgpt_info_btn.clicked.connect(self.chatgpt_help_window)
 
-        self.chatgpt_title_label = QLabel("ChatGPT Message Header")
+        self.chatgpt_title_label = QLabel("ChatGPT message header\nfor formatting HDL\nmodel title generation")
         self.chatgpt_title_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_title_label.setFont(small_text_font)
         self.chatgpt_title_label.setFixedSize(200, 50)
 
-        self.msg_title_label = QLabel("ChatGPT Message")
+        self.msg_title_label = QLabel("ChatGPT message elements:\nChatGPT message,HDL\nmodel title section")
         self.msg_title_label.setStyleSheet(BLACK_COLOR)
         self.msg_title_label.setFont(small_text_font)
 
-        self.generate_chatgpt_title = QPushButton("Generate file and Copy")
+        self.generate_chatgpt_title = QPushButton("Generate and Copy")
 
         self.generate_chatgpt_title.setFixedSize(200, 50)
         self.generate_chatgpt_title.setStyleSheet(
@@ -113,12 +113,12 @@ class Gen(QWidget):
         self.model_label.setStyleSheet(BLACK_COLOR)
         self.model_label.setFont(small_text_font)
 
-        self.chatgpt_model_label = QLabel("ChatGPT Message Header")
+        self.chatgpt_model_label = QLabel("ChatGPT message header for\nHDL model generation")
         self.chatgpt_model_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_model_label.setFont(small_text_font)
-        self.chatgpt_model_label.setFixedSize(200, 50)
+        #self.chatgpt_model_label.setFixedSize(200, 50)
 
-        self.msg_model_label = QLabel("ChatGPT Message")
+        self.msg_model_label = QLabel("ChatGPT message elements:\nChatGPT message header,\nHDL model template")
         self.msg_model_label.setStyleSheet(BLACK_COLOR)
         self.msg_model_label.setFont(small_text_font)
 
@@ -131,7 +131,7 @@ class Gen(QWidget):
         self.model_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.model_bk_checkBox.setStyleSheet(BLACK_COLOR)
 
-        self.generate_chatgpt_model = QPushButton("Generate file and Copy")
+        self.generate_chatgpt_model = QPushButton("Generate and Copy")
         self.generate_chatgpt_model.setFixedSize(200, 50)
         self.generate_chatgpt_model.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
@@ -169,12 +169,12 @@ class Gen(QWidget):
         self.testbench_label.setFont(small_text_font)
 
 
-        self.chatgpt_testbench_label = QLabel("ChatGPT Message Header")
+        self.chatgpt_testbench_label = QLabel("ChatGPT message header for\nHDL testbench generation")#\n(only 'ChatGPT message head'\nis currently shown)")
         self.chatgpt_testbench_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_testbench_label.setFont(small_text_font)
-        self.chatgpt_testbench_label.setFixedSize(200, 50)
+        #self.chatgpt_testbench_label.setFixedSize(200, 50)
 
-        self.msg_testbench_label = QLabel("ChatGPT Message")
+        self.msg_testbench_label = QLabel("ChatGPT message elements:\nChatGPT message header,\ntestbench signals, test plan")
         self.msg_testbench_label.setStyleSheet(BLACK_COLOR)
         self.msg_testbench_label.setFont(small_text_font)
 
@@ -189,8 +189,9 @@ class Gen(QWidget):
 
         self.wcfg_checkBox = QCheckBox("Waveform Configuration File")
         self.wcfg_checkBox.setStyleSheet(BLACK_COLOR)
+        self.wcfg_checkBox.setChecked(True)
 
-        self.generate_chatgpt_testbench = QPushButton("Generate file and Copy")
+        self.generate_chatgpt_testbench = QPushButton("Generate and Copy")
         self.generate_chatgpt_testbench.setFixedSize(200, 50)
         self.generate_chatgpt_testbench.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
@@ -271,14 +272,19 @@ class Gen(QWidget):
         self.header_title_check.setChecked(True)
         self.header_model_check = QRadioButton("Preview")
         self.header_model_check.setStyleSheet(BLACK_COLOR)
-        self.header_model_check.setChecked(True)
+        self.header_model_check.setFixedSize(200, 50)
+        #self.header_model_check.setChecked(True)
         self.header_testbench_check = QRadioButton("Preview")
         self.header_testbench_check.setStyleSheet(BLACK_COLOR)
-        self.header_testbench_check.setChecked(True)
+        self.header_testbench_check.setFixedSize(200, 50)
+        #self.header_testbench_check.setChecked(True)
         self.model_check = QRadioButton("Preview")
         self.model_check.setStyleSheet(BLACK_COLOR)
+        self.model_check.setChecked(True)
+
         self.testbench_check = QRadioButton("Preview")
         self.testbench_check.setStyleSheet(BLACK_COLOR)
+        self.testbench_check.setChecked(True)
         self.msg_model_check = QRadioButton("Preview")
         self.msg_model_check.setStyleSheet(BLACK_COLOR)
         self.msg_title_check = QRadioButton("Preview")
@@ -321,7 +327,7 @@ class Gen(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.top_layout.addWidget(self.testplan_label, 0, 0, 1, 1)
+        self.top_layout.addWidget(self.gen_label, 0, 0, 1, 1)
         self.top_layout.addWidget(self.chatgpt_info_btn, 0, 1, 1, 1)
         self.arch_action_layout.addLayout(self.top_layout)
         self.main_frame.setFrameShape(QFrame.StyledPanel)
@@ -762,6 +768,7 @@ class Gen(QWidget):
         self.model_VHDL.setVisible(True)
         self.title_VHDL.setVisible(True)
         self.testbench_VHDL.setVisible(True)
+        self.gen_label.setText("Generate VHDL")
 
         self.model_Verilog.setVisible(False)
         self.title_Verilog.setVisible(False)
@@ -771,6 +778,7 @@ class Gen(QWidget):
         self.model_Verilog.setVisible(True)
         self.title_Verilog.setVisible(True)
         self.testbench_Verilog.setVisible(True)
+        self.gen_label.setText("Generate Verilog")
 
         self.model_VHDL.setVisible(False)
         self.title_VHDL.setVisible(False)

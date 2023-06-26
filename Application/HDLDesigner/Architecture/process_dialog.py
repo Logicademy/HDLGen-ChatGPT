@@ -417,6 +417,8 @@ class ProcessDialog(QDialog):
         if self.seq_checkBox.isChecked():
             self.CSNS_frame.show()
             self.out_sig_frame.hide()
+            self.process_notes = "None"
+            self.add_note_btn.setText("Add Non Default Logic")
 
             if self.clkState == True:
                 for i in range(0, self.out_sig_table.rowCount()):
@@ -426,9 +428,11 @@ class ProcessDialog(QDialog):
                     self.in_sig_list.item(i).setHidden(True)
                 self.in_sig_list.item(self.input_signals.index("clk")).setHidden(False)
                 self.in_sig_list.item(self.input_signals.index("clk")).setCheckState(Qt.Checked)
+                self.seq_ceBox.setVisible(True)
+                self.add_note_btn.setVisible(False)
                 if self.rstState == True:
-                    self.seq_ceBox.setVisible(True)
-                    self.add_note_btn.setVisible(False)
+                    #self.seq_ceBox.setVisible(True)
+                    #self.add_note_btn.setVisible(False)
                     self.CSNS_table.showColumn(3)
                     self.in_sig_list.item(self.input_signals.index("rst")).setHidden(False)
                     self.in_sig_list.item(self.input_signals.index("rst")).setCheckState(Qt.Checked)
