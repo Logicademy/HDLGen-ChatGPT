@@ -60,8 +60,8 @@ class IntSignalDialog(QDialog):
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.standard_signal_Type_input.setPalette(pal)
         self.standard_signal_Type_input.addItems(self.standard_signal_types)
-        self.standard_signal_Type_input.setVisible(True)
-        self.standard_signal_Type_label.setVisible(True)
+        #self.standard_signal_Type_input.setVisible(True)
+        #self.standard_signal_Type_label.setVisible(True)
 
         self.CS_name_label = QLabel("CS name")
         self.CS_name_label.setStyleSheet(WHITE_COLOR)
@@ -153,8 +153,8 @@ class IntSignalDialog(QDialog):
         self.arrayName_label.setVisible(False)
         self.arrayName_input.setVisible(False)
         self.arrayName_input.setCurrentText("Create in packages")
-        self.sig_desc_input.setVisible(True)
-        self.sig_desc_label.setVisible(True)
+        #self.sig_desc_input.setVisible(True)
+        #self.sig_desc_label.setVisible(True)
         self.stateNames_table.setVisible(False)
         self.input_frame = QFrame()
 
@@ -223,7 +223,12 @@ class IntSignalDialog(QDialog):
         self.sig_type_combo.currentTextChanged.connect(self.sig_type_options)
         self.state_signal_Type_input.currentTextChanged.connect(self.state_sig_type_options)
         self.standard_signal_Type_input.currentTextChanged.connect(self.standard_sig_type_options)
+
+        self.sig_type_combo.currentTextChanged.connect(self.enable_ok_btn)
+        self.state_signal_Type_input.currentTextChanged.connect(self.enable_ok_btn)
+        self.standard_signal_Type_input.currentTextChanged.connect(self.enable_ok_btn)
         self.intSig_name_input.textChanged.connect(self.updateCSAndNS)
+
 
 
         self.add_btn.clicked.connect(self.add_stateName)
@@ -392,24 +397,52 @@ class IntSignalDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
-            if self.state_signal_Type_input.currentText() == "bus" or self.state_signal_Type_input.currentText() == "integer":
-                if self.sig_size_input.text() != "" and self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
-                    self.ok_btn.setEnabled(True)
-                else:
-                    self.ok_btn.setEnabled(False)
-            elif self.state_signal_Type_input.currentText() == "Enumerated type":
-                self.ok_btn.setEnabled(True)
-        elif self.sig_type_combo.currentText() == "array":
-            if self.arrayName_input.currentText() == "Create in packages":
-                self.ok_btn.setEnabled(False)
-            elif self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
-                self.ok_btn.setEnabled(True)
-        else:
-            if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "" and (self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != "")):
+        #if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
+         #   if self.state_signal_Type_input.currentText() == "bus" or self.state_signal_Type_input.currentText() == "integer":
+          #      if self.sig_size_input.text() != "" and self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
+           #         self.ok_btn.setEnabled(True)
+            #    else:
+            #        self.ok_btn.setEnabled(False)
+            #elif self.state_signal_Type_input.currentText() == "Enumerated type":
+            #    self.ok_btn.setEnabled(True)
+        #elif self.sig_type_combo.currentText() == "array":
+         #   if self.arrayName_input.currentText() == "Create in packages":
+          #      self.ok_btn.setEnabled(False)
+           # elif self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
+           #     self.ok_btn.setEnabled(True)
+        #else:
+        #    if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "" and (self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != "")):
+        #        self.ok_btn.setEnabled(True)
+        #    else:
+        #        self.ok_btn.setEnabled(False)
+
+        if self.sig_type_combo.currentText() == "standard" and (self.standard_signal_Type_input.currentText() == "bus" or self.standard_signal_Type_input.currentText() == "integer" or self.standard_signal_Type_input.currentText() == "signed" or self.standard_signal_Type_input.currentText() == "unsigned"):
+            if self.sig_size_input.text() != "" and self.intSig_name_input.text() != "":
                 self.ok_btn.setEnabled(True)
             else:
                 self.ok_btn.setEnabled(False)
+        elif self.sig_type_combo.currentText() == "array":
+            if self.intSig_name_input.text() != "":
+                if self.arrayName_input.currentText() != "Create in packages":
+                    self.ok_btn.setEnabled(True)
+            else:
+                self.ok_btn.setEnabled(False)
+        elif self.sig_type_combo.currentText() == "state signal pair(NS/CS)" and (self.state_signal_Type_input.currentText() == "bus" or self.state_signal_Type_input.currentText() == "integer"):
+            if self.sig_size_input.text() != "":
+                self.ok_btn.setEnabled(True)
+            else:
+                self.ok_btn.setEnabled(False)
+        elif self.sig_type_combo.currentText() == "state signal pair(NS/CS)" and self.state_signal_Type_input.currentText() == "Enumerated type":
+            self.ok_btn.setEnabled(True)
+        elif self.sig_type_combo.currentText() == "standard" and self.standard_signal_Type_input.currentText() == "single bit":
+            if self.intSig_name_input.text() != "":
+                self.ok_btn.setEnabled(True)
+            else:
+                self.ok_btn.setEnabled(False)
+        else:
+            self.ok_btn.setEnabled(False)
+
+
 
     def add_stateName(self):
         add_stateName = state_Name_Dialog("add")
@@ -479,7 +512,7 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
 
     def standard_sig_type_options(self):
-        self.enable_ok_btn()
+        #self.enable_ok_btn()
         if self.standard_signal_Type_input.currentText() != "single bit":
             self.sig_size_input.setEnabled(True)
             self.sig_size_input.clear()
@@ -493,7 +526,7 @@ class IntSignalDialog(QDialog):
 
 
     def state_sig_type_options(self):
-        self.enable_ok_btn()
+        #self.enable_ok_btn()
         if self.state_signal_Type_input.currentText() != "Enumerated type":
             self.add_btn.setVisible(False)
             self.stateNames_table.setVisible(False)
