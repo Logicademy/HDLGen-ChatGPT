@@ -747,11 +747,7 @@ class Generator(QWidget):
         chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","Backups", entity_name + "_VHDL_header_ChatGPT_backup.txt")
         chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","Backups", entity_name + "_VHDL_ChatGPT_backup.txt")
 
-        if "0" in filesNumber:
-         # Writing xml file
-         with open(vhdl_file_path, "w") as f:
-           f.write(vhdl_code)
-         print("VHDL Model successfully generated at ", vhdl_file_path)
+
         if "1" in filesNumber:
             base_name, extension = os.path.splitext(vhdl_file_HDLGen_path)
             new_filename = vhdl_file_HDLGen_path
@@ -763,16 +759,23 @@ class Generator(QWidget):
                     index += 1
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
-            # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(vhdl_code)
-            print("VHDL Backup Model successfully generated at ", new_filename)
-        if "4" in filesNumber:
+            try:
+                # Writing xml file
+                with open(vhdl_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("VHDL Backup Model successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(vhdl_code)
+                print("VHDL Backup Model successfully generated at ", new_filename)
+        if "0" in filesNumber:
          # Writing xml file
-         with open(chatgpt_header_file_path, "w") as f:
-           f.write(chatgpt_header)
-         pyperclip.copy(chatgpt_header)
-         print("ChatGPT VHDL title successfully generated at ", chatgpt_header_file_path)
+         with open(vhdl_file_path, "w") as f:
+           f.write(vhdl_code)
+         print("VHDL Model successfully generated at ", vhdl_file_path)
+
         if "5" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
             new_filename = chatgpt_header_HDLGen_file_path
@@ -785,16 +788,29 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(chatgpt_header)
-            print("ChatGPT VHDL title successfully generated at ", new_filename)
+            #with open(new_filename, "w") as f:
+                #f.write(chatgpt_header)
+            #print("ChatGPT VHDL title successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(chatgpt_header_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("ChatGPT VHDL title Backup successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(chatgpt_header)
+                print("ChatGPT VHDL title Backup successfully generated at ", new_filename)
 
-        if "6" in filesNumber:
+        if "4" in filesNumber:
          # Writing xml file
-         with open(chatgpt_vhdl_file_path, "w") as f:
-           f.write(chatgpt_vhdl)
-         pyperclip.copy(chatgpt_vhdl)
-         print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
+         with open(chatgpt_header_file_path, "w") as f:
+           f.write(chatgpt_header)
+         pyperclip.copy(chatgpt_header)
+         print("ChatGPT VHDL title successfully generated at ", chatgpt_header_file_path)
+
+
         if "7" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
             new_filename = chatgpt_vhdl_HDLGen_file_path
@@ -807,9 +823,27 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(chatgpt_vhdl)
-            print("ChatGPT VHDL model successfully generated at ", new_filename)
+            #with open(new_filename, "w") as f:
+                #f.write(chatgpt_vhdl)
+            #print("ChatGPT VHDL model successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(chatgpt_vhdl_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("ChatGPT VHDL model Backup successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(chatgpt_vhdl)
+                print("ChatGPT VHDL model Backup successfully generated at ", new_filename)
+
+        if "6" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_vhdl_file_path, "w") as f:
+           f.write(chatgpt_vhdl)
+         pyperclip.copy(chatgpt_vhdl)
+         print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
         self.entity_name = entity_name
         #return overwrite, instances
         return instances
@@ -1352,11 +1386,7 @@ class Generator(QWidget):
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_TB_ChatGPT.txt")
         chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT","Backups",entity_name + "_VHDL_TB_ChatGPT_backup.txt")
 
-        if "2" in filesNumber:
-         # Writing xml file
-         with open(vhdl_tb_path, "w") as f:
-             f.write(vhdl_tb_code)
-         print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
+
         if "3" in filesNumber:
             base_name, extension = os.path.splitext(vhdl_tb_HDLGen_path)
             new_filename = vhdl_tb_HDLGen_path
@@ -1369,16 +1399,27 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(vhdl_tb_code)
-            print("VHDL Testbench HDLGen file successfully generated at ", new_filename)
-        if "8" in filesNumber:
+            #with open(new_filename, "w") as f:
+                #f.write(vhdl_tb_code)
+            #print("VHDL Testbench HDLGen file successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(vhdl_tb_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("VHDL Testbench Backup file successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(vhdl_tb_code)
+                print("VHDL Testbench backup file successfully generated at ", new_filename)
+        if "2" in filesNumber:
          # Writing xml file
-         with open(chatgpt_vhdl_file_path, "w") as f:
-             f.write(chatgpt_tb)
-         pyperclip.copy(chatgpt_tb)
+         with open(vhdl_tb_path, "w") as f:
+             f.write(vhdl_tb_code)
+         print("VHDL Testbench file successfully generated at ", vhdl_tb_path)
 
-         print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
+
         if "9" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
             new_filename = chatgpt_vhdl_HDLGen_file_path
@@ -1391,9 +1432,28 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
+            #with open(new_filename, "w") as f:
+                #f.write(chatgpt_tb)
+            #print("Verilog Testbench ChatGPT file successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(chatgpt_vhdl_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("VHDL Testbench ChatGPT Backup file successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(chatgpt_tb)
+                print("VHDL Testbench ChatGPT backup file successfully generated at ", new_filename)
+
+        if "8" in filesNumber:
+            # Writing xml file
+            with open(chatgpt_vhdl_file_path, "w") as f:
                 f.write(chatgpt_tb)
-            print("Verilog Testbench ChatGPT file successfully generated at ", new_filename)
+            pyperclip.copy(chatgpt_tb)
+            print("VHDL Testbench ChatGPT file successfully generated at ", chatgpt_vhdl_file_path)
+
         if "10" in filesNumber:
             with open(waveform_path, "w") as f:
                 f.write(waveform)
@@ -2261,11 +2321,7 @@ class Generator(QWidget):
         chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "Backups",entity_name + "_Verilog_header_ChatGPT_backup.txt")
         chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "Backups",entity_name + "_Verilog_ChatGPT_backup.txt")
 
-        if "0" in filesNumber:
-            # Writing xml file
-            with open(verilog_file_path, "w") as f:
-                f.write(verilog_code)
-            print("Verilog Model successfully generated at ", verilog_file_path)
+
         if "1" in filesNumber:
             base_name, extension = os.path.splitext(verilog_file_HDLGen_path)
             new_filename = verilog_file_HDLGen_path
@@ -2278,15 +2334,26 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(verilog_code)
-            print("Verilog Backup Model successfully generated at ", new_filename)
-        if "4" in filesNumber:
+            #with open(new_filename, "w") as f:
+                #f.write(verilog_code)
+            #print("Verilog Backup Model successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(verilog_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("Verilog Backup Model successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(verilog_code)
+                print("Verilog Backup Model successfully generated at ", new_filename)
+        if "0" in filesNumber:
             # Writing xml file
-            with open(chatgpt_header_file_path, "w") as f:
-                f.write(chatgpt_header)
-            pyperclip.copy(chatgpt_header)
-            print("ChatGPT Verilog title successfully generated at ", chatgpt_header_file_path)
+            with open(verilog_file_path, "w") as f:
+                f.write(verilog_code)
+            print("Verilog Model successfully generated at ", verilog_file_path)
+
         if "5" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
             new_filename = chatgpt_header_HDLGen_file_path
@@ -2299,16 +2366,28 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(chatgpt_header)
-            print("ChatGPT Verilog title successfully generated at ", new_filename)
-
-        if "6" in filesNumber:
+            #with open(new_filename, "w") as f:
+                #f.write(chatgpt_header)
+            #print("ChatGPT Verilog title successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(chatgpt_header_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("ChatGPT Verilog title Backup successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(chatgpt_header)
+                print("ChatGPT Verilog title Backup successfully generated at ", new_filename)
+        if "4" in filesNumber:
             # Writing xml file
-            with open(chatgpt_verilog_file_path, "w") as f:
-                f.write(chatgpt_verilog)
-            pyperclip.copy(chatgpt_verilog)
-            print("ChatGPT Verilog model successfully generated at ", chatgpt_verilog_file_path)
+            with open(chatgpt_header_file_path, "w") as f:
+                f.write(chatgpt_header)
+            pyperclip.copy(chatgpt_header)
+            print("ChatGPT Verilog title successfully generated at ", chatgpt_header_file_path)
+
+
         if "7" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_verilog_HDLGen_file_path)
             new_filename = chatgpt_verilog_HDLGen_file_path
@@ -2321,9 +2400,26 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
+            #with open(new_filename, "w") as f:
+                #f.write(chatgpt_verilog)
+            #print("ChatGPT Verilog model successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(chatgpt_verilog_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("ChatGPT Verilog model Backup successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(chatgpt_verilog)
+                print("ChatGPT Verilog model Backup successfully generated at ", new_filename)
+        if "6" in filesNumber:
+            # Writing xml file
+            with open(chatgpt_verilog_file_path, "w") as f:
                 f.write(chatgpt_verilog)
-            print("ChatGPT Verilog model successfully generated at ", new_filename)
+            pyperclip.copy(chatgpt_verilog)
+            print("ChatGPT Verilog model successfully generated at ", chatgpt_verilog_file_path)
 
         self.entity_name = entity_name
         return instances
@@ -2671,11 +2767,7 @@ class Generator(QWidget):
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", entity_name + "_TB_behav.wcfg")
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_TB_ChatGPT.txt")
         chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT","Backups",entity_name + "_Verilog_TB_ChatGPT_backup.txt")
-        if "2" in filesNumber:
-         # Writing xml file
-         with open(verilog_tb_path, "w") as f:
-             f.write(verilog_tb_code)
-         print("Verilog Testbench file successfully generated at ", verilog_tb_path)
+
         if "3" in filesNumber:
             base_name, extension = os.path.splitext(verilog_tb_HDLGen_path)
             new_filename = verilog_tb_HDLGen_path
@@ -2688,16 +2780,26 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(verilog_tb_code)
-            print("Verilog Testbench HDLGen file successfully generated at ", new_filename)
-        if "8" in filesNumber:
+            #with open(new_filename, "w") as f:
+                #f.write(verilog_tb_code)
+            #print("Verilog Testbench HDLGen file successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(verilog_tb_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("Verilog Testbench Backup file successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(verilog_tb_code)
+                print("Verilog Testbench backup file successfully generated at ", new_filename)
+        if "2" in filesNumber:
          # Writing xml file
-         with open(chatgpt_verilog_file_path, "w") as f:
-             f.write(chatgpt_tb)
-         pyperclip.copy(chatgpt_tb)
+         with open(verilog_tb_path, "w") as f:
+             f.write(verilog_tb_code)
+         print("Verilog Testbench file successfully generated at ", verilog_tb_path)
 
-         print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)
         if "9" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_verilog_HDLGen_file_path)
             new_filename = chatgpt_verilog_HDLGen_file_path
@@ -2710,9 +2812,28 @@ class Generator(QWidget):
                     new_filename = f"{base_name}_{index}{extension}"
             print(new_filename)
             # Writing xml file
-            with open(new_filename, "w") as f:
-                f.write(chatgpt_tb)
-            print("Verilog Testbench ChatGPT file successfully generated at ", new_filename)
+            #with open(new_filename, "w") as f:
+                #f.write(chatgpt_tb)
+            #print("Verilog Testbench ChatGPT file successfully generated at ", new_filename)
+            try:
+                # Writing xml file
+                with open(chatgpt_verilog_file_path, 'r') as source:
+                    with open(new_filename, "w") as f:
+                        content = source.read()
+                        f.write(content)
+                    print("Verilog Testbench ChatGPT Backup file successfully generated at ", new_filename)
+            except FileNotFoundError:
+                with open(new_filename, "w") as f:
+                    f.write(chatgpt_tb)
+                print("Verilog Testbench ChatGPT backup file successfully generated at ", new_filename)
+
+        if "8" in filesNumber:
+         # Writing xml file
+         with open(chatgpt_verilog_file_path, "w") as f:
+             f.write(chatgpt_tb)
+         pyperclip.copy(chatgpt_tb)
+         print("Verilog Testbench ChatGPT file successfully generated at ", chatgpt_verilog_file_path)
+
         if "10" in filesNumber:
             with open(waveform_path, "w") as f:
                 f.write(waveform)
