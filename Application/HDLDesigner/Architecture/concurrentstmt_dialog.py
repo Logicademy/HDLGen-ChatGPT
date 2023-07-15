@@ -174,7 +174,7 @@ class ConcurrentStmtDialog(QDialog):
 
                 if len(self.output_signals) != 0 or len(self.internal_signals) != 0:
 
-                    self.output_signals.insert(0, "Please select")
+                    self.output_signals.insert(0, "Select signal")
                     self.out_signals_combo.addItems(self.output_signals + self.internal_signals )
                     self.output_signals.pop(0)
 

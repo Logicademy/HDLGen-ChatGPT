@@ -222,18 +222,19 @@ class Generator(QWidget):
                 gen_header += "-- Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
                 gen_header += "-- Title          : " + (title if title != "null" else "")+"\n\n"
-                desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
-                desc = desc.replace("&#10;", "\n-- ")
-                gen_header += "-- Description\n-- "
-                gen_header += (desc if desc != "null" else "") + "\n"
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
-                gen_header += "\n-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
+                gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
                 gen_header += "-- Company        : " + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
                 gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[
                     0].firstChild.data + "\n\n"
+                desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
+                desc = desc.replace("&#10;", "\n-- ")
+                gen_header += "-- Description\n-- "
+                gen_header += (desc if desc != "null" else "") + "\n"
+
                 chatgpt_header += gen_header
                 gen_vhdl += gen_header
 
@@ -893,17 +894,63 @@ class Generator(QWidget):
         components = hdlDesign[0].getElementsByTagName("components")
         comp_nodes = components[0].getElementsByTagName('component')
         self.dirs=[]
+
+        #for i in range(0, len(comp_nodes)):
+         #   if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
+          #      modelName = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
+           #     dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+            #    dir = dir.replace(
+             #       "/VHDL/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + ".vhd",
+              #      "/" + lang + "/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + "." + ext)
+              #  if not os.path.exists(ProjectManager.get_proj_environment() + dir):
+               #     print(ProjectManager.get_proj_environment() + dir + " Does not exist")
+                #    msgBox = QMessageBox()
+                 #   msgBox.setWindowTitle("Alert")
+                  #  msgBox.setText(ProjectManager.get_proj_environment() + dir + "\nDoes not exist")
+                   # msgBox.exec_()
+                #self.dirs.append(dir)
+        ##############new code######################
+        packageDirs = []
         for i in range(0, len(comp_nodes)):
-            if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
-                dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
-                dir = dir.replace("/VHDL/model/"+comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + ".vhd","/"+lang+"/model/"+comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + "."+ext )
-                if not os.path.exists(ProjectManager.get_proj_environment() + dir):
-                    print(ProjectManager.get_proj_environment() + dir + " Does not exist")
-                    msgBox = QMessageBox()
-                    msgBox.setWindowTitle("Alert")
-                    msgBox.setText(ProjectManager.get_proj_environment() + dir + "\nDoes not exist")
-                    msgBox.exec_()
-                self.dirs.append(dir)
+            packageDirs.append([comp_nodes[i].getElementsByTagName('model')[0].firstChild.data,
+                          comp_nodes[i].getElementsByTagName('dir')[
+                             0].firstChild.data])
+        while(instances):
+
+            #for instance in instances:
+                for namedir in packageDirs:
+                    if namedir[0] == instances[0]:
+                        #modelName = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
+                        #dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+                        dir = namedir[1]
+                        dir = dir.replace(
+                        "/VHDL/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + ".vhd",
+                        "/" + lang + "/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + "." + ext)
+                        if not os.path.exists(ProjectManager.get_proj_environment() + dir):
+                            print(ProjectManager.get_proj_environment() + dir + " Does not exist")
+                            msgBox = QMessageBox()
+                            msgBox.setWindowTitle("Alert")
+                            msgBox.setText(ProjectManager.get_proj_environment() + dir + "\nDoes not exist")
+                            msgBox.exec_()
+                        self.dirs.append(dir)
+                        # Split the directory path by the path separator (e.g., '/' on Unix-like systems)
+                        directories = dir.split('/')
+
+                        # Remove the last two elements (folders)
+                        dir = '/'.join(directories[:-3])
+                        print(dir)
+                        hdlgenDir = ProjectManager.get_proj_environment() + dir + "/HDLgenPrj/"+namedir[0]+".hdlgen"
+                        modelRoot = minidom.parse(hdlgenDir)
+                        modelHDLGen = modelRoot.documentElement
+                        modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
+                        modelComponents = modelHdlDesign[0].getElementsByTagName("architecture")
+                        modelComp_nodes = modelComponents[0].getElementsByTagName('instance')
+                        for i in range(0, len(modelComp_nodes)):
+                            instances.append(modelComp_nodes[i].getElementsByTagName('model')[0].firstChild.data)
+                        print(instances)
+                        instances.pop(0)
+        ##############end new code#############################
+
         if self.dirs is not None:
             for dir in self.dirs:
                 files += "add_files -norecurse  "+ ProjectManager.get_proj_environment() + dir + " \n"
@@ -1262,8 +1309,8 @@ class Generator(QWidget):
                 gen_header += "-- Generated by HDLGen, Github https://github.com/fearghal1/HDLGen\n\n"
                 gen_header += "-- Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
-                gen_header += "-- Title          : " + (title if title != "null" else "") + "\n"
-                gen_header += "-- Description    : refer to component hdl model fro function description and signal dictionary\n"
+                gen_header += "-- Title          : " + (title if title != "null" else "") + "\n\n"
+
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
@@ -1272,7 +1319,7 @@ class Generator(QWidget):
                 gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[
                     0].firstChild.data + "\n\n"
-
+                gen_header += "-- Description    : refer to component hdl model for function description and signal dictionary\n"
                 tb_code += gen_header
                 # Libraries Section
 
@@ -1323,7 +1370,7 @@ class Generator(QWidget):
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                     gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"#-- <delete (End)\n\n"
                 gen_process += "\n\t-- START Add testbench stimulus here\n\t-- === If copying a stim_p process generated by ChatGPT, delete the following lines from the beginning of the pasted code\n\t-- === Delete the -- === notes\n\t-- === stim_p: process\n\t-- === begin\n\n"
-                gen_process += "\n\t-- ==== If copying a stim_p process generated by ChatGPT, delete the following lines from the pasted code\n\t-- === wait;\n\t-- === end process stim_p;\n\t-- === end process stim_p;\n\n\t-- END Add testbench stimulus here\n"
+                gen_process += "\n\t-- ==== If copying a stim_p process generated by ChatGPT, delete the following lines from the pasted code\n\t-- === wait;\n\t-- === end process stim_p;\n\n\t-- END Add testbench stimulus here\n"
                 gen_process += "\t-- Print picosecond (ps) = 1000*ns (nanosecond) time to simulation transcript\n"
                 gen_process += "\t-- Use to find time when simulation ends (endOfSim is TRUE)\n"
                 gen_process += "\t-- Re-run the simulation for this time\n"
@@ -1769,18 +1816,19 @@ class Generator(QWidget):
                 gen_header += "// Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
                 gen_header += "// Title          : " + (title if title != "null" else "") + "\n\n"
-                desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
-                desc = desc.replace("&#10;", "\n// ")
-                gen_header += "// Description\n// "
-                gen_header += (desc if desc != "null" else "") + "\n"
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
-                gen_header += "\n// Author(s)      : " + (authors if authors != "null" else "") + "\n"
+                gen_header += "// Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
                 gen_header += "// Company        : " + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
                 gen_header += "// Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "// Date           : " + header_node[0].getElementsByTagName("date")[
                     0].firstChild.data + "\n\n"
+                desc = header_node[0].getElementsByTagName("description")[0].firstChild.data
+                desc = desc.replace("&#10;", "\n// ")
+                gen_header += "// Description\n// "
+                gen_header += (desc if desc != "null" else "") + "\n"
+
                 chatgpt_header += gen_header
                 gen_verilog += gen_header
 
@@ -2661,12 +2709,12 @@ class Generator(QWidget):
                 entity_name = comp_node.firstChild.data
 
                 gen_header = "// Title Section\n"
-                gen_header += "// VHDL testbench "+ entity_name +"_TB\n"
+                gen_header += "// Verilog testbench "+ entity_name +"_TB\n"
                 gen_header += "// Generated by HDLGen, Github https://github.com/fearghal1/HDLGen\n\n"
                 gen_header += "// Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
-                gen_header += "// Title          : " + (title if title != "null" else "") + "\n"
-                gen_header += "// Description    : refer to component hdl model fro function description and signal dictionary\n"
+                gen_header += "// Title          : " + (title if title != "null" else "") + "\n\n"
+
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "// Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
@@ -2675,6 +2723,7 @@ class Generator(QWidget):
                 gen_header += "// Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "// Date           : " + header_node[0].getElementsByTagName("date")[
                     0].firstChild.data + "\n\n"
+                gen_header += "// Description    : refer to component hdl model for function description and signal dictionary\n"
 
                 tb_code += gen_header
 
