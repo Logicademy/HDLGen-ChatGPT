@@ -915,42 +915,43 @@ class Generator(QWidget):
             packageDirs.append([comp_nodes[i].getElementsByTagName('model')[0].firstChild.data,
                           comp_nodes[i].getElementsByTagName('dir')[
                              0].firstChild.data])
+
         while(instances):
-
             #for instance in instances:
-                for namedir in packageDirs:
-                    if namedir[0] == instances[0]:
-                        #modelName = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
-                        #dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
-                        dir = namedir[1]
-                        dir = dir.replace(
-                        "/VHDL/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + ".vhd",
-                        "/" + lang + "/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + "." + ext)
-                        if not os.path.exists(ProjectManager.get_proj_environment() + dir):
-                            print(ProjectManager.get_proj_environment() + dir + " Does not exist")
-                            msgBox = QMessageBox()
-                            msgBox.setWindowTitle("Alert")
-                            msgBox.setText(ProjectManager.get_proj_environment() + dir + "\nDoes not exist")
-                            msgBox.exec_()
-                        self.dirs.append(dir)
-                        # Split the directory path by the path separator (e.g., '/' on Unix-like systems)
-                        directories = dir.split('/')
+            for namedir in packageDirs:
+                if namedir[0] == instances[0]:
+                    # modelName = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
+                    # dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
+                    dir = namedir[1]
+                    #dir = dir.replace("/VHDL/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + ".vhd","/" + lang + "/model/" + comp_nodes[i].getElementsByTagName('model')[0].firstChild.data + "." + ext)
+                    dir = dir.replace("/VHDL/model/" + namedir[0] + ".vhd","/" + lang + "/model/" + namedir[0] + "." + ext)
 
-                        # Remove the last two elements (folders)
-                        dir = '/'.join(directories[:-3])
-                        print(dir)
-                        hdlgenDir = ProjectManager.get_proj_environment() + dir + "/HDLgenPrj/"+namedir[0]+".hdlgen"
-                        modelRoot = minidom.parse(hdlgenDir)
-                        modelHDLGen = modelRoot.documentElement
-                        modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
-                        modelComponents = modelHdlDesign[0].getElementsByTagName("architecture")
-                        modelComp_nodes = modelComponents[0].getElementsByTagName('instance')
-                        for i in range(0, len(modelComp_nodes)):
-                            instances.append(modelComp_nodes[i].getElementsByTagName('model')[0].firstChild.data)
-                        print(instances)
-                        instances.pop(0)
+                    if not os.path.exists(ProjectManager.get_proj_environment() + dir):
+                        print(ProjectManager.get_proj_environment() + dir + " Does not exist")
+                        msgBox = QMessageBox()
+                        msgBox.setWindowTitle("Alert")
+                        msgBox.setText(ProjectManager.get_proj_environment() + dir + "\nDoes not exist")
+                        msgBox.exec_()
+                    self.dirs.append(dir)
+                    # Split the directory path by the path separator (e.g., '/' on Unix-like systems)
+                    directories = dir.split('/')
+
+                    # Remove the last two elements (folders)
+                    dir = '/'.join(directories[:-3])
+                    # print(dir)
+                    hdlgenDir = ProjectManager.get_proj_environment() + dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
+                    modelRoot = minidom.parse(hdlgenDir)
+                    modelHDLGen = modelRoot.documentElement
+                    modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
+                    modelComponents = modelHdlDesign[0].getElementsByTagName("architecture")
+                    modelComp_nodes = modelComponents[0].getElementsByTagName('instance')
+                    for i in range(0, len(modelComp_nodes)):
+                        instances.append(modelComp_nodes[i].getElementsByTagName('model')[0].firstChild.data)
+                    # print(instances)
+                    instances.pop(0)
+                    if len(instances) == 0:
+                        break
         ##############end new code#############################
-
         if self.dirs is not None:
             for dir in self.dirs:
                 files += "add_files -norecurse  "+ ProjectManager.get_proj_environment() + dir + " \n"
@@ -1976,6 +1977,15 @@ class Generator(QWidget):
                                         value = str(0)
                                 elif value in portNames or value in internalnames:
                                     value = value
+                                    if signals[0] in arrayList:
+                                        array_syntax=""
+                                        if signals[1] in arrayList:
+                                            for arr in arrayInfo:
+                                                if arr[0] == signals[0]:
+                                                    depth = int(arr[1])
+                                                    width = int(arr[2])
+                                                    array_syntax = "for (i=0; i<"+str(depth)+"; i++)\n\t\tbegin\n\t\t\t"+signals[0]+ "[i] <= "+signals[1]+"[i]"+"\n\t\tend"
+                                                    arraySignal=True
                                 #elif value.isdigit():
                                     #size = len(value)
                                     #value = str(size) + "'b" + value

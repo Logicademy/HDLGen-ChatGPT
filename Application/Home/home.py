@@ -56,6 +56,7 @@ class Home(QMainWindow):
 
 
     def setup_ui(self):
+        print("this is self.proj ")
         print(self.proj_dir)
         load_data = False
 

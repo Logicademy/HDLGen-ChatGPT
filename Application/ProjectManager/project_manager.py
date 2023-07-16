@@ -842,10 +842,10 @@ class ProjectManager(QWidget):
 
             # Reconstruct the directory path by joining the components until the "User_Projects" folder
             new_proj_env = "/".join(directories[:index + 1])
-
+            print(new_proj_env)
             if new_proj_env is None:
                 new_proj_env = new_proj_loc
-
+            settings.getElementsByTagName("environment")[0].firstChild.data = new_proj_env
             proj_loc = new_proj_loc
             proj_env = new_proj_env
 
