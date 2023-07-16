@@ -363,7 +363,7 @@ class Gen(QWidget):
         # Add the tabs to the tab widget
         self.tab_widget.addTab(self.HDLModel, "HDL Model")
         self.tab_widget.addTab(self.HDLTB, "HDL Testbench")
-        self.tab_widget.addTab(self.HDLTitle, "Format HDL Model Title")
+        #self.tab_widget.addTab(self.HDLTitle, "Format HDL Model Title")
 
 
         # Create layouts for each tab
