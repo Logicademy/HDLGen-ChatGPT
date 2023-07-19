@@ -54,6 +54,7 @@ class ProcessDialog(QDialog):
 
         self.seq_ceBox = QCheckBox("Chip Enabled")
         self.seq_ceBox.setStyleSheet(WHITE_COLOR)
+        self.seq_ceBox.setVisible(False)
 
         self.set_ce = QPushButton("Set CE")
         self.set_ce.setFixedSize(80, 25)
@@ -419,7 +420,8 @@ class ProcessDialog(QDialog):
             self.out_sig_frame.hide()
             self.process_notes = "None"
             self.add_note_btn.setText("Add Non Default Logic")
-
+            self.seq_ceBox.setVisible(True)
+            self.add_note_btn.setVisible(False)
             if self.clkState == True:
                 for i in range(0, self.out_sig_table.rowCount()):
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Unchecked)
@@ -428,8 +430,8 @@ class ProcessDialog(QDialog):
                     self.in_sig_list.item(i).setHidden(True)
                 self.in_sig_list.item(self.input_signals.index("clk")).setHidden(False)
                 self.in_sig_list.item(self.input_signals.index("clk")).setCheckState(Qt.Checked)
-                self.seq_ceBox.setVisible(True)
-                self.add_note_btn.setVisible(False)
+              #  self.seq_ceBox.setVisible(True)
+               # self.add_note_btn.setVisible(False)
                 if self.rstState == True:
                     #self.seq_ceBox.setVisible(True)
                     #self.add_note_btn.setVisible(False)
