@@ -17,4 +17,4 @@ pip install -r requirements.txt
 python main.py
 ``
 
-GitHub Project: https://github.com/users/abishek-bupathi/projects/1
+GitHub project: https://github.com/users/abishek-bupathi/projects/1
