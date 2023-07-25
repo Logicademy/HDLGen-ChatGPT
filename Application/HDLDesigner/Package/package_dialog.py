@@ -3,8 +3,6 @@ from PySide2.QtGui import *
 import sys
 
 sys.path.append("..")
-from HDLDesigner.InternalSignal.stateNamesDialog import state_Name_Dialog
-from ProjectManager.project_manager import ProjectManager
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -102,9 +100,6 @@ class PackageDialog(QDialog):
         self.input_frame.setContentsMargins(10, 10, 10, 10)
         self.input_frame.setFixedSize(400, 200)
         self.input_frame.setLayout(self.input_layout)
-
-        #self.sig_desc_input.setVisible(True)
-        #self.sig_desc_label.setVisible(True)
 
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)

@@ -17,7 +17,7 @@ WHITE_COLOR = "color: white"
 
 class settingsDialog(QDialog):
 
-    def __init__(self):#, add_or_edit, conc_data = None):
+    def __init__(self):
         super().__init__()
         self.commands = ["None", "None", "None", "None", "None", "None"]
         self.setWindowTitle("Settings")
@@ -130,9 +130,6 @@ class settingsDialog(QDialog):
         self.author_input.setText(author.strip())
         self.email_input.setText(email.strip())
         self.company_input.setText(company.strip())
-        #self.ChatGPT_header_input.setPlainText(chatGPTHeader)
-        #self.ChatGPT_model_input.setPlainText(chatGPTModel)
-        #self.ChatGPT_testbench_input.setPlainText(chatGPTTestbench)
         self.input_layout.addWidget(self.author_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.author_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.email_label, 0, 1, 1, 1)
@@ -145,10 +142,8 @@ class settingsDialog(QDialog):
         self.input_layout.addWidget(self.quartus_label, 4, 0, 1, 3)
         self.input_layout.addWidget(self.quartus_input, 5, 0, 1, 3)
         self.input_layout.addWidget(self.quartus_browse_btn, 5, 3, 1, 1)
-        #self.input_layout.addWidget(self.header_VHDL, 6, 0)
         self.input_layout.addWidget(self.model_VHDL, 6, 0)
         self.input_layout.addWidget(self.testbench_VHDL, 7, 0)
-        #self.input_layout.addWidget(self.header_Verilog, 6, 1)
         self.input_layout.addWidget(self.model_Verilog, 6, 1)
         self.input_layout.addWidget(self.testbench_Verilog, 7, 1)
         self.header_VHDL.clicked.connect(self.vhdl_header_command)
@@ -158,9 +153,8 @@ class settingsDialog(QDialog):
         self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
         self.testbench_Verilog.clicked.connect(self.verilog_testbench_command)
 
-        self.input_layout.addWidget(self.cancel_btn, 9, 2, 1, 1, alignment=Qt.AlignRight)#20, 2, 1, 1, alignment=Qt.AlignRight)
-        self.input_layout.addWidget(self.ok_btn, 9, 3, 1, 1, alignment=Qt.AlignRight)#20, 2, 1, 1, alignment=Qt.AlignRight)#20, 3, 1, 1, alignment=Qt.AlignRight)
-        #self.vivado_input.textChanged.connect(self.enable_ok_btn)
+        self.input_layout.addWidget(self.cancel_btn, 9, 2, 1, 1, alignment=Qt.AlignRight)
+        self.input_layout.addWidget(self.ok_btn, 9, 3, 1, 1, alignment=Qt.AlignRight)
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)

@@ -1,6 +1,5 @@
 import re
 import os
-from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys
@@ -80,7 +79,6 @@ class ComponentDialog(QDialog):
         self.config = configparser.ConfigParser()
         self.setup_ui()
 
-        #self.populate_signals(ProjectManager.get_xml_data_path())
 
         if add_or_edit == "edit" and component_data != None:
             self.load_component_data(component_data)
@@ -151,7 +149,12 @@ class ComponentDialog(QDialog):
             self.signal_table.setItem(row_position, 2, QTableWidgetItem(temp[1]))
             i = i + 1
 
+    def is_subdirectory(self, directory, potential_parent):
+        # Get the common prefix of the two paths
+        common_prefix = os.path.commonprefix([directory, potential_parent])
 
+        # Check if the common prefix is the same as the potential parent
+        return os.path.normpath(common_prefix) == os.path.normpath(potential_parent)
 
     def set_comp_path(self):
         self.config.read('config.ini')
@@ -160,9 +163,20 @@ class ComponentDialog(QDialog):
             lastDir = "../User_Projects/"
         comp_path = QFileDialog.getOpenFileName(self,"Select model .vhd file",lastDir, filter="VHDL files (*.vhd)")
         comp_path = comp_path[0]
-        if comp_path != "":
-            self.file_path_input.setText(comp_path)
-            self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
+        if self.is_subdirectory(comp_path, lastDir):
+            if comp_path != "":
+                self.file_path_input.setText(comp_path)
+                self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
+                print("The directory is within the potential parent directory.")
+        else:
+            print("The directory is not within the potential parent directory.")
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("Component cannot be added!\nThe component is not part of the project environment.")
+            msgBox.exec_()
+       # if comp_path != "":
+           # self.file_path_input.setText(comp_path)
+           # self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
     def load_component_data(self, component_data):
         self.component_name_input.setText(component_data[0])
         self.file_path_input.setText(ProjectManager.get_proj_environment()+component_data[1])
@@ -176,8 +190,6 @@ class ComponentDialog(QDialog):
             temp = signal.split(',')
             signals.append(temp[0])
             mode.append(temp[1])
-            #if temp[2][0:16] == "std_logic_vector":
-              #  temp[2] = temp[2] + " downto 0)"
             type.append(temp[2])
         i = 0
         for sig in signals:
@@ -203,17 +215,11 @@ class ComponentDialog(QDialog):
     def get_data(self):
         data = []
         signals = []
-        componentName = self.component_name_input.text().strip().replace(" ", "")
-        if componentName[-2:] != "_i":
-            componentName=componentName+"_i"
-        #data.append(componentName)
 
         for i in range(self.signal_table.rowCount()):
             signal = self.signal_table.item(i, 0).text()
             mode = self.signal_table.item(i, 1).text()
             type = self.signal_table.item(i, 2).text()
-            #if type[0:16] == "std_logic_vector":
-               # type = type + " downto 0)"
             signals.append(signal + "," + mode + "," + type)
 
         data.append(self.component_name_input.text())
@@ -241,12 +247,8 @@ class ComponentDialog(QDialog):
         endEnd = matchEnd.end()
 
         asign = vhdl_code[startEnd:endStart]
-        mainPackage = vhdl_code[startStart:endEnd].lower()
-        mainPackage = mainPackage.replace("entity", "component")
         asign = "\n".join([line for line in asign.splitlines() if line.strip()])
         signal_names = [line.split(":")[0].strip() for line in asign.splitlines()]
         signal_mode = [line.split(":")[1].strip().replace(";","") for line in asign.splitlines()]
-        #signal_mode = signal_mode.replace("\t","")
-        #signal_mode = signal_mode.replace("\n","")
         self.component_name_input.setText(model)
         return signal_names, model, signal_mode

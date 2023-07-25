@@ -8,7 +8,6 @@ from HDLDesigner.comp.comp_details import CompDetails
 from HDLDesigner.IOPorts.io_ports import IOPorts
 from HDLDesigner.Architecture.architecture import Architecture
 from HDLDesigner.testPlan.testplan import TestPlan
-from HDLDesigner.ChatGPT.chatgpt import ChatGPT
 from HDLDesigner.InternalSignal.internal_signal import InternalSignal
 from HDLDesigner.Package.package import Package
 from HDLDesigner.Subcomponents.subcomponents import Subcomponents
@@ -42,7 +41,6 @@ class HDLDesigner(QWidget):
         self.tabs.other_class = self
         # Creating a container
         self.container = QWidget()
-        #self.compDetails = CompDetails(self.proj_dir)
         self.project_manager = ProjectManager(self.proj_dir, self)
         self.setup_ui()
         self.hdl = "VHDL"
@@ -60,7 +58,6 @@ class HDLDesigner(QWidget):
         self.ioPorts = IOPorts(self.proj_dir)
         self.architecture = Architecture(self.proj_dir)
         self.testplan = TestPlan(self.proj_dir)
-        #self.chatGPT = ChatGPT(self.proj_dir)
         self.generate = Gen(self.proj_dir)
         self.internalSignal = InternalSignal(self.proj_dir)
         self.package = Package()
@@ -71,14 +68,12 @@ class HDLDesigner(QWidget):
         self.preview_pane_layout.addWidget(self.preview_window)
 
         self.tabs.addTab(self.compDetails, "Component")
-        #self.tabs.addTab(compDetails, "Component")
         self.tabs.addTab(self.package, "Types")
         self.tabs.addTab(self.subcomponents, "Sub-components")
         self.tabs.addTab(self.ioPorts, "Ports")
         self.tabs.addTab(self.internalSignal, "Internal Signals")
         self.tabs.addTab(self.architecture, "Architecture")
         self.tabs.addTab(self.testplan, "Test Plan")
-        #self.tabs.addTab(self.chatGPT,"ChatGPT Message")
         self.tabs.addTab(self.generate, "Generate")
         font = self.tabs.font()
         font.setPointSize(10)
@@ -87,21 +82,11 @@ class HDLDesigner(QWidget):
         self.mainLayout.addLayout(self.preview_pane_layout)
         self.setLayout(self.mainLayout)
 
-        #self.compDetails.save_btn.clicked.connect(self.update_preview)
         self.compDetails.save_signal.connect(self.update_preview)
-        #compDetails.save_signal.connect(self.update_preview)
-        #ioPorts.save_signal_btn.clicked.connect(self.update_preview)
         self.ioPorts.save_signal.connect(self.update_preview)
         self.ioPorts.save_signal.connect(self.update_arch)
-        #ioPorts.save_signal_btn.clicked.connect(self.update_arch)
-        #internalSignal.save_signal_btn.clicked.connect(self.update_preview)
         self.internalSignal.save_signal.connect(self.update_preview)
-        #self.architecture.save_btn.clicked.connect(self.update_preview)
         self.architecture.save_signal.connect(self.update_preview)
-        #self.chatGPT.save_signal.connect(self.update_preview)
-        #self.chatGPT.header_check.clicked.connect(self.update_preview)
-        #self.chatGPT.model_check.clicked.connect(self.update_preview)
-        #self.chatGPT.testbench_check.clicked.connect(self.update_preview)
         self.generate.save_signal.connect(self.update_preview)
         self.generate.header_title_check.clicked.connect(self.update_preview)
         self.generate.msg_title_check.clicked.connect(self.update_preview)
@@ -142,8 +127,6 @@ class HDLDesigner(QWidget):
             entity_name, self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_vhdl(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_vhdl_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            #self.tbnote = self.tbnote.replace("&#10;", "\n")
-            #self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
@@ -180,8 +163,6 @@ class HDLDesigner(QWidget):
             entity_name,self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_verilog(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_verilog_testbench_code(self)
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-            #self.tbnote = self.tbnote.replace("&#10;", "\n")
-            #self.tbnote = self.tbnote
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
                 VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
@@ -242,7 +223,7 @@ class HDLDesigner(QWidget):
             elif self.generate.tab_widget.currentIndex() == 2:
                 if self.generate.header_title_check.isChecked():
                     self.preview_label.setText("ChatGPT Message Header Preview")
-                    self.preview_window.setText(self.HeaderCmd) #+ "\n\n" +self.chatgpt_header)
+                    self.preview_window.setText(self.HeaderCmd)
                 elif self.generate.msg_title_check.isChecked():
                     self.preview_label.setText("ChatGPT message, to generate final HDL title")
                     self.preview_window.setText(self.HeaderCmd+ "\n\n" +self.chatgpt_header)

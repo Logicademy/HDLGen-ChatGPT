@@ -51,11 +51,6 @@ class Package(QWidget):
         self.pack_info_btn.setIcon(qta.icon("mdi.help"))
         self.pack_info_btn.setFixedSize(25, 25)
         self.pack_info_btn.clicked.connect(self.pack_help_window)
-        #self.save_signal_btn = QPushButton("Save")
-        #self.save_signal_btn.setFixedSize(60, 30)
-        #self.save_signal_btn.setStyleSheet(
-        #    "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-        #    " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
@@ -112,9 +107,6 @@ class Package(QWidget):
         self.package_action_layout.addSpacerItem(QSpacerItem(0, 5))
         self.package_action_layout.addWidget(self.package_list_frame)
         self.package_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        #self.package_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
-
-        #self.save_signal_btn.clicked.connect(self.save_data)
 
         self.package_action_frame.setFrameShape(QFrame.StyledPanel)
         self.package_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
@@ -212,7 +204,6 @@ class Package(QWidget):
             self.save_data()
 
     def save_data(self):
-        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
         mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
 
@@ -260,7 +251,6 @@ class Package(QWidget):
                 self.package_table.removeRow(0)
                 self.arrays.pop(0)
                 self.arrays_names.pop(0)
-        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
         mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         try:
             root = minidom.parse(mainPackageDir)

@@ -54,10 +54,41 @@ class Home(QMainWindow):
 
         self.setup_ui()
 
+    def closeEvent(self, event):
+        if self.project_manager.project_manager_change == True:
+            reply = self.prompt_to_save_changes()
+            if reply == QMessageBox.Save:
+                # Perform the save operation here or call a method to save data
+                print("Saving changes and closing window...")
+            elif reply == QMessageBox.Discard:
+                print("Discarding changes and closing the application...")
+            else:
+                # User clicked "Cancel," prevent the application from closing
+                event.ignore()
+
+        else:
+            print("")
+
+    def prompt_to_save_changes(self):
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Question)
+        msg_box.setText("Do you want to save your changes before closing?")
+        msg_box.setWindowTitle("Save Changes")
+        msg_box.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+        msg_box.setDefaultButton(QMessageBox.Save)
+
+        result = msg_box.exec_()
+
+        if result == QMessageBox.Save:
+            self.project_manager.save_xml()
+            return QMessageBox.Save
+        elif result == QMessageBox.Discard:
+            return QMessageBox.Discard
+        else:
+            return QMessageBox.Cancel
+
 
     def setup_ui(self):
-        print("this is self.proj ")
-        print(self.proj_dir)
         load_data = False
 
         if self.proj_dir is not None:
@@ -73,16 +104,13 @@ class Home(QMainWindow):
         font = self.tabs.font()
         font.setPointSize(10)
         self.tabs.setFont(font)
-        #self.generate_btn.clicked.connect(self.generate_btn_clicked)
         self.tabs.setCornerWidget(self.cornerWidget)
         self.start_vivado_btn.clicked.connect(self.start_eda_tool)
         self.export_project_btn.clicked.connect(self.export_project)
 
         self.project_manager.vhdl_check.clicked.connect(lambda: self.hdl_designer.update_preview("VHDL"))
-        #self.project_manager.vhdl_check.clicked.connect(lambda: self.hdl_designer.chatGPT.VHDLVisible())
         self.project_manager.vhdl_check.clicked.connect(lambda: self.hdl_designer.generate.VHDLVisible())
         self.project_manager.verilog_check.clicked.connect(lambda: self.hdl_designer.update_preview("Verilog"))
-        #self.project_manager.verilog_check.clicked.connect(lambda: self.hdl_designer.chatGPT.VerilogVisible())
         self.project_manager.verilog_check.clicked.connect(lambda: self.hdl_designer.generate.VerilogVisible())
         self.tabs.currentChanged.connect(self.hdl_designer.compDetails.update_comp_name)
 
@@ -175,7 +203,6 @@ class Home(QMainWindow):
                 self.generator.create_quartus_tcl_file("VHDL", instances)
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            print(files)
             if "4" in files or "5" in files:
                 msgBox.setText("Generated and copied to clipboard.\nPaste in ChatGPT to generate complete HDL model")
             elif "6" in files or "7" in files:
@@ -214,7 +241,6 @@ class Home(QMainWindow):
             self.open_file_explorer(path)
         elif self.project_manager.verilog_check.isChecked():
             path = proj_folder+"/Verilog/ChatGPT"
-            print(path)
             self.open_file_explorer(path)
 
     def open_testbench_folder(self):
@@ -470,17 +496,14 @@ class Home(QMainWindow):
                 if self.project_manager.vhdl_check.isChecked():
                     msgBox.setText("Starting EDA tool")
                     msgBox.exec_()
-                    #self.generator.create_tcl_file()
                     self.generator.run_tcl_file("VHDL","Vivado")
                 else:
                     msgBox.setText("Starting EDA tool")
                     msgBox.exec_()
-                    # self.generator.create_tcl_file()
                     self.generator.run_tcl_file("Verilog", "Vivado")
             else:
                 msgBox.setText("No vivado.bat path set")
         else:
-            #if self.project_manager.intel_dir_input.text()[-11:] == "quartus.exe":
             if self.project_manager.vhdl_check.isChecked():
                 msgBox.setText("Starting EDA tool")
                 msgBox.exec_()
@@ -489,15 +512,13 @@ class Home(QMainWindow):
                 msgBox.setText("Starting EDA tool")
                 msgBox.exec_()
                 self.generator.run_tcl_file("Verilog", "Quartus")
-            #else:
-                #msgBox.setText("No quartus.exe path set")
 
     def export_project(self):
         self.project_manager.export_project()
 
 
     def handle_tab_change(self, index):
-        self.project_manager.named_edit_done()
+        #self.project_manager.named_edit_done()
         if index != 0:
             self.project_manager.save_xml()
             self.hdl_designer.package.load_data()

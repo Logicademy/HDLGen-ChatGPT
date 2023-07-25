@@ -7,8 +7,6 @@ from PySide2.QtGui import *
 
 
 sys.path.append("..")
-from ProjectManager.project_manager import ProjectManager
-#from HDLDesigner.IOPorts.sequential_dialog import seqDialog
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"

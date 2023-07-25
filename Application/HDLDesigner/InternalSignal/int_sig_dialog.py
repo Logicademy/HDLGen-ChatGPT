@@ -153,15 +153,12 @@ class IntSignalDialog(QDialog):
         self.arrayName_label.setVisible(False)
         self.arrayName_input.setVisible(False)
         self.arrayName_input.setCurrentText("Create in packages")
-        #self.sig_desc_input.setVisible(True)
-        #self.sig_desc_label.setVisible(True)
         self.stateNames_table.setVisible(False)
         self.input_frame = QFrame()
 
         self.cancelled = True
         self.arrays = []
         self.setup_ui()
-        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
         mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
 
         root = minidom.parse(mainPackageDir)
@@ -210,7 +207,6 @@ class IntSignalDialog(QDialog):
         self.input_layout.addWidget(self.state_signal_Type_input, 3, 1, 1, 1)
         self.input_layout.addWidget(self.standard_signal_Type_label, 2, 1, 1, 1)
         self.input_layout.addWidget(self.standard_signal_Type_input, 3, 1, 1, 1)
-        #self.input_layout.addItem(QSpacerItem(0, 20), 7, 0, 1, 3)
         self.input_layout.addWidget(self.cancel_btn, 8, 1, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 8, 2, 1, 1, alignment=Qt.AlignRight)
 
@@ -381,7 +377,6 @@ class IntSignalDialog(QDialog):
         elif self.sig_type_combo.currentText() == "array":
             data.append("array," + self.arrayName_input.currentText())
         elif self.sig_type_combo.currentText() == "standard":
-            #data.append(self.sig_type_combo.currentText())
             data.append(self.standard_signal_Type_input.currentText())
         if data[1] != "Enumerated type state signal pair(NS/CS)":
             data.append(self.sig_size_input.text())
@@ -397,24 +392,6 @@ class IntSignalDialog(QDialog):
         self.close()
 
     def enable_ok_btn(self):
-        #if self.sig_type_combo.currentText() == "state signal pair(NS/CS)":
-         #   if self.state_signal_Type_input.currentText() == "bus" or self.state_signal_Type_input.currentText() == "integer":
-          #      if self.sig_size_input.text() != "" and self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
-           #         self.ok_btn.setEnabled(True)
-            #    else:
-            #        self.ok_btn.setEnabled(False)
-            #elif self.state_signal_Type_input.currentText() == "Enumerated type":
-            #    self.ok_btn.setEnabled(True)
-        #elif self.sig_type_combo.currentText() == "array":
-         #   if self.arrayName_input.currentText() == "Create in packages":
-          #      self.ok_btn.setEnabled(False)
-           # elif self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != ""):
-           #     self.ok_btn.setEnabled(True)
-        #else:
-        #    if self.intSig_name_input.text() != "" and self.sig_size_input.text() != "" and (self.intSig_name_input.text() not in self.signalNames or (self.intSig_name_input.text() == self.signalName and self.intSig_name_input.text() != "")):
-        #        self.ok_btn.setEnabled(True)
-        #    else:
-        #        self.ok_btn.setEnabled(False)
 
         if self.sig_type_combo.currentText() == "standard" and (self.standard_signal_Type_input.currentText() == "bus" or self.standard_signal_Type_input.currentText() == "integer" or self.standard_signal_Type_input.currentText() == "signed" or self.standard_signal_Type_input.currentText() == "unsigned"):
             if self.sig_size_input.text() != "" and self.intSig_name_input.text() != "":
@@ -512,7 +489,6 @@ class IntSignalDialog(QDialog):
                 self.stateNames_table.setCellWidget(row_position, 3, rst_state_tickbox)
 
     def standard_sig_type_options(self):
-        #self.enable_ok_btn()
         if self.standard_signal_Type_input.currentText() != "single bit":
             self.sig_size_input.setEnabled(True)
             self.sig_size_input.clear()
@@ -526,7 +502,6 @@ class IntSignalDialog(QDialog):
 
 
     def state_sig_type_options(self):
-        #self.enable_ok_btn()
         if self.state_signal_Type_input.currentText() != "Enumerated type":
             self.add_btn.setVisible(False)
             self.stateNames_table.setVisible(False)
@@ -564,7 +539,6 @@ class IntSignalDialog(QDialog):
             self.NS_name_input.setVisible(False)
             self.sig_size_label.setVisible(True)
             self.sig_size_input.setVisible(True)
-            #self.sig_size_input.clear()
             self.standard_signal_Type_input.setCurrentText("single bit")
             self.sig_size_input.setText("1")
             self.sig_size_input.setEnabled(False)
@@ -621,7 +595,6 @@ class IntSignalDialog(QDialog):
             self.sig_size_input.clear()
             self.arrayName_label.setVisible(False)
             self.arrayName_input.setVisible(False)
-
 
     def delete_clicked(self):
         button = self.sender()

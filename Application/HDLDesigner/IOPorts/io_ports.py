@@ -12,7 +12,6 @@ from HDLDesigner.IOPorts.sequential_dialog import seqDialog
 from HDLDesigner.IOPorts.port_help import IoHelpDialog
 from PySide2.QtCore import QObject, Signal
 
-from HDLDesigner.Architecture.architecture import Architecture
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -62,11 +61,6 @@ class IOPorts(QWidget):
         self.io_info_btn.setIcon(qta.icon("mdi.help"))
         self.io_info_btn.setFixedSize(25, 25)
         self.io_info_btn.clicked.connect(self.io_help_window)
-       # self.save_signal_btn = QPushButton("Save")
-        #self.save_signal_btn.setFixedSize(60, 30)
-        #self.save_signal_btn.setStyleSheet(
-        #    "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-        #    " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         # Port list layout widgets
         self.name_label = QLabel("Name")
@@ -112,16 +106,8 @@ class IOPorts(QWidget):
         self.seqSytle_editbtn.clicked.connect(self.edit_RTL)
         self.add_btn.clicked.connect(self.add_signal)
 
-        #self.port_list_title_layout.addWidget(self.name_label, 2, alignment=Qt.AlignLeft)
-        #self.port_list_title_layout.addWidget(self.mode_label, 2, alignment=Qt.AlignLeft)
-        #self.port_list_title_layout.addWidget(self.type_label, 2, alignment=Qt.AlignLeft)
-        #self.port_list_title_layout.addWidget(self.size_label, 2, alignment=Qt.AlignLeft)
-        #self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
-        #self.port_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.port_list_layout.setAlignment(Qt.AlignTop)
-        #self.port_list_layout.addLayout(self.port_list_title_layout)
-        #self.port_list_layout.addWidget(self.list_div)
 
         self.port_table.setColumnCount(6)
         self.port_table.setShowGrid(False)
@@ -134,17 +120,9 @@ class IOPorts(QWidget):
         self.port_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.port_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.port_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
-        #self.port_table.setColumnWidth(0, 80)
-        #self.port_table.setColumnWidth(1, 80)
-        #self.port_table.setColumnWidth(2, 80)
-        #self.port_table.setColumnWidth(3, 5)
         self.port_table.setColumnWidth(4, 10)
         self.port_table.setColumnWidth(5, 10)
-        #self.port_table.horizontalScrollMode()
         self.port_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        #self.port_table.horizontalScrollBar().hide()
-       # header = self.port_table.horizontalHeader()
-        #header.hide()
         vert = self.port_table.verticalHeader()
         vert.hide()
         self.port_table.setFrameStyle(QFrame.NoFrame)
@@ -153,24 +131,19 @@ class IOPorts(QWidget):
 
         self.port_list_frame.setFrameShape(QFrame.StyledPanel)
         self.port_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-       # self.port_list_frame.setFixedSize(420, 300)
         self.port_list_frame.setLayout(self.port_list_layout)
 
         self.port_action_layout.addLayout(self.port_heading_layout)
         self.port_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.port_action_layout.addWidget(self.port_list_frame)#, alignment=Qt.AlignCenter)
+        self.port_action_layout.addWidget(self.port_list_frame)
         self.port_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        #self.port_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
-
-        #self.save_signal_btn.clicked.connect(self.save_data)
 
         self.port_action_frame.setFrameShape(QFrame.StyledPanel)
         self.port_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        #self.port_action_frame.setFixedSize(500, 400)#410
         self.port_action_frame.setLayout(self.port_action_layout)
 
 
-        self.mainLayout.addWidget(self.port_action_frame)#, alignment=Qt.AlignCenter)
+        self.mainLayout.addWidget(self.port_action_frame)
 
         self.setLayout(self.mainLayout)
 

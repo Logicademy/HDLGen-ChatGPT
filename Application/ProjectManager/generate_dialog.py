@@ -16,7 +16,6 @@ class GenerationDialog(QDialog):
         layout.addWidget(select_all_checkbox)
 
         # Add checkboxes for each file
-        #for i in range(10):
         checkbox = QCheckBox(f"HDL Model ")
         layout.addWidget(checkbox)
         self.file_checkboxes.append(checkbox)
@@ -71,7 +70,7 @@ class GenerationDialog(QDialog):
         i=0
         for checkbox in self.file_checkboxes:
             if checkbox.isChecked():
-                selected_files.append(str(i))#checkbox.text())
+                selected_files.append(str(i))
             i=i+1
         self.cancelled = False
         self.close()
