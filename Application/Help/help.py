@@ -1,14 +1,7 @@
-import os
-import shutil
-import sys
-#import webbrowser
-from xml.dom import minidom
+
 import markdown as md
 
-#from PySide2.QtCore import QUrl
 from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from PySide2.QtWebEngineWidgets import *
 
 HELP_DOC_FILE_PATH = "./Help/help.md"
 OLD_HELP_DOC_FILE_PATH = "./Help/help(old).md"
@@ -18,9 +11,6 @@ class Help(QWidget):
 
     def __init__(self):
         super().__init__()
-
-
-        # self.webEngineView = QWebEngineView()
 
         self.markdown_view = QTextBrowser(readOnly=True)
         self.markdown_view.setOpenExternalLinks(True)
@@ -34,11 +24,8 @@ class Help(QWidget):
         with open(HELP_DOC_FILE_PATH, "r") as f:
            doc = md.markdown(f.read(),  extensions=['fenced_code', 'codehilite', 'tables', 'attr_list'])
 
-        #self.webview = HtmlView()
-        #self.webview.setHtml(doc)
         self.markdown_view.setHtml(doc)
         self.mainLayout.addWidget(self.markdown_view)
-        #self.mainLayout.addWidget(self.webview)
         self.setLayout(self.mainLayout)
 
 
@@ -48,7 +35,6 @@ class HelpDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("HDLGen Help")
-        # self.webEngineView = QWebEngineView()
 
         self.markdown_view = QTextBrowser(readOnly=True)
         self.markdown_view.setOpenExternalLinks(True)
@@ -63,11 +49,8 @@ class HelpDialog(QDialog):
         with open(HELP_DOC_FILE_PATH, "r") as f:
            doc = md.markdown(f.read(),  extensions=['fenced_code', 'codehilite', 'tables', 'attr_list'])
 
-        #self.webview = HtmlView()
-        #self.webview.setHtml(doc)
         self.markdown_view.setHtml(doc)
         self.mainLayout.addWidget(self.markdown_view)
-        #self.mainLayout.addWidget(self.webview)
         self.setLayout(self.mainLayout)
 
 

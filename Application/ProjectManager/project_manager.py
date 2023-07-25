@@ -34,12 +34,13 @@ class ProjectManager(QWidget):
         ProjectManager.proj_enviro = None
         self.info = ""
         self.startApp = True
-        #ProjectManager.hdl = None
+        self.project_manager_change = True
         ProjectManager.vivado_bat_path = None
         ProjectManager.intel_exe_path = None
         self.MainWindow = MainWindow
         ProjectManager.xml_data_path = None
         ProjectManager.package_xml_data_path = None
+
 
         # Initializing Widgets
 
@@ -65,11 +66,11 @@ class ProjectManager(QWidget):
 
         self.name_label = QLabel('Project Name*')
         self.name_label.setStyleSheet("color: white;")
-        self.name_change_btn = QPushButton("Edit")
-        self.name_change_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-        self.name_change_btn.setFixedSize(50, 22)
+        #self.name_change_btn = QPushButton("Edit")
+        #self.name_change_btn.setStyleSheet(
+          #  "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
+           # " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+        #self.name_change_btn.setFixedSize(50, 22)
         self.enviro_label = QLabel('Project Environment*')
         self.enviro_label.setStyleSheet("color: white;")
         self.dir_label = QLabel('Project Folder*')
@@ -79,7 +80,7 @@ class ProjectManager(QWidget):
         self.proj_enviro_input = QLineEdit()
         self.proj_enviro_input.setReadOnly(True)
         self.proj_name_input = QLineEdit()
-        self.proj_name_input.setReadOnly(True)
+       # self.proj_name_input.setReadOnly(True)
         self.proj_folder_btn = QPushButton("Browse")
         self.proj_folder_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
@@ -111,7 +112,6 @@ class ProjectManager(QWidget):
         self.lang_label.setFont(bold_font)
         self.lang_label.setStyleSheet(BLACK_COLOR)
         self.vhdl_check = QRadioButton("VHDL")
-        #self.vhdl_check.setChecked(True)
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QRadioButton("Verilog")
         self.verilog_check.setStyleSheet(BLACK_COLOR)
@@ -126,7 +126,6 @@ class ProjectManager(QWidget):
         self.intel_check.setFont(bold_font)
         self.intel_check.setStyleSheet(BLACK_COLOR)
 
-        #self.intel_check.setEnabled(False)
         self.intel_ver_label = QLabel("Version")
         self.intel_ver_label.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo = QComboBox()
@@ -140,7 +139,6 @@ class ProjectManager(QWidget):
         self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
-        #self.vivado_check.setChecked(True)
         self.vivado_check.setFont(bold_font)
         self.vivado_check.setStyleSheet(BLACK_COLOR)
         self.vivado_check.setChecked(True)
@@ -178,12 +176,6 @@ class ProjectManager(QWidget):
         self.proj_close_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-        #self.proj_save_btn = QPushButton("Save Project")
-        #self.proj_save_btn.setFixedHeight(50)
-        #self.proj_save_btn.setStyleSheet(
-           # "QPushButton {background-color: rgb(129, 134, 145);  color: white; border-radius: 8px; border-style: plain;}"
-            #"QPushButton:enabled {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            #" QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
         # Initializing layouts
         self.mainLayout = QHBoxLayout()
@@ -222,19 +214,19 @@ class ProjectManager(QWidget):
 
         if proj_dir != None:
             self.load_proj_data(proj_dir)
+
         else:
             self.fill_default_proj_details()
         self.startApp=False
 
     def setup_ui(self):
-        #self.projSettingLayout.addWidget(self.proj_setting_title)
         self.Settings_top_layout.addWidget(self.proj_setting_title, 0, 0, 1, 1)
         self.Settings_top_layout.addWidget(self.settings_info_btn, 0, 1, 1, 1)
         self.projSettingLayout.addLayout(self.Settings_top_layout)
         self.projSettingLayout.addSpacing(SMALL_SPACING)
         self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 3)
-        self.projDetailIpLayout.addWidget(self.name_change_btn, 1, 3, 1, 1, Qt.AlignRight)
+        #self.projDetailIpLayout.addWidget(self.name_change_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.projDetailIpLayout.addWidget(self.copy_proj_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.projDetailIpLayout.addWidget(self.enviro_label, 2, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_enviro_input, 3, 0, 1, 3)
@@ -260,7 +252,6 @@ class ProjectManager(QWidget):
         self.projSettingFrame.setLayout(self.projSettingLayout)
         self.leftColLayout.addWidget(self.projSettingFrame)
         self.leftColLayout.addWidget(self.proj_close_btn)
-        # self.rightColLayout.addLayout(self.proj_action_layout)
         self.leftColLayout.addStretch()
 
         self.EDA_top_layout.addWidget(self.eda_tools_title, 0, 0, 1, 1)
@@ -272,7 +263,6 @@ class ProjectManager(QWidget):
         self.vivadoToolLayout.addWidget(self.vivado_ver_combo, 0, 3, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_label, 1, 0, 1, 1)
         self.vivadoToolLayout.addWidget(self.vivado_dir_input, 2, 0, 1, 3)
-        #self.vivadoToolLayout.addWidget(self.vivado_info_btn, 1, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolLayout.addWidget(self.vivado_select_dir, 2, 3, 1, 1, Qt.AlignRight)
         self.vivadoToolFrame.setLayout(self.vivadoToolLayout)
         self.vivadoToolFrame.setStyleSheet(
@@ -302,7 +292,6 @@ class ProjectManager(QWidget):
         self.language_top_layout.addWidget(self.generate_title, 0, 0, 1, 1)
         self.language_top_layout.addWidget(self.language_info_btn, 0, 1, 1, 1)
         self.generateLayout.addLayout(self.language_top_layout)
-        #self.generateLayout.addWidget(self.generate_title)
         self.generateLayout.addSpacing(SMALL_SPACING)
         self.langLayout.addWidget(self.lang_label, 0, 1, 1, 1, Qt.AlignCenter)
         self.langLayout.addWidget(self.vhdl_check, 1, 0, 1, 1)
@@ -323,12 +312,6 @@ class ProjectManager(QWidget):
         self.generateFrame.setLayout(self.generateLayout)
 
         self.rightColLayout.addWidget(self.generateFrame)
-        #self.rightColLayout.addSpacing(MEDIUM_SPACING)
-
-
-        #self.proj_action_layout.addWidget(self.proj_close_btn)
-        #self.proj_action_layout.addWidget(self.proj_save_btn)
-        #self.rightColLayout.addLayout(self.proj_action_layout)
 
         self.mainLayout.addLayout(self.leftColLayout)
         self.mainLayout.addSpacing(MEDIUM_SPACING)
@@ -340,7 +323,7 @@ class ProjectManager(QWidget):
 
         # Setting actions for buttons
         self.proj_folder_btn.clicked.connect(self.set_proj_dir)
-        self.name_change_btn.clicked.connect(self.name_edit)
+        #self.name_change_btn.clicked.connect(self.name_edit)
         self.proj_enviro_btn.clicked.connect(self.set_proj_environment)
         self.proj_enviro_btn.clicked.connect(self.proj_enviro_change)
         self.vivado_select_dir.clicked.connect(self.get_vivado_dir)
@@ -349,15 +332,14 @@ class ProjectManager(QWidget):
         self.proj_info_addlink.clicked.connect(self.addLink)
 
         self.proj_close_btn.clicked.connect(self.close_project)
-        #self.proj_save_btn.clicked.connect(self.save_xml)
-        self.vhdl_check.clicked.connect(self.save_xml)
-        self.verilog_check.clicked.connect(self.save_xml)
-        self.vhdl_check.clicked.connect(self.named_edit_done)
-        self.verilog_check.clicked.connect(self.named_edit_done)
+        #self.vhdl_check.clicked.connect(self.save_xml)
+        #self.verilog_check.clicked.connect(self.save_xml)
+        #self.vhdl_check.clicked.connect(self.named_edit_done)
+        #self.verilog_check.clicked.connect(self.named_edit_done)
         self.intel_check.clicked.connect(self.edaCheckbox)
         self.vivado_check.clicked.connect(self.edaCheckbox)
-        self.intel_check.clicked.connect(self.save_xml)
-        self.vivado_check.clicked.connect(self.save_xml)
+        #self.intel_check.clicked.connect(self.save_xml)
+        #self.vivado_check.clicked.connect(self.save_xml)
     def fill_default_proj_details(self):
         self.config.read('config.ini')
         self.proj_enviro = self.config.get('user', 'recentEnviro')
@@ -367,28 +349,25 @@ class ProjectManager(QWidget):
             parent_path = path.parent.absolute()
             self.proj_enviro = os.path.join(parent_path, "User_Projects")
             self.proj_dir = os.path.join(parent_path, "User_Projects")
-            #self.proj_dir = #"User_Projects"
 
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_enviro_input.setText(self.proj_enviro)
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
-    def name_edit(self):
-        if self.proj_name_input.isReadOnly():
-            self.name_change_btn.setText("Save")
-            self.proj_name_input.setReadOnly(False)  # Disable QLineEdit
-        else:
-            self.name_change_btn.setText("Edit")
-            self.proj_name_input.setReadOnly(True)  # Enable QLineEdit
-            #self.proj_name_input.setFocus()  # Set focus to QLineEdit
-            self.save_xml()
-    def named_edit_done(self):
-        if self.name_change_btn.text() == "Save":
-            self.name_change_btn.setText("Edit")
-            self.proj_name_input.setReadOnly(True)  # Enable QLineEdit
-            #self.proj_name_input.setFocus()  # Set focus to QLineEdit
-            self.save_xml()
+   # def name_edit(self):
+        #if self.proj_name_input.isReadOnly():
+          #  self.name_change_btn.setText("Save")
+          #  self.proj_name_input.setReadOnly(False)
+        #else:
+            #self.name_change_btn.setText("Edit")
+            #self.proj_name_input.setReadOnly(True)
+            #self.save_xml()
+    #def named_edit_done(self):
+        #if self.name_change_btn.text() == "Save":
+            #self.name_change_btn.setText("Edit")
+            #self.proj_name_input.setReadOnly(True)
+            #self.save_xml()
 
     def proj_enviro_change(self):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
@@ -396,9 +375,9 @@ class ProjectManager(QWidget):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file. You may need to re add them in Types and Subcomponent tabs in the new enviroment")
             msgBox.exec_()
-            self.save_xml()
+            #self.save_xml()
     def proj_detail_change(self):
-
+        self.project_manager_change = True
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             # Getting project name from the text field
             ProjectManager.proj_name = self.proj_name_input.text()
@@ -411,10 +390,6 @@ class ProjectManager(QWidget):
             ProjectManager.xml_data_path = ProjectManager.xml_data_path.replace("\\", "/")
             ProjectManager.package_xml_data_path = self.proj_enviro + "\Package\mainPackage.hdlgen"
             ProjectManager.package_xml_data_path = ProjectManager.package_xml_data_path.replace("\\", "/")
-            #self.proj_save_btn.setEnabled(True)
-
-        #else:
-            #self.proj_save_btn.setEnabled(False)
 
     def proj_folder_change(self):
         if self.startApp != True:
@@ -434,10 +409,7 @@ class ProjectManager(QWidget):
                     else:
                         self.set_proj_dir()
 
-                    #self.proj_save_btn.setEnabled(True)
-            #else:
-                #self.proj_save_btn.setEnabled(False)
-            self.save_xml()
+            #self.save_xml()
 
 
 
@@ -458,30 +430,24 @@ class ProjectManager(QWidget):
         return ProjectManager.proj_dir
 
     def set_proj_dir(self):
-        self.named_edit_done()
-        #ProjectManager.proj_dir = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
+        self.project_manager_change = True
+        #self.named_edit_done()
         file = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
         if file != "":
             ProjectManager.proj_dir = file
             ProjectManager.proj_dir = ProjectManager.proj_dir.replace("\\", "/")
             self.proj_folder_input.setText(ProjectManager.proj_dir)
-            self.save_xml()
-        #else:
-            #ProjectManager.proj_dir = self.proj_folder_input.text()
+            #self.save_xml()
 
     def get_vivado_dir(self):
-        self.named_edit_done()
+        self.project_manager_change = True
+       # self.named_edit_done()
         file = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")
         file = file[0]
-        #ProjectManager.vivado_bat_path = QFileDialog.getOpenFileName(self, "Select Xilinx Vivado Batch file (vivado.bat)", "C:/", filter="Batch (*.bat)")
-        #ProjectManager.vivado_bat_path = ProjectManager.vivado_bat_path[0]
-        #if ProjectManager.vivado_bat_path:
         if file != "":
             ProjectManager.vivado_bat_path = file
             self.vivado_dir_input.setText(ProjectManager.vivado_bat_path)
-            self.save_xml()
-       # else:
-            #ProjectManager.vivado_bat_path=self.vivado_dir_input.text()
+            #self.save_xml()
 
 
     @staticmethod
@@ -492,36 +458,30 @@ class ProjectManager(QWidget):
     def get_proj_environment():
         return ProjectManager.proj_enviro
     def set_proj_environment(self):
-        self.named_edit_done()
+        self.project_manager_change = True
+        #self.named_edit_done()
         file = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", self.proj_enviro)
-        #ProjectManager.proj_enviro = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", self.proj_enviro)
         if file != "":
             ProjectManager.proj_enviro = file
-        #if ProjectManager.proj_enviro:
             ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
             self.proj_enviro_input.setText(ProjectManager.proj_enviro)
-           # self.proj_folder_input.setText(os.path.basename(os.path.normpath(ProjectManager.proj_enviro)))
             self.proj_folder_input.setText(ProjectManager.proj_enviro)
-            self.save_xml()
+            #self.save_xml()
     def get_intel_dir(self):
-        self.named_edit_done()
+        self.project_manager_change = True
+        #self.named_edit_done()
         file = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
         file = file[0]
         if file != "":
             ProjectManager.intel_exe_path = file
-        #ProjectManager.intel_exe_path = QFileDialog.getOpenFileName(self, "Select Intel Quartus exe", "C:/", filter="EXE (*.exe)")
-        #ProjectManager.intel_exe_path = ProjectManager.intel_exe_path[0]
-        #if ProjectManager.intel_exe_path:
             self.intel_dir_input.setText(ProjectManager.intel_exe_path)
-            self.save_xml()
-        #else:
-            #ProjectManager.intel_exe_path = self.intel_dir_input.text()
+            #self.save_xml()
 
     @staticmethod
     def get_intel_exe_path():
         return ProjectManager.intel_exe_path
     def save_xml(self):
-
+        self.project_manager_change = False
         ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
         ProjectManager.intel_exe_path = self.intel_dir_input.text()
         self.vivado_dir = self.vivado_dir_input.text()
@@ -569,7 +529,7 @@ class ProjectManager(QWidget):
         project_info = root.createElement('info')
         # Inserting project name to the name element
         project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
-        project_env.appendChild(root.createTextNode(ProjectManager.proj_enviro))
+        project_env.appendChild(root.createTextNode(self.proj_enviro_input.text()))#ProjectManager.proj_enviro))
         # Inserting project location to the location element
         project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir[:-1]))
         project_info.appendChild(root.createTextNode(self.info))
@@ -781,13 +741,11 @@ class ProjectManager(QWidget):
         print("Successfully saved!")
 
     def close_project(self):
-        self.save_xml()
         from Application.main import HDLGen
         self.MainWindow.close()
-        self.window = HDLGen()
-        #self.window.resize(600, 300)
-        self.window.show()
-        #self.window.showMaximized()
+        if self.MainWindow.isVisible() == False:
+            self.window = HDLGen()
+            self.window.show()
         print("Project Closed!")
 
     def find_project_folder_directory(self, dir, enviro):
@@ -824,6 +782,8 @@ class ProjectManager(QWidget):
             new_proj_loc = new_proj_loc + "/" + new_xml_path[i]
 
         if proj_loc != new_proj_loc:
+
+            #self.project_manager_change = True
             print("Project Location Change Detected!\nNew location:" + new_proj_loc)
             settings.getElementsByTagName("location")[0].firstChild.data = new_proj_loc
             # converting the doc into a string in xml format
@@ -832,16 +792,20 @@ class ProjectManager(QWidget):
             # Writing xml file
             with open(load_proj_dir[0], "w") as f:
                 f.write(xml_str)
+            if not os.path.isdir(proj_env):
+                proj_env = os.path.dirname(new_proj_loc)
             new_proj_env = os.path.basename(os.path.normpath(proj_env))
 
             # Split the string into individual directory components
             directories = new_proj_loc.split("/")
+            try:
+                # Find the index of the last occurrence of "project environment" in the directories list
+                index = len(directories) - 1 - directories[::-1].index(new_proj_env)
 
-            # Find the index of the last occurrence of "User_Projects" in the directories list
-            index = len(directories) - 1 - directories[::-1].index(new_proj_env)
-
-            # Reconstruct the directory path by joining the components until the "User_Projects" folder
-            new_proj_env = "/".join(directories[:index + 1])
+                # Reconstruct the directory path by joining the components until the "User_Projects" folder
+                new_proj_env = "/".join(directories[:index + 1])
+            except:
+                new_proj_env = os.path.dirname(new_proj_loc)
             print(new_proj_env)
             if new_proj_env is None:
                 new_proj_env = new_proj_loc
@@ -852,6 +816,7 @@ class ProjectManager(QWidget):
 
         self.proj_name_input.setText(proj_name)
         self.proj_enviro_input.setText(proj_env)
+
         self.proj_folder_input.setText(proj_loc)
         self.info=proj_info
         if self.info!="None":
@@ -892,6 +857,7 @@ class ProjectManager(QWidget):
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
         print("Project successfully loaded!")
+        self.save_xml()
 
     def vivado_help_window(self):
         eda_help_dialog = EDAHelpDialog()
@@ -912,7 +878,8 @@ class ProjectManager(QWidget):
             return "Verilog"
 
     def addLink(self):
-        self.named_edit_done()
+       # self.named_edit_done()
+        self.project_manager_change = True
         add_link = LinkDialog("edit", self.info)
         add_link.exec_()
 
@@ -926,7 +893,7 @@ class ProjectManager(QWidget):
                 self.proj_info_addlink.setText("Add Project Link")
                 self.proj_info_link.setEnabled(False)
     def openLink(self):
-        self.named_edit_done()
+        #self.named_edit_done()
         msgBox = QMessageBox()
         msgBox.setIcon(QMessageBox.Question)
         msgBox.setText("Do you trust this link? "+ self.info)
@@ -942,9 +909,6 @@ class ProjectManager(QWidget):
             webbrowser.open(self.info)
 
     def copy_project(self):
-        # Get the source file path using a QFileDialog
-        #source_path, _ = QFileDialog.getOpenFileName(None, 'Select File to Copy',
-         #                                            filter="All Files (*);;HDLGen Files (*.hdlgen)")
         try:
             source_path = self.proj_dir +"/"+self.proj_name_input.text()+"/HDLGenPrj/"+self.proj_name_input.text()+".hdlgen"
             # Get the new file name using a QFileDialog
@@ -989,7 +953,7 @@ class ProjectManager(QWidget):
             msgBox.setText("Error with folder set up")
             msgBox.exec_()
     def export_project(self):
-        self.named_edit_done()
+        #self.named_edit_done()
         # Get the base name of the folder
         dir = self.proj_dir +"/"+self.proj_name_input.text()+"/HDLGenPrj/"+self.proj_name_input.text()+".hdlgen"
         folder_path = os.path.dirname(os.path.dirname(dir))
@@ -1000,7 +964,6 @@ class ProjectManager(QWidget):
         # Prompt the user to enter a zip file name
         while True:
             options = QFileDialog.Options()
-           # options |= QFileDialog.DontUseNativeDialog
             zip_file_name, _ = QFileDialog.getSaveFileName(
                 None, "Export project", os.path.join(folder_dir, f"{base_name}.zip"), "Zip files (*.zip)",
                 options=options
@@ -1030,7 +993,7 @@ class ProjectManager(QWidget):
         msgBox.exec_()
         print(f"Successfully created {zip_file_name}!")
     def edaCheckbox(self):
-        self.named_edit_done()
+        self.project_manager_change = True
         button = self.sender()
         if button == self.intel_check:
             if button.isChecked():

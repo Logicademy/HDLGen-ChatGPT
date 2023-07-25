@@ -36,7 +36,6 @@ class Gen(QWidget):
         title_font.setPointSize(10)
         title_font.setBold(True)
         self.proj_dir = proj_dir
-        #self.commands = ["None", "None", "None", "None", "None", "None"]
         self.config = configparser.ConfigParser()
         self.config.read('config.ini')
         VHDLHeader = self.config.get('user', 'vhdlchatgptheader')
@@ -116,7 +115,6 @@ class Gen(QWidget):
         self.chatgpt_model_label = QLabel("ChatGPT message header for\nHDL model generation")
         self.chatgpt_model_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_model_label.setFont(small_text_font)
-        #self.chatgpt_model_label.setFixedSize(200, 50)
 
         self.msg_model_label = QLabel("ChatGPT message elements:\nChatGPT message header,\nHDL model template")
         self.msg_model_label.setStyleSheet(BLACK_COLOR)
@@ -169,10 +167,9 @@ class Gen(QWidget):
         self.testbench_label.setFont(small_text_font)
 
 
-        self.chatgpt_testbench_label = QLabel("ChatGPT message header for\nHDL testbench generation")#\n(only 'ChatGPT message head'\nis currently shown)")
+        self.chatgpt_testbench_label = QLabel("ChatGPT message header for\nHDL testbench generation")
         self.chatgpt_testbench_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_testbench_label.setFont(small_text_font)
-        #self.chatgpt_testbench_label.setFixedSize(200, 50)
 
         self.msg_testbench_label = QLabel("ChatGPT message elements:\nChatGPT message header,\ntestbench signals, test plan")
         self.msg_testbench_label.setStyleSheet(BLACK_COLOR)
@@ -273,11 +270,9 @@ class Gen(QWidget):
         self.header_model_check = QRadioButton("Preview")
         self.header_model_check.setStyleSheet(BLACK_COLOR)
         self.header_model_check.setFixedSize(200, 50)
-        #self.header_model_check.setChecked(True)
         self.header_testbench_check = QRadioButton("Preview")
         self.header_testbench_check.setStyleSheet(BLACK_COLOR)
         self.header_testbench_check.setFixedSize(200, 50)
-        #self.header_testbench_check.setChecked(True)
         self.model_check = QRadioButton("Preview")
         self.model_check.setStyleSheet(BLACK_COLOR)
         self.model_check.setChecked(True)
@@ -316,12 +311,9 @@ class Gen(QWidget):
         self.main_frame = QFrame()
         self.input_frame = QFrame()
         self.generator = Generator()
-      #  self.project_manager = ProjectManager(self.proj_dir, self)
         self.setup_ui()
         if proj_dir != None:
             self.load_data(proj_dir)
-
-
 
     def setup_ui(self):
         bold_font = QFont()
@@ -350,20 +342,17 @@ class Gen(QWidget):
         self.HDLModel = QFrame()
         self.HDLModel.setFrameShape(QFrame.StyledPanel)
         self.HDLModel.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
-        #self.HDLModel.setContentsMargins(40,40,40,40)
 
 
         self.HDLTB = QFrame()
         self.HDLTB.setFrameShape(QFrame.StyledPanel)
         self.HDLTB.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
-        #self.HDLTB.setContentsMargins(40, 40, 40, 40)
 
         self.HDLTitle = QFrame()
 
         # Add the tabs to the tab widget
         self.tab_widget.addTab(self.HDLModel, "HDL Model")
         self.tab_widget.addTab(self.HDLTB, "HDL Testbench")
-        #self.tab_widget.addTab(self.HDLTitle, "Format HDL Model Title")
 
 
         # Create layouts for each tab
@@ -372,16 +361,13 @@ class Gen(QWidget):
         self.header_msg_model_layout = QGridLayout()
         self.ModelLayout = QGridLayout()
         self.ChatgptModelLayout = QGridLayout()
-        
-        #self.ModelLayout = QGridLayout(self.HDLModel)
-        #self.TBLayout = QGridLayout(self.HDLTB)
+
         self.HDLTestbenchLayout = QVBoxLayout(self.HDLTB)
         self.HDLTB.setLayout(self.HDLTestbenchLayout)
         self.header_msg_testbench_layout = QGridLayout()
         self.TestbenchLayout = QGridLayout()
         self.ChatgptTestbenchLayout = QGridLayout()
 
-        #self.TitleLayout = QGridLayout(self.HDLTitle)
         self.HDLTitleLayout = QVBoxLayout(self.HDLTitle)
         self.HDLTitle.setLayout(self.HDLTitleLayout)
         self.header_msg_title_layout = QGridLayout()
@@ -427,7 +413,6 @@ class Gen(QWidget):
         self.modelBorderFrameLayout.addWidget(self.modelFrame)
 
         self.HDLModelLayout.addWidget(self.modelBorderFrame)
-        #self.HDLModelLayout.addWidget(self.modelFrame)
         self.HDLModelLayout.addSpacing(MEDIUM_SPACING)
 
         self.chatgptModelBorderFrame = QFrame()
@@ -482,7 +467,6 @@ class Gen(QWidget):
         self.testbenchBorderFrameLayout.addWidget(self.testbenchFrame)
 
         self.HDLTestbenchLayout.addWidget(self.testbenchBorderFrame)
-        # self.HDLModelLayout.addWidget(self.modelFrame)
         self.HDLTestbenchLayout.addSpacing(MEDIUM_SPACING)
 
         self.chatgptTestbenchBorderFrame = QFrame()
@@ -509,9 +493,7 @@ class Gen(QWidget):
 
         self.ChatgptTitleLayout.addWidget(self.msg_title_label, 0, 0)
         self.ChatgptTitleLayout.addWidget(self.chatgpt_loc_title, 0, 1)
-        # self.ChatgptTitleLayout.addWidget(self.title_VHDL, 4, 0)
         self.ChatgptTitleLayout.addWidget(self.generate_chatgpt_title, 1, 0)
-        # self.ChatgptTitleLayout.addWidget(self.title_Verilog, 4, 0)
         self.ChatgptTitleLayout.addWidget(self.chatgpt_title_bk_checkBox, 2, 1)
         self.ChatgptTitleLayout.addWidget(self.msg_title_check, 2, 0)
         self.ChatgptTitleLayout.addWidget(self.delete_bk_title_chatgpt, 1, 1)
@@ -525,21 +507,12 @@ class Gen(QWidget):
         self.titleBorderFrameLayout = QVBoxLayout(self.titleBorderFrame)
         self.titleBorderFrameLayout.addWidget(self.titleFrame)
 
-        #self.HDLTitleLayout.addWidget(self.titleBorderFrame)
-        # self.HDLModelLayout.addWidget(self.modelFrame)
-        #self.HDLTitleLayout.addSpacing(MEDIUM_SPACING)
-
         self.chatgptTitleBorderFrame = QFrame()
         self.chatgptTitleBorderFrame.setStyleSheet(
             ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
         self.chatgptTitleBorderFrameLayout = QVBoxLayout(self.chatgptTitleBorderFrame)
         self.chatgptTitleBorderFrameLayout.addWidget(self.chatgptTitleFrame)
         self.HDLTitleLayout.addWidget(self.chatgptTitleBorderFrame)
-
-
-
-        #self.TitleLayout.addWidget(self.header_VHDL, 1,0)
-        #self.TitleLayout.addWidget(self.header_Verilog, 1, 0)
 
         self.input_layout.addWidget(self.tab_widget)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
@@ -549,10 +522,6 @@ class Gen(QWidget):
         self.mainLayout.addWidget(self.main_frame)
 
         self.setLayout(self.mainLayout)
-        #self.generate_model.clicked.connect(self.HDL_model_generate)
-        #self.generate_chatgpt_model.clicked.connect(self.chatgpt_model_generate)
-        #self.generate_testbench.clicked.connect(self.HDL_testbench_generate)
-        #self.generate_chatgpt_testbench.clicked.connect(self.chatgpt_testbench_generate)
 
     def remove_blank_lines(self, text):
         lines = text.split("\n")  # Split the string into lines

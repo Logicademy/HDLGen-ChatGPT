@@ -36,7 +36,6 @@ class ProcessDialog(QDialog):
         self.internal_signals = []
         self.input_signals = []
         self.output_signals = []
-        #self.notes = []
         self.process_notes = "None"
         self.input_layout = QGridLayout()
 
@@ -145,8 +144,6 @@ class ProcessDialog(QDialog):
         self.out_sig_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.out_sig_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.out_sig_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
-        #self.out_sig_table.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
-        #self.out_sig_table.setColumnWidth(4, 80)
 
         self.out_sig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         vert = self.out_sig_table.verticalHeader()
@@ -290,7 +287,6 @@ class ProcessDialog(QDialog):
                     outputList_flag = 1
 
                     for signal in self.output_signals:
-                       # self.notes.append("")
                         checkbox = QCheckBox()
                         checkbox.setFixedWidth(45)
                         checkbox.clicked.connect(self.assignSignal_tick)
@@ -315,30 +311,20 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
-                       # self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
 
                         CScheckbox = QCheckBox()
                         CScheckbox.setFixedWidth(45)
 
                         CSout_val_combo = QComboBox()
-                        CSout_val_options = self.input_signals + self.internal_signals  # + "select"
+                        CSout_val_options = self.input_signals + self.internal_signals
                         CSout_val_options.append("zero")
                         CSout_val_options.insert(0, "Select")
                         CSout_val_combo.addItems(CSout_val_options)
-                        # CSout_val_options.pop(0)
-
-                        #CSout_val_combo.currentTextChanged.connect(self.disable_Custom_input)
-
                         onRst_val_combo = QComboBox()
-                        onRst_val_options = self.input_signals + self.internal_signals  # + "select" + "zero"
+                        onRst_val_options = self.input_signals + self.internal_signals
                         onRst_val_options.append("zero")
-                        # onRst_val_options.append("Select")
                         onRst_val_options.insert(0, "Select")
-                        # onRst_val_options.insert(0, "zero")
                         onRst_val_combo.addItems(onRst_val_options)
-                        # onRst_val_options.pop(0)
-
-                        # onRst_val_combo.currentTextChanged.connect(self.disable_Custom_input)
                         row_positionCSNS = self.CSNS_table.rowCount()
                         self.CSNS_table.insertRow(row_positionCSNS)
                         self.CSNS_table.setRowHeight(row_positionCSNS, 5)
@@ -378,7 +364,6 @@ class ProcessDialog(QDialog):
                         self.out_sig_table.setItem(row_position, 1, QTableWidgetItem(signal))
                         self.out_sig_table.setCellWidget(row_position, 2, out_val_combo)
                         self.out_sig_table.setCellWidget(row_position, 3, out_val_input)
-                       # self.out_sig_table.setCellWidget(row_position, 4, add_note_btn)
                         if signal[0:2] != "NS":
                             CScheckbox = QCheckBox()
                             CScheckbox.setFixedWidth(45)
@@ -430,11 +415,7 @@ class ProcessDialog(QDialog):
                     self.in_sig_list.item(i).setHidden(True)
                 self.in_sig_list.item(self.input_signals.index("clk")).setHidden(False)
                 self.in_sig_list.item(self.input_signals.index("clk")).setCheckState(Qt.Checked)
-              #  self.seq_ceBox.setVisible(True)
-               # self.add_note_btn.setVisible(False)
                 if self.rstState == True:
-                    #self.seq_ceBox.setVisible(True)
-                    #self.add_note_btn.setVisible(False)
                     self.CSNS_table.showColumn(3)
                     self.in_sig_list.item(self.input_signals.index("rst")).setHidden(False)
                     self.in_sig_list.item(self.input_signals.index("rst")).setCheckState(Qt.Checked)
@@ -488,9 +469,6 @@ class ProcessDialog(QDialog):
                 self.out_sig_table.cellWidget(i, 2).setEnabled(True)
                 self.out_sig_table.cellWidget(i, 3).setEnabled(True)
                 if not clk_default_vals:
-                   # self.notes[i] = notes[out_sigs.index(self.out_sig_table.item(i, 1).text())]
-                   # if self.notes[i] != "":
-                      #  self.out_sig_table.cellWidget(i, 4).setText("Edit note")
                     self.out_sig_table.cellWidget(i, 0).setCheckState(Qt.Checked)
                     self.out_sig_table.cellWidget(i, 2).setCurrentText(
                         default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
@@ -507,7 +485,6 @@ class ProcessDialog(QDialog):
                         dataText = dataText.replace("&gt;", ">")
                         dataText = dataText.replace("&#44;", ",")
                         self.out_sig_table.cellWidget(i, 3).setText(dataText)
-                            #default_vals[out_sigs.index(self.out_sig_table.item(i, 1).text())])
                     else:
                         self.out_sig_table.cellWidget(i, 3).clear()
                         self.out_sig_table.cellWidget(i, 3).setPlaceholderText("")
@@ -543,7 +520,6 @@ class ProcessDialog(QDialog):
         data = []
         in_sigs = []
         out_sigs = []
-        CSNS_sigs = []
         processName = self.proc_name_input.text().strip().replace(" ", "")
         if processName[-2:] != "_p":
             processName=processName+"_p"
@@ -646,8 +622,6 @@ class ProcessDialog(QDialog):
             if self.out_sig_table.cellWidget(row, 0).checkState() == Qt.Checked:
                 self.out_sig_table.cellWidget(row, 2).setEnabled(True)
                 self.out_sig_table.cellWidget(row, 3).setEnabled(True)
-                #self.out_sig_table.cellWidget(row, 4).setEnabled(True)
             else:
                 self.out_sig_table.cellWidget(row, 2).setEnabled(False)
                 self.out_sig_table.cellWidget(row, 3).setEnabled(False)
-                #self.out_sig_table.cellWidget(row, 4).setEnabled(False)

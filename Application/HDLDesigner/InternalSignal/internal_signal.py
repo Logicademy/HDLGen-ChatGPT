@@ -51,13 +51,6 @@ class InternalSignal(QWidget):
         self.int_info_btn.setFixedSize(25, 25)
         self.int_info_btn.clicked.connect(self.internal_help_window)
 
-        #self.save_signal_btn = QPushButton("Save")
-        #self.save_signal_btn.setFixedSize(60, 30)
-        #self.save_signal_btn.setStyleSheet(
-            #"QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-           # " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-
-
         # Port list layout widgets
         self.name_label = QLabel("Name")
         self.name_label.setFont(bold_font)
@@ -98,8 +91,6 @@ class InternalSignal(QWidget):
         self.instSig_list_title_layout.addSpacerItem(QSpacerItem(40, 1))
 
         self.intSig_list_layout.setAlignment(Qt.AlignTop)
-        #self.intSig_list_layout.addLayout(self.instSig_list_title_layout)
-        #self.intSig_list_layout.addWidget(self.list_div)
 
         self.intSig_table.setColumnCount(5)
         self.intSig_table.setShowGrid(False)
@@ -111,15 +102,9 @@ class InternalSignal(QWidget):
         self.intSig_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.intSig_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.intSig_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        #self.intSig_table.setColumnWidth(0, 110)
-        #self.intSig_table.setColumnWidth(1, 110)
-        #self.intSig_table.setColumnWidth(2, 50)
         self.intSig_table.setColumnWidth(3, 1)
         self.intSig_table.setColumnWidth(4, 1)
         self.intSig_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        #self.intSig_table.horizontalScrollBar().hide()
-        #header = self.intSig_table.horizontalHeader()
-        #header.hide()
         vert = self.intSig_table.verticalHeader()
         vert.hide()
         self.intSig_table.setFrameStyle(QFrame.NoFrame)
@@ -128,24 +113,19 @@ class InternalSignal(QWidget):
 
         self.intSig_list_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        #self.intSig_list_frame.setFixedSize(420, 300)
         self.intSig_list_frame.setLayout(self.intSig_list_layout)
 
         self.intSig_action_layout.addLayout(self.port_heading_layout)
         self.intSig_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        self.intSig_action_layout.addWidget(self.intSig_list_frame)#, alignment=Qt.AlignCenter)
+        self.intSig_action_layout.addWidget(self.intSig_list_frame)
         self.intSig_action_layout.addSpacerItem(QSpacerItem(0, 5))
-        #self.intSig_action_layout.addWidget(self.save_signal_btn, alignment=Qt.AlignRight)
-
-        #self.save_signal_btn.clicked.connect(self.save_data)
 
         self.intSig_action_frame.setFrameShape(QFrame.StyledPanel)
         self.intSig_action_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        #self.intSig_action_frame.setFixedSize(500, 400)
         self.intSig_action_frame.setLayout(self.intSig_action_layout)
 
 
-        self.mainLayout.addWidget(self.intSig_action_frame)#, alignment=Qt.AlignCenter)
+        self.mainLayout.addWidget(self.intSig_action_frame)
 
         self.setLayout(self.mainLayout)
 
@@ -439,7 +419,6 @@ class InternalSignal(QWidget):
                 self.intSig_table.setItem(i, 1, QTableWidgetItem("array"))
             else:
                 self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
-            #self.intSig_table.setItem(i, 1, QTableWidgetItem(loaded_sig_data[1]))
             size = QTableWidgetItem(str(loaded_sig_data[2]))
             size.setTextAlignment(Qt.AlignCenter)
             self.intSig_table.setItem(i, 2, size)

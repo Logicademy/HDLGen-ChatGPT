@@ -90,7 +90,6 @@ class InstanceDialog(QDialog):
 
 
         self.ok_btn = QPushButton("Ok")
-        #self.ok_btn.setEnabled(False)
         self.ok_btn.setFixedSize(60, 25)
         self.ok_btn.setStyleSheet(
             "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
@@ -108,12 +107,6 @@ class InstanceDialog(QDialog):
             self.load_instance_data(instance_data)
 
     def setup_ui(self):
-
-       # self.out_sig_header_layout.addWidget(self.out_sig_label)
-        #self.out_sig_header_layout.addWidget(self.val_label)
-
-       # self.out_sig_layout.addLayout(self.out_sig_header_layout)
-        #self.out_sig_layout.addWidget(self.list_div)
 
         self.out_sig_table.setFrameStyle(QFrame.NoFrame)
 
@@ -145,11 +138,8 @@ class InstanceDialog(QDialog):
         self.input_layout.addWidget(self.instance_name_input, 1, 0, 1, 1)
         self.input_layout.addWidget(self.suffix_label, 0, 1, 1, 1)
         self.input_layout.addWidget(self.suffix_input, 1, 1, 1, 1)
-        #self.input_layout.addWidget(self.file_path_label, 2, 0, 1, 2)
-        #self.input_layout.addWidget(self.file_path_input,3, 0, 1, 1)
         self.input_layout.addWidget(self.components_label, 2, 0, 1, 2)
         self.input_layout.addWidget(self.components_combobox,3, 0, 1, 2)
-        #self.input_layout.addWidget(self.browse_btn, 3, 1, 1, 1)
         self.input_layout.addWidget(self.out_sig_frame, 4, 0, 4, 2)
 
 
@@ -223,7 +213,6 @@ class InstanceDialog(QDialog):
 
                         self.out_sig_table.setItem(row_position, 0, QTableWidgetItem(temp[0]))
                         self.out_sig_table.setCellWidget(row_position, 1, out_val_combo)
-                   # self.out_sig_layout.addWidget(self.out_sig_table)
                 if outputList_flag == 0:
                     self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
                 return
@@ -281,12 +270,11 @@ class InstanceDialog(QDialog):
             signal_names = self.comps[i]
         else:
             signal_names = ""
-        return signal_names#, signal_mode
+        return signal_names
 
     def load_data(self):
         self.comps = []
         self.comps_names = []
-        #mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
         mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
@@ -303,10 +291,7 @@ class InstanceDialog(QDialog):
             for output_signal_node in output_signal_nodes:
                 output_signals.append(output_signal_node.firstChild.data)
 
-            #comp_data = [
-                #output_signals
-            #]
-            self.comps.append(output_signals)#comp_data)
+            self.comps.append(output_signals)
         self.components_combobox.addItems(self.comps_names)
 
 

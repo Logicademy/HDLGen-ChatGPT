@@ -1,10 +1,8 @@
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-import qtawesome as qta
 import sys
 
 sys.path.append("..")
-from ProjectManager.project_manager import ProjectManager
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -56,9 +54,6 @@ class note_Dialog(QDialog):
 
         self.input_layout.addWidget(self.note_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.note_input, 1, 0, 4, 3)
-
-
-        #self.input_layout.addItem(QSpacerItem(0, 20), 2, 0, 1, 3)
         self.input_layout.addWidget(self.cancel_btn, 6, 1, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 6, 2, 1, 1, alignment=Qt.AlignRight)
 
@@ -70,8 +65,6 @@ class note_Dialog(QDialog):
             self.input_frame.setFixedSize(700, 350)
         else:
             self.input_frame.setFixedSize(700, 700)
-
-        #self.note_input.textChanged.connect(self.enable_ok_btn);
 
         self.ok_btn.clicked.connect(self.get_data)
         self.cancel_btn.clicked.connect(self.cancel_selected)

@@ -78,7 +78,6 @@ class TestPlan(QWidget):
 
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        # self.main_frame.setFixedSize(500, 400)
 
         self.main_frame.setLayout(self.arch_action_layout)
         self.list_layout.addWidget(self.testbench_label)
@@ -86,20 +85,18 @@ class TestPlan(QWidget):
 
         self.list_frame.setFrameShape(QFrame.StyledPanel)
         self.list_frame.setStyleSheet('.QFrame{background-color: white; border-radius: 5px;}')
-        # self.list_frame.setFixedSize(420, 300)
         self.list_frame.setLayout(self.list_layout)
 
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
-        self.arch_action_layout.addWidget(self.list_frame)  # , alignment=Qt.AlignCenter)
+        self.arch_action_layout.addWidget(self.list_frame)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.testbench_btn.clicked.connect(self.add_testplan)
 
-        self.mainLayout.addWidget(self.main_frame)  # , alignment=Qt.AlignCenter)
+        self.mainLayout.addWidget(self.main_frame)
 
         self.setLayout(self.mainLayout)
 
     def add_testplan(self):
-        #self.note = ""
         if self.proj_dir is not None:
             root = minidom.parse(self.proj_dir[0])
             HDLGen = root.documentElement

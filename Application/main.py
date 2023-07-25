@@ -65,7 +65,6 @@ class HDLGen(QMainWindow):
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
         self.github_link.linkActivated.connect(self.link)
-        #self.vici_description = QLabel(VICI_DESCRIPTION)
         self.vici_link = QLabel('<a href="https://vicilogic.com">vicilogic.com</a> online learning, assessment and remote hardware prototyping and course builder')
         self.vici_link.setFont(text_font)
         self.vici_link.linkActivated.connect(self.link)
@@ -101,7 +100,6 @@ class HDLGen(QMainWindow):
         self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
         self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
-        #self.info_layout.addWidget(self.vici_description, alignment=Qt.AlignCenter)
 
         self.info_layout.addSpacerItem(QSpacerItem(1, 50))
 
@@ -131,7 +129,6 @@ class HDLGen(QMainWindow):
         lastDir = self.config.get('user', 'recentEnviro')
         if not os.path.exists(lastDir):
             lastDir = "../User_Projects/"
-        #self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", "../User_Projects/",
                                                          #filter="HDLGen (*.hdlgen)")
         self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", lastDir,
                                                          filter="HDLGen (*.hdlgen)")
