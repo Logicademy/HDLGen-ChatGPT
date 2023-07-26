@@ -1,5 +1,15 @@
 # HDLGen
 
+Top level process diagram:
+![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_TopLevelProcessDiagram.png)
+
+Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne
+
+GitHub project: https://github.com/users/abishek-bupathi/projects/1
+
+Detailed process diagram:                  
+https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.jpg
+
 ### Project Setup
 1. Install Python v3.10.0 and Git
 2. Open Command Prompt/Terminal
@@ -16,13 +26,3 @@ pip install -r requirements.txt
 ``
 python main.py
 ``
-
-GitHub project: https://github.com/users/abishek-bupathi/projects/1
-
-Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne
-
-Detailed process diagram:                  
-https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.jpg
-
-Top level process diagram:
-![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_TopLevelProcessDiagram.png)
