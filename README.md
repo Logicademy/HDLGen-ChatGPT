@@ -25,4 +25,4 @@ Detailed process diagram:
 https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.jpg
 
 Top level process diagram:
-![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_TopLevelProcessDiagram.jpg)
+![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_TopLevelProcessDiagram.png)
