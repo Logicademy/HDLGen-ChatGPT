@@ -3,6 +3,9 @@
 Top level process diagram:
 ![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_TopLevelProcessDiagram.png)
 
+Tutorial videos on HDLGen/ChatGPT, for a range of design examples, 
+https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf
+
 Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne
 
 Detailed process diagram:                  
