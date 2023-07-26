@@ -6,7 +6,7 @@ Top level process diagram:
 Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne
 
 Detailed process diagram:                  
-https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.jpg
+https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png
 
 ### Project Setup
 1. Install Python v3.10.0 and Git
