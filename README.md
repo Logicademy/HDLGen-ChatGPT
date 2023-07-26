@@ -5,8 +5,6 @@ Top level process diagram:
 
 Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne
 
-GitHub project: https://github.com/users/abishek-bupathi/projects/1
-
 Detailed process diagram:                  
 https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.jpg
 
@@ -26,3 +24,5 @@ pip install -r requirements.txt
 ``
 python main.py
 ``
+
+Kanban project: https://github.com/users/abishek-bupathi/projects/1
