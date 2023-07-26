@@ -18,3 +18,6 @@ python main.py
 ``
 
 GitHub project: https://github.com/users/abishek-bupathi/projects/1
+
+Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne
+![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_TopLevelProcessDiagram.jpg)
