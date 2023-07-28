@@ -1,24 +1,17 @@
-# HDLGen
+## HDLGen/ChatGPT: Digital Systems Design Capture and EDA Project Creation Automation
+### Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne.
 
-Top level process diagram:
-![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_TopLevelProcessDiagram.png)
-
-Tutorial videos on HDLGen/ChatGPT, for a range of design examples, 
+### Tutorial videos on HDLGen/ChatGPT, for a range of design examples,
 https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf
-
-Created by Fearghal Morgan, Abishek Bupathi, John Patrick Byrne
-
-Detailed process diagram:                  
-https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png
 
 ### Project Setup
 1. Install Python v3.10.0 and Git
-2. Open Command Prompt/Terminal
-3. Clone the repository
+2. Open Command Prompt/Terminal and cd to HDLGen installation folder
+3. Clone the repository (creates sub-folder HDLGen)
 ``
 git clone https://github.com/fearghal1/HDLGen.git
 ``
-3. cd to HDLGen/Application
+3. cd to HDLGen/Application folder
 4. Install required libraries
 ``
 pip install -r requirements.txt
@@ -28,4 +21,7 @@ pip install -r requirements.txt
 python main.py
 ``
 
-Kanban project: https://github.com/users/abishek-bupathi/projects/1
+### Kanban project: https://github.com/users/abishek-bupathi/projects/1
+
+### HDLGen / ChatGPT / EDA toolsuite detailed process diagram
+![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png)
