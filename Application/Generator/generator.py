@@ -826,8 +826,10 @@ class Generator(QWidget):
                                     0].firstChild.data])
 
         while (instances):
+            instances_unchanged = False
             for namedir in packageDirs:
                 if namedir[0] == instances[0]:
+                    instances_unchanged = True
                     dir = namedir[1]
                     dir = dir.replace("/VHDL/model/" + namedir[0] + ".vhd",
                                       "/" + lang + "/model/" + namedir[0] + "." + ext)
@@ -854,6 +856,8 @@ class Generator(QWidget):
                     instances.pop(0)
                     if len(instances) == 0:
                         break
+            if instances_unchanged == False:
+                break
         if self.dirs is not None:
             for dir in self.dirs:
                 files += "add_files -norecurse  " + ProjectManager.get_proj_environment() + dir + " \n"
@@ -2111,9 +2115,9 @@ class Generator(QWidget):
                                 assign_syntax = assign_syntax.replace("$value", signals[1])
                                 var_name = signals[1]
                                 pattern = f"(reg)\s*(\[\s*\d+\s*:\s*\d+\s*\])?\s+({var_name})"
-
+                                # Not sure if instance can be a reg
                                 # Replace "reg" with "wire" in the matching line
-                                gen_int_sig = re.sub(pattern, r"wire \2 \3", gen_int_sig)
+                                #gen_int_sig = re.sub(pattern, r"wire \2 \3", gen_int_sig)
 
                                 gen_stmts += "\t" + assign_syntax + ",\n"
                             gen_stmts = gen_stmts.rstrip()

@@ -132,7 +132,7 @@ class InstanceDialog(QDialog):
         self.out_sig_frame.setFrameStyle(QFrame.NoFrame)
         self.out_sig_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
         self.out_sig_frame.setLayout(self.out_sig_layout)
-        self.out_sig_frame.setFixedSize(325, 275)
+        self.out_sig_frame.setFixedSize(525, 475)
 
         self.input_layout.addWidget(self.instance_name_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.instance_name_input, 1, 0, 1, 1)
@@ -196,7 +196,8 @@ class InstanceDialog(QDialog):
                     internal_signal = intSignal_nodes[i].getElementsByTagName('name')[0].firstChild.data
                     self.internal_signals.append(internal_signal)
 
-                if len(self.output_signals) != 0 and len(self.input_signals) != 0:
+                #if len(self.output_signals) != 0 and len(self.input_signals) != 0:
+                if len(self.input_signals) != 0:
                     outputList_flag = 1
 
                     self.comp_signals = self.loadComponent(self.components_combobox.currentText()) #,self.comp_mode

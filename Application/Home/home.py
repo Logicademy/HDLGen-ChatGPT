@@ -278,7 +278,7 @@ class Home(QMainWindow):
                 self.generator.create_verilog_testbench_file(gen.get_selected_files())
                 msgBox = QMessageBox()
                 msgBox.setWindowTitle("Alert")
-                msgBox.setText("Verilog and Testbench Generated")
+                msgBox.setText("Verilog Testbench Generated")
                 msgBox.exec_()
 
     def delete_title_msg_backups(self):
