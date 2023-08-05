@@ -95,6 +95,7 @@ class Gen(QWidget):
         self.chatgpt_title_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.chatgpt_title_bk_checkBox.setStyleSheet(BLACK_COLOR)
 
+
         self.delete_bk_title_chatgpt = QPushButton("Delete backups")
         self.delete_bk_title_chatgpt.setFixedSize(200, 50)
         self.delete_bk_title_chatgpt.setStyleSheet(
@@ -108,15 +109,15 @@ class Gen(QWidget):
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
 
-        self.model_label = QLabel("HDL Model Template")
+        self.model_label = QLabel("Generate HDL Model Template")
         self.model_label.setStyleSheet(BLACK_COLOR)
         self.model_label.setFont(small_text_font)
 
-        self.chatgpt_model_label = QLabel("ChatGPT message header for\nHDL model generation")
+        self.chatgpt_model_label = QLabel("ChatGPT Message Header")
         self.chatgpt_model_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_model_label.setFont(small_text_font)
 
-        self.msg_model_label = QLabel("ChatGPT message elements:\nChatGPT message header,\nHDL model template")
+        self.msg_model_label = QLabel("Generate ChatGPT Message\nMerged Header and Template")
         self.msg_model_label.setStyleSheet(BLACK_COLOR)
         self.msg_model_label.setFont(small_text_font)
 
@@ -128,6 +129,7 @@ class Gen(QWidget):
 
         self.model_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.model_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.model_bk_checkBox.setChecked(True)
 
         self.generate_chatgpt_model = QPushButton("Generate and Copy")
         self.generate_chatgpt_model.setFixedSize(200, 50)
@@ -137,6 +139,7 @@ class Gen(QWidget):
 
         self.chatgpt_model_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.chatgpt_model_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.chatgpt_model_bk_checkBox.setChecked(True)
 
         self.delete_bk_model = QPushButton("Delete backups")
         self.delete_bk_model.setFixedSize(200, 50)
@@ -162,16 +165,16 @@ class Gen(QWidget):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
-        self.testbench_label = QLabel("HDL Testbench Template")
+        self.testbench_label = QLabel("Generate HDL Testbench Template")
         self.testbench_label.setStyleSheet(BLACK_COLOR)
         self.testbench_label.setFont(small_text_font)
 
 
-        self.chatgpt_testbench_label = QLabel("ChatGPT message header for\nHDL testbench generation")
+        self.chatgpt_testbench_label = QLabel("ChatGPT Message Header")
         self.chatgpt_testbench_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_testbench_label.setFont(small_text_font)
 
-        self.msg_testbench_label = QLabel("ChatGPT message elements:\nChatGPT message header,\ntestbench signals, test plan")
+        self.msg_testbench_label = QLabel("Generate ChatGPT Message\nMerged Header and Template")
         self.msg_testbench_label.setStyleSheet(BLACK_COLOR)
         self.msg_testbench_label.setFont(small_text_font)
 
@@ -183,6 +186,7 @@ class Gen(QWidget):
 
         self.testbench_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.testbench_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.testbench_bk_checkBox.setChecked(True)
 
         self.wcfg_checkBox = QCheckBox("Waveform Configuration File")
         self.wcfg_checkBox.setStyleSheet(BLACK_COLOR)
@@ -196,6 +200,7 @@ class Gen(QWidget):
 
         self.chatgpt_testbench_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.chatgpt_testbench_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.chatgpt_testbench_bk_checkBox.setChecked(True)
 
         self.delete_bk_testbench = QPushButton("Delete backups")
         self.delete_bk_testbench.setFixedSize(200, 50)
@@ -237,6 +242,12 @@ class Gen(QWidget):
         self.testbench_VHDL = QPushButton("Edit")
         self.testbench_VHDL.setFixedSize(200, 50)
         self.testbench_VHDL.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+
+        self.testbench_log = QPushButton("EDA Log file")
+        self.testbench_log.setFixedSize(200, 50)
+        self.testbench_log.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
 
@@ -426,6 +437,7 @@ class Gen(QWidget):
         self.TestbenchLayout.addWidget(self.loc_testbench, 0, 1)
         self.TestbenchLayout.addWidget(self.generate_testbench, 1, 0)
         self.TestbenchLayout.addWidget(self.testbench_bk_checkBox, 3, 1)
+        self.TestbenchLayout.addWidget(self.testbench_log, 3, 0)
         self.TestbenchLayout.addWidget(self.testbench_check, 2, 0)
         self.TestbenchLayout.addWidget(self.wcfg_checkBox, 2, 1)
         self.TestbenchLayout.addWidget(self.delete_bk_testbench, 1, 1)

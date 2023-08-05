@@ -102,7 +102,7 @@ class Generator(QWidget):
                 type = signal.getElementsByTagName('type')[0].firstChild.data
                 if type[0:6] == "array,":
                     type = type.split(",")
-                    type = type[1]
+                    type = type[1] + "  := ( others => (others => '0') )"
                     self.includeArrays = True
                     arrayList.append(name)
                 elif type == "single bit":
@@ -181,7 +181,7 @@ class Generator(QWidget):
                         integerList.append(name)
                     else:
                         type = type.split(",")
-                        type = type[1]
+                        type = type[1] + "  := ( others => (others => '0') )"
                         self.includeArrays = True
                         arrayList.append(name)
                     int_sig_syntax = vhdl_root.getElementsByTagName("intSigDeclaration")[0].firstChild.data
@@ -218,7 +218,7 @@ class Generator(QWidget):
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
-                gen_header += "-- Company        : " + (company if company != "null" else "") + "\n"
+                gen_header += "-- Organisation   : " + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
                 gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[
@@ -953,16 +953,32 @@ class Generator(QWidget):
         if edaTool == "Vivado":
             if lang == "VHDL":
                 tcl_path = proj_path + "\VHDL\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
+                tb_path = proj_path + "\VHDL\\testbench\\" + str(ProjectManager.get_proj_name()) + "_TB.vhd"
             elif lang == "Verilog":
                 tcl_path = proj_path + "\Verilog\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
+                tb_path = proj_path + "\Verilog\\testbench\\" + str(ProjectManager.get_proj_name()) + "_TB.v"
             if os.path.exists(tcl_path):
-                start_vivado_cmd = vivado_bat_file_path + " -source " + tcl_path
-                subprocess.Popen(start_vivado_cmd, shell=True)
+                if os.path.exists(tb_path):
+                    start_vivado_cmd = vivado_bat_file_path + " -source " + tcl_path
+                    subprocess.Popen(start_vivado_cmd, shell=True)
+                else:
+                    msgBox = QMessageBox()
+                    msgBox.setWindowTitle("Alert")
+                    msgBox.setText("No testbench found!\nDo you want to go back and generate the testbench?")
+                    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+                    msgBox.setDefaultButton(QMessageBox.Yes)
+
+                    result = msgBox.exec_()
+
+                    if result == QMessageBox.No:
+                        start_vivado_cmd = vivado_bat_file_path + " -source " + tcl_path
+                        subprocess.Popen(start_vivado_cmd, shell=True)
             else:
                 msgBox = QMessageBox()
                 msgBox.setWindowTitle("Alert")
-                msgBox.setText("Please Generate Model and Testbench HDL")
-                msgBox.exec_()
+                msgBox.setText("No TCL script found!\nPlease generate model and try again")
+
+
         else:
             if lang == "VHDL":
                 tcl_path = proj_path + "\VHDL\Intelprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
@@ -1220,7 +1236,7 @@ class Generator(QWidget):
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
-                gen_header += "-- Company        : " + (company if company != "null" else "") + "\n"
+                gen_header += "-- Organisation   : " + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
                 gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[
@@ -1537,7 +1553,7 @@ class Generator(QWidget):
                         if typeName == type[1]:
                             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
-                    arrayListIO.append(name)
+                    arrayListIO .append(name)
                     arrayInfo.append([name, depth, width])
                     bits = int(width) * int(depth) - 1
                     width = int(width) - 1
@@ -1555,6 +1571,7 @@ class Generator(QWidget):
                         low = low - width - 1
 
                     self.includeArrays = True
+                    name = name+"_"+ str(bits)
                 port_declare_syntax = verilog_root.getElementsByTagName("portDeclaration")[0].firstChild.data
 
                 port_declare_syntax = port_declare_syntax.replace("$name", name)
@@ -1695,7 +1712,7 @@ class Generator(QWidget):
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "// Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
-                gen_header += "// Company        : " + (company if company != "null" else "") + "\n"
+                gen_header += "// Organisation   : " + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
                 gen_header += "// Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "// Date           : " + header_node[0].getElementsByTagName("date")[
@@ -1801,8 +1818,8 @@ class Generator(QWidget):
                                             if arr[0] == signals[0]:
                                                 depth = int(arr[1])
                                                 width = int(arr[2])
-                                                array_syntax = "for (i=0; i<" + str(
-                                                    depth) + "; i++)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
+                                                array_syntax = "integer i;\n\tfor (i=0; i<" + str(
+                                                    depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
                                                     width) + "'b0;\n\t\tend"
                                                 arraySignal = True
                                     elif signals[0] in arrayListIO:
@@ -1813,8 +1830,8 @@ class Generator(QWidget):
                                                 width = int(arr[2])
                                                 bits = depth * width
                                                 signals[0] = signals[0] + "_" + str(bits)
-                                                array_syntax = "for (i=0; i<" + str(
-                                                    depth) + "; i++)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
+                                                array_syntax = "integer i;\n\tfor (i=0; i<" + str(
+                                                    depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
                                                     width) + "'b0;\n\t\tend\n"
                                                 arraySignal = True
                                     elif signals[0] in single_bitList:
@@ -1844,9 +1861,9 @@ class Generator(QWidget):
                                             for arr in arrayInfo:
                                                 if arr[0] == signals[0]:
                                                     depth = int(arr[1])
-                                                    array_syntax = "for (i=0; i<" + str(
-                                                        depth) + "; i++)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + \
-                                                                   signals[1] + "[i]" + "\n\t\tend"
+                                                    array_syntax = "integer i;\n\tfor (i=0; i<" + str(
+                                                        depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + \
+                                                                   signals[1] + "[i];" + "\n\t\tend"
                                                     arraySignal = True
 
                                 elif stateTypeSig == True and value == CSState:
@@ -1969,7 +1986,23 @@ class Generator(QWidget):
                                     gen_seq_process += process_syntax + "\n\n"
                                 else:
                                     for input_signal in child.getElementsByTagName("inputSignal"):
-                                        gen_in_sig += input_signal.firstChild.data + " or "
+                                        if input_signal.firstChild.data in arrayList:
+                                            for row_idx, row in enumerate(arrayInfo):
+                                                for col_idx, element in enumerate(row):
+                                                    if input_signal.firstChild.data in element:
+                                                        num = int(arrayInfo[row_idx][1])
+                                                        for i in range(num):
+                                                            gen_in_sig += input_signal.firstChild.data + "[" + str(
+                                                                i) + "]" + " or "
+                                        elif input_signal.firstChild.data in arrayListIO:
+                                            for row_idx, row in enumerate(arrayInfo):
+                                                for col_idx, element in enumerate(row):
+                                                    if input_signal.firstChild.data in element:
+                                                        num = int(arrayInfo[row_idx][1])
+                                                        for i in range(num):
+                                                            gen_in_sig += input_signal.firstChild.data + "[" + str(i) + "]" + " or "
+                                        else:
+                                            gen_in_sig += input_signal.firstChild.data + " or "
                                     gen_in_sig = gen_in_sig.strip()
                                     gen_in_sig = gen_in_sig[:-3]
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
@@ -2402,13 +2435,14 @@ class Generator(QWidget):
                     depth = 0
                     width = 0
                     type = type.split(",")
+                    print(array_nodes)
                     for i in range(0, len(array_nodes)):
                         typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
                         if typeName == type[1]:
                             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
-                        arrayInfo = [name, depth, width]
-                        arrayList.append(arrayInfo)
+                            arrayInfo = [name, depth, width]
+                            arrayList.append(arrayInfo)
                     bits = int(width) * int(depth) - 1
                     type = "array"
                     size = "[" + str(bits) + ":0]"
@@ -2437,6 +2471,7 @@ class Generator(QWidget):
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(
                                 size) + "'b1;\n"
                         else:
+                            print(arrayList)
                             for i in range(0, len(arrayList)):
                                 if signal.getElementsByTagName('name')[0].firstChild.data == arrayList[i][0]:
                                     size = int(arrayList[i][1]) * int(arrayList[i][2])
@@ -2544,7 +2579,7 @@ class Generator(QWidget):
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
                 gen_header += "// Author(s)      : " + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
-                gen_header += "// Company        : " + (company if company != "null" else "") + "\n"
+                gen_header += "// Organisation   : " + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
                 gen_header += "// Email          : " + (email if email != "null" else "") + "\n"
                 gen_header += "// Date           : " + header_node[0].getElementsByTagName("date")[

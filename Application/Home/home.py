@@ -1,8 +1,10 @@
 from PySide2.QtGui import QFont
 from PySide2.QtWidgets import *
 import os
+import platform
 import subprocess
 import glob
+import webbrowser
 import sys
 sys.path.append("..")
 import zipfile
@@ -129,6 +131,7 @@ class Home(QMainWindow):
         self.hdl_designer.generate.delete_bk_title_chatgpt.clicked.connect(self.delete_title_msg_backups)
         self.hdl_designer.generate.delete_bk_model_chatgpt.clicked.connect(self.delete_model_msg_backups)
         self.hdl_designer.generate.delete_bk_testbench_chatgpt.clicked.connect(self.delete_testbench_msg_backups)
+        self.hdl_designer.generate.testbench_log.clicked.connect(self.openEDALog)
         self.hdl_designer.generate.delete_bk_model.clicked.connect(self.delete_model_backups)
         self.hdl_designer.generate.delete_bk_testbench.clicked.connect(self.delete_testbench_backups)
 
@@ -357,6 +360,130 @@ class Home(QMainWindow):
             msgBox.setText("No Model Chatgpt Message Backup Files found")
             msgBox.exec_()
 
+    def openEDALog(self):
+        if self.project_manager.vhdl_check.isChecked():
+            if self.project_manager.vivado_check.isChecked():
+                proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
+                xvhdlpath = proj_folder + "/VHDL/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/xvhdl.log"
+                elabpath = proj_folder + "/VHDL/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/elaborate.log"
+                msg_box = QMessageBox()
+                msg_box.setIcon(QMessageBox.Question)
+                msg_box.setText("Choose a log option:")
+                msg_box.setWindowTitle("Log Options")
+                msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+                #msg_box.setDefaultButton(QMessageBox.Yes)
+                msg_box.setButtonText(QMessageBox.Yes, "xvhdl.log")
+                msg_box.setButtonText(QMessageBox.No, "elaborate.log")
+
+                result = msg_box.exec_()
+                if result == QMessageBox.Yes:
+                    print("xvhdl.log selected")
+                    if os.path.exists(xvhdlpath):
+                        try:
+                            system = platform.system()
+                            if system == 'Darwin':  # macOS
+                                subprocess.run(['open', xvhdlpath])
+                            elif system == 'Windows':
+                                subprocess.run(['start', xvhdlpath], shell=True)
+                            elif system == 'Linux':
+                                subprocess.run(['xdg-open', xvhdlpath])
+                            else:
+                                print("Unsupported operating system.")
+                        except:
+                            print("Unexpected error")
+                    else:
+                        msgBox = QMessageBox()
+                        msgBox.setWindowTitle("Alert")
+                        msgBox.setText("No xvhdl.log file genertaed")
+                        msgBox.exec_()
+                elif result == QMessageBox.No:
+                    print("elaborate.log selected")
+                    if os.path.exists(elabpath):
+                        try:
+                            system = platform.system()
+                            if system == 'Darwin':  # macOS
+                                subprocess.run(['open', elabpath])
+                            elif system == 'Windows':
+                                subprocess.run(['start', elabpath], shell=True)
+                            elif system == 'Linux':
+                                subprocess.run(['xdg-open', elabpath])
+                            else:
+                                print("Unsupported operating system.")
+                        except:
+                            print("Unexpected error")
+                    else:
+                        msgBox = QMessageBox()
+                        msgBox.setWindowTitle("Alert")
+                        msgBox.setText("No elaborate.log file genertaed")
+                        msgBox.exec_()
+            elif self.project_manager.intel_check.isChecked():
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Intel Quartus is still a work in progress")
+                msgBox.exec_()
+
+
+
+        elif self.project_manager.verilog_check.isChecked():
+            if self.project_manager.vivado_check.isChecked():
+                proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
+                xvhdlpath = proj_folder + "/Verilog/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/xvhdl.log"
+                elabpath = proj_folder + "/Verilog/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/elaborate.log"
+                msg_box = QMessageBox()
+                msg_box.setIcon(QMessageBox.Question)
+                msg_box.setText("Choose a log option:")
+                msg_box.setWindowTitle("Log Options")
+                msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+                # msg_box.setDefaultButton(QMessageBox.Yes)
+                msg_box.setButtonText(QMessageBox.Yes, "xvhdl.log")
+                msg_box.setButtonText(QMessageBox.No, "elaborate.log")
+
+                result = msg_box.exec_()
+                if result == QMessageBox.Yes:
+                    print("xvhdl.log selected")
+                    if os.path.exists(xvhdlpath):
+                        try:
+                            system = platform.system()
+                            if system == 'Darwin':  # macOS
+                                subprocess.run(['open', xvhdlpath])
+                            elif system == 'Windows':
+                                subprocess.run(['start', xvhdlpath], shell=True)
+                            elif system == 'Linux':
+                                subprocess.run(['xdg-open', xvhdlpath])
+                            else:
+                                print("Unsupported operating system.")
+                        except:
+                            print("Unexpected error")
+                    else:
+                        msgBox = QMessageBox()
+                        msgBox.setWindowTitle("Alert")
+                        msgBox.setText("No xvhdl.log file genertaed")
+                        msgBox.exec_()
+                elif result == QMessageBox.No:
+                    print("elaborate.log selected")
+                    if os.path.exists(elabpath):
+                        try:
+                            system = platform.system()
+                            if system == 'Darwin':  # macOS
+                                subprocess.run(['open', elabpath])
+                            elif system == 'Windows':
+                                subprocess.run(['start', elabpath], shell=True)
+                            elif system == 'Linux':
+                                subprocess.run(['xdg-open', elabpath])
+                            else:
+                                print("Unsupported operating system.")
+                        except:
+                            print("Unexpected error")
+                    else:
+                        msgBox = QMessageBox()
+                        msgBox.setWindowTitle("Alert")
+                        msgBox.setText("No elaborate.log file genertaed")
+                        msgBox.exec_()
+            elif self.project_manager.intel_check.isChecked():
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Intel Quartus is still a work in progress")
+                msgBox.exec_()
     def delete_testbench_msg_backups(self):
         backup_files = ""
         bk = False
