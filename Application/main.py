@@ -11,10 +11,22 @@ from Settings.settings import settingsDialog
 import configparser
 
 
-APP_AUTHORS = "Fearghal Morgan, Abishek Bupathi & JP Byrne"
+APP_AUTHORS = "Created by Fearghal Morgan, Abishek Bupathi & JP Byrne"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
-APP_DESCRIPTION = "<ul><li>Fast capture and generation of HDL model and testbench templates</li>" \
-                 "<li>Generation of ChatGPT message, including header and HDL templates</li>" \
+APP_DESCRIPTION = "<ul><li>Open source application</li>" \
+                 "<li>Fast capture of design and test plan capture from design and test specifications</li>" \
+                 "<li>Generate HDL model and testbench templates and low-level logic pseudo code</li>" \
+                 "<li>Integrate within ChatGPT message<ul>" \
+                 "<li>HDL model completion</li>" \
+                 "<li>HDL testbench stimulus and signal checking</li></ul></li>" \
+                 "<li>Supports<ul>" \
+                 "<li>VHDL and Verilog</li>" \
+                 "<li>AMD Vivado and Intel Quartus Electronic Design Automation tools</li>" \
+                 "<li>Design hierarchy</li></ul></li>" \
+                 "<li>EDA project creation and launch"
+
+APP_DESCRIPTION1 = "<ul><li>Fast capture and generation of HDL model and testbench templates</li>" \
+                 "<li>Generation of ChatGPT messages, including header and HDL templates</li>" \
                  "<li>ChatGPT-directed HDL model and testbench generation</li>" \
                  "<li>EDA project creation and launch</li>" \
                  "<li>Supports VHDL and Verilog / AMD Xilinx Vivado</li>" \
@@ -31,6 +43,10 @@ class HDLGen(QMainWindow):
         title_font.setPointSize(20)
         title_font.setBold(True)
 
+        title_1_font = QFont()
+        title_1_font.setPointSize(15)
+        #title_1_font.setBold(True)
+
         bold_font = QFont()
         bold_font.setPointSize(10)
         bold_font.setBold(True)
@@ -40,35 +56,68 @@ class HDLGen(QMainWindow):
 
         # Initializing UI Elements
         self.mainLayout = QHBoxLayout()
-        self.button_layout = QVBoxLayout()
+        self.button_layout = QGridLayout()
         self.info_layout = QVBoxLayout()
+        self.Settings_top_layout = QGridLayout()
 
         self.open_btn = QPushButton("Open Existing Project")
         self.new_btn = QPushButton("Create New Project")
         self.help_btn = QPushButton("Help")
         self.settings_btn = QPushButton("Settings")
-
+        self.open_btn.setFixedSize(150, 50)
+        self.open_btn.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        # self.button_layout.addSpacerItem(QSpacerItem(1, 70))
+        self.open_btn.clicked.connect(self.open_project)
+        self.new_btn.setFixedSize(150, 50)
+        self.new_btn.setStyleSheet(
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+        # self.button_layout.addWidget(self.new_btn, 0, 1, 1, 1)#(self.new_btn, alignment= Qt.AlignCenter)
+        # self.button_layout.addSpacerItem(QSpacerItem(1, 70))
+        self.new_btn.clicked.connect(self.new_project)
         self.help_btn.setFixedSize(35, 25)
         self.help_btn.clicked.connect(self.help_window)
 
         self.settings_btn.setFixedSize(60, 25)
         self.settings_btn.clicked.connect(self.settings_window)
 
-        self.hdlgen_logo = QLabel("HDLGen and ChatGPT\nDigital Systems Design\nCapture Automation")
+
+        self.help_btn_spacer = QLabel("")
+        self.settings_btn_spacer = QLabel("")
+        self.settings_btn_spacer.setFixedSize(60, 25)
+        self.help_btn_spacer.setFixedSize(35, 25)
+
+        self.hdlgen_logo = QLabel("HDLGen and ChatGPT")#\nDigital Systems Design Capture\nEDA Project Creation Automation")
         self.hdlgen_logo.setFont(title_font)
         self.hdlgen_logo.setAlignment(Qt.AlignCenter)
-
+        self.hdlgen_logo_1 = QLabel("Digital Systems Design Capture Automation")
+        self.hdlgen_logo_1.setFont(title_1_font)
+        self.hdlgen_logo_1.setAlignment(Qt.AlignCenter)
         self.app_description = QLabel(APP_DESCRIPTION)
         self.app_description.setFont(text_font)
+        self.processphoto = QLabel()
+        curr_direct = os.getcwd()
+        photo_direct = curr_direct + "/Resources/processdiagram.png"
+        pixmap = QPixmap(photo_direct)
+        self.processphoto.setPixmap(pixmap)
+        "https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf"
+        self.tutorial_link = QLabel(
+            '<a href="https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf">Tutorials</a> Tutorial videos on HDLGen/ChatGPT, for a range of design examples')
+        self.tutorial_link.setFont(text_font)
+        self.tutorial_link.linkActivated.connect(self.link)
         self.github_link = QLabel('<a href="https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use the HDLGen application, please include the Github reference to our work')
         self.github_link.setFont(text_font)
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
         self.github_link.linkActivated.connect(self.link)
-        self.vici_link = QLabel('<a href="https://vicilogic.com">vicilogic.com</a> online learning, assessment and remote hardware prototyping and course builder')
+        self.vici_link = QLabel('<a href="https://vicilogic.com">VICILOGIC</a> Online learning, assessment and remote hardware prototyping and course builder')
         self.vici_link.setFont(text_font)
         self.vici_link.linkActivated.connect(self.link)
-
+        self.chatgpt_link = QLabel('<a href="https://chat.openai.com/auth/login">ChatGPT</a> Online large language model-based chatbot developed by OpenAI')
+        self.chatgpt_link.setFont(text_font)
+        self.chatgpt_link.linkActivated.connect(self.link)
         # Creating a container
         self.container = QWidget()
         self.config = configparser.ConfigParser()
@@ -78,32 +127,37 @@ class HDLGen(QMainWindow):
 
         print("Setting up UI")
 
-        self.open_btn.setFixedSize(150, 50)
-        self.open_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-        self.button_layout.addSpacerItem(QSpacerItem(1, 70))
-        self.button_layout.addWidget(self.open_btn, alignment= Qt.AlignCenter)
-        self.open_btn.clicked.connect(self.open_project)
-        self.new_btn.setFixedSize(150, 50)
-        self.new_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
-        self.button_layout.addWidget(self.new_btn, alignment= Qt.AlignCenter)
-        self.button_layout.addSpacerItem(QSpacerItem(1, 70))
-        self.new_btn.clicked.connect(self.new_project)
+        self.button_layout.addWidget(self.new_btn, 0, 1,  alignment= Qt.AlignLeft)
+        self.button_layout.addWidget(self.open_btn, 0, 0, alignment= Qt.AlignRight)
 
-        self.info_layout.addSpacerItem(QSpacerItem(1, 50))
+        #self.button_layout.addWidget(self.open_btn, 0, 0, 1, 1)  # addWidget(self.open_btn, alignment= Qt.AlignCenter)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 25))
+
         self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
-        self.info_layout.addWidget(self.app_authors, alignment=Qt.AlignCenter)
-        self.info_layout.addWidget(self.app_description, alignment= Qt.AlignCenter)
+        self.info_layout.addWidget(self.hdlgen_logo_1, alignment=Qt.AlignCenter)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 25))
+        #self.info_layout.addWidget(self.app_authors, alignment=Qt.AlignCenter)
+        #self.info_layout.addSpacerItem(QSpacerItem(1, 25))
+        self.info_layout.addWidget(self.app_description, alignment=Qt.AlignCenter)
+        #self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 25))
+        #self.info_layout.addWidget(self.app_description, alignment= Qt.AlignCenter)
+        self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 25))
+        self.info_layout.addLayout(self.button_layout)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 25))
+        self.info_layout.addWidget(self.tutorial_link, alignment=Qt.AlignCenter)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 10))
         self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
         self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
-
+        self.info_layout.addSpacerItem(QSpacerItem(1, 10))
+        self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 50))
 
-        self.mainLayout.addLayout(self.button_layout)
+       # self.mainLayout.addLayout(self.button_layout)
+        self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)
+        self.mainLayout.addWidget(self.help_btn_spacer, alignment=Qt.AlignTop)
         self.mainLayout.addLayout(self.info_layout)
         self.mainLayout.addWidget(self.settings_btn, alignment=Qt.AlignTop)
         self.mainLayout.addWidget(self.help_btn, alignment=Qt.AlignTop)
