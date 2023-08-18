@@ -327,7 +327,7 @@ class Generator(QWidget):
 
                             for default_out in child.getElementsByTagName("defaultOutput"):
 
-                                assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                assign_syntax = vhdl_root.getElementsByTagName("sigAssign")[0].firstChild.data
                                 signals = default_out.firstChild.data.split(",")
                                 assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                 value = signals[1]
@@ -401,7 +401,7 @@ class Generator(QWidget):
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
                                 gen_defaults += assign_syntax + "-- Default assignment \n\t"
                                 if len(signals) == 4:
-                                    clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                    clkAssign_syntax = vhdl_root.getElementsByTagName("sigAssign")[0].firstChild.data
                                     clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
                                     value = signals[2]
                                     if signals[3] != "N/A":
@@ -533,7 +533,7 @@ class Generator(QWidget):
                                     conc_syntax = conc_syntax.replace("$concurrentstmt_label",
                                                                       child.getElementsByTagName("label")[
                                                                           0].firstChild.data)
-                                    assign_syntax = vhdl_root.getElementsByTagName("sigAssingn")[0].firstChild.data
+                                    assign_syntax = vhdl_root.getElementsByTagName("sigAssign")[0].firstChild.data
 
                                     assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                     value = signals[1]
@@ -2008,11 +2008,13 @@ class Generator(QWidget):
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     if notes == "None":
+                                        gen_defaults = gen_defaults.replace("<","")
                                         gen_defaults += ""
                                         if caseEmpty == False:
                                             case_syntax = case_syntax.replace("$whenCase", whenCase)
                                             gen_defaults += "\n" + case_syntax
                                     else:
+                                        gen_defaults = gen_defaults.replace("<", "")
                                         gen_defaults += "\n" + note_syntax
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
@@ -2120,7 +2122,7 @@ class Generator(QWidget):
                                     if arraySignal == True:
                                         conc_syntax = array_syntax
                                     else:
-                                        assign_syntax = verilog_root.getElementsByTagName("sigAssingn")[
+                                        assign_syntax = verilog_root.getElementsByTagName("sigAssign")[
                                             0].firstChild.data
                                         assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                         assign_syntax = assign_syntax.replace("$value", value)

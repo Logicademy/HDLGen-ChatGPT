@@ -28,7 +28,7 @@
     <clkIfStatement>if (clk) then&#10;$default_assignments&#x9;end if;</clkIfStatement>
     <caseCopy>&#x9;case ( $stateType )&#10;</caseCopy>
     <case>&#x9;case ( $stateType )$whenCase&#10;&#x9;&#x9;default :&#10;&#x9;&#x9;&#x9;begin&#10;&#10;&#x9;&#x9;&#x9;end&#10;&#x9;endcase</case>
-    <sigAssingn>$output_signal = $value;</sigAssingn>
+    <sigAssign>$output_signal = $value;</sigAssign>
     <processAssign>$output_signal &lt;= $value;</processAssign>
     <portAssign>.$output_signal ($value)</portAssign>
     <concurrentstmt>assign $statement&#10;</concurrentstmt>
