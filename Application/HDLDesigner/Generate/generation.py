@@ -33,8 +33,10 @@ class Gen(QWidget):
         small_text_font.setPointSize(10)
         small_text_font.setBold(True)
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
         self.proj_dir = proj_dir
         self.config = configparser.ConfigParser()
         self.config.read('config.ini')
@@ -79,34 +81,37 @@ class Gen(QWidget):
         self.chatgpt_title_label = QLabel("ChatGPT message header\nfor formatting HDL\nmodel title generation")
         self.chatgpt_title_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_title_label.setFont(small_text_font)
-        self.chatgpt_title_label.setFixedSize(200, 50)
+        #self.chatgpt_title_label.setFixedSize(200, 50)
 
         self.msg_title_label = QLabel("ChatGPT message elements:\nChatGPT message,HDL\nmodel title section")
         self.msg_title_label.setStyleSheet(BLACK_COLOR)
         self.msg_title_label.setFont(small_text_font)
 
         self.generate_chatgpt_title = QPushButton("Generate and Copy")
-
-        self.generate_chatgpt_title.setFixedSize(200, 50)
+        self.generate_chatgpt_title.setFont(input_font)
+        #self.generate_chatgpt_title.setFixedSize(200, 50)
         self.generate_chatgpt_title.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.chatgpt_title_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.chatgpt_title_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.chatgpt_title_bk_checkBox.setFont(input_font)
 
 
         self.delete_bk_title_chatgpt = QPushButton("Delete backups")
-        self.delete_bk_title_chatgpt.setFixedSize(200, 50)
+        self.delete_bk_title_chatgpt.setFont(input_font)
+        #self.delete_bk_title_chatgpt.setFixedSize(200, 50)
         self.delete_bk_title_chatgpt.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.chatgpt_loc_title = QPushButton("Go to folder")
-        self.chatgpt_loc_title.setFixedSize(200, 50)
+        self.chatgpt_loc_title.setFont(input_font)
+        #self.chatgpt_loc_title.setFixedSize(200, 50)
         self.chatgpt_loc_title.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
 
         self.model_label = QLabel("Generate HDL Model Template")
@@ -122,48 +127,50 @@ class Gen(QWidget):
         self.msg_model_label.setFont(small_text_font)
 
         self.generate_model = QPushButton("Generate")
-        self.generate_model.setFixedSize(200, 50)
+        self.generate_model.setFont(input_font)
         self.generate_model.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.model_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.model_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.model_bk_checkBox.setFont(input_font)
         self.model_bk_checkBox.setChecked(True)
 
         self.generate_chatgpt_model = QPushButton("Generate and Copy")
-        self.generate_chatgpt_model.setFixedSize(200, 50)
+        self.generate_chatgpt_model.setFont(input_font)
         self.generate_chatgpt_model.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.chatgpt_model_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.chatgpt_model_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.chatgpt_model_bk_checkBox.setFont(input_font)
         self.chatgpt_model_bk_checkBox.setChecked(True)
 
         self.delete_bk_model = QPushButton("Delete backups")
-        self.delete_bk_model.setFixedSize(200, 50)
+        self.delete_bk_model.setFont(input_font)
         self.delete_bk_model.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.delete_bk_model_chatgpt = QPushButton("Delete backups")
-        self.delete_bk_model_chatgpt.setFixedSize(200, 50)
+        self.delete_bk_model_chatgpt.setFont(input_font)
         self.delete_bk_model_chatgpt.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.loc_model = QPushButton("Go to folder")
-        self.loc_model.setFixedSize(200, 50)
+        self.loc_model.setFont(input_font)
         self.loc_model.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.chatgpt_loc_model = QPushButton("Go to folder")
-        self.chatgpt_loc_model.setFixedSize(200, 50)
+        self.chatgpt_loc_model.setFont(input_font)
         self.chatgpt_loc_model.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.testbench_label = QLabel("Generate HDL Testbench Template")
         self.testbench_label.setStyleSheet(BLACK_COLOR)
@@ -179,13 +186,14 @@ class Gen(QWidget):
         self.msg_testbench_label.setFont(small_text_font)
 
         self.generate_testbench = QPushButton("Generate")
-        self.generate_testbench.setFixedSize(200, 50)
+        self.generate_testbench.setFont(input_font)
         self.generate_testbench.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.testbench_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.testbench_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.testbench_bk_checkBox.setFont(input_font)
         self.testbench_bk_checkBox.setChecked(True)
 
         self.wcfg_checkBox = QCheckBox("Waveform Configuration File")
@@ -193,86 +201,87 @@ class Gen(QWidget):
         self.wcfg_checkBox.setChecked(True)
 
         self.generate_chatgpt_testbench = QPushButton("Generate and Copy")
-        self.generate_chatgpt_testbench.setFixedSize(200, 50)
+        self.generate_chatgpt_testbench.setFont(input_font)
         self.generate_chatgpt_testbench.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.chatgpt_testbench_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
         self.chatgpt_testbench_bk_checkBox.setStyleSheet(BLACK_COLOR)
+        self.chatgpt_testbench_bk_checkBox.setFont(input_font)
         self.chatgpt_testbench_bk_checkBox.setChecked(True)
 
         self.delete_bk_testbench = QPushButton("Delete backups")
-        self.delete_bk_testbench.setFixedSize(200, 50)
+        self.delete_bk_testbench.setFont(input_font)
         self.delete_bk_testbench.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.delete_bk_testbench_chatgpt = QPushButton("Delete backups")
-        self.delete_bk_testbench_chatgpt.setFixedSize(200, 50)
+        self.delete_bk_testbench_chatgpt.setFont(input_font)
         self.delete_bk_testbench_chatgpt.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.loc_testbench = QPushButton("Go to folder")
-        self.loc_testbench.setFixedSize(200, 50)
+        self.loc_testbench.setFont(input_font)
         self.loc_testbench.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.chatgpt_loc_testbench = QPushButton("Go to folder")
-        self.chatgpt_loc_testbench.setFixedSize(200, 50)
+        self.chatgpt_loc_testbench.setFont(input_font)
         self.chatgpt_loc_testbench.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.title_VHDL = QPushButton("Edit")
-        self.title_VHDL.setFixedSize(200, 50)
+        self.title_VHDL.setFont(input_font)
         self.title_VHDL.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.model_VHDL = QPushButton("Edit")
-        self.model_VHDL.setFixedSize(200, 50)
+        self.model_VHDL.setFont(input_font)
         self.model_VHDL.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
 
         self.testbench_VHDL = QPushButton("Edit")
-        self.testbench_VHDL.setFixedSize(200, 50)
+        self.testbench_VHDL.setFont(input_font)
         self.testbench_VHDL.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.testbench_log = QPushButton("EDA Log file")
-        self.testbench_log.setFixedSize(200, 50)
+        self.testbench_log.setFont(input_font)
         self.testbench_log.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
 
         self.title_Verilog = QPushButton("Edit")
-        self.title_Verilog.setFixedSize(200, 50)
+        self.title_Verilog.setFont(input_font)
         self.title_Verilog.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.title_Verilog.setVisible(False)
 
 
         self.model_Verilog = QPushButton("Edit")
-        self.model_Verilog.setFixedSize(200, 50)
+        self.model_Verilog.setFont(input_font)
         self.model_Verilog.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.model_Verilog.setVisible(False)
 
 
         self.testbench_Verilog = QPushButton("Edit")
-        self.testbench_Verilog.setFixedSize(200, 50)
+        self.testbench_Verilog.setFont(input_font)
         self.testbench_Verilog.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.testbench_Verilog.setVisible(False)
 
         self.header_title_check = QRadioButton("Preview")
@@ -280,22 +289,27 @@ class Gen(QWidget):
         self.header_title_check.setChecked(True)
         self.header_model_check = QRadioButton("Preview")
         self.header_model_check.setStyleSheet(BLACK_COLOR)
-        self.header_model_check.setFixedSize(200, 50)
+        self.header_model_check.setFont(input_font)
         self.header_testbench_check = QRadioButton("Preview")
         self.header_testbench_check.setStyleSheet(BLACK_COLOR)
-        self.header_testbench_check.setFixedSize(200, 50)
+        self.header_testbench_check.setFont(input_font)
         self.model_check = QRadioButton("Preview")
+        self.model_check.setFont(input_font)
         self.model_check.setStyleSheet(BLACK_COLOR)
         self.model_check.setChecked(True)
 
         self.testbench_check = QRadioButton("Preview")
+        self.testbench_check.setFont(input_font)
         self.testbench_check.setStyleSheet(BLACK_COLOR)
         self.testbench_check.setChecked(True)
         self.msg_model_check = QRadioButton("Preview")
+        self.msg_model_check.setFont(input_font)
         self.msg_model_check.setStyleSheet(BLACK_COLOR)
         self.msg_title_check = QRadioButton("Preview")
+        self.msg_title_check.setFont(input_font)
         self.msg_title_check.setStyleSheet(BLACK_COLOR)
         self.msg_testbench_check = QRadioButton("Preview")
+        self.msg_testbench_check.setFont(input_font)
         self.msg_testbench_check.setStyleSheet(BLACK_COLOR)
 
         self.model_button_group = QButtonGroup()

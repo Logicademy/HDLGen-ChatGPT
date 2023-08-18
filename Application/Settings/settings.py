@@ -22,17 +22,21 @@ class settingsDialog(QDialog):
         self.commands = ["None", "None", "None", "None", "None", "None"]
         self.setWindowTitle("Settings")
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.input_layout = QGridLayout()
         self.mainLayout = QVBoxLayout()
 
         self.author_label = QLabel("Author")
         self.author_label.setStyleSheet(WHITE_COLOR)
+        self.author_label.setFont(title_font)
         self.author_input = QLineEdit()
+        self.author_input.setFont(input_font)
 
         self.email_label = QLabel("Email")
         self.email_label.setStyleSheet(WHITE_COLOR)
@@ -51,65 +55,80 @@ class settingsDialog(QDialog):
         self.quartus_input = QLineEdit()
 
         self.header_VHDL = QPushButton("VHDL Title Section Command")
-        self.header_VHDL.setFixedSize(200, 25)
+        #self.header_VHDL.setFixedSize(200, 25)
         self.header_VHDL.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.model_VHDL = QPushButton("VHDL Model Command")
-        self.model_VHDL.setFixedSize(200, 25)
+        #self.model_VHDL.setFixedSize(250, 25)
         self.model_VHDL.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.testbench_VHDL = QPushButton("VHDL Testbench Command")
-        self.testbench_VHDL.setFixedSize(200, 25)
+        #self.testbench_VHDL.setFixedSize(250, 25)
         self.testbench_VHDL.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.header_Verilog = QPushButton("Verilog Title Section Command")
-        self.header_Verilog.setFixedSize(200, 25)
+        #self.header_Verilog.setFixedSize(200, 25)
         self.header_Verilog.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.model_Verilog = QPushButton("Verilog Model Command")
-        self.model_Verilog.setFixedSize(200, 25)
+       # self.model_Verilog.setFixedSize(250, 25)
         self.model_Verilog.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.testbench_Verilog = QPushButton("Verilog Testbench Command")
-        self.testbench_Verilog.setFixedSize(200, 25)
+        #self.testbench_Verilog.setFixedSize(250, 25)
         self.testbench_Verilog.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.browse_btn = QPushButton("Browse")
-        self.browse_btn.setFixedSize(60, 25)
+        #self.browse_btn.setFixedSize(80, 25)
         self.browse_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.quartus_browse_btn = QPushButton("Browse")
-        self.quartus_browse_btn.setFixedSize(60, 25)
+        #self.quartus_browse_btn.setFixedSize(80, 25)
         self.quartus_browse_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+       # self.cancel_btn.setFixedSize(60, 25)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
 
         self.ok_btn = QPushButton("Ok")
-        self.ok_btn.setFixedSize(60, 25)
+        #self.ok_btn.setFixedSize(60, 25)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
         self.input_frame = QFrame()
 
         self.cancelled = True
         self.config = configparser.ConfigParser()
-
+        self.vivado_label.setFont(title_font)
+        self.email_label.setFont(title_font)
+        self.company_label.setFont(title_font)
+        self.quartus_label.setFont(title_font)
+        self.vivado_input.setFont(input_font)
+        self.email_input.setFont(input_font)
+        self.company_input.setFont(input_font)
+        self.quartus_input.setFont(input_font)
+        self.browse_btn.setFont(input_font)
+        self.quartus_browse_btn.setFont(input_font)
+        self.testbench_VHDL.setFont(input_font)
+        self.testbench_Verilog.setFont(input_font)
+        self.model_VHDL.setFont(input_font)
+        self.model_Verilog.setFont(input_font)
+        self.ok_btn.setFont(input_font)
+        self.cancel_btn.setFont(input_font)
         self.setup_ui()
     def setup_ui(self):
         self.config.read('config.ini')
@@ -158,7 +177,7 @@ class settingsDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(600, 500)
+        self.input_frame.setFixedSize(1000, 500)
         self.input_frame.setLayout(self.input_layout)
         self.cancel_btn.clicked.connect(self.cancel)
 

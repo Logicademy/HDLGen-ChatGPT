@@ -37,10 +37,13 @@ class Architecture(QWidget):
         btn_font.setPointSize(10)
         bold_font = QFont()
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
+
         self.process = ""
         self.mainLayout = QVBoxLayout()
 
-        self.top_layout = QGridLayout()
+        self.top_layout = QHBoxLayout()#QGridLayout()
         self.arch_action_layout = QVBoxLayout()
 
         self.arch_types = ["RTL", "Combinational"]
@@ -49,20 +52,23 @@ class Architecture(QWidget):
         self.arch_name_input.setStyleSheet(WHITE_COLOR)
 
         self.new_proc_btn = QPushButton("New Process")
-        self.new_proc_btn.setFixedSize(100, 25)
+        self.new_proc_btn.setFont(input_font)
+        #self.new_proc_btn.setFixedSize(100, 25)
         self.new_proc_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding: 10px;}")
         self.new_conc_btn = QPushButton("New Concurrent Statement")
-        self.new_conc_btn.setFixedSize(175, 25)
+        self.new_conc_btn.setFont(input_font)
+        #self.new_conc_btn.setFixedSize(175, 25)
         self.new_conc_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding: 10px;}")
         self.new_instance_btn = QPushButton("New Instance")
-        self.new_instance_btn.setFixedSize(100, 25)
+        self.new_instance_btn.setFont(input_font)
+        #self.new_instance_btn.setFixedSize(100, 25)
         self.new_instance_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding: 10px;}")
         self.arch_info_btn = QPushButton()
         self.arch_info_btn.setIcon(qta.icon("mdi.help"))
         self.arch_info_btn.setFixedSize(25, 25)
@@ -94,14 +100,14 @@ class Architecture(QWidget):
     def setup_ui(self):
         bold_font = QFont()
         bold_font.setBold(True)
-        self.top_layout.addWidget(self.arch_name_input, 0, 0, 1, 1)
-        self.top_layout.addWidget(self.new_proc_btn, 0, 1, 1, 1)
+        self.top_layout.addWidget(self.arch_name_input)#, 0, 0, 1, 1)
+        self.top_layout.addWidget(self.new_proc_btn, alignment=Qt.AlignRight)#, 0, 1, 1, 1)
         self.new_proc_btn.clicked.connect(self.add_proc)
-        self.top_layout.addWidget(self.new_conc_btn, 0, 2, 1, 1)
+        self.top_layout.addWidget(self.new_conc_btn,alignment=Qt.AlignCenter)#, 0, 2, 1, 1)
         self.new_conc_btn.clicked.connect(self.add_concurrentstmt)
-        self.top_layout.addWidget(self.new_instance_btn, 0, 3, 1, 1)
+        self.top_layout.addWidget(self.new_instance_btn,alignment=Qt.AlignLeft)#, 0, 3, 1, 1)
         self.new_instance_btn.clicked.connect(self.add_instance)
-        self.top_layout.addWidget(self.arch_info_btn, 0, 4, 1, 1)
+        self.top_layout.addWidget(self.arch_info_btn,alignment=Qt.AlignRight)#, 0, 4, 1, 1)
 
 
         self.arch_action_layout.addLayout(self.top_layout)

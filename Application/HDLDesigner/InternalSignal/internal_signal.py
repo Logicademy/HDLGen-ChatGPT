@@ -20,10 +20,13 @@ class InternalSignal(QWidget):
         super().__init__()
 
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
         bold_font = QFont()
+        bold_font.setPointSize(10)
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.all_intSignals = []
         self.all_signals_names = []
@@ -41,10 +44,11 @@ class InternalSignal(QWidget):
         self.io_list_label.setStyleSheet(WHITE_COLOR)
 
         self.add_btn = QPushButton("Add Signal")
-        self.add_btn.setFixedSize(80, 25)
+        self.add_btn.setFont(input_font)
+        #self.add_btn.setFixedSize(80, 25)
         self.add_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.int_info_btn = QPushButton()
         self.int_info_btn.setIcon(qta.icon("mdi.help"))

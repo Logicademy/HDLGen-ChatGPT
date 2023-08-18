@@ -22,7 +22,7 @@ class TestPlan(QWidget):
         small_text_font = QFont()
         small_text_font.setPointSize(10)
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
         self.proj_dir = proj_dir
         self.note=""
@@ -32,10 +32,11 @@ class TestPlan(QWidget):
         self.input_layout = QGridLayout()
 
         self.testbench_btn = QPushButton("Test Plan")
-        self.testbench_btn.setFixedSize(160, 25)
+        self.testbench_btn.setFont(small_text_font)
+        #self.testbench_btn.setFixedSize(160, 25)
         self.testbench_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.testplan_label = QLabel("Test Plan")
         self.testplan_label.setFont(title_font)
@@ -53,7 +54,7 @@ class TestPlan(QWidget):
         self.testPlan_info_btn.setFixedSize(25, 25)
         self.testPlan_info_btn.clicked.connect(self.testPlan_help_window)
 
-        self.top_layout = QGridLayout()
+        self.top_layout = QHBoxLayout()#QGridLayout()
         self.arch_action_layout = QVBoxLayout()
         self.btn_layout = QHBoxLayout()
 
@@ -70,9 +71,9 @@ class TestPlan(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.top_layout.addWidget(self.testplan_label, 0, 0, 1, 1)
-        self.top_layout.addWidget(self.testbench_btn, 0, 1, 1, 1)
-        self.top_layout.addWidget(self.testPlan_info_btn, 0, 2, 1, 1)
+        self.top_layout.addWidget(self.testplan_label)#, 0, 0, 1, 1)
+        self.top_layout.addWidget(self.testbench_btn, alignment=Qt.AlignRight)#, 0, 1, 1, 1)
+        self.top_layout.addWidget(self.testPlan_info_btn)#, 0, 2, 1, 1)
 
         self.arch_action_layout.addLayout(self.top_layout)
 

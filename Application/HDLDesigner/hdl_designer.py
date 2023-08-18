@@ -76,7 +76,7 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(self.testplan, "Test Plan")
         self.tabs.addTab(self.generate, "Generate")
         font = self.tabs.font()
-        font.setPointSize(10)
+        font.setPointSize(12)
         self.tabs.setFont(font)
         self.mainLayout.addWidget(self.tabs)
         self.mainLayout.addLayout(self.preview_pane_layout)
