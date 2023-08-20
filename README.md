@@ -9,7 +9,7 @@ https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf
 2. Open Command Prompt/Terminal and cd to HDLGen installation folder
 3. Clone the repository (creates sub-folder HDLGen)
 ``
-git clone https://github.com/fearghal1/HDLGen.git
+git clone https://github.com/fearghal1/HDLGen-ChatGPT.git
 ``
 3. cd to HDLGen/Application folder
 4. Install required libraries
