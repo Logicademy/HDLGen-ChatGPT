@@ -7,6 +7,7 @@
 #### [Project Setup instructions](https://tinyurl.com/34srhxjw)
 #### [Tutorials: RISC-V and other digital systems componentshttps://tinyurl.com/4x53f828](https://tinyurl.com/zbjxa9fz)
 #### User experiences
+#### HDLGen-ChatGPT application architecture and functionality
 #### Latest default ChatGPT prompt headers
 ##
 #### [Kanban project management](https://github.com/users/abishek-bupathi/projects/1)
