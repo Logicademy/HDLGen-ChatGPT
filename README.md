@@ -7,6 +7,7 @@
 #### [Project Setup instructions](https://tinyurl.com/34srhxjw)
 #### [Tutorials: RISC-V and other digital systems componentshttps://tinyurl.com/4x53f828](https://tinyurl.com/zbjxa9fz)
 #### HDLGen-ChatGPT application architecture and functionality
+#### HDLGen-ChatGPT pseudo code guidelines
 #### Latest default ChatGPT prompt headers
 #### John Patrick Byrne, “HDLGen-ChatGPT and ChatGPT Digital Systems Design Capture Automation”, [Masters Thesis](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/HDLGen-ChatGPT_JPB.pdf), May 2023
 #### HDLGen-ChatGPT code walkthrough
