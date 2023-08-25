@@ -4,8 +4,6 @@ from PySide2.QtGui import *
 import sys
 # make sure to add to requirements.txt
 import configparser
-from Settings.VHDLHeaderDefault import VHDLHeaderDefaultDialog
-from Settings.VerilogHeaderDefault import VerilogHeaderDefaultDialog
 from Settings.VHDLModelDefault import VHDLModelDefaultDialog
 from Settings.VerilogModelDefault import VerilogModelDefaultDialog
 from Settings.VHDLTestbenchDefault import VHDLTestbenchDefaultDialog
@@ -137,12 +135,12 @@ class settingsDialog(QDialog):
         author = self.config.get('user', 'author')
         email = self.config.get('user', 'email')
         company = self.config.get('user', 'company')
-        self.commands[1] = self.config.get('user', 'verilogchatgptheader')
-        self.commands[3] = self.config.get('user', 'verilogchatgptmodel')
-        self.commands[5] = self.config.get('user', 'verilogchatgpttestbench')
-        self.commands[0] = self.config.get('user', 'vhdlchatgptheader')
-        self.commands[2] = self.config.get('user', 'vhdlchatgptmodel')
-        self.commands[4] = self.config.get('user', 'vhdlchatgpttestbench')
+        #self.commands[1] = self.config.get('user', 'verilogchatgptheader')
+        self.commands[1] = self.config.get('user', 'verilogchatgptmodel')
+        self.commands[3] = self.config.get('user', 'verilogchatgpttestbench')
+        #self.commands[0] = self.config.get('user', 'vhdlchatgptheader')
+        self.commands[0] = self.config.get('user', 'vhdlchatgptmodel')
+        self.commands[2] = self.config.get('user', 'vhdlchatgpttestbench')
 
         self.vivado_input.setText(vivadoPath.strip())
         self.quartus_input.setText(quartusPath.strip())
@@ -165,8 +163,8 @@ class settingsDialog(QDialog):
         self.input_layout.addWidget(self.testbench_VHDL, 7, 0)
         self.input_layout.addWidget(self.model_Verilog, 6, 1)
         self.input_layout.addWidget(self.testbench_Verilog, 7, 1)
-        self.header_VHDL.clicked.connect(self.vhdl_header_command)
-        self.header_Verilog.clicked.connect(self.verilog_header_command)
+        #self.header_VHDL.clicked.connect(self.vhdl_header_command)
+        #self.header_Verilog.clicked.connect(self.verilog_header_command)
         self.model_VHDL.clicked.connect(self.vhdl_model_command)
         self.model_Verilog.clicked.connect(self.verilog_model_command)
         self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
@@ -225,61 +223,61 @@ class settingsDialog(QDialog):
         self.config.set("user", "company", self.company_input.text())
         self.config.set("user", "vivado.bat", self.vivado_input.text())
         self.config.set("user", "quartus", self.quartus_input.text())
-        self.config.set("user", 'verilogchatgptheader', self.commands[1])
-        self.config.set("user", 'verilogchatgptmodel', self.commands[3])
-        self.config.set("user", 'verilogchatgpttestbench', self.commands[5])
-        self.config.set("user", 'vhdlchatgptheader', self.commands[0])
-        self.config.set("user", 'vhdlchatgptmodel', self.commands[2])
-        self.config.set("user", 'vhdlchatgpttestbench', self.commands[4])
+        #self.config.set("user", 'verilogchatgptheader', self.commands[1])
+        self.config.set("user", 'verilogchatgptmodel', self.commands[1])
+        self.config.set("user", 'verilogchatgpttestbench', self.commands[3])
+        #self.config.set("user", 'vhdlchatgptheader', self.commands[0])
+        self.config.set("user", 'vhdlchatgptmodel', self.commands[0])
+        self.config.set("user", 'vhdlchatgpttestbench', self.commands[2])
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
         self.cancelled = False
         self.close()
 
-    def vhdl_header_command(self):
-        vhdl_header = VHDLHeaderDefaultDialog("edit", self.commands[0])
-        vhdl_header.exec_()
+    #def vhdl_header_command(self):
+    #    vhdl_header = VHDLHeaderDefaultDialog("edit", self.commands[0])
+    #    vhdl_header.exec_()
 
-        if not vhdl_header.cancelled:
-            vhdl_header = vhdl_header.get_data()
-            self.commands[0] = vhdl_header
+    #    if not vhdl_header.cancelled:
+    #        vhdl_header = vhdl_header.get_data()
+    #        self.commands[0] = vhdl_header
 
-    def verilog_header_command(self):
-        verilog_header = VerilogHeaderDefaultDialog("edit", self.commands[1])
-        verilog_header.exec_()
+    #def verilog_header_command(self):
+    #    verilog_header = VerilogHeaderDefaultDialog("edit", self.commands[1])
+    #    verilog_header.exec_()
 
-        if not verilog_header.cancelled:
-            verilog_header = verilog_header.get_data()
-            self.commands[1] = verilog_header
+    #    if not verilog_header.cancelled:
+    #        verilog_header = verilog_header.get_data()
+    #        self.commands[1] = verilog_header
 
     def vhdl_model_command(self):
-        vhdl_model = VHDLModelDefaultDialog("edit", self.commands[2])
+        vhdl_model = VHDLModelDefaultDialog("edit", self.commands[0])
         vhdl_model.exec_()
 
         if not vhdl_model.cancelled:
             vhdl_model = vhdl_model.get_data()
-            self.commands[2] = vhdl_model
+            self.commands[0] = vhdl_model
 
     def verilog_model_command(self):
-        verilog_model = VerilogModelDefaultDialog("edit", self.commands[3])
+        verilog_model = VerilogModelDefaultDialog("edit", self.commands[1])
         verilog_model.exec_()
 
         if not verilog_model.cancelled:
             verilog_model = verilog_model.get_data()
-            self.commands[3] = verilog_model
+            self.commands[1] = verilog_model
 
     def vhdl_testbench_command(self):
-        vhdl_testbench = VHDLTestbenchDefaultDialog("edit", self.commands[4])
+        vhdl_testbench = VHDLTestbenchDefaultDialog("edit", self.commands[2])
         vhdl_testbench.exec_()
 
         if not vhdl_testbench.cancelled:
             vhdl_testbench = vhdl_testbench.get_data()
-            self.commands[4] = vhdl_testbench
+            self.commands[2] = vhdl_testbench
 
     def verilog_testbench_command(self):
-        verilog_testbench = VerilogTestbenchDefaultDialog("edit", self.commands[5])
+        verilog_testbench = VerilogTestbenchDefaultDialog("edit", self.commands[3])
         verilog_testbench.exec_()
 
         if not verilog_testbench.cancelled:
             verilog_testbench = verilog_testbench.get_data()
-            self.commands[5] = verilog_testbench
+            self.commands[3] = verilog_testbench

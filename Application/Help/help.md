@@ -57,7 +57,7 @@ Fearghal Morgan, Abishek Bupathi and John Patrick Byrne
 ## HDLGen download and installation
 - [HDLGen github repository](https://github.com/abishek-bupathi/HDLGen)
 
-## [Contact Us](mailto:fearghal.morgan@universityofgalway.ie?subject=HDLGen email) with comments and/or suggestions
+## [Contact Us](mailto:fearghal.morgan1@gmail.ie?subject=HDLGen-ChatGPT email) with comments and/or suggestions
 
 ## EDA toolsuite download links
 

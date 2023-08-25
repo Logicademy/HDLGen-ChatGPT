@@ -200,6 +200,7 @@ class ProjectManager(QWidget):
 
 
         self.proj_close_btn = QPushButton("Close Project")
+        self.proj_close_btn.setFont(input_font)
         #self.proj_close_btn.setFixedHeight(50)
         self.proj_close_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
@@ -401,7 +402,7 @@ class ProjectManager(QWidget):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file. You may need to re add them in Types and Subcomponent tabs in the new enviroment")
+            msgBox.setText("If changing a Project Environment in an existing project, the types or subcomponents will not be included in the created VHDL package file. You may wish to include types and subcomponents in the new environment, using the Types and Subcomponent menus.")
             msgBox.exec_()
             #self.save_xml()
     def proj_detail_change(self):
@@ -764,6 +765,7 @@ class ProjectManager(QWidget):
                 f.write(package_xml_str)
         self.config.read('config.ini')
         self.config.set("user", "recentEnviro", self.proj_enviro_input.text())
+        print(self.proj_enviro_input.text())
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
         print("Successfully saved!")

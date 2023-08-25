@@ -10,8 +10,8 @@ import qtawesome as qta
 
 sys.path.append("..")
 from HDLDesigner.ChatGPT.chatgpt_help import ChatGPTHelpDialog
-from HDLDesigner.ChatGPT.VHDLHeader import VHDLHeaderDialog
-from HDLDesigner.ChatGPT.VerilogHeader import VerilogHeaderDialog
+#from HDLDesigner.ChatGPT.VHDLHeader import VHDLHeaderDialog
+#from HDLDesigner.ChatGPT.VerilogHeader import VerilogHeaderDialog
 from HDLDesigner.ChatGPT.VHDLModel import VHDLModelDialog
 from HDLDesigner.ChatGPT.VerilogModel import VerilogModelDialog
 from HDLDesigner.ChatGPT.VHDLTestbench import VHDLTestbenchDialog
@@ -40,19 +40,20 @@ class Gen(QWidget):
         self.proj_dir = proj_dir
         self.config = configparser.ConfigParser()
         self.config.read('config.ini')
-        VHDLHeader = self.config.get('user', 'vhdlchatgptheader')
-        VerilogHeader = self.config.get('user', 'verilogchatgptheader')
+        #VHDLHeader = self.config.get('user', 'vhdlchatgptheader')
+        #VerilogHeader = self.config.get('user', 'verilogchatgptheader')
         VHDLModel = self.config.get('user', 'vhdlchatgptmodel')
         VerilogModel = self.config.get('user', 'verilogchatgptmodel')
         VHDLTestbench = self.config.get('user', 'vhdlchatgpttestbench')
         VerilogTestbench = self.config.get('user', 'verilogchatgpttestbench')
-        VHDLHeader = self.remove_blank_lines(VHDLHeader)
-        VerilogHeader = self.remove_blank_lines(VerilogHeader)
+        #VHDLHeader = self.remove_blank_lines(VHDLHeader)
+        #VerilogHeader = self.remove_blank_lines(VerilogHeader)
         VHDLModel = self.remove_blank_lines(VHDLModel)
         VerilogModel = self.remove_blank_lines(VerilogModel)
         VHDLTestbench = self.remove_blank_lines(VHDLTestbench)
         VerilogTestbench = self.remove_blank_lines(VerilogTestbench)
-        self.commands = [VHDLHeader, VerilogHeader, VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
+        #self.commands = [VHDLHeader, VerilogHeader, VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
+        self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
         self.proj_path = ""
         self.entity_name = ""
         self.mainLayout = QVBoxLayout()
@@ -78,12 +79,12 @@ class Gen(QWidget):
         self.chatgpt_info_btn.setFixedSize(25, 25)
         self.chatgpt_info_btn.clicked.connect(self.chatgpt_help_window)
 
-        self.chatgpt_title_label = QLabel("ChatGPT message header\nfor formatting HDL\nmodel title generation")
+        self.chatgpt_title_label = QLabel("ChatGPT prompt header\nfor formatting HDL\nmodel title generation")
         self.chatgpt_title_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_title_label.setFont(small_text_font)
         #self.chatgpt_title_label.setFixedSize(200, 50)
 
-        self.msg_title_label = QLabel("ChatGPT message elements:\nChatGPT message,HDL\nmodel title section")
+        self.msg_title_label = QLabel("ChatGPT prompt elements:\nChatGPT prompt,HDL\nmodel title section")
         self.msg_title_label.setStyleSheet(BLACK_COLOR)
         self.msg_title_label.setFont(small_text_font)
 
@@ -118,11 +119,11 @@ class Gen(QWidget):
         self.model_label.setStyleSheet(BLACK_COLOR)
         self.model_label.setFont(small_text_font)
 
-        self.chatgpt_model_label = QLabel("ChatGPT Message Header")
+        self.chatgpt_model_label = QLabel("ChatGPT Prompt Header")
         self.chatgpt_model_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_model_label.setFont(small_text_font)
 
-        self.msg_model_label = QLabel("Generate ChatGPT Message\nMerged Header and Template")
+        self.msg_model_label = QLabel("Generate ChatGPT Prompt\nMerged Header and Template")
         self.msg_model_label.setStyleSheet(BLACK_COLOR)
         self.msg_model_label.setFont(small_text_font)
 
@@ -177,11 +178,11 @@ class Gen(QWidget):
         self.testbench_label.setFont(small_text_font)
 
 
-        self.chatgpt_testbench_label = QLabel("ChatGPT Message Header")
+        self.chatgpt_testbench_label = QLabel("ChatGPT Prompt Header")
         self.chatgpt_testbench_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_testbench_label.setFont(small_text_font)
 
-        self.msg_testbench_label = QLabel("Generate ChatGPT Message\nMerged Header and Template")
+        self.msg_testbench_label = QLabel("Generate ChatGPT Prompt\nMerged Header and Template")
         self.msg_testbench_label.setStyleSheet(BLACK_COLOR)
         self.msg_testbench_label.setFont(small_text_font)
 
@@ -349,8 +350,8 @@ class Gen(QWidget):
         self.arch_action_layout.addLayout(self.top_layout)
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        self.title_VHDL.clicked.connect(self.vhdl_header_command)
-        self.title_Verilog.clicked.connect(self.verilog_header_command)
+        #self.title_VHDL.clicked.connect(self.vhdl_header_command)
+        #self.title_Verilog.clicked.connect(self.verilog_header_command)
         self.model_VHDL.clicked.connect(self.vhdl_model_command)
         self.model_Verilog.clicked.connect(self.verilog_model_command)
         self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
@@ -565,34 +566,34 @@ class Gen(QWidget):
         new_chatgpt = root.createElement('chatgpt')
         commands_node = root.createElement('commands')
 
-        VHDLHeader_node = root.createElement('VHDLHeader')
-        self.commands[0] = self.commands[0].replace("\n", "&#10;" )
-        VHDLHeader_node.appendChild(root.createTextNode(self.commands[0]))
-        commands_node.appendChild(VHDLHeader_node)
+        #VHDLHeader_node = root.createElement('VHDLHeader')
+        #self.commands[0] = self.commands[0].replace("\n", "&#10;" )
+        #VHDLHeader_node.appendChild(root.createTextNode(self.commands[0]))
+        #commands_node.appendChild(VHDLHeader_node)
 
-        VerilogHeader_node = root.createElement('VerilogHeader')
-        self.commands[1] = self.commands[1].replace("\n", "&#10;")
-        VerilogHeader_node.appendChild(root.createTextNode(self.commands[1]))
-        commands_node.appendChild(VerilogHeader_node)
+        #VerilogHeader_node = root.createElement('VerilogHeader')
+        #self.commands[1] = self.commands[1].replace("\n", "&#10;")
+        #VerilogHeader_node.appendChild(root.createTextNode(self.commands[1]))
+        #commands_node.appendChild(VerilogHeader_node)
 
         VHDLModel_node = root.createElement('VHDLModel')
-        self.commands[2] = self.commands[2].replace("\n", "&#10;")
-        VHDLModel_node.appendChild(root.createTextNode(self.commands[2]))
+        self.commands[0] = self.commands[0].replace("\n", "&#10;")
+        VHDLModel_node.appendChild(root.createTextNode(self.commands[0]))
         commands_node.appendChild(VHDLModel_node)
 
         VerilogModel_node = root.createElement('VerilogModel')
-        self.commands[3] = self.commands[3].replace("\n", "&#10;")
-        VerilogModel_node.appendChild(root.createTextNode(self.commands[3]))
+        self.commands[1] = self.commands[1].replace("\n", "&#10;")
+        VerilogModel_node.appendChild(root.createTextNode(self.commands[1]))
         commands_node.appendChild(VerilogModel_node)
 
         VHDLTestbench_node = root.createElement('VHDLTestbench')
-        self.commands[4] = self.commands[4].replace("\n", "&#10;")
-        VHDLTestbench_node.appendChild(root.createTextNode(self.commands[4]))
+        self.commands[2] = self.commands[2].replace("\n", "&#10;")
+        VHDLTestbench_node.appendChild(root.createTextNode(self.commands[2]))
         commands_node.appendChild(VHDLTestbench_node)
 
         VerilogTestbench_node = root.createElement('VerilogTestbench')
-        self.commands[5] = self.commands[5].replace("\n", "&#10;")
-        VerilogTestbench_node.appendChild(root.createTextNode(self.commands[5]))
+        self.commands[3] = self.commands[3].replace("\n", "&#10;")
+        VerilogTestbench_node.appendChild(root.createTextNode(self.commands[3]))
         commands_node.appendChild(VerilogTestbench_node)
 
         new_chatgpt.appendChild(commands_node)
@@ -633,71 +634,71 @@ class Gen(QWidget):
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
 
-            VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
-            VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
+            #VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
+            #VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
             VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
             VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
             VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
             VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
 
-            self.commands = [VHDLHeader, VerilogHeader, VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
-
+            #self.commands = [VHDLHeader, VerilogHeader, VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
+            self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
     def chatgpt_help_window(self):
         chatgpt_help_dialog = ChatGPTHelpDialog()
         chatgpt_help_dialog.exec_()
 
-    def vhdl_header_command(self):
-        vhdl_header = VHDLHeaderDialog("edit", self.commands[0])
-        vhdl_header.exec_()
+    #def vhdl_header_command(self):
+       # vhdl_header = VHDLHeaderDialog("edit", self.commands[0])
+       # vhdl_header.exec_()
 
-        if not vhdl_header.cancelled:
-            vhdl_header = vhdl_header.get_data()
-            self.commands[0] = vhdl_header
-        self.save_data()
+        #if not vhdl_header.cancelled:
+         #   vhdl_header = vhdl_header.get_data()
+          #  self.commands[0] = vhdl_header
+        #self.save_data()
 
-    def verilog_header_command(self):
-        verilog_header = VerilogHeaderDialog("edit", self.commands[1])
-        verilog_header.exec_()
+    #def verilog_header_command(self):
+     #   verilog_header = VerilogHeaderDialog("edit", self.commands[1])
+     #   verilog_header.exec_()
 
-        if not verilog_header.cancelled:
-            verilog_header = verilog_header.get_data()
-            self.commands[1] = verilog_header
-        self.save_data()
+      #  if not verilog_header.cancelled:
+      #      verilog_header = verilog_header.get_data()
+      #      self.commands[1] = verilog_header
+      #  self.save_data()
 
     def vhdl_model_command(self):
-        vhdl_model = VHDLModelDialog("edit", self.commands[2])
+        vhdl_model = VHDLModelDialog("edit", self.commands[0])
         vhdl_model.exec_()
 
         if not vhdl_model.cancelled:
             vhdl_model = vhdl_model.get_data()
-            self.commands[2] = vhdl_model
+            self.commands[0] = vhdl_model
         self.save_data()
 
     def verilog_model_command(self):
-        verilog_model = VerilogModelDialog("edit", self.commands[3])
+        verilog_model = VerilogModelDialog("edit", self.commands[1])
         verilog_model.exec_()
 
         if not verilog_model.cancelled:
             verilog_model = verilog_model.get_data()
-            self.commands[3] = verilog_model
+            self.commands[1] = verilog_model
         self.save_data()
 
     def vhdl_testbench_command(self):
-        vhdl_testbench = VHDLTestbenchDialog("edit", self.commands[4])
+        vhdl_testbench = VHDLTestbenchDialog("edit", self.commands[2])
         vhdl_testbench.exec_()
 
         if not vhdl_testbench.cancelled:
             vhdl_testbench = vhdl_testbench.get_data()
-            self.commands[4] = vhdl_testbench
+            self.commands[2] = vhdl_testbench
         self.save_data()
 
     def verilog_testbench_command(self):
-        verilog_testbench = VerilogTestbenchDialog("edit", self.commands[5])
+        verilog_testbench = VerilogTestbenchDialog("edit", self.commands[3])
         verilog_testbench.exec_()
 
         if not verilog_testbench.cancelled:
             verilog_testbench = verilog_testbench.get_data()
-            self.commands[5] = verilog_testbench
+            self.commands[3] = verilog_testbench
         self.save_data()
 
     def header_VHDL_file(self):
