@@ -45,10 +45,12 @@ class ProjectManager(QWidget):
         # Initializing Widgets
 
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.EDA_top_layout = QGridLayout()
         self.Settings_top_layout = QGridLayout()
@@ -66,6 +68,7 @@ class ProjectManager(QWidget):
 
         self.name_label = QLabel('Project Name*')
         self.name_label.setStyleSheet("color: white;")
+        self.name_label.setFont(input_font)
         #self.name_change_btn = QPushButton("Edit")
         #self.name_change_btn.setStyleSheet(
           #  "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
@@ -73,38 +76,49 @@ class ProjectManager(QWidget):
         #self.name_change_btn.setFixedSize(50, 22)
         self.enviro_label = QLabel('Project Environment*')
         self.enviro_label.setStyleSheet("color: white;")
+        self.enviro_label.setFont(input_font)
         self.dir_label = QLabel('Project Folder*')
         self.dir_label.setStyleSheet("color: white;")
+        self.dir_label.setFont(input_font)
         self.proj_folder_input = QLineEdit()
         self.proj_folder_input.setReadOnly(True)
+        self.proj_folder_input.setFont(input_font)
         self.proj_enviro_input = QLineEdit()
         self.proj_enviro_input.setReadOnly(True)
+        self.proj_enviro_input.setFont(input_font)
         self.proj_name_input = QLineEdit()
+        self.proj_name_input.setFont(input_font)
        # self.proj_name_input.setReadOnly(True)
         self.proj_folder_btn = QPushButton("Browse")
+        self.proj_folder_btn.setFont(input_font)
         self.proj_folder_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; padding; 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding; 10px;}")
         self.proj_enviro_btn = QPushButton("Browse")
+        self.proj_enviro_btn.setFont(input_font)
         self.proj_enviro_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-        self.proj_folder_btn.setFixedSize(50, 22)
-        self.proj_enviro_btn.setFixedSize(50, 22)
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain;padding; 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding; 10px;}")
+        #self.proj_folder_btn.setFixedSize(50, 22)
+        #self.proj_enviro_btn.setFixedSize(50, 22)
 
         self.copy_proj_btn = QPushButton("Copy project")
+        self.copy_proj_btn.setFont(input_font)
         self.copy_proj_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-        self.copy_proj_btn.setFixedSize(80, 22)
+            "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain;padding; 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding; 10px;}")
+        #self.copy_proj_btn.setFixedSize(80, 22)
         self.copy_proj_btn.setVisible(False)
         self.proj_info_label = QLabel("Project Information Link")
+        self.proj_info_label.setFont(input_font)
         self.proj_info_label.setStyleSheet(WHITE_COLOR)
         self.proj_info_link = QPushButton("Project Link")
-        self.proj_info_link.setFixedSize(100,25)
+        self.proj_info_link.setFont(input_font)
+        #self.proj_info_link.setFixedSize(100,25)
         self.proj_info_link.setEnabled(False)
         self.proj_info_addlink = QPushButton("Add Project Link")
-        self.proj_info_addlink.setFixedSize(120, 25)
+        self.proj_info_addlink.setFont(input_font)
+        #self.proj_info_addlink.setFixedSize(120, 25)
 
 
 
@@ -112,13 +126,17 @@ class ProjectManager(QWidget):
         self.lang_label.setFont(bold_font)
         self.lang_label.setStyleSheet(BLACK_COLOR)
         self.vhdl_check = QRadioButton("VHDL")
+        self.vhdl_check.setFont(input_font)
         self.vhdl_check.setStyleSheet(BLACK_COLOR)
         self.verilog_check = QRadioButton("Verilog")
+        self.verilog_check.setFont(input_font)
         self.verilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check = QRadioButton("System Verilog (In development)")
+        self.sverilog_check.setFont(input_font)
         self.sverilog_check.setStyleSheet(BLACK_COLOR)
         self.sverilog_check.setEnabled(False)
         self.chisel_check = QRadioButton("Chisel (In development)")
+        self.chisel_check.setFont(input_font)
         self.chisel_check.setStyleSheet(BLACK_COLOR)
         self.chisel_check.setEnabled(False)
 
@@ -127,32 +145,42 @@ class ProjectManager(QWidget):
         self.intel_check.setStyleSheet(BLACK_COLOR)
 
         self.intel_ver_label = QLabel("Version")
+        self.intel_ver_label.setFont(input_font)
         self.intel_ver_label.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo = QComboBox()
+        self.intel_ver_combo.setFont(input_font)
         self.intel_ver_combo.setStyleSheet(BLACK_COLOR)
         self.intel_ver_combo.addItem("21.1 Lite")
         self.intel_dir_label = QLabel('Intel Quartus executable File path')
+        self.intel_dir_label.setFont(input_font)
         self.intel_dir_label.setStyleSheet(BLACK_COLOR)
         self.intel_dir_input = QLineEdit()
+        self.intel_dir_input.setFont(input_font)
         self.intel_dir_input.setReadOnly(True)
         self.intel_select_dir = QPushButton("Browse")
-        self.intel_select_dir.setFixedSize(60, 26)
+        self.intel_select_dir.setFont(input_font)
+       # self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
         self.vivado_check.setFont(bold_font)
         self.vivado_check.setStyleSheet(BLACK_COLOR)
         self.vivado_check.setChecked(True)
         self.vivado_ver_label = QLabel("Version")
+        self.vivado_ver_label.setFont(input_font)
         self.vivado_ver_label.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo = QComboBox()
+        self.vivado_ver_combo.setFont(input_font)
         self.vivado_ver_combo.setStyleSheet(BLACK_COLOR)
         self.vivado_ver_combo.addItem("2019.1")
         self.vivado_dir_label = QLabel('Xilinx Vivado Batch File path')
+        self.vivado_dir_label.setFont(input_font)
         self.vivado_dir_label.setStyleSheet(BLACK_COLOR)
         self.vivado_dir_input = QLineEdit()
+        self.vivado_dir_input.setFont(input_font)
         self.vivado_dir_input.setReadOnly(True)
         self.vivado_select_dir = QPushButton("Browse")
-        self.vivado_select_dir.setFixedSize(60, 26)
+        self.vivado_select_dir.setFont(input_font)
+        #self.vivado_select_dir.setFixedSize(60, 26)
 
         self.vivado_info_btn = QPushButton()
         self.vivado_info_btn.setIcon(qta.icon("mdi.help"))
@@ -172,10 +200,11 @@ class ProjectManager(QWidget):
 
 
         self.proj_close_btn = QPushButton("Close Project")
-        self.proj_close_btn.setFixedHeight(50)
+        self.proj_close_btn.setFont(input_font)
+        #self.proj_close_btn.setFixedHeight(50)
         self.proj_close_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         # Initializing layouts
         self.mainLayout = QHBoxLayout()
@@ -373,7 +402,7 @@ class ProjectManager(QWidget):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
-            msgBox.setText("If changing a Project Environment in an existing project, any types or subcomponents will not be included in the Package file. You may need to re add them in Types and Subcomponent tabs in the new enviroment")
+            msgBox.setText("If changing a Project Environment in an existing project, the types or subcomponents will not be included in the created VHDL package file. You may wish to include types and subcomponents in the new environment, using the Types and Subcomponent menus.")
             msgBox.exec_()
             #self.save_xml()
     def proj_detail_change(self):
@@ -736,6 +765,7 @@ class ProjectManager(QWidget):
                 f.write(package_xml_str)
         self.config.read('config.ini')
         self.config.set("user", "recentEnviro", self.proj_enviro_input.text())
+        print(self.proj_enviro_input.text())
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
         print("Successfully saved!")

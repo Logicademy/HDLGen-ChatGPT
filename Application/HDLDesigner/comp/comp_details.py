@@ -20,7 +20,7 @@ class CompDetails(QWidget):
         small_text_font = QFont()
         small_text_font.setPointSize(10)
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
         self.proj_dir = proj_dir
 

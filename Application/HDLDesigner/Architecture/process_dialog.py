@@ -56,17 +56,17 @@ class ProcessDialog(QDialog):
         self.seq_ceBox.setVisible(False)
 
         self.set_ce = QPushButton("Set CE")
-        self.set_ce.setFixedSize(80, 25)
+        #self.set_ce.setFixedSize(80, 25)
         self.set_ce.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.set_ce.setVisible(False)
 
         self.add_note_btn = QPushButton("Add Non Default Logic")
-        self.add_note_btn.setFixedSize(150, 25)
+        #self.add_note_btn.setFixedSize(150, 25)
         self.add_note_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
 
         self.in_sig_layout = QVBoxLayout()

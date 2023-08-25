@@ -21,7 +21,7 @@ class Subcomponents(QWidget):
         small_text_font = QFont()
         small_text_font.setPointSize(10)
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
@@ -33,7 +33,7 @@ class Subcomponents(QWidget):
         self.comps = []
         self.comps_names = []
 
-        self.package_heading_layout = QGridLayout()
+        self.package_heading_layout = QHBoxLayout()#QGridLayout()
         self.package_action_layout = QVBoxLayout()
         self.component_list_layout = QVBoxLayout()
         self.mainLayout = QVBoxLayout()
@@ -43,10 +43,10 @@ class Subcomponents(QWidget):
         self.package_label.setStyleSheet(WHITE_COLOR)
 
         self.add_component_btn = QPushButton("Add component")
-        self.add_component_btn.setFixedSize(120, 25)
+        #self.add_component_btn.setFixedSize(120, 25)
         self.add_component_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.subcomp_info_btn = QPushButton()
         self.subcomp_info_btn.setIcon(qta.icon("mdi.help"))
@@ -69,9 +69,10 @@ class Subcomponents(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.package_heading_layout.addWidget(self.package_label, 0, 0, 1, 1)
-        self.package_heading_layout.addWidget(self.add_component_btn, 0, 1, 1, 1)
-        self.package_heading_layout.addWidget(self.subcomp_info_btn, 0, 2, 1, 1)
+        self.package_heading_layout.addWidget(self.package_label)#, 0, 0, 1, 1)
+        self.package_heading_layout.addWidget(self.add_component_btn, alignment=Qt.AlignRight)#, 0, 1, 1, 1)
+        self.package_heading_layout.addWidget(self.subcomp_info_btn)#, 0, 2, 1, 1)
+        #self.port_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)
         self.add_component_btn.clicked.connect(self.add_component)
 
         self.component_list_layout.setAlignment(Qt.AlignTop)

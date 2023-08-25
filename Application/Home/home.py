@@ -24,7 +24,7 @@ class Home(QMainWindow):
 
         super().__init__()
         small_text_font = QFont()
-        small_text_font.setPointSize(10)
+        small_text_font.setPointSize(12)
         self.setWindowTitle("HDLGen V2022.0.1")
 
         self.cornerWidget = QWidget()
@@ -104,7 +104,7 @@ class Home(QMainWindow):
         self.tabs.addTab(Help(), "Help")
         self.tabs.currentChanged.connect(self.handle_tab_change)
         font = self.tabs.font()
-        font.setPointSize(10)
+        font.setPointSize(12)
         self.tabs.setFont(font)
         self.tabs.setCornerWidget(self.cornerWidget)
         self.start_vivado_btn.clicked.connect(self.start_eda_tool)

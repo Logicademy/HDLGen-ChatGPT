@@ -21,7 +21,7 @@ class Package(QWidget):
         small_text_font = QFont()
         small_text_font.setPointSize(10)
         title_font = QFont()
-        title_font.setPointSize(10)
+        title_font.setPointSize(12)
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
@@ -31,7 +31,7 @@ class Package(QWidget):
         self.arrays = []
         self.arrays_names = []
 
-        self.package_heading_layout = QGridLayout()
+        self.package_heading_layout = QHBoxLayout()#QGridLayout()
         self.package_action_layout = QVBoxLayout()
         self.package_list_layout = QVBoxLayout()
         self.package_list_title_layout = QHBoxLayout()
@@ -42,10 +42,10 @@ class Package(QWidget):
         self.package_label.setStyleSheet(WHITE_COLOR)
 
         self.add_btn = QPushButton("Add type")
-        self.add_btn.setFixedSize(80, 25)
+        #self.add_btn.setFixedSize(80, 25)
         self.add_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.pack_info_btn = QPushButton()
         self.pack_info_btn.setIcon(qta.icon("mdi.help"))
@@ -71,9 +71,9 @@ class Package(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.package_heading_layout.addWidget(self.package_label, 0, 0, 1, 1)
-        self.package_heading_layout.addWidget(self.add_btn, 0, 1, 1, 1)
-        self.package_heading_layout.addWidget(self.pack_info_btn, 0, 2, 1, 1)
+        self.package_heading_layout.addWidget(self.package_label)#, 0, 0, 1, 1)
+        self.package_heading_layout.addWidget(self.add_btn, alignment=Qt.AlignRight)#, 0, 1, 1, 1)
+        self.package_heading_layout.addWidget(self.pack_info_btn)#, 0, 2, 1, 1)
 
         self.add_btn.clicked.connect(self.add_package)
 

@@ -76,7 +76,7 @@ class HDLDesigner(QWidget):
         self.tabs.addTab(self.testplan, "Test Plan")
         self.tabs.addTab(self.generate, "Generate")
         font = self.tabs.font()
-        font.setPointSize(10)
+        font.setPointSize(12)
         self.tabs.setFont(font)
         self.mainLayout.addWidget(self.tabs)
         self.mainLayout.addLayout(self.preview_pane_layout)
@@ -129,16 +129,16 @@ class HDLDesigner(QWidget):
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
-                VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
-                VHDLHeader = VHDLHeader.replace("&#10;", "\n")
-                VHDLHeader = VHDLHeader.replace("&amp;", "&")
-                VHDLHeader = VHDLHeader.replace("&quot;", "\"")
-                VHDLHeader = VHDLHeader.replace("&apos;", "\'")
-                VHDLHeader = VHDLHeader.replace("&lt;", "<")
-                VHDLHeader = VHDLHeader.replace("&#x9;", "\t")
-                VHDLHeader = VHDLHeader.replace("&gt;", ">")
-                VHDLHeader = VHDLHeader.replace("&#44;", ",")
-                self.HeaderCmd = VHDLHeader
+                #VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
+                #VHDLHeader = VHDLHeader.replace("&#10;", "\n")
+                #VHDLHeader = VHDLHeader.replace("&amp;", "&")
+                #VHDLHeader = VHDLHeader.replace("&quot;", "\"")
+                #VHDLHeader = VHDLHeader.replace("&apos;", "\'")
+                #VHDLHeader = VHDLHeader.replace("&lt;", "<")
+                #VHDLHeader = VHDLHeader.replace("&#x9;", "\t")
+                #VHDLHeader = VHDLHeader.replace("&gt;", ">")
+                #VHDLHeader = VHDLHeader.replace("&#44;", ",")
+                #self.HeaderCmd = VHDLHeader
                 VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
                 VHDLModel = VHDLModel.replace("&#10;", "\n")
                 VHDLModel = VHDLModel.replace("&amp;", "&")
@@ -148,6 +148,9 @@ class HDLDesigner(QWidget):
                 VHDLModel = VHDLModel.replace("&#x9;", "\t")
                 VHDLModel = VHDLModel.replace("&gt;", ">")
                 VHDLModel = VHDLModel.replace("&#44;", ",")
+                lines = VHDLModel.split('\n')
+                filtered_lines = [line for line in lines if not line.startswith('~')]
+                VHDLModel = '\n'.join(filtered_lines)
                 self.ModelCmd = VHDLModel
                 VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
                 VHDLTestbench = VHDLTestbench.replace("&#10;", "\n")
@@ -158,6 +161,9 @@ class HDLDesigner(QWidget):
                 VHDLTestbench = VHDLTestbench.replace("&#x9;", "\t")
                 VHDLTestbench = VHDLTestbench.replace("&gt;", ">")
                 VHDLTestbench = VHDLTestbench.replace("&#44;", ",")
+                lines = VHDLTestbench.split('\n')
+                filtered_lines = [line for line in lines if not line.startswith('~')]
+                VHDLTestbench = '\n'.join(filtered_lines)
                 self.TBCmd = VHDLTestbench
         elif self.hdl == "Verilog":
             entity_name,self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_verilog(self)
@@ -165,16 +171,16 @@ class HDLDesigner(QWidget):
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
-                VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
-                VerilogHeader = VerilogHeader.replace("&#10;", "\n")
-                VerilogHeader = VerilogHeader.replace("&amp;", "&")
-                VerilogHeader = VerilogHeader.replace("&quot;", "\"")
-                VerilogHeader = VerilogHeader.replace("&apos;", "\'")
-                VerilogHeader = VerilogHeader.replace("&lt;", "<")
-                VerilogHeader = VerilogHeader.replace("&#x9;", "\t")
-                VerilogHeader = VerilogHeader.replace("&gt;", ">")
-                VerilogHeader = VerilogHeader.replace("&#44;", ",")
-                self.HeaderCmd = VerilogHeader
+                #VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
+                #VerilogHeader = VerilogHeader.replace("&#10;", "\n")
+                #VerilogHeader = VerilogHeader.replace("&amp;", "&")
+                #VerilogHeader = VerilogHeader.replace("&quot;", "\"")
+                #VerilogHeader = VerilogHeader.replace("&apos;", "\'")
+                #VerilogHeader = VerilogHeader.replace("&lt;", "<")
+                #VerilogHeader = VerilogHeader.replace("&#x9;", "\t")
+                #VerilogHeader = VerilogHeader.replace("&gt;", ">")
+                #VerilogHeader = VerilogHeader.replace("&#44;", ",")
+                #self.HeaderCmd = VerilogHeader
                 VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
                 VerilogModel = VerilogModel.replace("&#10;", "\n")
                 VerilogModel = VerilogModel.replace("&amp;", "&")
@@ -184,6 +190,9 @@ class HDLDesigner(QWidget):
                 VerilogModel = VerilogModel.replace("&#x9;", "\t")
                 VerilogModel = VerilogModel.replace("&gt;", ">")
                 VerilogModel = VerilogModel.replace("&#44;", ",")
+                lines = VerilogModel.split('\n')
+                filtered_lines = [line for line in lines if not line.startswith('~')]
+                VerilogModel = '\n'.join(filtered_lines)
                 self.ModelCmd=VerilogModel
                 VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
                 VerilogTestbench = VerilogTestbench.replace("&#10;", "\n")
@@ -194,6 +203,9 @@ class HDLDesigner(QWidget):
                 VerilogTestbench = VerilogTestbench.replace("&#x9;", "\t")
                 VerilogTestbench = VerilogTestbench.replace("&gt;", ">")
                 VerilogTestbench = VerilogTestbench.replace("&#44;", ",")
+                lines = VerilogTestbench.split('\n')
+                filtered_lines = [line for line in lines if not line.startswith('~')]
+                VerilogTestbench = '\n'.join(filtered_lines)
                 self.TBCmd = VerilogTestbench
         if self.tabs.currentIndex() == 6:
             self.preview_window.setText(self.tb_code)
@@ -204,28 +216,28 @@ class HDLDesigner(QWidget):
                     self.preview_label.setText("HDL Model Preview")
                     self.preview_window.setText(self.code)
                 elif self.generate.header_model_check.isChecked():
-                    self.preview_label.setText("ChatGPT Message Header Preview")
+                    self.preview_label.setText("ChatGPT Prompt Header Preview")
                     self.preview_window.setText(self.ModelCmd)
                 elif self.generate.msg_model_check.isChecked():
-                    self.preview_label.setText("ChatGPT message, to generate final HDL model")
+                    self.preview_label.setText("ChatGPT Prompt, to generate final HDL model")
                     self.preview_window.setText(self.ModelCmd + "\n\n" +self.code)
             elif self.generate.tab_widget.currentIndex() == 1:
                 if self.generate.header_testbench_check.isChecked():
-                    self.preview_label.setText("ChatGPT Message Header Preview")
+                    self.preview_label.setText("ChatGPT Prompt Header Preview")
                     self.preview_window.setText(self.TBCmd)
                 elif self.generate.testbench_check.isChecked():
                     self.preview_window.setText(self.tb_code)
                     self.preview_label.setText("HDL Testbench Preview")
                 elif self.generate.msg_testbench_check.isChecked():
-                    chatgpt_tb = self.TBCmd + "\n\n" + self.tb_code + "\n\n" + self.tbnote
+                    chatgpt_tb = self.TBCmd + "\n\n" + self.chatgpt_tb + "\n\n" + self.tbnote
                     self.preview_window.setText(chatgpt_tb)
-                    self.preview_label.setText("ChatGPT message, to generate final HDL testbench")
+                    self.preview_label.setText("ChatGPT Prompt, to generate final HDL testbench")
             elif self.generate.tab_widget.currentIndex() == 2:
                 if self.generate.header_title_check.isChecked():
-                    self.preview_label.setText("ChatGPT Message Header Preview")
+                    self.preview_label.setText("ChatGPT Prompt Header Preview")
                     self.preview_window.setText(self.HeaderCmd)
                 elif self.generate.msg_title_check.isChecked():
-                    self.preview_label.setText("ChatGPT message, to generate final HDL title")
+                    self.preview_label.setText("ChatGPT Prompt, to generate final HDL title")
                     self.preview_window.setText(self.HeaderCmd+ "\n\n" +self.chatgpt_header)
         else:
             self.preview_window.setText(self.code)

@@ -48,10 +48,10 @@ class ConcurrentStmtDialog(QDialog):
         self.note_input = QLineEdit()
         self.note_input.setVisible(False)
         self.add_note_btn = QPushButton("Add Custom Value")
-        self.add_note_btn.setFixedSize(125, 25)
+        #self.add_note_btn.setFixedSize(125, 25)
         self.add_note_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.add_note_btn.setVisible(False)
 
         self.out_sig_header_layout = QHBoxLayout()

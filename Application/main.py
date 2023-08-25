@@ -61,26 +61,30 @@ class HDLGen(QMainWindow):
         self.Settings_top_layout = QGridLayout()
 
         self.open_btn = QPushButton("Open Existing Project")
+        self.open_btn.setFont(text_font)
         self.new_btn = QPushButton("Create New Project")
+        self.new_btn.setFont(text_font)
         self.help_btn = QPushButton("Help")
+        self.help_btn.setFont(text_font)
         self.settings_btn = QPushButton("Settings")
-        self.open_btn.setFixedSize(150, 50)
+        self.settings_btn.setFont(text_font)
+        #self.open_btn.setFixedSize(200, 50)
         self.open_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         # self.button_layout.addSpacerItem(QSpacerItem(1, 70))
         self.open_btn.clicked.connect(self.open_project)
-        self.new_btn.setFixedSize(150, 50)
+        #self.new_btn.setFixedSize(150, 50)
         self.new_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;}")
+            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         # self.button_layout.addWidget(self.new_btn, 0, 1, 1, 1)#(self.new_btn, alignment= Qt.AlignCenter)
         # self.button_layout.addSpacerItem(QSpacerItem(1, 70))
         self.new_btn.clicked.connect(self.new_project)
-        self.help_btn.setFixedSize(35, 25)
+        #self.help_btn.setFixedSize(35, 25)
         self.help_btn.clicked.connect(self.help_window)
 
-        self.settings_btn.setFixedSize(60, 25)
+        #self.settings_btn.setFixedSize(60, 25)
         self.settings_btn.clicked.connect(self.settings_window)
 
 
@@ -89,7 +93,7 @@ class HDLGen(QMainWindow):
         self.settings_btn_spacer.setFixedSize(60, 25)
         self.help_btn_spacer.setFixedSize(35, 25)
 
-        self.hdlgen_logo = QLabel("HDLGen and ChatGPT")#\nDigital Systems Design Capture\nEDA Project Creation Automation")
+        self.hdlgen_logo = QLabel("HDLGen-ChatGPT")#\nDigital Systems Design Capture\nEDA Project Creation Automation")
         self.hdlgen_logo.setFont(title_font)
         self.hdlgen_logo.setAlignment(Qt.AlignCenter)
         self.hdlgen_logo_1 = QLabel("Digital Systems Design Capture Automation")
