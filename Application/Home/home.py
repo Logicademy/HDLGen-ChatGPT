@@ -25,7 +25,7 @@ class Home(QMainWindow):
         super().__init__()
         small_text_font = QFont()
         small_text_font.setPointSize(12)
-        self.setWindowTitle("HDLGen V2022.0.1")
+        self.setWindowTitle("HDLGen-ChatGPT Version 1.0.0")
 
         self.cornerWidget = QWidget()
         #self.generate_btn = QPushButton("Generate")

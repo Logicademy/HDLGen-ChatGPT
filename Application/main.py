@@ -36,7 +36,7 @@ class HDLGen(QMainWindow):
     def __init__(self):
 
         super().__init__()
-        self.setWindowTitle("HDLGen V.1")
+        self.setWindowTitle("HDLGen-ChatGPT Version 1.0.0")
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
 
         title_font = QFont()
