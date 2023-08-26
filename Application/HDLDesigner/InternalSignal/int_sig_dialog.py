@@ -16,6 +16,8 @@ class IntSignalDialog(QDialog):
 
     def __init__(self, add_or_edit, signals_names, intSig_data=None):
         super().__init__()
+        input_font = QFont()
+        input_font.setPointSize(10)
         self.signalNames = signals_names
         self.signalName = ""
         if intSig_data != None:
@@ -41,11 +43,16 @@ class IntSignalDialog(QDialog):
 
         self.intSig_name_label = QLabel("Internal Signal Name*")
         self.intSig_name_label.setStyleSheet(WHITE_COLOR)
+        self.intSig_name_label.setFont(input_font)
         self.intSig_name_input = QLineEdit()
+        self.intSig_name_input.setFont(input_font)
 
         self.state_signal_Type_label = QLabel("State Signal Type")
         self.state_signal_Type_label.setStyleSheet(WHITE_COLOR)
+        self.state_signal_Type_label.setFont(input_font)
         self.state_signal_Type_input = QComboBox()
+        self.state_signal_Type_input.setFont(input_font)
+        self.state_signal_Type_input.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.state_signal_Type_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.state_signal_Type_input.setPalette(pal)
@@ -55,7 +62,10 @@ class IntSignalDialog(QDialog):
 
         self.standard_signal_Type_label = QLabel("Standard Signal Type")
         self.standard_signal_Type_label.setStyleSheet(WHITE_COLOR)
+        self.standard_signal_Type_label.setFont(input_font)
         self.standard_signal_Type_input = QComboBox()
+        self.standard_signal_Type_input.setFont(input_font)
+        self.standard_signal_Type_input.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.standard_signal_Type_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.standard_signal_Type_input.setPalette(pal)
@@ -65,7 +75,9 @@ class IntSignalDialog(QDialog):
 
         self.CS_name_label = QLabel("CS name")
         self.CS_name_label.setStyleSheet(WHITE_COLOR)
+        self.CS_name_label.setFont(input_font)
         self.CS_name_input = QLineEdit()
+        self.CS_name_input.setFont(input_font)
         self.CS_name_label.setVisible(False)
         self.CS_name_input.setVisible(False)
         self.CS_name_input.setEnabled(False)
@@ -80,7 +92,10 @@ class IntSignalDialog(QDialog):
 
         self.sig_type_label = QLabel("Signal Type")
         self.sig_type_label.setStyleSheet(WHITE_COLOR)
+        self.sig_type_label.setFont(input_font)
         self.sig_type_combo = QComboBox()
+        self.sig_type_combo.setFont(input_font)
+        self.sig_type_combo.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.sig_type_combo.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_type_combo.setPalette(pal)
@@ -88,65 +103,76 @@ class IntSignalDialog(QDialog):
 
         self.sig_size_label = QLabel("Size (eg. 32) * ")
         self.sig_size_label.setStyleSheet(WHITE_COLOR)
+        self.sig_size_label.setFont(input_font)
         self.sig_size_input = QLineEdit()
+        self.sig_size_input.setFont(input_font)
         self.sig_size_input.setText("1")
         self.sig_size_input.setEnabled(False)
 
         self.onlyInt = QIntValidator()
         self.sig_size_input.setValidator(self.onlyInt)
         self.binaryBitSize_label = QLabel("Bits")
+        self.binaryBitSize_label.setFont(input_font)
         self.binaryBitSize_label.setStyleSheet(WHITE_COLOR)
         self.binaryBitSize_input = QLineEdit()
+        self.binaryBitSize_input.setFont(input_font)
         self.binaryBitSize_input.setText("1")
         self.binaryBitSize_input.setValidator(self.onlyInt)
         self.binaryBitSize_input.setVisible(False)
         self.binaryBitSize_label.setVisible(False)
 
         self.sig_desc_label = QLabel("Signal Description")
+        self.sig_desc_label.setFont(input_font)
         self.sig_desc_label.setStyleSheet(WHITE_COLOR)
         self.sig_desc_input = QPlainTextEdit()
+        self.sig_desc_input.setFont(input_font)
         self.sig_desc_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
 
         self.stateNames_table = QTableWidget()
+        self.stateNames_table.setFont(input_font)
         self.stateNames_table.setColumnCount(4)
         self.stateNames_table.setShowGrid(False)
-        self.stateNames_table.setColumnWidth(0, 150)
-        self.stateNames_table.setColumnWidth(1, 25)
-        self.stateNames_table.setColumnWidth(2, 25)
-        self.stateNames_table.setColumnWidth(3, 100)
+        #self.stateNames_table.setColumnWidth(0, 150)
+        #self.stateNames_table.setColumnWidth(1, 25)
+        #self.stateNames_table.setColumnWidth(2, 25)
+        #self.stateNames_table.setColumnWidth(3, 100)
         self.stateNames_table.setVisible(False)
         self.stateNames_table.horizontalScrollBar().hide()
         self.header0_label = QLabel("state name")
+        self.header0_label.setFont(input_font)
         header = self.stateNames_table.horizontalHeader()
         header.hide()
         header = self.stateNames_table.verticalHeader()
         header.hide()
 
         self.add_btn = QPushButton("Add state")
-        self.add_btn.setFixedSize(80, 25)
+        self.add_btn.setFont(input_font)
+        #self.add_btn.setFixedSize(80, 25)
         self.add_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.add_btn.setVisible(False)
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.ok_btn = QPushButton("Ok")
         self.ok_btn.setEnabled(False)
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
         self.arrayName_label = QLabel("Arrays")
         self.arrayName_label.setStyleSheet(WHITE_COLOR)
+        self.arrayName_label.setFont(input_font)
         self.arrayName_input = QComboBox()
+        self.arrayName_input.setFont(input_font)
+        self.arrayName_input.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.arrayName_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.arrayName_input.setPalette(pal)
@@ -213,7 +239,7 @@ class IntSignalDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(500, 400)
+        self.input_frame.setFixedSize(600, 600)
         self.input_frame.setLayout(self.input_layout)
 
         self.sig_type_combo.currentTextChanged.connect(self.sig_type_options)
@@ -301,6 +327,9 @@ class IntSignalDialog(QDialog):
                 edit_btn.clicked.connect(self.edit_stateName)
 
                 rst_state_tickbox = QCheckBox("Make rst state")
+                input_font = QFont()
+                input_font.setPointSize(10)
+                rst_state_tickbox.setFont(input_font)
                 rst_state_tickbox.setStyleSheet(BLACK_COLOR)
                 if i==0:
                     rst_state_tickbox.setCheckState(Qt.Checked)
@@ -439,6 +468,9 @@ class IntSignalDialog(QDialog):
             edit_btn.clicked.connect(self.edit_stateName)
 
             rst_state_tickbox = QCheckBox("Make rst state")
+            input_font = QFont()
+            input_font.setPointSize(10)
+            rst_state_tickbox.setFont(input_font)
             rst_state_tickbox.setStyleSheet(BLACK_COLOR)
 
             row_position = self.stateNames_table.rowCount()
@@ -476,6 +508,9 @@ class IntSignalDialog(QDialog):
                 edit_btn.clicked.connect(self.edit_stateName)
 
                 rst_state_tickbox = QCheckBox("Make rst state")
+                input_font = QFont()
+                input_font.setPointSize(10)
+                rst_state_tickbox.setFont(input_font)
                 rst_state_tickbox.setStyleSheet(BLACK_COLOR)
 
                 self.all_stateNames.insert(row, stateName_data)

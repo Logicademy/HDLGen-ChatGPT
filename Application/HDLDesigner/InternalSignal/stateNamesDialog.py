@@ -24,26 +24,29 @@ class state_Name_Dialog(QDialog):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
-
+        input_font = QFont()
+        input_font.setPointSize(10)
         self.mainLayout = QVBoxLayout()
 
         self.state_name_label = QLabel("State Name")
+        self.state_name_label.setFont(input_font)
         self.state_name_label.setStyleSheet(WHITE_COLOR)
         self.state_name_input = QLineEdit()
+        self.state_name_input.setFont(input_font)
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.ok_btn = QPushButton("Ok")
         self.ok_btn.setEnabled(False)
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
         self.input_frame = QFrame()
 

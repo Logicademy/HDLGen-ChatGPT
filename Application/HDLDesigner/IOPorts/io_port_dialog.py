@@ -14,7 +14,8 @@ class IOPortDialog(QDialog):
 
     def __init__(self, add_or_edit, signals_names, signal_data = None):
         super().__init__()
-
+        input_font = QFont()
+        input_font.setPointSize(10)
         self.input_layout = QGridLayout()
 
         if add_or_edit == "add":
@@ -29,12 +30,17 @@ class IOPortDialog(QDialog):
 
         self.sig_name_label = QLabel("Signal Name *")
         self.sig_name_label.setStyleSheet(WHITE_COLOR)
+        self.sig_name_label.setFont(input_font)
         self.sig_name_input = QLineEdit()
+        self.sig_name_input.setFont(input_font)
 
 
         self.sig_mode_label = QLabel("Mode")
         self.sig_mode_label.setStyleSheet(WHITE_COLOR)
+        self.sig_mode_label.setFont(input_font)
         self.sig_mode_input = QComboBox()
+        self.sig_mode_input.setFont(input_font)
+        self.sig_mode_input.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.sig_mode_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_mode_input.setPalette(pal)
@@ -43,7 +49,10 @@ class IOPortDialog(QDialog):
 
         self.sig_type_label = QLabel("Type")
         self.sig_type_label.setStyleSheet(WHITE_COLOR)
+        self.sig_type_label.setFont(input_font)
         self.sig_type_input = QComboBox()
+        self.sig_type_input.setFont(input_font)
+        self.sig_type_input.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.sig_type_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_type_input.setPalette(pal)
@@ -53,13 +62,19 @@ class IOPortDialog(QDialog):
 
         self.sig_size_label = QLabel("Size (eg. 32) * ")
         self.sig_size_label.setStyleSheet(WHITE_COLOR)
+        self.sig_size_label.setFont(input_font)
         self.sig_size_input = QLineEdit()
+        self.sig_size_input.setFont(input_font)
         self.sig_size_input.setText("1")
         self.sig_size_input.setEnabled(False)
+        self.sig_size_input.setFont(input_font)
 
         self.arrayName_label = QLabel("Arrays")
         self.arrayName_label.setStyleSheet(WHITE_COLOR)
+        self.arrayName_label.setFont(input_font)
         self.arrayName_input = QComboBox()
+        self.arrayName_input.setFont(input_font)
+        self.arrayName_input.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.arrayName_input.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.arrayName_input.setPalette(pal)
@@ -72,24 +87,24 @@ class IOPortDialog(QDialog):
 
         self.sig_description_label = QLabel("Signal Description")
         self.sig_description_label.setStyleSheet(WHITE_COLOR)
+        self.sig_description_label.setFont(input_font)
         self.sig_description_input = QPlainTextEdit()#MyPlainTextEdit()#QPlainTextEdit()#QLineEdit()
         self.sig_description_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
-
+        self.sig_description_input.setFont(input_font)
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.ok_btn = QPushButton("Ok")
         self.ok_btn.setEnabled(False)
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
         self.input_frame = QFrame()
 
@@ -133,7 +148,7 @@ class IOPortDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(400, 400)
+        self.input_frame.setFixedSize(600, 600)
         self.input_frame.setLayout(self.input_layout)
 
         self.sig_name_input.textChanged.connect(self.enable_ok_btn);

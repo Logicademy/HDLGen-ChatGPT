@@ -30,6 +30,8 @@ class ProcessDialog(QDialog):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.clkState = False
         self.rstState = False
@@ -43,29 +45,35 @@ class ProcessDialog(QDialog):
 
         self.proc_name_label = QLabel("Process Name*")
         self.proc_name_label.setStyleSheet(WHITE_COLOR)
+        self.proc_name_label.setFont(input_font)
         self.proc_name_input = QLineEdit()
+        self.proc_name_input.setFont(input_font)
 
         self.in_sig_label = QLabel("Sensitivity List")
         self.in_sig_label.setFont(title_font)
 
         self.seq_checkBox = QCheckBox("Sequential")
+        self.seq_checkBox.setFont(input_font)
         self.seq_checkBox.setStyleSheet(WHITE_COLOR)
 
         self.seq_ceBox = QCheckBox("Chip Enabled")
+        self.seq_ceBox.setFont(input_font)
         self.seq_ceBox.setStyleSheet(WHITE_COLOR)
         self.seq_ceBox.setVisible(False)
 
         self.set_ce = QPushButton("Set CE")
+        self.set_ce.setFont(input_font)
         #self.set_ce.setFixedSize(80, 25)
         self.set_ce.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.set_ce.setVisible(False)
 
         self.add_note_btn = QPushButton("Add Non Default Logic")
+        self.add_note_btn.setFont(input_font)
         #self.add_note_btn.setFixedSize(150, 25)
         self.add_note_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
 
@@ -73,18 +81,23 @@ class ProcessDialog(QDialog):
         self.in_sig_frame = QFrame()
         self.in_sig_list = QListWidget()
         self.in_sig_empty_info = QLabel("No Input Signals found!\nPlease add signal in Ports")
+        self.in_sig_empty_info.setFont(input_font)
 
         self.suffix_label = QLabel("Suffix")
+        self.suffix_label.setFont(input_font)
         self.suffix_label.setStyleSheet(WHITE_COLOR)
         self.suffix_input = QLineEdit()
+        self.suffix_input.setFont(input_font)
         self.suffix_input.setFixedWidth(40)
         self.suffix_input.setEnabled(False)
         self.suffix_input.setText("_p")
 
         self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in Ports")
+        self.out_sig_empty_info.setFont(input_font)
         self.out_sig_empty_info.setFixedSize(400, 300)
 
         self.CSNS_empty_info = QLabel("No CS NS Signals found!\nPlease add signals in Internal Signals")
+        self.CSNS_empty_info.setFont(input_font)
         self.CSNS_empty_info.setFixedSize(400, 300)
         self.CSNS_table = QTableWidget()
         self.CSNS_layout = QVBoxLayout()
@@ -95,19 +108,19 @@ class ProcessDialog(QDialog):
         self.out_sig_frame = QFrame()
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
 
         self.ok_btn = QPushButton("Ok")
         self.ok_btn.setEnabled(False)
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
 
 

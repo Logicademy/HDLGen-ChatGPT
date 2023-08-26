@@ -28,6 +28,8 @@ class ConcurrentStmtDialog(QDialog):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.internal_signals = []
         self.input_signals = []
@@ -39,36 +41,50 @@ class ConcurrentStmtDialog(QDialog):
 
         self.conc_name_label = QLabel("Concurrent Statement Name*")
         self.conc_name_label.setStyleSheet(WHITE_COLOR)
+        self.conc_name_label.setFont(input_font)
         self.conc_name_input = QLineEdit()
+        self.conc_name_input.setFont(input_font)
         self.noteBox = QCheckBox("Custom Value")
         self.noteBox.setStyleSheet(WHITE_COLOR)
+        self.noteBox.setFont(input_font)
         self.note_label = QLabel("Custom Value")
         self.note_label.setStyleSheet(WHITE_COLOR)
+        self.note_label.setFont(input_font)
         self.note_label.setVisible(False)
         self.note_input = QLineEdit()
         self.note_input.setVisible(False)
+        self.note_input.setFont(input_font)
         self.add_note_btn = QPushButton("Add Custom Value")
-        #self.add_note_btn.setFixedSize(125, 25)
+        self.add_note_btn.setFont(input_font)
         self.add_note_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; padding: 10px; }"
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.add_note_btn.setVisible(False)
 
         self.out_sig_header_layout = QHBoxLayout()
         self.out_sig_label = QLabel("Assign Signal")
+        self.out_sig_label.setFont(input_font)
         self.out_sig_label.setStyleSheet(WHITE_COLOR)
-        self.out_sig_label.setFixedWidth(100)
+        #self.out_sig_label.setFixedWidth(100)
         self.options_sig_label = QLabel("Default Value")
+        self.options_sig_label.setFont(input_font)
         self.options_sig_label.setStyleSheet(WHITE_COLOR)
-        self.options_sig_label.setFixedWidth(100)
+        #self.options_sig_label.setFixedWidth(100)
         self.val_label = QLabel("Binary Value")
+        self.val_label.setFont(input_font)
         self.val_label.setStyleSheet(WHITE_COLOR)
         self.out_sig_empty_info = QLabel("No Output Signals found!\nPlease add signal in the IO Ports")
+        self.out_sig_empty_info.setFont(input_font)
         self.out_sig_empty_info.setFixedSize(400, 300)
 
         self.out_signals_combo = QComboBox()
+        self.out_signals_combo.setFont(input_font)
+        self.out_signals_combo.setStyleSheet("QComboBox {padding: 2px;}")
         self.options_signals_combo = QComboBox()
+        self.options_signals_combo.setFont(input_font)
+        self.options_signals_combo.setStyleSheet("QComboBox {padding: 2px;}")
         self.out_val_input = QLineEdit()
+        self.out_val_input.setFont(input_font)
         validator = QIntValidator()
         self.out_val_input.setValidator(validator)
 
@@ -76,24 +92,26 @@ class ConcurrentStmtDialog(QDialog):
 
         self.suffix_label = QLabel("Suffix")
         self.suffix_label.setStyleSheet(WHITE_COLOR)
+        self.suffix_label.setFont(input_font)
         self.suffix_input = QLineEdit()
+        self.suffix_input.setFont(input_font)
         self.suffix_input.setEnabled(False)
         self.suffix_input.setText("_c")
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
 
         self.ok_btn = QPushButton("Ok")
         self.ok_btn.setEnabled(False)
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
         self.input_frame = QFrame()
 
@@ -126,7 +144,7 @@ class ConcurrentStmtDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(600, 175)
+        self.input_frame.setFixedSize(600, 300)
         self.input_frame.setLayout(self.input_layout)
         self.add_note_btn.clicked.connect(self.add_conc_note)
         self.ok_btn.clicked.connect(self.get_data)

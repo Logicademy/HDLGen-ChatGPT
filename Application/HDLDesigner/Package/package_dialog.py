@@ -18,9 +18,8 @@ class PackageDialog(QDialog):
         elif add_or_edit == "edit":
             self.setWindowTitle("Edit Package Signal")
 
-        title_font = QFont()
-        title_font.setPointSize(10)
-        title_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
         bold_font = QFont()
         bold_font.setBold(True)
 
@@ -28,19 +27,28 @@ class PackageDialog(QDialog):
         self.sig_types = [ "bus", "signed", "unsigned"]
         self.array_name_label = QLabel("Array Name*")
         self.array_name_label.setStyleSheet(WHITE_COLOR)
+        self.array_name_label.setFont(input_font)
         self.array_name_input = QLineEdit()
+        self.array_name_input.setFont(input_font)
 
         self.arraySize_label = QLabel("Array Depth")
+        self.arraySize_label.setFont(input_font)
         self.arraySize_label.setStyleSheet(WHITE_COLOR)
         self.arraySize_input = QLineEdit()
+        self.arraySize_input.setFont(input_font)
 
         self.arrayLength_label = QLabel("Array Width")
         self.arrayLength_label.setStyleSheet(WHITE_COLOR)
+        self.arrayLength_label.setFont(input_font)
         self.arrayLength_input = QLineEdit()
+        self.arrayLength_input.setFont(input_font)
 
         self.sig_type_label = QLabel("Signal Type")
+        self.sig_type_label.setFont(input_font)
         self.sig_type_label.setStyleSheet(WHITE_COLOR)
         self.sig_type_combo = QComboBox()
+        self.sig_type_combo.setFont(input_font)
+        self.sig_type_combo.setStyleSheet("QComboBox {padding: 2px;}")
         pal = self.sig_type_combo.palette()
         pal.setColor(QPalette.Button, QColor(255, 255, 255))
         self.sig_type_combo.setPalette(pal)
@@ -51,22 +59,24 @@ class PackageDialog(QDialog):
         self.arrayLength_input.setValidator(self.onlyInt)
 
         self.sig_desc_label = QLabel("Signal Description")
+        self.sig_desc_label.setFont(input_font)
         self.sig_desc_label.setStyleSheet(WHITE_COLOR)
         self.sig_desc_input = QLineEdit()
+        self.sig_desc_input.setFont(input_font)
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.ok_btn = QPushButton("Ok")
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setEnabled(False)
-        self.ok_btn.setFixedSize(60, 25)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
         self.input_frame = QFrame()
 
@@ -98,7 +108,7 @@ class PackageDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(400, 200)
+        #self.input_frame.setFixedSize(600, 600)
         self.input_frame.setLayout(self.input_layout)
 
         self.ok_btn.clicked.connect(self.get_data)
@@ -110,7 +120,6 @@ class PackageDialog(QDialog):
         self.setLayout(self.mainLayout)
 
     def load_sig_data(self, array_data):
-        print("load arrays")
         self.array_name_input.setText(array_data[0])
         self.arraySize_input.setText(array_data[1])
         self.arrayLength_input.setText(array_data[2])
@@ -124,7 +133,7 @@ class PackageDialog(QDialog):
         if sig_type == "bus":
             sig_type = "std_logic_vector"
         data = [self.array_name_input.text().strip(), self.arraySize_input.text().strip(), self.arrayLength_input.text().strip(), sig_type]#self.sig_type_combo.currentText()]
-        print(data)
+
         self.cancelled = False
         self.close()
 

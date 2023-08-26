@@ -697,14 +697,12 @@ class Generator(QWidget):
         if "1" in filesNumber:
             base_name, extension = os.path.splitext(vhdl_file_HDLGen_path)
             new_filename = vhdl_file_HDLGen_path
-            print(new_filename)
             if os.path.isfile(new_filename):
                 # File already exists, modify the name
                 index = 1
                 while os.path.isfile(new_filename):
                     index += 1
                     new_filename = f"{base_name}_{index}{extension}"
-            print(new_filename)
             try:
                 # Writing xml file
                 with open(vhdl_file_path, 'r') as source:
@@ -725,14 +723,12 @@ class Generator(QWidget):
         if "5" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
             new_filename = chatgpt_header_HDLGen_file_path
-            print(new_filename)
             if os.path.isfile(new_filename):
                 # File already exists, modify the name
                 index = 1
                 while os.path.isfile(new_filename):
                     index += 1
                     new_filename = f"{base_name}_{index}{extension}"
-            print(new_filename)
             try:
                 # Writing xml file
                 with open(chatgpt_header_file_path, 'r') as source:
@@ -755,14 +751,12 @@ class Generator(QWidget):
         if "7" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
             new_filename = chatgpt_vhdl_HDLGen_file_path
-            print(new_filename)
             if os.path.isfile(new_filename):
                 # File already exists, modify the name
                 index = 1
                 while os.path.isfile(new_filename):
                     index += 1
                     new_filename = f"{base_name}_{index}{extension}"
-            print(new_filename)
             try:
                 # Writing xml file
                 with open(chatgpt_vhdl_file_path, 'r') as source:
@@ -2458,7 +2452,6 @@ class Generator(QWidget):
                     depth = 0
                     width = 0
                     type = type.split(",")
-                    print(array_nodes)
                     for i in range(0, len(array_nodes)):
                         typeName = array_nodes[i].getElementsByTagName('name')[0].firstChild.data
                         if typeName == type[1]:
@@ -2494,7 +2487,6 @@ class Generator(QWidget):
                             inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(
                                 size) + "'b1;\n"
                         else:
-                            print(arrayList)
                             for i in range(0, len(arrayList)):
                                 if signal.getElementsByTagName('name')[0].firstChild.data == arrayList[i][0]:
                                     size = int(arrayList[i][1]) * int(arrayList[i][2])
@@ -2729,14 +2721,12 @@ class Generator(QWidget):
         if "9" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_verilog_HDLGen_file_path)
             new_filename = chatgpt_verilog_HDLGen_file_path
-            print(new_filename)
             if os.path.isfile(new_filename):
                 # File already exists, modify the name
                 index = 1
                 while os.path.isfile(new_filename):
                     index += 1
                     new_filename = f"{base_name}_{index}{extension}"
-            print(new_filename)
             try:
                 with open(chatgpt_verilog_file_path, 'r') as source:
                     with open(new_filename, "w") as f:

@@ -16,37 +16,37 @@ class VHDLModelDialog(QDialog):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
-
+        input_font = QFont()
+        input_font.setPointSize(10)
         self.input_layout = QGridLayout()
         self.mainLayout = QVBoxLayout()
 
         self.ChatGPT_model_label = QLabel("ChatGPT Model Commands")
         self.ChatGPT_model_label.setStyleSheet(WHITE_COLOR)
+        self.ChatGPT_model_label.setFont(input_font)
         self.ChatGPT_model_input = QPlainTextEdit()
         self.ChatGPT_model_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
+        self.ChatGPT_model_input.setFont(input_font)
 
-        self.ChatGPT_default_label = QLabel("ChatGPT Default Command Copy this text to above")
-        self.ChatGPT_default_label.setStyleSheet(WHITE_COLOR)
-        self.ChatGPT_default_input = QPlainTextEdit()
-        self.ChatGPT_default_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
-
-        self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
-        self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
 
         self.reset_btn = QPushButton("Reset")
-        self.reset_btn.setFixedSize(60, 25)
+        self.reset_btn.setFont(input_font)
         self.reset_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
+
+        self.cancel_btn = QPushButton("Cancel")
+        self.cancel_btn.setFont(input_font)
+        self.cancel_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
+
         self.ok_btn = QPushButton("Ok")
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
         self.input_frame = QFrame()
 
         self.cancelled = True
@@ -72,7 +72,7 @@ class VHDLModelDialog(QDialog):
         self.input_frame.setFrameShape(QFrame.StyledPanel)
         self.input_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.input_frame.setContentsMargins(10, 10, 10, 10)
-        self.input_frame.setFixedSize(600, 600)
+        self.input_frame.setFixedSize(900, 800)
         self.input_frame.setLayout(self.input_layout)
         self.cancel_btn.clicked.connect(self.cancel_selected)
 
