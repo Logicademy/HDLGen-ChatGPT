@@ -20,9 +20,8 @@ class ComponentDialog(QDialog):
         elif add_or_edit == "edit":
             self.setWindowTitle("Edit component")
 
-        title_font = QFont()
-        title_font.setPointSize(10)
-        title_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
         bold_font = QFont()
         bold_font.setBold(True)
 
@@ -36,11 +35,14 @@ class ComponentDialog(QDialog):
 
         self.component_name_label = QLabel("Component Name")
         self.component_name_label.setStyleSheet(WHITE_COLOR)
+        self.component_name_label.setFont(input_font)
         self.component_name_input = QLabel("Browse to select VHDL Model")
         self.component_name_input.setStyleSheet(WHITE_COLOR)
         self.component_name_input.setEnabled(False)
+        self.component_name_input.setFont(input_font)
 
         self.signal_empty_info = QLabel("No Top level Signals found!\nPlease add input and output signals in Ports")
+        self.signal_empty_info.setFont(input_font)
         self.signal_empty_info.setFixedSize(400, 300)
         self.signal_table = QTableWidget()
 
@@ -48,29 +50,29 @@ class ComponentDialog(QDialog):
         self.signal_frame = QFrame()
 
         self.file_path_label = QLabel("Component model file path")
+        self.file_path_label.setFont(input_font)
         self.file_path_label.setStyleSheet(WHITE_COLOR)
         self.file_path_input = QLineEdit()
+        self.file_path_input.setFont(input_font)
 
         self.browse_btn = QPushButton("Browse")
-        self.browse_btn.setFixedSize(60, 25)
+        self.browse_btn.setFont(input_font)
         self.browse_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
-
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.ok_btn = QPushButton("Ok")
-        #self.ok_btn.setEnabled(False)
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
         self.input_frame = QFrame()
 
@@ -106,7 +108,7 @@ class ComponentDialog(QDialog):
         self.signal_frame.setFrameStyle(QFrame.NoFrame)
         self.signal_frame.setStyleSheet(".QFrame{background-color: white; border-radius: 5px;}")
         self.signal_frame.setLayout(self.signal_layout)
-        self.signal_frame.setFixedSize(325, 275)
+        self.signal_frame.setFixedSize(600, 600)
 
         self.input_layout.addWidget(self.component_name_label, 0, 0, 1, 1)
         self.input_layout.addWidget(self.component_name_input, 1, 0, 1, 1)
@@ -145,6 +147,10 @@ class ComponentDialog(QDialog):
             self.signal_table.setRowHeight(row_position, 5)
 
             self.signal_table.setItem(row_position, 0, QTableWidgetItem(signal))
+            if temp[1] == "std_logic":
+                temp[1] = "single bit"
+            elif temp[1][0:16] == "std_logic_vector":
+                temp[1] = "bus "+ "["+temp[1][17:]+":0]"
             self.signal_table.setItem(row_position, 1, QTableWidgetItem(temp[0]))
             self.signal_table.setItem(row_position, 2, QTableWidgetItem(temp[1]))
             i = i + 1
@@ -169,11 +175,12 @@ class ComponentDialog(QDialog):
                 self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
                 print("The directory is within the potential parent directory.")
         else:
-            print("The directory is not within the potential parent directory.")
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle("Alert")
-            msgBox.setText("Component cannot be added!\nThe component is not part of the project environment.")
-            msgBox.exec_()
+            if comp_path != "":
+                print("The directory is not within the potential parent directory.")
+                msgBox = QMessageBox()
+                msgBox.setWindowTitle("Alert")
+                msgBox.setText("Component cannot be added!\nThe component is not part of the project environment.")
+                msgBox.exec_()
        # if comp_path != "":
            # self.file_path_input.setText(comp_path)
            # self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
@@ -198,6 +205,12 @@ class ComponentDialog(QDialog):
             self.signal_table.setRowHeight(row_position, 5)
             self.signal_table.setItem(row_position, 0, QTableWidgetItem(sig))
             self.signal_table.setItem(row_position, 1, QTableWidgetItem(mode[i]))
+            if type[i] == "std_logic":
+                type[i] = "single bit"
+            elif type[i][0:16] == "std_logic_vector":
+                type[i] = "bus "+ "["+type[i][17:]
+                type[i] = type[i].replace(" downto ",":")
+                type[i] = type[i].replace(")","]")
             self.signal_table.setItem(row_position, 2, QTableWidgetItem(type[i]))
             i = i+1
         self.signal_layout.addWidget(self.signal_table)
@@ -220,6 +233,10 @@ class ComponentDialog(QDialog):
             signal = self.signal_table.item(i, 0).text()
             mode = self.signal_table.item(i, 1).text()
             type = self.signal_table.item(i, 2).text()
+            if type == "single bit":
+                type = "std_logic"
+            elif type[0:3] == "bus":
+                type = "std_logic_vector("+type[5:]+" downto 0)"
             signals.append(signal + "," + mode + "," + type)
 
         data.append(self.component_name_input.text())

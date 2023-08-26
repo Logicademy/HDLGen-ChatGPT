@@ -17,7 +17,7 @@ class settingsDialog(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.commands = ["None", "None", "None", "None", "None", "None"]
+        self.commands = ["None", "None", "None", "None", "None", "None","None", "None", "None", "None"]
         self.setWindowTitle("Settings")
         title_font = QFont()
         title_font.setPointSize(12)
@@ -135,12 +135,14 @@ class settingsDialog(QDialog):
         author = self.config.get('user', 'author')
         email = self.config.get('user', 'email')
         company = self.config.get('user', 'company')
-        #self.commands[1] = self.config.get('user', 'verilogchatgptheader')
         self.commands[1] = self.config.get('user', 'verilogchatgptmodel')
         self.commands[3] = self.config.get('user', 'verilogchatgpttestbench')
-        #self.commands[0] = self.config.get('user', 'vhdlchatgptheader')
         self.commands[0] = self.config.get('user', 'vhdlchatgptmodel')
         self.commands[2] = self.config.get('user', 'vhdlchatgpttestbench')
+        self.commands[5] = self.config.get('user', 'verilogchatgptmodelreset')
+        self.commands[7] = self.config.get('user', 'verilogchatgpttestbenchreset')
+        self.commands[4] = self.config.get('user', 'vhdlchatgptmodelreset')
+        self.commands[6] = self.config.get('user', 'vhdlchatgpttestbenchreset')
 
         self.vivado_input.setText(vivadoPath.strip())
         self.quartus_input.setText(quartusPath.strip())
@@ -214,7 +216,6 @@ class settingsDialog(QDialog):
             self.author_input.setText("To be completed")
         if self.email_input.text().strip() == "":
             self.email_input.setText("To be completed")
-            print(self.email_input.text())
         if self.company_input.text().strip() == "":
             self.company_input.setText("To be completed")
 
@@ -251,7 +252,7 @@ class settingsDialog(QDialog):
     #        self.commands[1] = verilog_header
 
     def vhdl_model_command(self):
-        vhdl_model = VHDLModelDefaultDialog("edit", self.commands[0])
+        vhdl_model = VHDLModelDefaultDialog("edit", self.commands[0], self.commands[4])
         vhdl_model.exec_()
 
         if not vhdl_model.cancelled:
@@ -259,7 +260,7 @@ class settingsDialog(QDialog):
             self.commands[0] = vhdl_model
 
     def verilog_model_command(self):
-        verilog_model = VerilogModelDefaultDialog("edit", self.commands[1])
+        verilog_model = VerilogModelDefaultDialog("edit", self.commands[1], self.commands[5])
         verilog_model.exec_()
 
         if not verilog_model.cancelled:
@@ -267,7 +268,7 @@ class settingsDialog(QDialog):
             self.commands[1] = verilog_model
 
     def vhdl_testbench_command(self):
-        vhdl_testbench = VHDLTestbenchDefaultDialog("edit", self.commands[2])
+        vhdl_testbench = VHDLTestbenchDefaultDialog("edit", self.commands[2], self.commands[6])
         vhdl_testbench.exec_()
 
         if not vhdl_testbench.cancelled:
@@ -275,7 +276,7 @@ class settingsDialog(QDialog):
             self.commands[2] = vhdl_testbench
 
     def verilog_testbench_command(self):
-        verilog_testbench = VerilogTestbenchDefaultDialog("edit", self.commands[3])
+        verilog_testbench = VerilogTestbenchDefaultDialog("edit", self.commands[3], self.commands[7])
         verilog_testbench.exec_()
 
         if not verilog_testbench.cancelled:

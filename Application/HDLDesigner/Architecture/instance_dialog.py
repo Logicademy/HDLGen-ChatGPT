@@ -29,6 +29,9 @@ class InstanceDialog(QDialog):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        bold_font.setPointSize(10)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.comps_names = []
         self.comps = []
@@ -43,14 +46,18 @@ class InstanceDialog(QDialog):
 
         self.instance_name_label = QLabel("Instance Name*")
         self.instance_name_label.setStyleSheet(WHITE_COLOR)
+        self.instance_name_label.setFont(input_font)
         self.instance_name_input = QLineEdit()
+        self.instance_name_input.setFont(input_font)
 
         self.suffix_label = QLabel("Suffix")
         self.suffix_label.setStyleSheet(WHITE_COLOR)
+        self.suffix_label.setFont(input_font)
         self.suffix_input = QLineEdit()
         self.suffix_input.setFixedWidth(40)
         self.suffix_input.setEnabled(False)
         self.suffix_input.setText("_i")
+        self.suffix_input.setFont(input_font)
 
         self.out_sig_header_layout = QHBoxLayout()
         self.out_sig_label = QLabel("Component Signal")
@@ -58,43 +65,50 @@ class InstanceDialog(QDialog):
         self.val_label = QLabel("Top Level Signal")
         self.val_label.setFont(bold_font)
         self.out_sig_empty_info = QLabel("No Top level Signals found!\nPlease add input and output signals in Ports")
+        self.out_sig_empty_info.setFont(input_font)
         self.out_sig_empty_info.setFixedSize(400, 300)
         self.list_div = QFrame()
         self.list_div.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129);}')
         self.list_div.setFixedHeight(1)
         self.out_sig_table = QTableWidget()
+        self.out_sig_table.setFont(input_font)
 
         self.out_sig_layout = QVBoxLayout()
         self.out_sig_frame = QFrame()
 
         self.file_path_label = QLabel("Component model file path")
+        self.file_path_label.setFont(input_font)
         self.file_path_label.setStyleSheet(WHITE_COLOR)
         self.file_path_input = QLineEdit()
+        self.file_path_input.setFont(input_font)
 
         self.components_label = QLabel("Components")
         self.components_label.setStyleSheet(WHITE_COLOR)
+        self.components_label.setFont(input_font)
         self.components_combobox = QComboBox()
+        self.components_combobox.setFont(input_font)
+        self.components_combobox.setStyleSheet("QComboBox {padding: 2px;}")
 
 
         self.browse_btn = QPushButton("Browse")
-        self.browse_btn.setFixedSize(60, 25)
+        self.browse_btn.setFont(input_font)
         self.browse_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.setFixedSize(60, 25)
+        self.cancel_btn.setFont(input_font)
         self.cancel_btn.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}")
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
 
 
         self.ok_btn = QPushButton("Ok")
-        self.ok_btn.setFixedSize(60, 25)
+        self.ok_btn.setFont(input_font)
         self.ok_btn.setStyleSheet(
-            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;}"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;}"
-            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain; }")
+            "QPushButton {background-color: rgb(169,169,169);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+            "QPushButton:enabled {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }")
 
         self.input_frame = QFrame()
 
