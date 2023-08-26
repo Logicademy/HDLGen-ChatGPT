@@ -1,3 +1,4 @@
+#Dialog box for note called by concurrenentstmt_dialog.py or process_dialog.py
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys

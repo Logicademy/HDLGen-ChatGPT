@@ -1,5 +1,4 @@
-import os
-import sys
+#Dialog box for process called by the architecture.py when adding or editing process
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *

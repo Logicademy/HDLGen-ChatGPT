@@ -1,3 +1,4 @@
+#Called in generation.py used for editing the ChatGPT Prompt header
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import configparser

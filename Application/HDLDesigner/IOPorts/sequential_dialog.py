@@ -1,4 +1,4 @@
-import os
+#Dialog box for adding/editing rtl logic called in the io_ports.py class.
 import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *

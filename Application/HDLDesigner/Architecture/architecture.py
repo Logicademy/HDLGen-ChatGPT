@@ -1,5 +1,6 @@
+#Architecture section in HDL Designer. This class will call three oter classes, process_dialog.py, concurrentstmt_dialog.py, instance_dialog.py and arch_help.py.
+#This class will save all entered data to the .hdlgen. The save happens when there is a change.
 import os
-import sys
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *

@@ -1,3 +1,4 @@
+#Internal signals section in HDL Designer. This class will call int_sig_dialog when adding/editing internal signal and will call internal_help.py when help is called
 import os
 import sys
 from xml.dom import minidom

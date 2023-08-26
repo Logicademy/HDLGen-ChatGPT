@@ -1,6 +1,5 @@
-
+#Displays the assoicated help markdown file
 import markdown as md
-
 from PySide2.QtWidgets import *
 
 HELP_DOC_FILE_PATH = "./Help/help.md"

@@ -1,21 +1,17 @@
+#This class is called in main.py it sets up the next screen of the GUI and conatins 3 tabs and two buttons.
+#tabs call project_manager.py, hdl_designer.py and help.py. The two buttons call a method in generator.py to run TCL file to open EDA tool
 from PySide2.QtGui import QFont
 from PySide2.QtWidgets import *
 import os
 import platform
 import subprocess
 import glob
-import webbrowser
 import sys
 sys.path.append("..")
-import zipfile
-import pyperclip
 from ProjectManager.project_manager import ProjectManager
 from Generator.generator import Generator
 from Help.help import Help
 from HDLDesigner.hdl_designer import HDLDesigner
-from ProjectManager.generate_dialog import GenerationDialog
-from HDLDesigner.Architecture.note_dialog import note_Dialog
-from xml.dom import minidom
 
 
 class Home(QMainWindow):
@@ -255,34 +251,6 @@ class Home(QMainWindow):
             path = proj_folder+"/Verilog/testbench"
             self.open_file_explorer(path)
 
-    def generate_btn_clicked(self):
-        gen = GenerationDialog()
-        gen.exec_()
-        if not gen.cancelled:
-            if self.project_manager.vhdl_check.isChecked():
-                self.generator.generate_folders()
-                instances = self.generator.create_vhdl_file(gen.get_selected_files())
-                if self.project_manager.vivado_check.isChecked():
-                    self.generator.create_tcl_file("VHDL", instances)
-                else:
-                    self.generator.create_quartus_tcl_file("VHDL", instances)
-                self.generator.create_testbench_file(gen.get_selected_files())
-                msgBox = QMessageBox()
-                msgBox.setWindowTitle("Alert")
-                msgBox.setText("Selected Files Generated")
-                msgBox.exec_()
-            elif self.project_manager.verilog_check.isChecked():
-                self.generator.generate_folders()
-                instances = self.generator.create_verilog_file(gen.get_selected_files())
-                if self.project_manager.vivado_check.isChecked():
-                    self.generator.create_tcl_file("Verilog", instances)
-                else:
-                    self.generator.create_quartus_tcl_file("Verilog", instances)
-                self.generator.create_verilog_testbench_file(gen.get_selected_files())
-                msgBox = QMessageBox()
-                msgBox.setWindowTitle("Alert")
-                msgBox.setText("Verilog Testbench Generated")
-                msgBox.exec_()
 
     def delete_title_msg_backups(self):
         backup_files = ""

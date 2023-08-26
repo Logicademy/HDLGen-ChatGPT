@@ -1,3 +1,5 @@
+#Component section in HDL Designer. This class will only call comp_help.md if help button is clicked
+#This class will save all entered data to the .hdlgen. The save happens when there is a change.
 import os
 from xml.dom import minidom
 from PySide2.QtWidgets import *

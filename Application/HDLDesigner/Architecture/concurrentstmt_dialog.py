@@ -1,3 +1,4 @@
+#Dialog box for concurrent statement called by the architecture.py when adding or editing concurrent statement
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -65,11 +66,9 @@ class ConcurrentStmtDialog(QDialog):
         self.out_sig_label = QLabel("Assign Signal")
         self.out_sig_label.setFont(input_font)
         self.out_sig_label.setStyleSheet(WHITE_COLOR)
-        #self.out_sig_label.setFixedWidth(100)
         self.options_sig_label = QLabel("Default Value")
         self.options_sig_label.setFont(input_font)
         self.options_sig_label.setStyleSheet(WHITE_COLOR)
-        #self.options_sig_label.setFixedWidth(100)
         self.val_label = QLabel("Binary Value")
         self.val_label.setFont(input_font)
         self.val_label.setStyleSheet(WHITE_COLOR)

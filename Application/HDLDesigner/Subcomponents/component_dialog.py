@@ -1,3 +1,4 @@
+#Dialog box for adding/editing sub-component called in the subcomponents.py class.
 import re
 import os
 from PySide2.QtWidgets import *
@@ -237,6 +238,7 @@ class ComponentDialog(QDialog):
                 type = "std_logic"
             elif type[0:3] == "bus":
                 type = "std_logic_vector("+type[5:]+" downto 0)"
+                type = type.replace(":0]","")
             signals.append(signal + "," + mode + "," + type)
 
         data.append(self.component_name_input.text())

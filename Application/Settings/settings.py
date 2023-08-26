@@ -1,4 +1,4 @@
-from xml.dom import minidom
+#settings dialog box when settings is clicked in main.py. Reads/writes from config.ini file default and reusable information
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys

@@ -1,5 +1,6 @@
+#This class is a tab in the home.py class of the GUI. it displays Project setting, EDA tools and Generate sections.
+#It will store information on the project and will save if tab is changed to HDL Designer, or will prompt user to save if the application is closed if changes are made.
 import os
-import sys
 from xml.dom import minidom
 from pathlib import Path
 from PySide2.QtWidgets import *

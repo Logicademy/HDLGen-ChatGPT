@@ -1,3 +1,4 @@
+#Dialog box for the ChatGPT prompt from config.ini file. This is called from setting.py and data is exchanged. User can edit the config.ini file using this for the specific prompt
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import configparser
@@ -18,12 +19,6 @@ class VHDLModelDefaultDialog(QDialog):
 
         self.input_layout = QGridLayout()
         self.mainLayout = QVBoxLayout()
-
-        #self.ChatGPT_model_label = QLabel("ChatGPT Model Commands")
-        #self.ChatGPT_model_label.setStyleSheet(WHITE_COLOR)
-        #self.ChatGPT_model_input = QPlainTextEdit()
-        #self.ChatGPT_model_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
-        #self.ChatGPT_model_input.setFont(input_font)
 
         self.ChatGPT_default_label = QLabel("ChatGPT Default Prompt")
         self.ChatGPT_default_label.setStyleSheet(WHITE_COLOR)

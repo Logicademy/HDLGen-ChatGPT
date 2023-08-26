@@ -1,3 +1,4 @@
+#Dialog box for adding/editing type called in the package.py class.
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import sys
@@ -132,7 +133,7 @@ class PackageDialog(QDialog):
         sig_type = self.sig_type_combo.currentText()
         if sig_type == "bus":
             sig_type = "std_logic_vector"
-        data = [self.array_name_input.text().strip(), self.arraySize_input.text().strip(), self.arrayLength_input.text().strip(), sig_type]#self.sig_type_combo.currentText()]
+        data = [self.array_name_input.text().strip(), self.arraySize_input.text().strip(), self.arrayLength_input.text().strip(), sig_type]
 
         self.cancelled = False
         self.close()

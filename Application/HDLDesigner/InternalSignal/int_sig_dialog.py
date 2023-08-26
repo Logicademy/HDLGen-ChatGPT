@@ -1,5 +1,5 @@
+#Dialog box for adding/editing internal signals called in the internal_signal.py class. Will also call stateNamesDialog.py when states are added/edited
 import os
-
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import qtawesome as qta

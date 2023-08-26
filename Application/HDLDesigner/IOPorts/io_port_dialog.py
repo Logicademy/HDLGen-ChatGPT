@@ -1,5 +1,4 @@
-import os
-import sys
+#Dialog box for adding/editing port signals called in the io_ports.py class.
 from xml.dom import minidom
 
 from PySide2 import QtWidgets

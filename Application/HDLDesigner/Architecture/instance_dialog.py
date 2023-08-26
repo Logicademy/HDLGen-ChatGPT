@@ -1,5 +1,4 @@
-import re
-import os
+#Dialog box for instance called by the architecture.py when adding or editing instance
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *

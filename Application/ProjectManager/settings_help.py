@@ -1,3 +1,4 @@
+#Displays the assoicated help markdown file
 import markdown as md
 from PySide2.QtWidgets import *
 
