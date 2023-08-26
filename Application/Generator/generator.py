@@ -1788,8 +1788,8 @@ class Generator(QWidget):
                             notes = notes.replace("&#44;", ",")
                             notes = notes.replace("(", "[")
                             notes = notes.replace(")", "]")
-                            notes = notes.replace("{", "[")
-                            notes = notes.replace("}", "]")
+                            #notes = notes.replace("{", "[")
+                            #notes = notes.replace("}", "]")
                             notes = notes.replace("downto", ":")
                             notes = notes.replace("'", "")
                             pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
@@ -1810,6 +1810,8 @@ class Generator(QWidget):
                             notes = notes.replace("'", "_")
                             pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
                             notes = re.sub(pattern1, r'{\1,\2}', notes)
+                            notes = notes.replace("{0}","{1b'0}")
+                            notes = notes.replace("{1}","{1b'1}")
                             notes = notes.replace("_", "'")
                             signalList = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
@@ -1895,8 +1897,8 @@ class Generator(QWidget):
                                     value = value.replace("&#44;", ",")
                                     value = value.replace("(", "[")
                                     value = value.replace(")", "]")
-                                    value = value.replace("{", "[")
-                                    value = value.replace("}", "]")
+                                    #value = value.replace("{", "[")
+                                    #value = value.replace("}", "]")
                                     value = value.replace("downto", ":")
                                     value = value.replace("'", "")
 
@@ -1918,6 +1920,8 @@ class Generator(QWidget):
                                     value = value.replace("'", "_")
                                     pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
                                     value = re.sub(pattern1, r'{\1,\2}', value)
+                                    value = value.replace("{0}","{1b'0}")
+                                    value = value.replace("{1}","{1b'1}")
                                     value = value.replace("_", "'")
 
                                 if arraySignal == True:
@@ -2048,8 +2052,8 @@ class Generator(QWidget):
                                     notes = notes.replace("&#44;", ",")
                                     notes = notes.replace("(", "[")
                                     notes = notes.replace(")", "]")
-                                    notes = notes.replace("{", "[")
-                                    notes = notes.replace("}", "]")
+                                    #notes = notes.replace("{", "[")
+                                    #notes = notes.replace("}", "]")
                                     notes = notes.replace("downto", ":")
                                     notes = notes.replace("'", "")
                                     pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
@@ -2071,6 +2075,8 @@ class Generator(QWidget):
                                     notes = notes.replace("'", "_")
                                     pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
                                     notes = re.sub(pattern1, r'{\1,\2}', notes)
+                                    notes = notes.replace("{0}","{1b'0}")
+                                    notes = notes.replace("{1}","{1b'1}")
                                     notes = notes.replace("_", "'")
                                     note_syntax = verilog_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
