@@ -190,6 +190,7 @@ class Gen(QWidget):
 
         self.wcfg_checkBox = QCheckBox("Waveform Configuration File")
         self.wcfg_checkBox.setStyleSheet(BLACK_COLOR)
+        self.wcfg_checkBox.setFont(input_font)
         self.wcfg_checkBox.setChecked(True)
 
         self.generate_chatgpt_testbench = QPushButton("Generate and Copy")
