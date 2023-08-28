@@ -941,11 +941,11 @@ class Generator(QWidget):
         intel_exe_file_path = ProjectManager.get_intel_exe_path()
         if edaTool == "Vivado":
             if lang == "VHDL":
-                model_path = proj_path + "\VHDL\\model\\" + str(ProjectManager.get_proj_name()) + ".vhd"
+                model_path = proj_path + "\VHDL\model\\" + str(ProjectManager.get_proj_name()) + ".vhd"
                 tcl_path = proj_path + "\VHDL\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
                 tb_path = proj_path + "\VHDL\\testbench\\" + str(ProjectManager.get_proj_name()) + "_TB.vhd"
             elif lang == "Verilog":
-                model_path = proj_path + "\VHDL\\model\\" + str(ProjectManager.get_proj_name()) + ".v"
+                model_path = proj_path + "\Verilog\model\\" + str(ProjectManager.get_proj_name()) + ".v"
                 tcl_path = proj_path + "\Verilog\AMDprj\\" + str(ProjectManager.get_proj_name()) + ".tcl"
                 tb_path = proj_path + "\Verilog\\testbench\\" + str(ProjectManager.get_proj_name()) + "_TB.v"
             if os.path.exists(tcl_path):
@@ -2076,6 +2076,11 @@ class Generator(QWidget):
                                     note_syntax = note_syntax.replace("$output_signal", signals[0])
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     gen_conc += note_syntax + "\n\n"
+                                    var_name = signals[0]
+                                    pattern = f"(reg)\s*(\[\s*\d+\s*:\s*\d+\s*\])?\s+({var_name})"
+
+                                    # Replace "reg" with "wire" in the matching line
+                                    gen_int_sig = re.sub(pattern, r"wire \2 \3", gen_int_sig)
                                 else:
                                     gen_stmts = ""
                                     conc_syntax = verilog_root.getElementsByTagName("concurrentstmt")[0].firstChild.data

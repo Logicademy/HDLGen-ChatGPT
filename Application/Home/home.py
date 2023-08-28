@@ -79,6 +79,14 @@ class Home(QMainWindow):
 
         if result == QMessageBox.Save:
             self.project_manager.save_xml()
+            self.hdl_designer.package.load_data()
+            self.hdl_designer.subcomponents.load_data()
+            self.hdl_designer.compDetails.save_data()
+            self.hdl_designer.compDetails.save_data()
+            self.hdl_designer.ioPorts.save_data()
+            self.hdl_designer.architecture.save_data()
+            self.hdl_designer.generate.save_data()
+            self.hdl_designer.internalSignal.save_data()
             return QMessageBox.Save
         elif result == QMessageBox.Discard:
             return QMessageBox.Discard

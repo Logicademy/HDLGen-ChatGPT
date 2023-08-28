@@ -57,11 +57,11 @@ class VerilogModelDialog(QDialog):
         if add_or_edit == "edit" and data != None:
             self.load_data(data)
     def setup_ui(self):
-        self.config.read('config.ini')
-        chatGPTDefault = self.config.get('user', 'VerilogchatGPTModel')
+        #self.config.read('config.ini')
+        #chatGPTDefault = self.config.get('user', 'VerilogchatGPTModel')
 
 
-        self.ChatGPT_model_input.setPlainText(chatGPTDefault)
+        #self.ChatGPT_model_input.setPlainText(chatGPTDefault)
 
         self.input_layout.addWidget(self.ChatGPT_model_label, 0, 0, 1, 4)
         self.input_layout.addWidget(self.ChatGPT_model_input, 1, 0, 4, 4)

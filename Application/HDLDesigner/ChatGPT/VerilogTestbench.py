@@ -57,16 +57,14 @@ class VerilogTestbenchDialog(QDialog):
         if add_or_edit == "edit" and data != None:
             self.load_data(data)
     def setup_ui(self):
-        self.config.read('config.ini')
-        chatGPTDefault = self.config.get('user', 'VerilogchatGPTTestbench')
+        #self.config.read('config.ini')
+        #chatGPTDefault = self.config.get('user', 'VerilogchatGPTTestbench')
 
 
-        self.ChatGPT_testbench_input.setPlainText(chatGPTDefault)
+        #self.ChatGPT_testbench_input.setPlainText(chatGPTDefault)
 
         self.input_layout.addWidget(self.ChatGPT_testbench_label, 0, 0, 1, 4)
         self.input_layout.addWidget(self.ChatGPT_testbench_input, 1, 0, 4, 4)
-        #self.input_layout.addWidget(self.ChatGPT_default_label, 5, 0, 1, 4)
-        #self.input_layout.addWidget(self.ChatGPT_default_input, 6, 0, 4, 4)
         self.input_layout.addWidget(self.reset_btn, 5, 1, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.cancel_btn, 5, 2, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 5, 3, 1, 1, alignment=Qt.AlignRight)
