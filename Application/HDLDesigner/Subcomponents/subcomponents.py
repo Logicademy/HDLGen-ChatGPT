@@ -1,3 +1,5 @@
+#Sub-components section in HDL Designer. This class will call component_dialog.py when adding/editing a component and subcomp_help.md if help button is clicked
+#This class will save all entered data to the mainPackage.hdlgen. The save happens when there is a change.
 import os
 import sys
 from xml.dom import minidom

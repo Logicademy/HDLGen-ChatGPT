@@ -1,7 +1,7 @@
-from xml.dom import minidom
+#state names dialog called in int_sig_dialog.py if state name is added
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-import qtawesome as qta
+
 import sys
 
 sys.path.append("..")

@@ -1,3 +1,4 @@
+#Port section in HDL Designer. This class will call io_port_dialog when adding/editing port signal, sequential_dialog.py when adding/editing rtl and will call port_help.py when help is calleed
 import os
 import sys
 from xml.dom import minidom

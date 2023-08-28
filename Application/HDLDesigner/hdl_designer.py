@@ -1,3 +1,5 @@
+#This class is a tab in the home.py class of the GUI. it contains the 8 classes comp_details.py, architecture.py, io_ports.py, testplan.py, internal_signal.py,
+#package.py, subcomponents.py, generation.py, generator.py will also call project_manager.py to get information
 import os
 from xml.dom import minidom
 from PySide2.QtWidgets import *

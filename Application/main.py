@@ -1,8 +1,8 @@
+#main.py is the file that is called when HDLGen-ChatGPT is started. From here the home.py, settings.py and help.py are called. This displays the splash page on start up
 import os
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
-import qtawesome as qta
 import sys
 sys.path.append(".")
 from Home.home import Home
@@ -45,7 +45,6 @@ class HDLGen(QMainWindow):
 
         title_1_font = QFont()
         title_1_font.setPointSize(15)
-        #title_1_font.setBold(True)
 
         bold_font = QFont()
         bold_font.setPointSize(10)
@@ -68,23 +67,17 @@ class HDLGen(QMainWindow):
         self.help_btn.setFont(text_font)
         self.settings_btn = QPushButton("Settings")
         self.settings_btn.setFont(text_font)
-        #self.open_btn.setFixedSize(200, 50)
         self.open_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
-        # self.button_layout.addSpacerItem(QSpacerItem(1, 70))
         self.open_btn.clicked.connect(self.open_project)
         #self.new_btn.setFixedSize(150, 50)
         self.new_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
-        # self.button_layout.addWidget(self.new_btn, 0, 1, 1, 1)#(self.new_btn, alignment= Qt.AlignCenter)
-        # self.button_layout.addSpacerItem(QSpacerItem(1, 70))
         self.new_btn.clicked.connect(self.new_project)
-        #self.help_btn.setFixedSize(35, 25)
         self.help_btn.clicked.connect(self.help_window)
 
-        #self.settings_btn.setFixedSize(60, 25)
         self.settings_btn.clicked.connect(self.settings_window)
 
 

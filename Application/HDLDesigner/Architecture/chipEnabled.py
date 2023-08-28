@@ -1,3 +1,4 @@
+#Dialog called inside process_dialog. Allows user to selct what signal to use as the hcip enabled signal.
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *

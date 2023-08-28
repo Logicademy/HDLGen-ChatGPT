@@ -1,3 +1,5 @@
+#Generation section in HDL Designer. This class will call VHDLModel.py, VerilogModel.py, VHDLTestbench.py, VerilogTestbench.py, generotor.py
+
 import os
 from xml.dom import minidom
 from PySide2.QtWidgets import *
@@ -10,8 +12,6 @@ import qtawesome as qta
 
 sys.path.append("..")
 from HDLDesigner.ChatGPT.chatgpt_help import ChatGPTHelpDialog
-#from HDLDesigner.ChatGPT.VHDLHeader import VHDLHeaderDialog
-#from HDLDesigner.ChatGPT.VerilogHeader import VerilogHeaderDialog
 from HDLDesigner.ChatGPT.VHDLModel import VHDLModelDialog
 from HDLDesigner.ChatGPT.VerilogModel import VerilogModelDialog
 from HDLDesigner.ChatGPT.VHDLTestbench import VHDLTestbenchDialog
@@ -40,19 +40,14 @@ class Gen(QWidget):
         self.proj_dir = proj_dir
         self.config = configparser.ConfigParser()
         self.config.read('config.ini')
-        #VHDLHeader = self.config.get('user', 'vhdlchatgptheader')
-        #VerilogHeader = self.config.get('user', 'verilogchatgptheader')
         VHDLModel = self.config.get('user', 'vhdlchatgptmodel')
         VerilogModel = self.config.get('user', 'verilogchatgptmodel')
         VHDLTestbench = self.config.get('user', 'vhdlchatgpttestbench')
         VerilogTestbench = self.config.get('user', 'verilogchatgpttestbench')
-        #VHDLHeader = self.remove_blank_lines(VHDLHeader)
-        #VerilogHeader = self.remove_blank_lines(VerilogHeader)
         VHDLModel = self.remove_blank_lines(VHDLModel)
         VerilogModel = self.remove_blank_lines(VerilogModel)
         VHDLTestbench = self.remove_blank_lines(VHDLTestbench)
         VerilogTestbench = self.remove_blank_lines(VerilogTestbench)
-        #self.commands = [VHDLHeader, VerilogHeader, VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
         self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
         self.proj_path = ""
         self.entity_name = ""
@@ -82,7 +77,6 @@ class Gen(QWidget):
         self.chatgpt_title_label = QLabel("ChatGPT prompt header\nfor formatting HDL\nmodel title generation")
         self.chatgpt_title_label.setStyleSheet(BLACK_COLOR)
         self.chatgpt_title_label.setFont(small_text_font)
-        #self.chatgpt_title_label.setFixedSize(200, 50)
 
         self.msg_title_label = QLabel("ChatGPT prompt elements:\nChatGPT prompt,HDL\nmodel title section")
         self.msg_title_label.setStyleSheet(BLACK_COLOR)
@@ -90,7 +84,6 @@ class Gen(QWidget):
 
         self.generate_chatgpt_title = QPushButton("Generate and Copy")
         self.generate_chatgpt_title.setFont(input_font)
-        #self.generate_chatgpt_title.setFixedSize(200, 50)
         self.generate_chatgpt_title.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
@@ -102,14 +95,12 @@ class Gen(QWidget):
 
         self.delete_bk_title_chatgpt = QPushButton("Delete backups")
         self.delete_bk_title_chatgpt.setFont(input_font)
-        #self.delete_bk_title_chatgpt.setFixedSize(200, 50)
         self.delete_bk_title_chatgpt.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
         self.chatgpt_loc_title = QPushButton("Go to folder")
         self.chatgpt_loc_title.setFont(input_font)
-        #self.chatgpt_loc_title.setFixedSize(200, 50)
         self.chatgpt_loc_title.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
@@ -350,8 +341,6 @@ class Gen(QWidget):
         self.arch_action_layout.addLayout(self.top_layout)
         self.main_frame.setFrameShape(QFrame.StyledPanel)
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
-        #self.title_VHDL.clicked.connect(self.vhdl_header_command)
-        #self.title_Verilog.clicked.connect(self.verilog_header_command)
         self.model_VHDL.clicked.connect(self.vhdl_model_command)
         self.model_Verilog.clicked.connect(self.verilog_model_command)
         self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
@@ -477,9 +466,7 @@ class Gen(QWidget):
 
         self.ChatgptTestbenchLayout.addWidget(self.msg_testbench_label, 0, 0)
         self.ChatgptTestbenchLayout.addWidget(self.chatgpt_loc_testbench, 0, 1)
-        #self.ChatgptTestbenchLayout.addWidget(self.testbench_VHDL, 4, 0)
         self.ChatgptTestbenchLayout.addWidget(self.generate_chatgpt_testbench, 1, 0)
-        #self.ChatgptTestbenchLayout.addWidget(self.testbench_Verilog, 4, 0)
         self.ChatgptTestbenchLayout.addWidget(self.chatgpt_testbench_bk_checkBox, 2, 1)
         self.ChatgptTestbenchLayout.addWidget(self.msg_testbench_check, 2, 0)
         self.ChatgptTestbenchLayout.addWidget(self.delete_bk_testbench_chatgpt, 1, 1)
@@ -566,16 +553,6 @@ class Gen(QWidget):
         new_chatgpt = root.createElement('chatgpt')
         commands_node = root.createElement('commands')
 
-        #VHDLHeader_node = root.createElement('VHDLHeader')
-        #self.commands[0] = self.commands[0].replace("\n", "&#10;" )
-        #VHDLHeader_node.appendChild(root.createTextNode(self.commands[0]))
-        #commands_node.appendChild(VHDLHeader_node)
-
-        #VerilogHeader_node = root.createElement('VerilogHeader')
-        #self.commands[1] = self.commands[1].replace("\n", "&#10;")
-        #VerilogHeader_node.appendChild(root.createTextNode(self.commands[1]))
-        #commands_node.appendChild(VerilogHeader_node)
-
         VHDLModel_node = root.createElement('VHDLModel')
         self.commands[0] = self.commands[0].replace("\n", "&#10;")
         VHDLModel_node.appendChild(root.createTextNode(self.commands[0]))
@@ -634,36 +611,15 @@ class Gen(QWidget):
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
 
-            #VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
-            #VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
             VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
             VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
             VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
             VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
 
-            #self.commands = [VHDLHeader, VerilogHeader, VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
             self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
     def chatgpt_help_window(self):
         chatgpt_help_dialog = ChatGPTHelpDialog()
         chatgpt_help_dialog.exec_()
-
-    #def vhdl_header_command(self):
-       # vhdl_header = VHDLHeaderDialog("edit", self.commands[0])
-       # vhdl_header.exec_()
-
-        #if not vhdl_header.cancelled:
-         #   vhdl_header = vhdl_header.get_data()
-          #  self.commands[0] = vhdl_header
-        #self.save_data()
-
-    #def verilog_header_command(self):
-     #   verilog_header = VerilogHeaderDialog("edit", self.commands[1])
-     #   verilog_header.exec_()
-
-      #  if not verilog_header.cancelled:
-      #      verilog_header = verilog_header.get_data()
-      #      self.commands[1] = verilog_header
-      #  self.save_data()
 
     def vhdl_model_command(self):
         vhdl_model = VHDLModelDialog("edit", self.commands[0])

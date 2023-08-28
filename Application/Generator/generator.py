@@ -1,3 +1,5 @@
+#This class generates all the hdl code and TCL scripts, comprised of many different methods called by home.py class, generation.py class and hdl_designer.py class
+
 import os
 import re
 from xml.dom import minidom
@@ -653,20 +655,10 @@ class Generator(QWidget):
         root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-        VHDLHeader = "None"
         VHDLModel = "None"
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
-            #VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
-            #VHDLHeader = VHDLHeader.replace("&#10;", "\n")
-            #VHDLHeader = VHDLHeader.replace("&amp;", "&")
-            #VHDLHeader = VHDLHeader.replace("&quot;", "\"")
-            #VHDLHeader = VHDLHeader.replace("&apos;", "\'")
-            #VHDLHeader = VHDLHeader.replace("&lt;", "<")
-            #VHDLHeader = VHDLHeader.replace("&#x9;", "\t")
-            #VHDLHeader = VHDLHeader.replace("&gt;", ">")
-            #VHDLHeader = VHDLHeader.replace("&#44;", ",")
             VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
             VHDLModel = VHDLModel.replace("&#10;", "\n")
             VHDLModel = VHDLModel.replace("&amp;", "&")
@@ -683,7 +675,6 @@ class Generator(QWidget):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         entity_name, vhdl_code, instances, chatgpt_header, chatgpt_vhdl = self.generate_vhdl()
-        #chatgpt_header = VHDLHeader + "\n\n" + chatgpt_header
         chatgpt_vhdl = VHDLModel + "\n\n" + vhdl_code
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_backup.vhd")
@@ -2239,15 +2230,7 @@ class Generator(QWidget):
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
-            #VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
-            #VerilogHeader = VerilogHeader.replace("&#10;", "\n")
-            #VerilogHeader = VerilogHeader.replace("&amp;", "&")
-            #VerilogHeader = VerilogHeader.replace("&quot;", "\"")
-            #VerilogHeader = VerilogHeader.replace("&apos;", "\'")
-            #VerilogHeader = VerilogHeader.replace("&lt;", "<")
-            #VerilogHeader = VerilogHeader.replace("&#x9;", "\t")
-            #VerilogHeader = VerilogHeader.replace("&gt;", ">")
-            #VerilogHeader = VerilogHeader.replace("&#44;", ",")
+
             VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
             VerilogModel = VerilogModel.replace("&#10;", "\n")
             VerilogModel = VerilogModel.replace("&amp;", "&")
@@ -2263,7 +2246,6 @@ class Generator(QWidget):
             VerilogModel = '\n'.join(filtered_lines)
         entity_name, verilog_code, instances, chatgpt_header, chatgpt_verilog = self.generate_verilog()
         model = VerilogModel
-        #chatgpt_header = VerilogHeader + "\n\n" + chatgpt_header
         chatgpt_verilog = model + "\n\n" + verilog_code
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_backup.v")
