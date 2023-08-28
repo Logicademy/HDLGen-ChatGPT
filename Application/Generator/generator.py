@@ -2076,6 +2076,11 @@ class Generator(QWidget):
                                     note_syntax = note_syntax.replace("$output_signal", signals[0])
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     gen_conc += note_syntax + "\n\n"
+                                    var_name = signals[0]
+                                    pattern = f"(reg)\s*(\[\s*\d+\s*:\s*\d+\s*\])?\s+({var_name})"
+
+                                    # Replace "reg" with "wire" in the matching line
+                                    gen_int_sig = re.sub(pattern, r"wire \2 \3", gen_int_sig)
                                 else:
                                     gen_stmts = ""
                                     conc_syntax = verilog_root.getElementsByTagName("concurrentstmt")[0].firstChild.data
