@@ -131,16 +131,6 @@ class HDLDesigner(QWidget):
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
-                #VHDLHeader = commands_node.getElementsByTagName('VHDLHeader')[0].firstChild.data
-                #VHDLHeader = VHDLHeader.replace("&#10;", "\n")
-                #VHDLHeader = VHDLHeader.replace("&amp;", "&")
-                #VHDLHeader = VHDLHeader.replace("&quot;", "\"")
-                #VHDLHeader = VHDLHeader.replace("&apos;", "\'")
-                #VHDLHeader = VHDLHeader.replace("&lt;", "<")
-                #VHDLHeader = VHDLHeader.replace("&#x9;", "\t")
-                #VHDLHeader = VHDLHeader.replace("&gt;", ">")
-                #VHDLHeader = VHDLHeader.replace("&#44;", ",")
-                #self.HeaderCmd = VHDLHeader
                 VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
                 VHDLModel = VHDLModel.replace("&#10;", "\n")
                 VHDLModel = VHDLModel.replace("&amp;", "&")
@@ -173,16 +163,6 @@ class HDLDesigner(QWidget):
             chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
             if chatgpt.hasChildNodes():
                 commands_node = chatgpt.getElementsByTagName('commands')[0]
-                #VerilogHeader = commands_node.getElementsByTagName('VerilogHeader')[0].firstChild.data
-                #VerilogHeader = VerilogHeader.replace("&#10;", "\n")
-                #VerilogHeader = VerilogHeader.replace("&amp;", "&")
-                #VerilogHeader = VerilogHeader.replace("&quot;", "\"")
-                #VerilogHeader = VerilogHeader.replace("&apos;", "\'")
-                #VerilogHeader = VerilogHeader.replace("&lt;", "<")
-                #VerilogHeader = VerilogHeader.replace("&#x9;", "\t")
-                #VerilogHeader = VerilogHeader.replace("&gt;", ">")
-                #VerilogHeader = VerilogHeader.replace("&#44;", ",")
-                #self.HeaderCmd = VerilogHeader
                 VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
                 VerilogModel = VerilogModel.replace("&#10;", "\n")
                 VerilogModel = VerilogModel.replace("&amp;", "&")
