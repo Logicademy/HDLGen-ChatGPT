@@ -1,7 +1,7 @@
 
 ## 
 ### HDLGen-ChatGPT                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Fearghal Morgan, John Patrick Byrne, Abishek Bupathi
-* Digital Systems Design and Test Plan Capture, VHDL/Verilog Model, Testbench and EDA Project Generation.
+### Digital Systems Design and Test Plan Capture, VHDL/Verilog Model, Testbench and EDA Project Generation.
 * If you use this work, please cite research paper: Fearghal Morgan et al., "HDLGen-ChatGPT Case Study: RISC-V Processor VHDL and Verilog Model, Testbench and EDA Project Generation", 34th International Workshopd on Rapid System Prototyping (RSP), Sept 2023, in press.
 ##
 * [Project Setup instructions](https://tinyurl.com/34srhxjw) : use a Python environment or downlaod/execute application .exe file
@@ -17,4 +17,5 @@
 * HDLGen-ChatGPT / ChatGPT / EDA toolsuite process diagram:
 ![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png)
 * License: MIT - <http://www.opensource.org/licenses/mit-license.ph
+  
 * [Links to online HDL testbench generators](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/Online+HDL+Generator+Examples.pdf)
