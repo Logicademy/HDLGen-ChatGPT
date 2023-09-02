@@ -1,0 +1,322 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<hdlDesign>
+		<mainPackage>
+			<array>
+				<name>reg4x4_Array</name>
+				<depth>4</depth>
+				<width>4</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>reg4x32_Array</name>
+				<depth>4</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>reg32x32_Array</name>
+				<depth>32</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>reg4x1_Array</name>
+				<depth>4</depth>
+				<width>1</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>reg1024x32</name>
+				<depth>1024</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>array4x32</name>
+				<depth>4</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>array32x32</name>
+				<depth>32</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>array128x32</name>
+				<depth>128</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+			<array>
+				<name>array256x32</name>
+				<depth>256</depth>
+				<width>32</width>
+				<signalType>std_logic_vector</signalType>
+			</array>
+		</mainPackage>
+		<components>
+			<component>
+				<model>mux21_1</model>
+				<dir>/combinational/mux21_1/VHDL/model/mux21_1.vhd</dir>
+				<port>sel,in,std_logic</port>
+				<port>muxIn1,in,std_logic</port>
+				<port>muxIn0,in,std_logic</port>
+				<port>muxOut,out,std_logic</port>
+			</component>
+			<component>
+				<model>mux21_4</model>
+				<dir>/combinational/mux21_4/VHDL/model/mux21_4.vhd</dir>
+				<port>mux21_4_In1,in,std_logic_vector(3 downto 0)</port>
+				<port>mux21_4_In0,in,std_logic_vector(3 downto 0)</port>
+				<port>sel,in,std_logic</port>
+				<port>mux21_4_Out,out,std_logic_vector(3 downto 0)</port>
+			</component>
+			<component>
+				<model>singleShot</model>
+				<dir>/sequential/FiniteStateMachines_FSMs/singleShot/VHDL/model/singleShot.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>sw,in,std_logic</port>
+				<port>aShot,out,std_logic</port>
+			</component>
+			<component>
+				<model>memorySys</model>
+				<dir>/multiComponent/memorySys/VHDL/model/memorySys.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>selMemBankToBeWritten,in,std_logic</port>
+				<port>we,in,std_logic</port>
+				<port>add,in,std_logic_vector(1 downto 0)</port>
+				<port>dIn,in,std_logic_vector(3 downto 0)</port>
+				<port>dOut,out,std_logic_vector(3 downto 0)</port>
+				<port>ce,in,std_logic</port>
+				<port>selMemBankToBeRead,in,std_logic</port>
+			</component>
+			<component>
+				<model>threshold</model>
+				<dir>/seq_FSM/threshold/VHDL/model/threshold.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>ce,in,std_logic</port>
+				<port>go,in,std_logic</port>
+				<port>reg4x32_CSRA,in,reg4x32_Array</port>
+				<port>reg4x32_CSRB,in,reg4x32_Array</port>
+				<port>BRAM_dOut,in,std_logic_vector(255 downto 0)</port>
+				<port>active,out,std_logic</port>
+				<port>wr,out,std_logic</port>
+				<port>add,out,std_logic_vector(7 downto 0)</port>
+				<port>datToMem,out,std_logic_vector(31 downto 0)</port>
+				<port>functBus,out,std_logic_vector(95 downto 0)</port>
+			</component>
+			<component>
+				<model>CB4CLED</model>
+				<dir>/sequential/counters/CB4CLED/VHDL/model/CB4CLED.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>load,in,std_logic</port>
+				<port>loadDat,in,std_logic_vector(3 downto 0)</port>
+				<port>ce,in,std_logic</port>
+				<port>up,in,std_logic</port>
+				<port>count,out,std_logic_vector(3 downto 0)</port>
+				<port>TC,out,std_logic</port>
+				<port>ceo,out,std_logic</port>
+			</component>
+			<component>
+				<model>CB32C_maxCount</model>
+				<dir>/sequential/counters/CB32C_maxCount/VHDL/model/CB32C_maxCount.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>ce,in,std_logic</port>
+				<port>ceo,out,std_logic</port>
+				<port>maxCount,in,std_logic_vector(31 downto 0)</port>
+			</component>
+			<component>
+				<model>CB9</model>
+				<dir>/sequential/counters/CB9/VHDL/model/CB9.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>count,out,std_logic_vector(8 downto 0)</port>
+			</component>
+			<component>
+				<model>CB32CE</model>
+				<dir>/sequential/counters/CB32CE/VHDL/model/CB32CE.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>ce,in,std_logic</port>
+				<port>TC,out,std_logic</port>
+				<port>ceo,out,std_logic</port>
+				<port>count,out,std_logic_vector(31 downto 0)</port>
+			</component>
+			<component>
+				<model>singleShotCE</model>
+				<dir>/seq_FSM/singleShotCE/VHDL/model/singleShotCE.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>sw,in,std_logic</port>
+				<port>aShot,out,std_logic</port>
+				<port>ce,in,std_logic</port>
+			</component>
+			<component>
+				<model>multCtrlr</model>
+				<dir>/multiComponent/multiplier/multCtrlr/VHDL/model/multCtrlr.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>ce,in,std_logic</port>
+				<port>goMult,in,std_logic</port>
+				<port>initMult,out,std_logic</port>
+				<port>multCE,out,std_logic</port>
+				<port>multDone,out,std_logic</port>
+				<port>multCtrlrStatus,out,std_logic_vector(2 downto 0)</port>
+			</component>
+			<component>
+				<model>multiplierDatapath</model>
+				<dir>/multiComponent/multiplier/multiplierDatapath/VHDL/model/multiplierDatapath.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>multiplicand,in,std_logic_vector(4 downto 0)</port>
+				<port>multiplier,in,std_logic_vector(4 downto 0)</port>
+				<port>initMult,in,std_logic</port>
+				<port>multCE,in,std_logic</port>
+				<port>multOut,out,std_logic_vector(9 downto 0)</port>
+				<port>multiplierDatapathStatus,out,std_logic_vector(30 downto 0)</port>
+			</component>
+			<component>
+				<model>RISCV_ALU</model>
+				<dir>/RISCV_V1/RISCV_ALU/VHDL/model/RISCV_ALU.vhd</dir>
+				<port>selALUOp,in,std_logic_vector(3 downto 0)</port>
+				<port>A,in,std_logic_vector(31 downto 0)</port>
+				<port>B,in,std_logic_vector(31 downto 0)</port>
+				<port>ALUOut,out,std_logic_vector(31 downto 0)</port>
+				<port>branch,out,std_logic</port>
+			</component>
+			<component>
+				<model>RISCV_RB</model>
+				<dir>/RISCV_V1/RISCV_RB/VHDL/model/RISCV_RB.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>RWr,in,std_logic</port>
+				<port>rd,in,std_logic_vector(4 downto 0)</port>
+				<port>rs1,in,std_logic_vector(4 downto 0)</port>
+				<port>rs2,in,std_logic_vector(4 downto 0)</port>
+				<port>rs1D,out,std_logic_vector(31 downto 0)</port>
+				<port>rs2D,out,std_logic_vector(31 downto 0)</port>
+				<port>WBDat,in,std_logic_vector(31 downto 0)</port>
+				<port>ce,in,std_logic</port>
+			</component>
+			<component>
+				<model>RISCV_PCCU</model>
+				<dir>/RISCV_V1/RISCV_PCCU/VHDL/model/RISCV_PCCU.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>load,in,std_logic</port>
+				<port>loadDat,in,std_logic_vector(31 downto 0)</port>
+				<port>ce,in,std_logic</port>
+				<port>count,out,std_logic_vector(31 downto 0)</port>
+				<port>countPlus4,out,std_logic_vector(31 downto 0)</port>
+			</component>
+			<component>
+				<model>RISCV_IF</model>
+				<dir>/RISCV_V1/RISCV_IF/VHDL/model/RISCV_IF.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>ce,in,std_logic</port>
+				<port>instruction,out,std_logic_vector(31 downto 0)</port>
+				<port>PC,out,std_logic_vector(31 downto 0)</port>
+				<port>PCPlus4,out,std_logic_vector(31 downto 0)</port>
+				<port>selNxtPC,in,std_logic</port>
+				<port>brAdd,in,std_logic_vector(31 downto 0)</port>
+			</component>
+			<component>
+				<model>RISCV_IM</model>
+				<dir>/RISCV_V1/RISCV_IM/VHDL/model/RISCV_IM.vhd</dir>
+				<port>PC,in,std_logic_vector(31 downto 0)</port>
+				<port>instruction,out,std_logic_vector(31 downto 0)</port>
+			</component>
+			<component>
+				<model>RISCV_EX</model>
+				<dir>/RISCV_V1/RISCV_EX/VHDL/model/RISCV_EX.vhd</dir>
+				<port>rs1D,in,std_logic_vector(31 downto 0)</port>
+				<port>rs2D,in,std_logic_vector(31 downto 0)</port>
+				<port>extImm,in,std_logic_vector(31 downto 0)</port>
+				<port>PC,in,std_logic_vector(31 downto 0)</port>
+				<port>brAdd,out,std_logic_vector(31 downto 0)</port>
+				<port>ALUOut,out,std_logic_vector(31 downto 0)</port>
+				<port>DToM,out,std_logic_vector(31 downto 0)</port>
+				<port>branch,out,std_logic</port>
+				<port>selALUOp,in,std_logic_vector(3 downto 0)</port>
+				<port>selB,in,std_logic</port>
+				<port>selA,in,std_logic</port>
+				<port>selBrBaseAdd,in,std_logic</port>
+				<port>selDToM,in,std_logic_vector(1 downto 0)</port>
+			</component>
+			<component>
+				<model>RISCV_WB</model>
+				<dir>/RISCV_V1/RISCV_WB/VHDL/model/RISCV_WB.vhd</dir>
+				<port>DFrM,in,std_logic_vector(31 downto 0)</port>
+				<port>selMToWB,in,std_logic_vector(2 downto 0)</port>
+				<port>selWBDat,in,std_logic_vector(1 downto 0)</port>
+				<port>WBDat,out,std_logic_vector(31 downto 0)</port>
+				<port>PCPlus4,in,std_logic_vector(31 downto 0)</port>
+				<port>ALUOut,in,std_logic_vector(31 downto 0)</port>
+			</component>
+			<component>
+				<model>RISCV_MEM</model>
+				<dir>/RISCV_V1/RISCV_MEM/VHDL/model/RISCV_MEM.vhd</dir>
+				<port>clk,in,std_logic</port>
+				<port>MWr,in,std_logic</port>
+				<port>MRd,in,std_logic</port>
+				<port>DToM,in,std_logic_vector(31 downto 0)</port>
+				<port>DFrM,out,std_logic_vector(31 downto 0)</port>
+				<port>address,in,std_logic_vector(31 downto 0)</port>
+				<port>ce,in,std_logic</port>
+			</component>
+			<component>
+				<model>RISCV_ID</model>
+				<dir>/RISCV_V1/RISCV_ID/VHDL/model/RISCV_ID.vhd</dir>
+				<port>instruction,in,std_logic_vector(31 downto 0)</port>
+				<port>WBDat,in,std_logic_vector(31 downto 0)</port>
+				<port>rs1D,out,std_logic_vector(31 downto 0)</port>
+				<port>rs2D,out,std_logic_vector(31 downto 0)</port>
+				<port>selALUOp,out,std_logic_vector(3 downto 0)</port>
+				<port>selDToM,out,std_logic_vector(1 downto 0)</port>
+				<port>selNxtPC,out,std_logic</port>
+				<port>selMToWB,out,std_logic_vector(2 downto 0)</port>
+				<port>selWBDat,out,std_logic_vector(1 downto 0)</port>
+				<port>MWr,out,std_logic</port>
+				<port>MRd,out,std_logic</port>
+				<port>selA,out,std_logic</port>
+				<port>selB,out,std_logic</port>
+				<port>selBrBaseAdd,out,std_logic</port>
+				<port>ce,in,std_logic</port>
+				<port>clk,in,std_logic</port>
+				<port>rst,in,std_logic</port>
+				<port>extImm,out,std_logic_vector(31 downto 0)</port>
+				<port>branch,in,std_logic</port>
+			</component>
+			<component>
+				<model>RISCV_DEC</model>
+				<dir>/RISCV_V1/RISCV_DEC/VHDL/model/RISCV_DEC.vhd</dir>
+				<port>instruction,in,std_logic_vector(31 downto 0)</port>
+				<port>RWr,out,std_logic</port>
+				<port>rd,out,std_logic_vector(4 downto 0)</port>
+				<port>rs1,out,std_logic_vector(4 downto 0)</port>
+				<port>rs2,out,std_logic_vector(4 downto 0)</port>
+				<port>extImm,out,std_logic_vector(31 downto 0)</port>
+				<port>selA,out,std_logic</port>
+				<port>selB,out,std_logic</port>
+				<port>selALUOp,out,std_logic_vector(3 downto 0)</port>
+				<port>selDToM,out,std_logic_vector(1 downto 0)</port>
+				<port>selBrBaseAdd,out,std_logic</port>
+				<port>selMToWB,out,std_logic_vector(2 downto 0)</port>
+				<port>MWr,out,std_logic</port>
+				<port>MRd,out,std_logic</port>
+				<port>selWBDat,out,std_logic_vector(1 downto 0)</port>
+				<port>selNxtPC,out,std_logic</port>
+				<port>branch,in,std_logic</port>
+			</component>
+		</components>
+	</hdlDesign>
+</HDLGen>

@@ -14,7 +14,7 @@ class ChatGPTHelpDialog(QDialog):
         self.markdown_view.setOpenExternalLinks(True)
 
         self.mainLayout = QVBoxLayout()
-        self.setFixedSize(800, 300)
+        self.setFixedSize(800, 800)
         self.setup_ui()
 
     def setup_ui(self):
