@@ -100,6 +100,21 @@ class VerilogModelDialog(QDialog):
             data = data.replace("&#x9;","\t")
             data = data.replace("&gt;",">")
             data = data.replace("&#44;", ",")
+        # Split the string into lines, filter out empty lines, and join the lines back
+        lines = data.splitlines()
+        non_empty_lines = []
+        consecutive_empty_lines = 0
+
+        for line in lines:
+            if line.strip() == '':
+                consecutive_empty_lines += 1
+                if consecutive_empty_lines <= 1:
+                    non_empty_lines.append(line)
+            else:
+                consecutive_empty_lines = 0
+                non_empty_lines.append(line)
+
+        data = '\n'.join(non_empty_lines)
         self.ChatGPT_model_input.setPlainText(data)
     def get_data(self):
         data = self.ChatGPT_model_input.toPlainText().strip()
@@ -121,4 +136,18 @@ class VerilogModelDialog(QDialog):
     def reset(self):
         self.config.read('config.ini')
         data = self.config.get('user', 'verilogchatgptmodel')
+        lines = data.splitlines()
+        non_empty_lines = []
+        consecutive_empty_lines = 0
+
+        for line in lines:
+            if line.strip() == '':
+                consecutive_empty_lines += 1
+                if consecutive_empty_lines <= 1:
+                    non_empty_lines.append(line)
+            else:
+                consecutive_empty_lines = 0
+                non_empty_lines.append(line)
+
+        data = '\n'.join(non_empty_lines)
         self.ChatGPT_model_input.setPlainText(data)

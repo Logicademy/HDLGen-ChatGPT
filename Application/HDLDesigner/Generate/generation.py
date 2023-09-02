@@ -1,6 +1,7 @@
 #Generation section in HDL Designer. This class will call VHDLModel.py, VerilogModel.py, VHDLTestbench.py, VerilogTestbench.py, generotor.py
 
 import os
+import re
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
@@ -618,11 +619,50 @@ class Gen(QWidget):
             VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
 
             self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
+
+    def getProcessAndConcur(self, proj_dir):
+        processNames=[]
+        concurrentNames=[]
+        proj_name = ProjectManager.get_proj_name()
+        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+
+        root = minidom.parse(proj_dir[0])
+        HDLGen = root.documentElement
+        hdl_design = HDLGen.getElementsByTagName("hdlDesign")
+        arch_node = hdl_design[0].getElementsByTagName("architecture")
+        if len(arch_node) != 0 and arch_node[0].firstChild is not None:
+
+            child = arch_node[0].firstChild
+
+            while child is not None:
+
+                next = child.nextSibling
+
+                if (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "process"):
+                    processNames.append(child.getElementsByTagName("label")[0].firstChild.data)
+                elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
+                    concurrentNames.append(child.getElementsByTagName("label")[0].firstChild.data)
+
+                child = next
+        return processNames, concurrentNames
     def chatgpt_help_window(self):
         chatgpt_help_dialog = ChatGPTHelpDialog()
         chatgpt_help_dialog.exec_()
 
     def vhdl_model_command(self):
+        self.commands[0] = self.remove_and_replaceVHDLProcess(self.commands[0])
+        self.commands[0] = self.remove_and_replaceVerilogConcurrent(self.commands[0])
+        processNames, concurrentNames = self.getProcessAndConcur(self.proj_dir)
+        processText=""
+        concurrentText=""
+        for pname in processNames:
+            processText+="~Complete ONLY the VHDL code for the PROCESS "+pname+" &#44; in a single formatted code box&#10;"
+        for cname in concurrentNames:
+            concurrentText+="~Complete ONLY the VHDL code for the CONCURRENT STATEMENT "+cname+" &#44; in a single formatted code box&#10;"
+        if processText != "":
+            self.commands[0]=self.commands[0].replace("~***Reserved for processes***",processText)
+        if concurrentText != "":
+            self.commands[0] = self.commands[0].replace("~***Reserved for concurrent statements***", concurrentText)
         vhdl_model = VHDLModelDialog("edit", self.commands[0])
         vhdl_model.exec_()
 
@@ -632,6 +672,19 @@ class Gen(QWidget):
         self.save_data()
 
     def verilog_model_command(self):
+        self.commands[1] = self.remove_and_replaceVerilogProcess(self.commands[1])
+        self.commands[1] = self.remove_and_replaceVerilogConcurrent(self.commands[1])
+        processNames, concurrentNames = self.getProcessAndConcur(self.proj_dir)
+        processText = ""
+        concurrentText = ""
+        for pname in processNames:
+            processText += "~Complete ONLY the Verilog code for the PROCESS " + pname + " &#44; in a single formatted code box&#10;"
+        for cname in concurrentNames:
+            concurrentText += "~Complete ONLY the Verilog code for the CONCURRENT STATEMENT " + cname + " &#44; in a single formatted code box&#10;"
+        if processText != "":
+            self.commands[1] = self.commands[1].replace("~***Reserved for processes***", processText)
+        if concurrentText != "":
+            self.commands[1] = self.commands[1].replace("~***Reserved for concurrent statements***", concurrentText)
         verilog_model = VerilogModelDialog("edit", self.commands[1])
         verilog_model.exec_()
 
@@ -640,6 +693,101 @@ class Gen(QWidget):
             self.commands[1] = verilog_model
         self.save_data()
 
+    def remove_and_replaceVHDLProcess(self, text):
+        self.match_count = 0
+        self.input_string = text
+
+        # Define the regex pattern to match
+        pattern = r'(?:~)?Complete ONLY the VHDL code for the PROCESS (\w+) &#44; in a single formatted code box'
+
+        # Find all matches
+        matches = re.finditer(pattern, self.input_string)
+        self.total_matches = sum(1 for _ in matches)  # Count total matches
+        # Process each line and build the output string
+        output_lines = []
+        for line in self.input_string.split('&#10;'):
+            line = re.sub(pattern, self.replace_with_reserved_process, line)
+            #if line.strip():  # Only add non-empty lines
+            output_lines.append(line)
+
+        # Combine the lines into the final output
+        self.output_string = '&#10;'.join(output_lines)
+        return self.output_string
+
+    def remove_and_replaceVHDLConcurrent(self, text):
+        self.match_count = 0
+        self.input_string = text
+
+        # Define the regex pattern to match
+        pattern = r'(?:~)?~Complete ONLY the VHDL code for the CONCURRENT STATEMENT (\w+) &#44; in a single formatted code box'
+
+        # Find all matches
+        matches = re.finditer(pattern, self.input_string)
+        self.total_matches = sum(1 for _ in matches)  # Count total matches
+        # Process each line and build the output string
+        output_lines = []
+        for line in self.input_string.split('&#10;'):
+            line = re.sub(pattern, self.replace_with_reserved_concurrent, line)
+            #if line.strip():  # Only add non-empty lines
+            output_lines.append(line)
+
+        # Combine the lines into the final output
+        output_string = '&#10;'.join(output_lines)
+        return output_string
+    def replace_with_reserved_process(self, match):
+        self.match_count += 1
+        if self.match_count == self.total_matches:
+            return "~***Reserved for processes***"
+        else:
+            return ''
+
+    def remove_and_replaceVerilogProcess(self, text):
+        self.match_count = 0
+        self.input_string = text
+
+        # Define the regex pattern to match
+        pattern = r'(?:~)?Complete ONLY the Verilog code for the PROCESS (\w+) &#44; in a single formatted code box'
+
+        # Find all matches
+        matches = re.finditer(pattern, self.input_string)
+        self.total_matches = sum(1 for _ in matches)  # Count total matches
+        # Process each line and build the output string
+        output_lines = []
+        for line in self.input_string.split('&#10;'):
+            line = re.sub(pattern, self.replace_with_reserved_process, line)
+            #if line.strip():  # Only add non-empty lines
+            output_lines.append(line)
+
+        # Combine the lines into the final output
+        output_string = '&#10;'.join(output_lines)
+        return output_string
+
+    def remove_and_replaceVerilogConcurrent(self, text):
+        self.match_count = 0
+        self.input_string = text
+
+        # Define the regex pattern to match
+        pattern = r'(?:~)?~Complete ONLY the Verilog code for the CONCURRENT STATEMENT (\w+) &#44; in a single formatted code box'
+
+        # Find all matches
+        matches = re.finditer(pattern, self.input_string)
+        self.total_matches = sum(1 for _ in matches)  # Count total matches
+        # Process each line and build the output string
+        output_lines = []
+        for line in self.input_string.split('&#10;'):
+            line = re.sub(pattern, self.replace_with_reserved_concurrent, line)
+            #if line.strip():  # Only add non-empty lines
+            output_lines.append(line)
+
+        # Combine the lines into the final output
+        output_string = '&#10;'.join(output_lines)
+        return output_string
+    def replace_with_reserved_concurrent(self, match):
+        self.match_count += 1
+        if self.match_count == self.total_matches:
+            return "~***Reserved for concurrent statements***"
+        else:
+            return ''
     def vhdl_testbench_command(self):
         vhdl_testbench = VHDLTestbenchDialog("edit", self.commands[2])
         vhdl_testbench.exec_()
