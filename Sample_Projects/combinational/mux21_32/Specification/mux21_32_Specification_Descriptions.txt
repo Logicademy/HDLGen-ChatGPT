@@ -1,0 +1,15 @@
+Design specification for component 
+
+Name mux21_32
+Title 2-to-1 multiplexer, 32-bit data
+
+Description muxOut = muxIn0 (default)
+Assertion of sel selects muxOut = muxIn1
+
+Component signal dictionary
+sel	datapath select, '0'/'1' passes muxIn1/0 data to muxOut
+muxIn1	datapath 1, 32-bit
+muxIn0	datapath 0, 32-bit
+muxOut	output data, 32-bit
+
+Internal signal dictionary  None

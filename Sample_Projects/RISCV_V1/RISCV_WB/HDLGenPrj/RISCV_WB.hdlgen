@@ -1,0 +1,118 @@
+<?xml version="1.0" ?>
+<HDLGen>
+	<genFolder>
+		<vhdl_folder>RISCV_WB/VHDL/model</vhdl_folder>
+		<vhdl_folder>RISCV_WB/VHDL/testbench</vhdl_folder>
+		<vhdl_folder>RISCV_WB/VHDL/ChatGPT</vhdl_folder>
+		<vhdl_folder>RISCV_WB/VHDL/ChatGPT/Backups</vhdl_folder>
+		<vhdl_folder>RISCV_WB/VHDL/AMDprj</vhdl_folder>
+	</genFolder>
+	<projectManager>
+		<settings>
+			<name>RISCV_WB</name>
+			<environment>C:/Users/User/HDLGen/Sample_Projects</environment>
+			<location>C:/Users/User/HDLGen/Sample_Projects/RISCV_V1</location>
+			<info>None</info>
+		</settings>
+		<EDA>
+			<tool>
+				<name>Xilinx Vivado</name>
+				<dir>C:/Xilinx/Vivado/2019.1/bin/vivado.bat</dir>
+				<version>2019.1</version>
+			</tool>
+		</EDA>
+		<HDL>
+			<language>
+				<name>VHDL</name>
+			</language>
+		</HDL>
+	</projectManager>
+	<hdlDesign>
+		<header>
+			<compName>RISCV_WB</compName>
+			<title>RISC-V writeback (WB) stage </title>
+			<description>selWBDat   WBDat&amp;#10;00              ALUOut &amp;#10;01              MToWB&amp;#10;10              PCPlus4&amp;#10;&amp;#10;selMToWB  MToWB&amp;#10;000               DFrM&amp;#10;001               16{DFrM(15)} &amp;amp; &amp;quot;0000&amp;quot; &amp;amp; DFrM(15:0)&amp;#10;010               24{DFrM(7)} &amp;amp; DFrM(7:0)&amp;#10;011               x&amp;quot;0000&amp;quot; &amp;amp; DFrM(15:0)&amp;#10;100               x&amp;quot;000000&amp;quot; &amp;amp; DFrM(7:0)&amp;#10;Other            0</description>
+			<authors>Fearghal Morgan</authors>
+			<company>University of Galway</company>
+			<email>fearghal.morgan@universityofgalway.ie</email>
+			<date>02/09/2023</date>
+		</header>
+		<clkAndRst/>
+		<entityIOPorts>
+			<signal>
+				<name>DFrM</name>
+				<mode>in</mode>
+				<type>bus(31 downto 0)</type>
+				<description>Combinationally read data from memory &amp;#10;DFrM = memory(ALUOut)</description>
+			</signal>
+			<signal>
+				<name>selMToWB</name>
+				<mode>in</mode>
+				<type>bus(2 downto 0)</type>
+				<description>select MToWB datapath&amp;#10;&amp;#10;selMToWB  MToWB&amp;#10;000               DFrM&amp;#10;001               16{DFrM(15)} &amp; &quot;0000&quot; &amp; DFrM(15:0)&amp;#10;010               24{DFrM(7)} &amp; DFrM(7:0)&amp;#10;011               x&quot;0000&quot; &amp; DFrM(15:0)&amp;#10;100               x&quot;000000&quot; &amp; DFrM(7:0)&amp;#10;Other            0</description>
+			</signal>
+			<signal>
+				<name>selWBDat</name>
+				<mode>in</mode>
+				<type>bus(1 downto 0)</type>
+				<description>Select WBDat datapath
+&amp;#10;&amp;#10;selWBDat   WBDat&amp;#10;00              ALUOut &amp;#10;01              MToWB&amp;#10;10              PCPlus4</description>
+			</signal>
+			<signal>
+				<name>WBDat</name>
+				<mode>out</mode>
+				<type>bus(31 downto 0)</type>
+				<description>Writeback data to be synchronously written to register bank</description>
+			</signal>
+			<signal>
+				<name>PCPlus4</name>
+				<mode>in</mode>
+				<type>bus(31 downto 0)</type>
+				<description>PC + 4&amp;#44; the address of the next instruction</description>
+			</signal>
+			<signal>
+				<name>ALUOut</name>
+				<mode>in</mode>
+				<type>bus(31 downto 0)</type>
+				<description>Arithmetic logic unit data output</description>
+			</signal>
+		</entityIOPorts>
+		<internalSignals>
+			<signal>
+				<name>MToWB</name>
+				<type>bus(31 downto 0)</type>
+				<description>Memory output datapath</description>
+			</signal>
+		</internalSignals>
+		<architecture>
+			<archName>Combinational</archName>
+			<process>
+				<label>MToWB_p</label>
+				<inputSignal>DFrM</inputSignal>
+				<inputSignal>selMToWB</inputSignal>
+				<defaultOutput>MToWB,DFrM</defaultOutput>
+				<note>case selMtoWB&amp;#10;001     begin&amp;#10;            MToWB(31:16) = {16{DFrM(15)}} -- assign each bit (31:16) to DFrM(15)&amp;#10;            MToWB(15:0) = DFrM(15:0)&amp;#10;          end&amp;#10;010     begin&amp;#10;            MToWB(31:8) = {24{DFrM(7)}} -- assign each bit (31:16) to DFrM(7)&amp;#10;            MToWB( 7:0) = DFrM( 7:0)&amp;#10;          end &amp;#10;&amp;#10;011     begin&amp;#10;            MToWB(31:16) = 16{0} &amp;#10;            MToWB(15:0) = DFrM(15:0)&amp;#10;           end&amp;#10;&amp;#10;100      begin &amp;#10;              MToWB(31:8) = 24{0}&amp;#10;              MToWB( 7:0) = DFrM( 7:0)&amp;#10;           end&amp;#10;end case</note>
+			</process>
+			<process>
+				<label>WBDat_p</label>
+				<inputSignal>selWBDat</inputSignal>
+				<inputSignal>PCPlus4</inputSignal>
+				<inputSignal>ALUOut</inputSignal>
+				<inputSignal>MToWB</inputSignal>
+				<defaultOutput>WBDat,MToWB</defaultOutput>
+				<note>case selWBDat &amp;#10;00  WBDat = ALUOut &amp;#10;01  WBDat = MToWB&amp;#10;10  WBDat = PCPlus4&amp;#10;end case</note>
+			</process>
+		</architecture>
+		<testbench>
+			<TBNote>Inputs          selWBDat ALUOut   DFrM     selMToWB PCPlus4&amp;#10;Outputs                                    &amp;#x9;&amp;#x9;&amp;#x9;&amp;#x9;&amp;#x9; WBDat&amp;#10;TestNo  delay   2&amp;apos;b      32&amp;apos;h     32&amp;apos;h     3&amp;apos;b      32&amp;apos;h     32&amp;apos;h     Note on WBDat&amp;#10;1       1       00       5a5a5a5a deadbeef 000      c001cafe 5a5a5a5a ALUOut&amp;#10;2       1       00       a5a5a5a5 deadbeef 000      c001cafe a5a5a5a5  &amp;#10;3       1       01       a5a5a5a5 deadbeef 000      c001cafe deadbeef DFrM lw&amp;#10;4       1       01       a5a5a5a5 deadbeef 001      c001cafe ffffbeef DFrM lh&amp;#10;5       1       01       a5a5a5a5 deadbeef 010      c001cafe ffffffef DFrM lb&amp;#10;6       1       01       a5a5a5a5 deadbeef 011      c001cafe 0000beef DFrM lhu&amp;#10;7       1       01       a5a5a5a5 deadbeef 100      c001cafe 00000000 0&amp;#10;8       1       01       a5a5a5a5 deadbeef 101      c001cafe 00000000 0&amp;#10;9       1       01       a5a5a5a5 deadbeef 110      c001cafe 00000000 0&amp;#10;10      1       01       a5a5a5a5 deadbeef 111      c001cafe 00000000 0&amp;#10;11      1       10       a5a5a5a5 deadbeef 000      c001cafe c001cafe PCPlus4&amp;#10;12      1       11       a5a5a5a5 deadbeef 000      c001cafe 00000000 0</TBNote>
+		</testbench>
+		<chatgpt>
+			<commands>
+				<VHDLModel>Complete the following VHDL model&amp;#44; and output in a single formatted code box.&amp;#10;&amp;#10;Do not remove any comments beginning with &amp;apos;-- &amp;apos;&amp;#44; i.e&amp;#44; only two dashes&amp;#10;&amp;#10;For each line between -- Title section start and -- Title section end&amp;#44; improve the text formatting&amp;#10;&amp;#10;For each line containing the prefix &amp;apos;--- &amp;apos;&amp;#44; generate VHDL code describing the logic&amp;#44; applying the following rules&amp;#10;For arithmetic operations&amp;#44; use type casting to support signal type requirements in ieee.numeric_std arithmetic functions.&amp;#10;&amp;#10;&amp;#10;If a line includes a std_logic_vector signal as an array index&amp;#44; convert the signal to an integer index using &amp;quot;ieee.numeric_std&amp;quot; package to_integer(unsigned()).&amp;#10;&amp;#10;Convert shift_left and shift_right function outputs to signal type std_logic_vector.&amp;#10;&amp;#10;Only use ieee.numeric_std package shift_left or shift_right functions&amp;#44; and do not use sra&amp;#44; srl&amp;#44; sll&amp;#44; shift_right_arithmetic functions&amp;#44; introduced in IEEE VHDL-2008&amp;#10;&amp;#10;Use hexadecimal signal format where the number of bits in the assignment is a multiple of 4&amp;#44; extending the hex value to the full width of the target signal.&amp;#10;Use X&amp;quot;0000&amp;quot; format to describe a hexadecimal constant assignment&amp;#44; rather than 16#0000#.&amp;#10;&amp;#10;For assignments such as sigOut = 16{sigIn}&amp;#44; which describes an assignment of each bit of a 16-bit signal sigOut slice to a single-bit signal sigIn&amp;#44; where sigIn can be constant 0&amp;#44; 1 or a signal name&amp;#44; use a VHDL &amp;apos;for loop&amp;#44; end loop&amp;apos; to assign each bit of the sigOut slice to the sigIn value.&amp;#10;An example is MToWB(31 downto 16) = 16(DFrM(15)) generates&amp;#10;for i in 31 downto 16 loop&amp;#10;MToWB(i) &amp;lt;= DFrM(15);&amp;#10;end loop;&amp;#10;&amp;#10;If a line includes a &amp;gt;&amp;gt;&amp;gt; shift right arithmetic operation&amp;#44; use ieee.numeric_std package shift_right function&amp;#44; assuming signed data.&amp;#10;&amp;#10;Leave all labels unchanged.&amp;#10;&amp;#10;For each line containing &amp;apos;_c:&amp;apos; in the label&amp;#44; generate a concurrent VHDL statement&amp;#44; do not generate a process statement&amp;#44; do not remove the label&amp;#44; remove the &amp;apos;---&amp;apos;&amp;#44; and remove &amp;apos;-- Default assignment&amp;apos;&amp;#10;&amp;#10;Remove all assignments in if or case statements which duplicate the default assignment.&amp;#10;Including null in others case statement if a default assignment is included in a case statement&amp;#10;&amp;#10;&amp;#10;In assignments which include signals with one bit extension&amp;#44; e.g&amp;#44; (0 &amp;amp; CSUpr) or  (1 &amp;amp; CSUpr)&amp;#44; use single quotes around the single bit value 0 or 1. Do not add &amp;quot;&amp;quot;.&amp;#10;For example&amp;#44; generate (&amp;apos;0&amp;apos; &amp;amp; CSUpr) from VHDL (0 &amp;amp; CSUpr)&amp;#10;&amp;#10;Remove the &amp;apos;--- &amp;apos;  prefix from the line.&amp;#10;&amp;#10;Do not remove any library statements&amp;#44; do not add any new library &amp;apos;use&amp;apos; statements&amp;#44; to avoid conflicts with the ieee.numeric_std package functions.&amp;#10;&amp;#10;For all case statements&amp;#44; include &amp;quot;when others =&amp;gt; null;&amp;quot; before every occurrence of an &amp;quot;end case&amp;quot; statement.&amp;#10;&amp;#10;Only use VHDL which is support by the IEEE VHDL-1987 standard.&amp;#10;&amp;#10;Within all VHDL processes&amp;#44; do not remove the line containing &amp;apos;-- Default assignment&amp;apos;&amp;#44; and place it immediately before the VHDL statements generated for lines containing prefix &amp;apos;--- &amp;apos;.&amp;#10;&amp;#10;In all VHDL processes&amp;#44; replace each conditional when else statement with a case statement or an if statement&amp;#44; without removing any signal state check&amp;#44; and not including any assignments which duplicate the assignment labelled &amp;apos;-- Default assignment&amp;apos;&amp;#10;&amp;#10;For all VHDL case statements&amp;#44; include &amp;quot;when others =&amp;gt; null;&amp;quot; before every occurrence of an &amp;quot;end case&amp;quot; statement.</VHDLModel>
+				<VerilogModel># This ChatGPT message header is used with the HDLGen-generated HDL model template (which can include pseudo code logic descriptions) to generate the complete HDL model.&amp;#10;&amp;#10;Complete the following Verilog model&amp;#44; and output in a single formatted code box.&amp;#10;&amp;#10;For each line between // Title section start and // Title section end&amp;#44; improve formatting of the text.&amp;#10;&amp;#10;Do not include input or output keywords in the module declaration&amp;#10;&amp;#10;For each line containing the prefix &amp;apos;///&amp;apos;&amp;#44; replace with generated Verilog code for the logic described&amp;#44; and remove the &amp;apos;///&amp;apos;.&amp;#10;&amp;#10;For each line containing &amp;apos;_c:&amp;apos; in the label&amp;#44; do not generate a sequential statement&amp;#44; do not remove the label containing &amp;apos;_c:&amp;apos;&amp;#44; remove the &amp;apos;///&amp;apos;&amp;#44; and remove &amp;apos;// Default assignment&amp;apos;&amp;#10;&amp;#10;In VERILOG processes&amp;#44; do not remove the line containing suffix &amp;apos;// Default assignment&amp;apos;&amp;#44; and place it immediately before the VERILOG statements generated for lines containing prefix &amp;apos;/// &amp;apos;.&amp;#10;Place the line containing suffix &amp;apos;// Default assignment&amp;apos; immediately before the VERILOG if statement in lines containing prefix &amp;apos;///&amp;apos;.&amp;#10;Use for loop (format for (i=0; i&amp;lt;32; i=i+1) around complete array signal assignments.&amp;#10;&amp;#10;Leave all labels unchanged.&amp;#10;Place the Verilog process line containing &amp;apos;// Default assignment&amp;apos;&amp;#44; unchanged&amp;#44; and immediately before the VHDL logic generated for lines containing prefix &amp;apos;///&amp;apos;.&amp;#10;Do not output the lines containing prefix &amp;apos;///&amp;apos;.&amp;#10;&amp;#10;&amp;#10;&amp;#10;&amp;#10;Include &amp;lt;= operator in assignments.&amp;#10;Make assignment bit widths compatible.&amp;#10;&amp;#10;Keep all { and } characters in the generated Verilog&amp;#10;Keep case assignments separate&amp;#44; as specified in the ChatGPT prompt.&amp;#10;&amp;#10;&amp;#10;&amp;#10;For &amp;lt;&amp;lt;&amp;lt; shift right arithmetic assignment&amp;#44; apply the shift operation on the signed signal value&amp;#44; using $signed()&amp;#10;Remove all lines which contain default:&amp;#10;&amp;#10;&amp;#10;=== For reference. Ignore the following lines.&amp;#10;=== List of Optional ChatGPT messages&amp;#44; which can be submitted individually after the above ChatGPT message&amp;#44; if the Chat GPT output is not fully correct.&amp;#10;Repeat&amp;#44; without outputting lines between &amp;apos;-- Title section start&amp;apos; and &amp;apos;-- Title section end&amp;apos;</VerilogModel>
+				<VHDLTestbench># This ChatGPT message header is used with the testbench signal declarations and test plan to generate the complete HDL testbench.&amp;#10;&amp;#10;In the table&amp;#44;&amp;#10;Input signal names are included in row 1&amp;#44; output signal names are included in row 2&amp;#44; signal radix is included in row 3.&amp;#10;TestNo is included in column 1&amp;#44; delay is included in column 3&amp;#10;&amp;#10;Create a single VHDL process stim_p&amp;#44; in a formatted code box&amp;#44; starting at row 4&amp;#44; and including the following&amp;#10;TestNo.&amp;#10;Comment in the Note column.&amp;#10;Assignment of every input signal&amp;#44; irrespective of its value. Do not assign any output signals. Use hexadecimal if signal format is greater or equal to 32 bits.&amp;#10;wait for (delay  * period); statement&amp;#44; where delay can be integer or real&amp;#44; after all signal stimulus for the row have been assigned&amp;#44; using delay value in the delay column&amp;#44; with brackets () around (delay * period).&amp;#10;Test if each output signal value (though not input signal values) matches the value included in its corresponding row&amp;#44; outputting a fail message if it does not match.</VHDLTestbench>
+				<VerilogTestbench># This ChatGPT message header is used with the testbench signal declarations and test plan to generate the complete HDL testbench.&amp;#10;&amp;#10;In the table&amp;#44;&amp;#10;Input signal names are included in row 1&amp;#44; output signal names are included in row 2&amp;#44; signal radix is included in row 3.&amp;#10;TestNo is included in column 1&amp;#44; delay is included in column 3&amp;#10;&amp;#10;Create a single VERILOG initial statement&amp;#44; in a formatted code box&amp;#44; starting at row 4&amp;#44; and including the following:&amp;#10;TestNo.&amp;#10;Comment taken from the Note column.&amp;#10;Assignment of every input signal&amp;#44; irrespective of its value.&amp;#10;Do not assign any output signals.&amp;#10;&amp;quot;# (delay value)&amp;quot; statement&amp;#44; where delay can be integer or real&amp;#44; after all signal stimulus for the row have been assigned&amp;#44; using delay value in the delay column&amp;#44; with brackets () around (delay * period)&amp;#44; not including any character before the # character&amp;#44; and not including TestNo in the line.&amp;#10;Test if each output signal value (though not input signal values) matches the value included in its corresponding row&amp;#44; outputting a fail message if it does not match.</VerilogTestbench>
+			</commands>
+		</chatgpt>
+	</hdlDesign>
+</HDLGen>
