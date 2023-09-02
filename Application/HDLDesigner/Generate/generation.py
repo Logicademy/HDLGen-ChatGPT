@@ -639,10 +639,8 @@ class Gen(QWidget):
                 next = child.nextSibling
 
                 if (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "process"):
-                    print(child.getElementsByTagName("label")[0].firstChild.data)
                     processNames.append(child.getElementsByTagName("label")[0].firstChild.data)
                 elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "concurrentStmt"):
-                    print(child.getElementsByTagName("label")[0].firstChild.data)
                     concurrentNames.append(child.getElementsByTagName("label")[0].firstChild.data)
 
                 child = next
@@ -705,7 +703,6 @@ class Gen(QWidget):
         # Find all matches
         matches = re.finditer(pattern, self.input_string)
         self.total_matches = sum(1 for _ in matches)  # Count total matches
-        print(self.total_matches)
         # Process each line and build the output string
         output_lines = []
         for line in self.input_string.split('&#10;'):
@@ -727,7 +724,6 @@ class Gen(QWidget):
         # Find all matches
         matches = re.finditer(pattern, self.input_string)
         self.total_matches = sum(1 for _ in matches)  # Count total matches
-        print(self.total_matches)
         # Process each line and build the output string
         output_lines = []
         for line in self.input_string.split('&#10;'):
@@ -755,7 +751,6 @@ class Gen(QWidget):
         # Find all matches
         matches = re.finditer(pattern, self.input_string)
         self.total_matches = sum(1 for _ in matches)  # Count total matches
-        print(self.total_matches)
         # Process each line and build the output string
         output_lines = []
         for line in self.input_string.split('&#10;'):
@@ -777,7 +772,6 @@ class Gen(QWidget):
         # Find all matches
         matches = re.finditer(pattern, self.input_string)
         self.total_matches = sum(1 for _ in matches)  # Count total matches
-        print(self.total_matches)
         # Process each line and build the output string
         output_lines = []
         for line in self.input_string.split('&#10;'):
