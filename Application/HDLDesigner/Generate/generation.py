@@ -651,7 +651,7 @@ class Gen(QWidget):
 
     def vhdl_model_command(self):
         self.commands[0] = self.remove_and_replaceVHDLProcess(self.commands[0])
-        self.commands[0] = self.remove_and_replaceVerilogConcurrent(self.commands[0])
+        self.commands[0] = self.remove_and_replaceVHDLConcurrent(self.commands[0])
         processNames, concurrentNames = self.getProcessAndConcur(self.proj_dir)
         processText=""
         concurrentText=""
@@ -719,7 +719,7 @@ class Gen(QWidget):
         self.input_string = text
 
         # Define the regex pattern to match
-        pattern = r'(?:~)?~Complete ONLY the VHDL code for the CONCURRENT STATEMENT (\w+) &#44; in a single formatted code box'
+        pattern = r'(?:~)?Complete ONLY the VHDL code for the CONCURRENT STATEMENT (\w+) &#44; in a single formatted code box'
 
         # Find all matches
         matches = re.finditer(pattern, self.input_string)
@@ -734,6 +734,7 @@ class Gen(QWidget):
         # Combine the lines into the final output
         output_string = '&#10;'.join(output_lines)
         return output_string
+
     def replace_with_reserved_process(self, match):
         self.match_count += 1
         if self.match_count == self.total_matches:
@@ -767,7 +768,7 @@ class Gen(QWidget):
         self.input_string = text
 
         # Define the regex pattern to match
-        pattern = r'(?:~)?~Complete ONLY the Verilog code for the CONCURRENT STATEMENT (\w+) &#44; in a single formatted code box'
+        pattern = r'(?:~)?Complete ONLY the Verilog code for the CONCURRENT STATEMENT (\w+) &#44; in a single formatted code box'
 
         # Find all matches
         matches = re.finditer(pattern, self.input_string)
