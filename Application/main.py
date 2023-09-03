@@ -13,17 +13,13 @@ import configparser
 
 APP_AUTHORS = "Created by Fearghal Morgan, Abishek Bupathi & JP Byrne"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
-APP_DESCRIPTION = "<ul><li>Open source application</li>" \
-                 "<li>Fast capture of design and test plan capture from design and test specifications</li>" \
-                 "<li>Generate HDL model and testbench templates and low-level logic pseudo code</li>" \
-                 "<li>Integrate within ChatGPT message<ul>" \
-                 "<li>HDL model completion</li>" \
-                 "<li>HDL testbench stimulus and signal checking</li></ul></li>" \
-                 "<li>Supports<ul>" \
-                 "<li>VHDL and Verilog</li>" \
-                 "<li>AMD Vivado and Intel Quartus Electronic Design Automation tools</li>" \
-                 "<li>Design hierarchy</li></ul></li>" \
-                 "<li>EDA project creation and launch"
+APP_DESCRIPTION = "<ul><li>Open source application and tutorials found on <a href='https://github.com/fearghal1/HDLGen'>GitHub</a></li>" \
+                 "<li>Fast digital systems design capture from design and test specifications</li>" \
+                 "<li>Generate HDL model templates and low-level logic pseudo code</li>" \
+                 "<li>Generate HDL testbench templates (stimulus and signal checking)</li>" \
+                 "<li>Assemble <a href='https://chat.openai.com/auth/login'>ChatGPT</a> prompt<li>" \
+                 "<li>Execute <a href='https://chat.openai.com/auth/login'>ChatGPT</a> prompts to complete HDL model and testbench stimulus / signal checking</li>" \
+                 "<li>Create EDA project, simulate HDL, synthesis HDL, prototype FPGA hardware</li>"
 
 APP_DESCRIPTION1 = "<ul><li>Fast capture and generation of HDL model and testbench templates</li>" \
                  "<li>Generation of ChatGPT messages, including header and HDL templates</li>" \
@@ -94,10 +90,12 @@ class HDLGen(QMainWindow):
         self.hdlgen_logo_1.setAlignment(Qt.AlignCenter)
         self.app_description = QLabel(APP_DESCRIPTION)
         self.app_description.setFont(text_font)
+        self.app_description.linkActivated.connect(self.link)
         self.processphoto = QLabel()
         curr_direct = os.getcwd()
         photo_direct = curr_direct + "/Resources/processdiagram.png"
         pixmap = QPixmap(photo_direct)
+
         self.processphoto.setPixmap(pixmap)
         "https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf"
         self.tutorial_link = QLabel(
@@ -109,7 +107,7 @@ class HDLGen(QMainWindow):
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
         self.github_link.linkActivated.connect(self.link)
-        self.vici_link = QLabel('<a href="https://vicilogic.com">VICILOGIC</a> Online learning, assessment and remote hardware prototyping and course builder')
+        self.vici_link = QLabel('<a href="https://vicilogic.com">VICILOGIC</a> online courses: digital systems design and RISC-V architecture and applications')
         self.vici_link.setFont(text_font)
         self.vici_link.linkActivated.connect(self.link)
         self.chatgpt_link = QLabel('<a href="https://chat.openai.com/auth/login">ChatGPT</a> Online large language model-based chatbot developed by OpenAI')
@@ -131,7 +129,7 @@ class HDLGen(QMainWindow):
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
 
         self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
-        self.info_layout.addWidget(self.hdlgen_logo_1, alignment=Qt.AlignCenter)
+        #self.info_layout.addWidget(self.hdlgen_logo_1, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         #self.info_layout.addWidget(self.app_authors, alignment=Qt.AlignCenter)
         #self.info_layout.addSpacerItem(QSpacerItem(1, 25))
@@ -143,14 +141,14 @@ class HDLGen(QMainWindow):
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addLayout(self.button_layout)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-        self.info_layout.addWidget(self.tutorial_link, alignment=Qt.AlignCenter)
-        self.info_layout.addSpacerItem(QSpacerItem(1, 10))
-        self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
-        self.info_layout.addSpacerItem(QSpacerItem(1, 10))
+        #self.info_layout.addWidget(self.tutorial_link, alignment=Qt.AlignCenter)
+        #self.info_layout.addSpacerItem(QSpacerItem(1, 10))
+        #self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
+        #self.info_layout.addSpacerItem(QSpacerItem(1, 10))
         self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
-        self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
-        self.info_layout.addSpacerItem(QSpacerItem(1, 50))
+        #self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
+        #self.info_layout.addSpacerItem(QSpacerItem(1, 50))
 
        # self.mainLayout.addLayout(self.button_layout)
         self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)
@@ -198,6 +196,7 @@ class HDLGen(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     window = HDLGen()
+    window.move(0, 0)
     window.show()
     app.setStyle('windowsvista')
     app.exec_()
