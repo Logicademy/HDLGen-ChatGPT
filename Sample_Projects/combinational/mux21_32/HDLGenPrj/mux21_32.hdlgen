@@ -73,7 +73,7 @@
 				<inputSignal>muxIn1</inputSignal>
 				<inputSignal>muxIn0</inputSignal>
 				<defaultOutput>muxOut,muxIn0</defaultOutput>
-				<note>if sel = 1 muxOut = muxIn1&amp;#10;mux = 16{0}&amp;#10;extImm[31:20] = 12 {instruction[31]}</note>
+				<note>if sel = 1 muxOut = muxIn1</note>
 			</process>
 		</architecture>
 		<testbench>
