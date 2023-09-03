@@ -5,7 +5,9 @@
 * If you use this work, please cite research paper: Fearghal Morgan et al., "HDLGen-ChatGPT Case Study: RISC-V Processor VHDL and Verilog Model, Testbench and EDA Project Generation", 34th International Workshop on Rapid System Prototyping (RSP), Sept 2023, in press.
 ##
 * [Install HDLGen-ChatGPT](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/Install+HDLGen-ChatGPT.pdf) : Setup/use a Python environment or download/execute application .exe file
-* [Tutorials](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen-ChatGPT+Tutorials.pdf) : Using HDLGen-ChatGPT / ChatGPT on a range of digital component designs, including RV32I RISC-V processor design
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+git clone https://github.com/fearghal1/HDLGen-ChatGPT.git
+* [Tutorials](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen-ChatGPT+Tutorials.pdf) : using HDLGen-ChatGPT / ChatGPT on a range of digital component designs, including RV32I RISC-V processor design
 * [HDLGen-ChatGPT logic pseudo code capture guidelines](https://tinyurl.com/4x53f828)
 * [Latest ChatGPT prompt headers](https://tinyurl.com/4x53f828)
 * [User experiences](https://tinyurl.com/4x53f828)
@@ -16,5 +18,4 @@
 * HDLGen-ChatGPT / ChatGPT / EDA toolsuite process diagram:
 ![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png)
 * License: MIT - <http://www.opensource.org/licenses/mit-license.ph
-  
 * [Links to online HDL testbench generators](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/Online+HDL+Generator+Examples.pdf)
