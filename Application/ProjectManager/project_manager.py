@@ -380,6 +380,8 @@ class ProjectManager(QWidget):
             parent_path = path.parent.absolute()
             self.proj_enviro = os.path.join(parent_path, "User_Projects")
             self.proj_dir = os.path.join(parent_path, "User_Projects")
+            self.config.set("user", "recentEnviro", self.proj_enviro)
+
 
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_enviro_input.setText(self.proj_enviro)
@@ -777,6 +779,7 @@ class ProjectManager(QWidget):
         self.MainWindow.close()
         if self.MainWindow.isVisible() == False:
             self.window = HDLGen()
+            self.window.move(0, 0)
             self.window.show()
         print("Project Closed!")
 
@@ -885,7 +888,7 @@ class ProjectManager(QWidget):
                 self.verilog_check.setChecked(True)
                 ProjectManager.hdl = "Verilog"
         self.config.read('config.ini')
-        self.config.set("user", "recentEnviro", self.proj_enviro_input.text())
+        self.config.set("user", "recentEnviro", proj_env)
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
         print("Project successfully loaded!")
