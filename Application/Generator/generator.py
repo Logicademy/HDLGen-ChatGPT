@@ -305,8 +305,8 @@ class Generator(QWidget):
                             notes = notes.replace("&#44;", ",")
                             notes = notes.replace("[", "(")
                             notes = notes.replace("]", ")")
-                            notes = notes.replace("{", "(")
-                            notes = notes.replace("}", ")")
+                            #notes = notes.replace("{", "(")
+                            #notes = notes.replace("}", ")")
                             notes = notes.replace(":", " downto ")
                             notes = notes.replace("'", "")
                             notes = re.sub(r'\s+', ' ', notes)
@@ -324,6 +324,10 @@ class Generator(QWidget):
                             notes = re.sub(pattern2,
                                            lambda match: match.group(0).replace("'", "").replace('"', ""),
                                            notes)
+                            # Define a regular expression pattern to match the content inside { }
+                            pattern3 = r'\w+\{([^}]+)\}'
+                            # Use re.sub to replace the matched content inside { }
+                            notes = re.sub(pattern3, r'(others => \1)', notes)
 
                             signalList = ""
 
@@ -380,8 +384,8 @@ class Generator(QWidget):
                                     value = value.replace("&#44;", ",")
                                     value = value.replace("[", "(")
                                     value = value.replace("]", ")")
-                                    value = value.replace("{", "(")
-                                    value = value.replace("}", ")")
+                                    #value = value.replace("{", "(")
+                                    #value = value.replace("}", ")")
                                     value = value.replace(":", " downto ")
                                     value = value.replace("'", "")
                                     value = re.sub(r'\s+', ' ', value)
@@ -398,7 +402,10 @@ class Generator(QWidget):
                                     value = re.sub(pattern2,
                                                    lambda match: match.group(0).replace("'", "").replace('"', ""),
                                                    value)
-
+                                    # Define a regular expression pattern to match the content inside { }
+                                    pattern3 = r'\w+\{([^}]+)\}'
+                                    # Use re.sub to replace the matched content inside { }
+                                    value = re.sub(pattern3, r'(others => \1)', value)
                                 assign_syntax = assign_syntax.replace("$value", value)
                                 if_gen_defaults += "\t" + assign_syntax + "\n\t"
                                 gen_defaults += assign_syntax + "-- Default assignment \n\t"
@@ -501,8 +508,8 @@ class Generator(QWidget):
                                     notes = notes.replace("&#44;", ",")
                                     notes = notes.replace("[", "(")
                                     notes = notes.replace("]", ")")
-                                    notes = notes.replace("{", "(")
-                                    notes = notes.replace("}", ")")
+                                    #notes = notes.replace("{", "(")
+                                    #notes = notes.replace("}", ")")
                                     notes = notes.replace(":", " downto ")
                                     notes = notes.replace("'", "")
                                     notes = re.sub(r'\s+', ' ', notes)
@@ -522,6 +529,11 @@ class Generator(QWidget):
                                     notes = re.sub(pattern2,
                                                    lambda match: match.group(0).replace("'", "").replace('"', ""),
                                                    notes)
+                                    # Define a regular expression pattern to match the content inside { }
+                                    pattern3 = r'\w+\{([^}]+)\}'
+                                    # Use re.sub to replace the matched content inside { }
+                                    notes = re.sub(pattern3, r'(others => \1)', notes)
+
                                     note_syntax = vhdl_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",
                                                                       child.getElementsByTagName("label")[
@@ -1803,6 +1815,10 @@ class Generator(QWidget):
                             notes = re.sub(pattern1, r'{\1,\2}', notes)
                             notes = notes.replace("{0}","{1b'0}")
                             notes = notes.replace("{1}","{1b'1}")
+                            # Define a regular expression pattern to match the desired pattern of finding eg. 16{1'b0} and convert to {16{1'b0}}
+                            pattern4 = r'(\w+)\{([^}]+)\}'
+                            # Use re.sub to replace the matched pattern with {match}
+                            notes = re.sub(pattern4, r'{\1{\2}}', notes)
                             notes = notes.replace("_", "'")
                             signalList = ""
                             for default_out in child.getElementsByTagName("defaultOutput"):
@@ -1913,6 +1929,10 @@ class Generator(QWidget):
                                     value = re.sub(pattern1, r'{\1,\2}', value)
                                     value = value.replace("{0}","{1b'0}")
                                     value = value.replace("{1}","{1b'1}")
+                                    # Define a regular expression pattern to match the desired pattern of finding eg. 16{1'b0} and convert to {16{1'b0}}
+                                    pattern4 = r'(\w+)\{([^}]+)\}'
+                                    # Use re.sub to replace the matched pattern with {match}
+                                    notes = re.sub(pattern4, r'{\1{\2}}', value)
                                     value = value.replace("_", "'")
 
                                 if arraySignal == True:
@@ -2068,6 +2088,10 @@ class Generator(QWidget):
                                     notes = re.sub(pattern1, r'{\1,\2}', notes)
                                     notes = notes.replace("{0}","{1b'0}")
                                     notes = notes.replace("{1}","{1b'1}")
+                                    # Define a regular expression pattern to match the desired pattern of finding eg. 16{1'b0} and convert to {16{1'b0}}
+                                    pattern4 = r'(\w+)\{([^}]+)\}'
+                                    # Use re.sub to replace the matched pattern with {match}
+                                    notes = re.sub(pattern4, r'{\1{\2}}', notes)
                                     notes = notes.replace("_", "'")
                                     note_syntax = verilog_root.getElementsByTagName("concNote")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$concurrentstmt_label",

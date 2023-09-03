@@ -141,9 +141,10 @@ class ProjectManager(QWidget):
         self.chisel_check.setStyleSheet(BLACK_COLOR)
         self.chisel_check.setEnabled(False)
 
-        self.intel_check = QCheckBox("Intel Quartus")
+        self.intel_check = QCheckBox("Intel Quartus (In development)")
         self.intel_check.setFont(bold_font)
         self.intel_check.setStyleSheet(BLACK_COLOR)
+        self.intel_check.setEnabled(False)
 
         self.intel_ver_label = QLabel("Version")
         self.intel_ver_label.setFont(input_font)
