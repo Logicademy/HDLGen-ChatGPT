@@ -82,7 +82,7 @@ class HDLGen(QMainWindow):
         self.settings_btn_spacer.setFixedSize(60, 25)
         self.help_btn_spacer.setFixedSize(35, 25)
 
-        self.hdlgen_logo = QLabel("HDLGen-ChatGPT")#\nDigital Systems Design Capture\nEDA Project Creation Automation")
+        self.hdlgen_logo = QLabel("HDLGen-ChatGPT")
         self.hdlgen_logo.setFont(title_font)
         self.hdlgen_logo.setAlignment(Qt.AlignCenter)
         self.hdlgen_logo_1 = QLabel("Digital Systems Design Capture Automation")
@@ -97,7 +97,6 @@ class HDLGen(QMainWindow):
         pixmap = QPixmap(photo_direct)
 
         self.processphoto.setPixmap(pixmap)
-        "https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf"
         self.tutorial_link = QLabel(
             '<a href="https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf">Tutorials</a> Tutorial videos on HDLGen/ChatGPT, for a range of design examples')
         self.tutorial_link.setFont(text_font)
@@ -125,32 +124,19 @@ class HDLGen(QMainWindow):
         self.button_layout.addWidget(self.new_btn, 0, 1,  alignment= Qt.AlignLeft)
         self.button_layout.addWidget(self.open_btn, 0, 0, alignment= Qt.AlignRight)
 
-        #self.button_layout.addWidget(self.open_btn, 0, 0, 1, 1)  # addWidget(self.open_btn, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
 
         self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
-        #self.info_layout.addWidget(self.hdlgen_logo_1, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-        #self.info_layout.addWidget(self.app_authors, alignment=Qt.AlignCenter)
-        #self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addWidget(self.app_description, alignment=Qt.AlignCenter)
-        #self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-        #self.info_layout.addWidget(self.app_description, alignment= Qt.AlignCenter)
         self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addLayout(self.button_layout)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-        #self.info_layout.addWidget(self.tutorial_link, alignment=Qt.AlignCenter)
-        #self.info_layout.addSpacerItem(QSpacerItem(1, 10))
-        #self.info_layout.addWidget(self.github_link, alignment= Qt.AlignCenter)
-        #self.info_layout.addSpacerItem(QSpacerItem(1, 10))
         self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
-        #self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
-        #self.info_layout.addSpacerItem(QSpacerItem(1, 50))
 
-       # self.mainLayout.addLayout(self.button_layout)
         self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)
         self.mainLayout.addWidget(self.help_btn_spacer, alignment=Qt.AlignTop)
         self.mainLayout.addLayout(self.info_layout)
@@ -178,7 +164,6 @@ class HDLGen(QMainWindow):
         lastDir = self.config.get('user', 'recentEnviro')
         if not os.path.exists(lastDir):
             lastDir = "../User_Projects/"
-                                                         #filter="HDLGen (*.hdlgen)")
         self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", lastDir,
                                                          filter="HDLGen (*.hdlgen)")
         if self.load_proj_dir[0]:
