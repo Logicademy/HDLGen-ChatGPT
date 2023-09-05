@@ -27,6 +27,8 @@ class Package(QWidget):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.all_signals = []
         self.all_signals_names = []
@@ -44,7 +46,7 @@ class Package(QWidget):
         self.package_label.setStyleSheet(WHITE_COLOR)
 
         self.add_btn = QPushButton("Add type")
-        #self.add_btn.setFixedSize(80, 25)
+        self.add_btn.setFont(input_font)
         self.add_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
