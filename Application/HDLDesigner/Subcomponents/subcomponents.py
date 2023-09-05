@@ -27,6 +27,8 @@ class Subcomponents(QWidget):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        input_font = QFont()
+        input_font.setPointSize(10)
 
         self.all_signals = []
         self.all_signals_names = []
@@ -35,7 +37,7 @@ class Subcomponents(QWidget):
         self.comps = []
         self.comps_names = []
 
-        self.package_heading_layout = QHBoxLayout()#QGridLayout()
+        self.package_heading_layout = QHBoxLayout()
         self.package_action_layout = QVBoxLayout()
         self.component_list_layout = QVBoxLayout()
         self.mainLayout = QVBoxLayout()
@@ -45,7 +47,7 @@ class Subcomponents(QWidget):
         self.package_label.setStyleSheet(WHITE_COLOR)
 
         self.add_component_btn = QPushButton("Add component")
-        #self.add_component_btn.setFixedSize(120, 25)
+        self.add_component_btn.setFont(input_font)
         self.add_component_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain; padding: 10px;}"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
