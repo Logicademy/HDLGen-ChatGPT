@@ -14,7 +14,6 @@ WHITE_COLOR = "color: white"
 class InstanceDialog(QDialog):
     def __init__(self, add_or_edit, instanceNames, instance_data = None):
         super().__init__()
-        print(instanceNames)
         if add_or_edit == "add":
             self.setWindowTitle("New instance")
         elif add_or_edit == "edit":
@@ -233,7 +232,6 @@ class InstanceDialog(QDialog):
 
         self.out_sig_layout.addWidget(self.out_sig_empty_info, alignment=Qt.AlignTop)
     def load_instance_data(self, instance_data):
-        print(instance_data)
         self.instance_name_input.setText(instance_data[1])
         self.components_combobox.setCurrentText(instance_data[2])
         self.populate_signals(ProjectManager.get_xml_data_path())

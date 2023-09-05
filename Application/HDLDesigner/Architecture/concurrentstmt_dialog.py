@@ -249,7 +249,6 @@ class ConcurrentStmtDialog(QDialog):
         button = self.sender()
         if button:
             if button.text() == "Edit Custom Value":
-                print(self.conc_notes)
                 add_note = note_Dialog("edit", "Concurrent Statement Custom Value",self.conc_notes)
             else:
                 add_note = note_Dialog("add", "Concurrent Statement Custom Value",self.conc_notes)
