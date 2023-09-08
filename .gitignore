@@ -1,0 +1,13 @@
+# Python cache files and compiled python files/classes
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Application specific files generated at runtime
+# Override with "git add -f User_Projects/*" to update example User Projects
+**/mainPackage.hdlgen
+User_Projects/
+
+# Stop commits of local user configs
+# Override with "git add -f config.ini" to update ChatGPT Prompts
+Application/config.ini
