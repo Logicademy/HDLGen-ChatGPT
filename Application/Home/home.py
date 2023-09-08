@@ -86,6 +86,7 @@ class Home(QMainWindow):
             self.hdl_designer.ioPorts.save_data()
             self.hdl_designer.architecture.save_data()
             self.hdl_designer.generate.save_data()
+            self.hdl_designer.testplan.save_xml()
             self.hdl_designer.internalSignal.save_data()
             return QMessageBox.Save
         elif result == QMessageBox.Discard:
@@ -632,6 +633,7 @@ class Home(QMainWindow):
             self.hdl_designer.architecture.save_data()
             self.hdl_designer.generate.save_data()
             self.hdl_designer.internalSignal.save_data()
+            self.hdl_designer.testplan.save_xml()
 
 
 

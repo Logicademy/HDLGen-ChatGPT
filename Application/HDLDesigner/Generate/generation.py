@@ -621,12 +621,17 @@ class Gen(QWidget):
             self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
 
     def getProcessAndConcur(self, proj_dir):
+        if proj_dir == None:
+            proj_name = ProjectManager.get_proj_name()
+            proj_dir = os.path.join(ProjectManager.get_proj_dir(), proj_name,"HDLGenPrj",proj_name+".hdlgen")
+            print(proj_dir)
+        else:
+            proj_dir = proj_dir[0]
         processNames=[]
         concurrentNames=[]
-        proj_name = ProjectManager.get_proj_name()
-        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
 
-        root = minidom.parse(proj_dir[0])
+
+        root = minidom.parse(proj_dir)
         HDLGen = root.documentElement
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
         arch_node = hdl_design[0].getElementsByTagName("architecture")
