@@ -116,41 +116,44 @@ class TestPlan(QWidget):
             if not add_note.cancelled:
                 note_data = add_note.get_data()
                 self.note = note_data
-                xml_data_path = ProjectManager.get_xml_data_path()
+                self.save_xml()
 
-                root = minidom.parse(xml_data_path)
-                HDLGen = root.documentElement
-                hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-                testbench_node = root.createElement("testbench")
-                tb_node = root.createElement("TBNote")
-                tb_node.appendChild(root.createTextNode(self.note))
-                testbench_node.appendChild(tb_node)
-                hdlDesign[0].replaceChild(testbench_node, hdlDesign[0].getElementsByTagName("testbench")[0])
-                # converting the doc into a string in xml format
-                xml_str = root.toprettyxml()
-                xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
-                # Writing xml file
-                with open(xml_data_path, "w") as f:
-                    f.write(xml_str)
-                note_data = self.note
-                note_data = note_data.replace("&#10;", "\n")
-                note_data = note_data.replace("&amp;", "&")
-                note_data = note_data.replace("&amp;", "&")
-                note_data = note_data.replace("&quot;", "\"")
-                note_data = note_data.replace("&apos;", "\'")
-                note_data = note_data.replace("&lt;", "<")
-                note_data = note_data.replace("&#x9;", "\t")
-                note_data = note_data.replace("&gt;", ">")
-                note_data = note_data.replace("&#44;", ",")
+    def save_xml(self):
+        xml_data_path = ProjectManager.get_xml_data_path()
 
-                if note_data!="None":
-                    self.testbench_btn.setText("Edit Test Plan")
-                else:
-                    note_data = "No test plan created"
-                    self.testbench_btn.setText("Add Test Plan")
-                self.testplan_input.setText(note_data)
-                self.note = note_data
-                print("Saved test plan")
+        root = minidom.parse(xml_data_path)
+        HDLGen = root.documentElement
+        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        testbench_node = root.createElement("testbench")
+        tb_node = root.createElement("TBNote")
+        tb_node.appendChild(root.createTextNode(self.note))
+        testbench_node.appendChild(tb_node)
+        hdlDesign[0].replaceChild(testbench_node, hdlDesign[0].getElementsByTagName("testbench")[0])
+        # converting the doc into a string in xml format
+        xml_str = root.toprettyxml()
+        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        # Writing xml file
+        with open(xml_data_path, "w") as f:
+            f.write(xml_str)
+        note_data = self.note
+        note_data = note_data.replace("&#10;", "\n")
+        note_data = note_data.replace("&amp;", "&")
+        note_data = note_data.replace("&amp;", "&")
+        note_data = note_data.replace("&quot;", "\"")
+        note_data = note_data.replace("&apos;", "\'")
+        note_data = note_data.replace("&lt;", "<")
+        note_data = note_data.replace("&#x9;", "\t")
+        note_data = note_data.replace("&gt;", ">")
+        note_data = note_data.replace("&#44;", ",")
+
+        if note_data != "None":
+            self.testbench_btn.setText("Edit Test Plan")
+        else:
+            note_data = "No test plan created"
+            self.testbench_btn.setText("Add Test Plan")
+        self.testplan_input.setText(note_data)
+        self.note = note_data
+        print("Saved test plan")
     def load_data(self, proj_dir):
         self.note = "No test plan created"
 
