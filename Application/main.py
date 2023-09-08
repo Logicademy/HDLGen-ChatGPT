@@ -40,7 +40,7 @@ class HDLGen(QMainWindow):
         title_font.setBold(True)
 
         title_1_font = QFont()
-        title_1_font.setPointSize(15)
+        title_1_font.setPointSize(12)
 
         bold_font = QFont()
         bold_font.setPointSize(10)
@@ -61,8 +61,14 @@ class HDLGen(QMainWindow):
         self.new_btn.setFont(text_font)
         self.help_btn = QPushButton("Help")
         self.help_btn.setFont(text_font)
+        self.help_btn.setStyleSheet(
+            "QPushButton {background-color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed {background-color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.settings_btn = QPushButton("Settings")
         self.settings_btn.setFont(text_font)
+        self.settings_btn.setStyleSheet(
+            "QPushButton {background-color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
+            " QPushButton:pressed {background-color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.open_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
@@ -85,7 +91,7 @@ class HDLGen(QMainWindow):
         self.hdlgen_logo = QLabel("HDLGen-ChatGPT")
         self.hdlgen_logo.setFont(title_font)
         self.hdlgen_logo.setAlignment(Qt.AlignCenter)
-        self.hdlgen_logo_1 = QLabel("Digital Systems Design Capture Automation")
+        self.hdlgen_logo_1 = QLabel("HDLGen-ChatGPT / ChatGPT / EDA Tool Suite Process Flow")
         self.hdlgen_logo_1.setFont(title_1_font)
         self.hdlgen_logo_1.setAlignment(Qt.AlignCenter)
         self.app_description = QLabel(APP_DESCRIPTION)
@@ -101,7 +107,7 @@ class HDLGen(QMainWindow):
             '<a href="https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf">Tutorials</a> Tutorial videos on HDLGen/ChatGPT, for a range of design examples')
         self.tutorial_link.setFont(text_font)
         self.tutorial_link.linkActivated.connect(self.link)
-        self.github_link = QLabel('<a href="https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use the HDLGen application, please include the Github reference to our work')
+        self.github_link = QLabel('<a href="https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use HDLGen-ChatGPT, please include the Github reference to our work')
         self.github_link.setFont(text_font)
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
@@ -120,28 +126,34 @@ class HDLGen(QMainWindow):
     def setup_ui(self):
 
         print("Setting up UI")
-
-        self.button_layout.addWidget(self.new_btn, 0, 1,  alignment= Qt.AlignLeft)
-        self.button_layout.addWidget(self.open_btn, 0, 0, alignment= Qt.AlignRight)
+        self.button_layout.addWidget(self.hdlgen_logo,0,0,1,3) #alignment=Qt.AlignLeft)
+        self.button_layout.addWidget(self.new_btn, 0, 5, 1,1) #alignment= Qt.AlignRight)
+        self.button_layout.addWidget(self.open_btn, 0, 4,1,1) #alignment= Qt.AlignRight)
+        self.button_layout.addWidget(self.settings_btn, 0, 6,1,1)# alignment=Qt.AlignRight)
+        self.button_layout.addWidget(self.help_btn, 0, 7,1,1)# alignment=Qt.AlignLeft)
 
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
 
-        self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
-        self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-        self.info_layout.addWidget(self.app_description, alignment=Qt.AlignCenter)
-        self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-        self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
+        #self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addLayout(self.button_layout)
+       # self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
+        self.info_layout.addWidget(self.hdlgen_logo_1, alignment=Qt.AlignCenter)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 5))
+        #self.info_layout.addLayout(self.button_layout)
+        self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
+        self.info_layout.addSpacerItem(QSpacerItem(1, 5))
+        self.info_layout.addWidget(self.github_link, alignment=Qt.AlignCenter)
         self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
+        self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
 
-        self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)
-        self.mainLayout.addWidget(self.help_btn_spacer, alignment=Qt.AlignTop)
+       # self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)
+        #self.mainLayout.addWidget(self.help_btn_spacer, alignment=Qt.AlignTop)
         self.mainLayout.addLayout(self.info_layout)
-        self.mainLayout.addWidget(self.settings_btn, alignment=Qt.AlignTop)
-        self.mainLayout.addWidget(self.help_btn, alignment=Qt.AlignTop)
+        #self.mainLayout.addWidget(self.settings_btn, alignment=Qt.AlignTop)
+        #self.mainLayout.addWidget(self.help_btn, alignment=Qt.AlignTop)
 
 
         self.setLayout(self.mainLayout)
@@ -181,8 +193,10 @@ class HDLGen(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     window = HDLGen()
+    window.setWindowFlags(window.windowFlags() | Qt.WindowMaximizeButtonHint)
     window.move(0, 0)
     window.show()
+    #window.showMaximized()
     app.setStyle('windowsvista')
     app.exec_()
 
