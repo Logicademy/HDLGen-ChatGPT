@@ -183,7 +183,7 @@ class Subcomponents(QWidget):
             self.comps_names.pop(row)
             self.save_data()
     def save_data(self):
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
 
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
@@ -224,7 +224,7 @@ class Subcomponents(QWidget):
                 self.component_table.removeRow(0)
                 self.comps.pop(0)
                 self.comps_names.pop(0)
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         try:
             root = minidom.parse(mainPackageDir)
             HDLGen = root.documentElement

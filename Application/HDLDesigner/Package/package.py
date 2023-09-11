@@ -208,7 +208,7 @@ class Package(QWidget):
             self.save_data()
 
     def save_data(self):
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         root = minidom.parse(mainPackageDir)
 
         HDLGen = root.documentElement
@@ -255,7 +255,7 @@ class Package(QWidget):
                 self.package_table.removeRow(0)
                 self.arrays.pop(0)
                 self.arrays_names.pop(0)
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         try:
             root = minidom.parse(mainPackageDir)
             HDLGen = root.documentElement

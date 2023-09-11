@@ -490,6 +490,15 @@ class ProjectManager(QWidget):
     @staticmethod
     def get_proj_environment():
         return ProjectManager.proj_enviro
+    
+    @staticmethod
+    def get_main_hdlgen():
+        return os.path.join(ProjectManager.proj_enviro, "Package", "mainPackage.hdlgen")
+    
+    @staticmethod
+    def get_main_vhd():
+        return os.path.join(ProjectManager.proj_enviro, "Package", "MainPackage.vhd")
+    
     def set_proj_environment(self):
         self.project_manager_change = True
         #self.named_edit_done()
@@ -500,6 +509,7 @@ class ProjectManager(QWidget):
             self.proj_enviro_input.setText(ProjectManager.proj_enviro)
             self.proj_folder_input.setText(ProjectManager.proj_enviro)
             #self.save_xml()
+
     def get_intel_dir(self):
         self.project_manager_change = True
         #self.named_edit_done()

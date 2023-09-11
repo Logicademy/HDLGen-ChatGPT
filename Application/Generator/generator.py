@@ -799,14 +799,14 @@ class Generator(QWidget):
         tcl_vivado_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_vivado_code = tcl_vivado_code.replace("$comp_name", comp)
         mainPackagePath = "add_files -norecurse  "
-        mainPackagePath = mainPackagePath + ProjectManager.get_proj_environment() + "/Package/mainPackage.vhd"
+        mainPackagePath = mainPackagePath + ProjectManager.get_main_vhd()
         mainPackagePath = mainPackagePath.replace("\\", "/")
         if lang == "VHDL":
             tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", mainPackagePath)
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$arrayPackage", "")
         files = ""
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -829,7 +829,7 @@ class Generator(QWidget):
                     dir = dir.replace("/VHDL/model/" + namedir[0] + ".vhd",
                                       "/" + lang + "/model/" + namedir[0] + "." + ext)
 
-                    if not os.path.exists(ProjectManager.get_proj_environment() + dir):
+                    if not os.path.exists(os.path.join(ProjectManager.get_proj_environment(), dir)):
                         print(ProjectManager.get_proj_environment() + dir + " Does not exist")
                         msgBox = QMessageBox()
                         msgBox.setWindowTitle("Alert")
@@ -899,7 +899,7 @@ class Generator(QWidget):
         wd = os.getcwd()
         wd = wd.replace("\\", "/")
         mainPackagePath = "add_files -norecurse  "  # + wd
-        mainPackagePath = mainPackagePath + ProjectManager.get_proj_environment() + "/Package/mainPackage.vhd"
+        mainPackagePath = mainPackagePath + ProjectManager.get_main_vhd()
         mainPackagePath = mainPackagePath.replace("\\", "/")
         # if self.includeArrays == True:
         # tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage", mainPackagePath)
@@ -907,7 +907,7 @@ class Generator(QWidget):
         # tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage","")
         files = ""
         # mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-        mainPackageDir = ProjectManager.get_proj_environment() + "/Package/MainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1426,7 +1426,7 @@ class Generator(QWidget):
         # Parsing the xml file
         vhdl_database = minidom.parse(vhdl_database_path)
         vhdl_root = vhdl_database.documentElement
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\MainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -1470,7 +1470,7 @@ class Generator(QWidget):
         array_vhdl_code = array_vhdl_code.replace("$arrays", gen_arrays)
 
         array_vhdl_code = array_vhdl_code.replace("$Component", comp)
-        array_vhdl_file_path = ProjectManager.get_proj_environment() + "\Package\MainPackage.vhd"
+        array_vhdl_file_path = ProjectManager.get_main_vhd()
         # Write array code to file
         with open(array_vhdl_file_path, "w") as f:
             f.write(array_vhdl_code)
@@ -1519,7 +1519,7 @@ class Generator(QWidget):
         internalnames = []
         instances = []
         stateTypeSig = False
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -2377,7 +2377,7 @@ class Generator(QWidget):
         header_node = hdl_design[0].getElementsByTagName("header")
         comp_node = header_node[0].getElementsByTagName("compName")[0]
         entity_name = comp_node.firstChild.data
-        mainPackageDir = ProjectManager.get_proj_environment() + "\Package\mainPackage.hdlgen"
+        mainPackageDir = ProjectManager.get_main_hdlgen()
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
