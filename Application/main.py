@@ -145,8 +145,8 @@ class HDLGen(QMainWindow):
         self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 5))
         self.info_layout.addWidget(self.github_link, alignment=Qt.AlignCenter)
-        self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
-        self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
+        #self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
+        #self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
 
        # self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)

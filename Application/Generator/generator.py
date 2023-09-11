@@ -1907,23 +1907,25 @@ class Generator(QWidget):
                                     while match:
                                         value = value.replace(match.group(), match.group(1) + match.group(3) + "]")
                                         match = re.search(pattern2, value)
-                                   # pattern3 = r"(\w+)(\d+'b)(\d+)"
+                                    # pattern3 = r"(\w+)(\d+'b)(\d+)"
                                     pattern3 = r"([a-zA-Z_]+)(\d+'b)(\d+)"
                                     match = re.search(pattern3, value)
+                                    # This match is for signals that have a 0 or 1 in them
                                     while match:
                                         value = value.replace(match.group(), match.group(1) + match.group(3))
                                         match = re.search(pattern3, value)
-
                                     value = value.replace("'", "_")
                                     pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
                                     value = re.sub(pattern1, r'{\1,\2}', value)
-                                    value = value.replace("{0}","{1b'0}")
-                                    value = value.replace("{1}","{1b'1}")
+                                    value = value.replace("{0}", "{1b'0}")
+                                    value = value.replace("{1}", "{1b'1}")
                                     # Define a regular expression pattern to match the desired pattern of finding eg. 16{1'b0} and convert to {16{1'b0}}
                                     pattern4 = r'(\w+)\{([^}]+)\}'
                                     # Use re.sub to replace the matched pattern with {match}
-                                    notes = re.sub(pattern4, r'{\1{\2}}', value)
+                                    value = re.sub(pattern4, r'{\1{\2}}', value)
                                     value = value.replace("_", "'")
+
+
 
                                 if arraySignal == True:
                                     assign_syntax = array_syntax
@@ -2042,7 +2044,7 @@ class Generator(QWidget):
                                 signals = statement.firstChild.data.split(",")
                                 notes = child.getElementsByTagName("note")[0].firstChild.data
                                 if notes != "None":
-                                    notes = re.sub(r'\s+', '', notes)
+                                    notes = re.sub(r'\s+', ' ', notes)
                                     notes = notes.replace("&#10;", "\n/// ")
                                     notes = notes.replace("&amp;", ",")
                                     notes = notes.replace("&quot;", "\"")
@@ -2056,26 +2058,25 @@ class Generator(QWidget):
                                     notes = notes.replace("downto", ":")
                                     notes = notes.replace("'", "")
                                     pattern = r'(?<!:)(?<!\d)([01]+)(?!\d)(?!\s*:)'
-
                                     notes = re.sub(pattern, lambda m: f"1'b{m.group(1)}" if len(
                                         m.group(1)) == 1 else f"{len(m.group(1))}'b{m.group(1)}", notes)
-
                                     pattern2 = r"(\[|\w+)([\d]+)'b([\d]+)]"
                                     match = re.search(pattern2, notes)
                                     while match:
                                         notes = notes.replace(match.group(), match.group(1) + match.group(3) + "]")
                                         match = re.search(pattern2, notes)
-                                    #pattern3 = r"(\w+)(\d+'b)(\d+)"
+                                    # pattern3 = r"(\w+)(\d+'b)(\d+)"
                                     pattern3 = r"([a-zA-Z_]+)(\d+'b)(\d+)"
                                     match = re.search(pattern3, notes)
+                                    # This match is for signals that have a 0 or 1 in them
                                     while match:
                                         notes = notes.replace(match.group(), match.group(1) + match.group(3))
                                         match = re.search(pattern3, notes)
                                     notes = notes.replace("'", "_")
                                     pattern1 = r'\[?(\w+\[[^\]]*\]|\w+)\s*,\s*(\w+\[[^\]]*\]|\w+)\]?'
                                     notes = re.sub(pattern1, r'{\1,\2}', notes)
-                                    notes = notes.replace("{0}","{1b'0}")
-                                    notes = notes.replace("{1}","{1b'1}")
+                                    notes = notes.replace("{0}", "{1b'0}")
+                                    notes = notes.replace("{1}", "{1b'1}")
                                     # Define a regular expression pattern to match the desired pattern of finding eg. 16{1'b0} and convert to {16{1'b0}}
                                     pattern4 = r'(\w+)\{([^}]+)\}'
                                     # Use re.sub to replace the matched pattern with {match}

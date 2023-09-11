@@ -27,7 +27,7 @@ class TestPlan(QWidget):
         title_font.setPointSize(12)
         title_font.setBold(True)
         self.proj_dir = proj_dir
-        self.note=""
+        self.note="None"
 
         self.mainLayout = QVBoxLayout()
 
