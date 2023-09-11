@@ -7,6 +7,7 @@
 * [Install HDLGen-ChatGPT](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/Install+HDLGen-ChatGPT.pdf) : Setup/use a Python environment or download/execute application .exe file
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
 git clone https://github.com/fearghal1/HDLGen-ChatGPT.git
+* [Download design examples](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen-ChatGPT+Tutorials.pdf)
 * [Tutorials](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen-ChatGPT+Tutorials.pdf) : using HDLGen-ChatGPT / ChatGPT on a range of digital component designs, including RV32I RISC-V processor design
 * [HDLGen-ChatGPT logic pseudo code capture guidelines](https://tinyurl.com/4x53f828)
 * [Latest ChatGPT prompt headers](https://tinyurl.com/4x53f828)
