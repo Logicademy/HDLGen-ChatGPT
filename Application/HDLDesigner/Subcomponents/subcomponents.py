@@ -202,8 +202,6 @@ class Subcomponents(QWidget):
             for output_signal in component[2]:
                 port_node = root.createElement("port")
                 temp = output_signal.split(",")
-                if temp[2][-1].isdigit():
-                    temp[2] = temp[2]+" downto 0)"
                 ports = temp[0] + "," + temp[1] + "," + temp[2]
                 port_node.appendChild(root.createTextNode(ports))
                 comp_node.appendChild(port_node)

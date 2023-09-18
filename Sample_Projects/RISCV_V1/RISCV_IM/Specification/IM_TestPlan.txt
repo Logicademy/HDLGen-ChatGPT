@@ -1,8 +1,0 @@
-Inputs               PC
-Outputs                       instruction
-                     32'h     32'h 
-        TestNo delay                      Note
-		1      1     00000000 00520113    address IM data
-        2      1     00000001 00934193    
-        3      1     00000002 00000000    empty memory, data = 0
-        4      1     10000001 00934193

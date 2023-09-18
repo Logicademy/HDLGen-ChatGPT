@@ -50,6 +50,7 @@ class ProjectManager(QWidget):
         title_font.setBold(True)
         bold_font = QFont()
         bold_font.setBold(True)
+        bold_font.setPointSize(10)
         input_font = QFont()
         input_font.setPointSize(10)
 
