@@ -8,7 +8,7 @@
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
 git clone https://github.com/fearghal1/HDLGen-ChatGPT.git
 * [Sample_Projects download](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/Sample_Projects_Downloads.pdf)
-* [User_Projects download](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/User_Projects_Downloads.pdf)
+* [RSP2023 Workshop Presentation, 21st Sept 2023](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_presentation_RSP2023+HDLGen-ChatGPT+Case+Study+-+RISC-V+Processor+VHDL+and+Verilog+Model%2C+Testbench+and+EDA+Project+Generation.pdf)
 * [Tutorials](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen-ChatGPT+Tutorials.pdf) : using HDLGen-ChatGPT / ChatGPT on a range of digital component designs, including RV32I RISC-V processor design
 * [HDLGen-ChatGPT logic pseudo code capture guidelines](https://tinyurl.com/4x53f828)
 * [Latest ChatGPT prompt headers](https://tinyurl.com/4x53f828)
