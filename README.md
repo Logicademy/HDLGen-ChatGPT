@@ -12,8 +12,6 @@ git clone https://github.com/fearghal1/HDLGen-ChatGPT.git
 * [User experiences](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/Early+user+feedback+(16+users)+To+John+Patrick.pdf)
 ##
 * [Kanban project management](https://github.com/users/abishek-bupathi/projects/1)
-* [HDLGen-ChatGPT application background](https://tinyurl.com/4x53f828) : Architecture and code walkthrough
-* [Masters Thesis](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/HDLGen-ChatGPT_JPB.pdf), John Patrick Byrne “HDLGen-ChatGPT Digital Systems Design Capture Automation”, May'23, University of Galway
 * HDLGen-ChatGPT / ChatGPT / EDA toolsuite process diagram:
 ![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png)
 * License: MIT - <http://www.opensource.org/licenses/mit-license.ph
