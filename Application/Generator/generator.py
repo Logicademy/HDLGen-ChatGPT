@@ -1212,6 +1212,9 @@ class Generator(QWidget):
                         digits_list = re.findall(r'\d+', type)
                         size = "[" + str(digits_list[0]) + ":" + str(digits_list[1]) + "]"
                         type = "array"
+                    elif type[0:7] == "integer":
+                        size = ""
+                        type = "other"
                     UUTInternal_content = re.sub(r"\[type]", type, UUTInternal_content)
                     UUTInternal_content = re.sub(r"\[size]", size, UUTInternal_content)
                     UUTInternal += UUTInternal_content
@@ -2567,7 +2570,7 @@ class Generator(QWidget):
                         type = "array"
                     elif type[0:7] == "integer":
                         size = ""
-                        type = "logic"
+                        type = "other"
                     else:
                         self.includeArrays = True
                         digits_list = re.findall(r'\d+', type)
