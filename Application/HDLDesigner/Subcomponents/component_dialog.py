@@ -157,6 +157,9 @@ class ComponentDialog(QDialog):
             i = i + 1
 
     def is_subdirectory(self, directory, potential_parent):
+        # Normalize the paths to use forward slashes
+        directory = os.path.normpath(directory).replace("\\", "/")
+        potential_parent = os.path.normpath(potential_parent).replace("\\", "/")
         # Get the common prefix of the two paths
         common_prefix = os.path.commonprefix([directory, potential_parent])
 
