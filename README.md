@@ -1,7 +1,7 @@
 
 ## 
 ### HDLGen-ChatGPT and ChatGPT: 
-### Digital Systems Design and test Plan Capture, Generate VHDL/Verilog Model, Testbench, EDA Project Generation and Launch
+### Digital Systems Design and Test Plan Capture Wizard, VHDL/Verilog Model and Testbench Generator, EDA Project Generator/Launcher
 * [Download installable app](https://github.com/fearghal1/HDLGen-ChatGPT/releases/tag/v1.0.0)
 ##
 * [Setup GIT environment](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/Setup+Python+and+Git+Environment.pdf)
