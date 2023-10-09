@@ -92,6 +92,8 @@ class CompDetails(QWidget):
         self.comp_date_picker = QDateEdit(calendarPopup=True)
         self.comp_date_picker.setDate(QDate.currentDate())
         self.comp_date_picker.setFont(small_text_font)
+        self.comp_date_picker.setDisplayFormat("dd/MM/yyyy")
+        
         self.input_frame = QFrame()
         self.setup_ui()
         if proj_dir != None:

@@ -782,10 +782,10 @@ class Generator(QWidget):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         if lang == "VHDL":
-            self.tcl_path = proj_path + "/VHDL/AMDPrj/" + self.entity_name + ".tcl"
+            self.tcl_path = proj_path + "/VHDL/AMDprj/" + self.entity_name + ".tcl"
             ext = "vhd"
         else:
-            self.tcl_path = proj_path + "/Verilog/AMDPrj/" + self.entity_name + ".tcl"
+            self.tcl_path = proj_path + "/Verilog/AMDprj/" + self.entity_name + ".tcl"
             ext = "v"
         tcl_database_path = "./Generator/TCL_Database/tcl_database.xml"
 
@@ -1322,7 +1322,10 @@ class Generator(QWidget):
     def create_testbench_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        #root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        root = minidom.parse(
+            os.path.join(proj_path, "HDLGenPrj", proj_name + ".hdlgen")
+        )
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')

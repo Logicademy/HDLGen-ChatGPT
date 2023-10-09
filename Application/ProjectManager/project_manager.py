@@ -413,17 +413,18 @@ class ProjectManager(QWidget):
     def proj_detail_change(self):
         self.project_manager_change = True
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
-            # Getting project name from the text field
-            ProjectManager.proj_name = self.proj_name_input.text()
-            # Getting project location from the text field
-            ProjectManager.proj_dir = self.proj_folder_input.text() + "/"
-            ProjectManager.proj_dir=ProjectManager.proj_dir.replace("\\", "/")
-            ProjectManager.proj_enviro = self.proj_enviro_input.text()
-            ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
-            ProjectManager.xml_data_path = self.proj_dir + self.proj_name + "/" + "HDLGenPrj" + "/" + self.proj_name + ".hdlgen"
-            ProjectManager.xml_data_path = ProjectManager.xml_data_path.replace("\\", "/")
-            ProjectManager.package_xml_data_path = ProjectManager.get_package_hdlgen();
-            ProjectManager.package_xml_data_path = ProjectManager.package_xml_data_path.replace("\\", "/")
+            # Get project name from text field
+            ProjectManager.proj_name             = self.proj_name_input.text()
+
+            # Get project location from text field
+            ProjectManager.proj_dir              = Path(self.proj_folder_input.text())
+
+            # Get project environment from text field
+            ProjectManager.proj_enviro           = Path(self.proj_enviro_input.text())
+
+            # Set Project HDLGen Path and Package HDLGen Path based on new name, directory, environment
+            ProjectManager.xml_data_path         = ProjectManager.get_proj_hdlgen()
+            ProjectManager.package_xml_data_path = ProjectManager.get_package_hdlgen()
 
     def proj_folder_change(self):
         if self.startApp != True:
@@ -465,13 +466,11 @@ class ProjectManager(QWidget):
 
     def set_proj_dir(self):
         self.project_manager_change = True
-        #self.named_edit_done()
-        file = QFileDialog.getExistingDirectory(self, "Choose Directory", self.proj_dir)
-        if file != "":
-            ProjectManager.proj_dir = file
-            ProjectManager.proj_dir = ProjectManager.proj_dir.replace("\\", "/")
-            self.proj_folder_input.setText(ProjectManager.proj_dir)
-            #self.save_xml()
+        file = QFileDialog.getExistingDirectory(self, "Choose Directory", str(self.proj_dir))
+
+        if file:
+            ProjectManager.proj_dir = Path(file)
+            self.proj_folder_input.setText(str(ProjectManager.proj_dir))
 
     def get_vivado_dir(self):
         self.project_manager_change = True
@@ -499,6 +498,10 @@ class ProjectManager(QWidget):
     @staticmethod
     def get_package_vhd():
         return os.path.join(ProjectManager.proj_enviro, "Package", "MainPackage.vhd")
+
+    @staticmethod
+    def get_proj_hdlgen():
+        return os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj", ProjectManager.proj_name + ".hdlgen")
     
     def set_proj_environment(self):
         self.project_manager_change = True
@@ -534,7 +537,7 @@ class ProjectManager(QWidget):
         xml_data_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj")
         print("Saving project details at ", xml_data_dir)
 
-        temp_xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
+        temp_xml_data_path = ProjectManager.get_proj_hdlgen()
 
         # Creating XML doc
         rootPack = minidom.Document()
@@ -575,7 +578,7 @@ class ProjectManager(QWidget):
         project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
         project_env.appendChild(root.createTextNode(self.proj_enviro_input.text()))#ProjectManager.proj_enviro))
         # Inserting project location to the location element
-        project_loc.appendChild(root.createTextNode(ProjectManager.proj_dir[:-1]))
+        project_loc.appendChild(root.createTextNode(str(os.path.join(ProjectManager.proj_dir, ProjectManager.get_proj_name()))))
         project_info.appendChild(root.createTextNode(self.info))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
@@ -744,7 +747,7 @@ class ProjectManager(QWidget):
             # converting the doc into a string in xml format
             xml_str = root.toprettyxml(indent="\t")
 
-            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
+            ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
 
             # Writing xml file
             with open(ProjectManager.xml_data_path, "w") as f:
@@ -763,14 +766,15 @@ class ProjectManager(QWidget):
             xml_str = data.toprettyxml()
             xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
 
-            ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
+            ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
 
             # Writing xml file
             with open(ProjectManager.xml_data_path, "w") as f:
                 f.write(xml_str)
 
-        ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
+        ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
         ProjectManager.package_xml_data_path = ProjectManager.get_package_hdlgen()
+
         if not os.path.exists(ProjectManager.package_xml_data_path):
             if not os.path.exists(os.path.join(ProjectManager.proj_enviro, "Package")):
                 os.makedirs(os.path.join(ProjectManager.proj_enviro, "Package"))
@@ -794,11 +798,11 @@ class ProjectManager(QWidget):
             self.window.show()
         print("Project Closed!")
 
-    def find_project_folder_directory(self, dir, enviro):
-        while dir != os.path.dirname(dir):
-            if os.path.basename(dir) == enviro:
-                return dir
-            dir = os.path.dirname(dir)
+    def find_project_folder_directory(self, proj_dir, enviro):
+        while proj_dir != os.path.dirname(proj_dir):
+            if os.path.basename(proj_dir) == enviro:
+                return proj_dir
+            proj_dir = os.path.dirname(proj_dir)
         return None
 
 
@@ -1024,7 +1028,7 @@ class ProjectManager(QWidget):
         zip_file = zipfile.ZipFile(zip_file_name, 'w', zipfile.ZIP_DEFLATED)
 
         # Walk through the folder and add files to the zip file
-        for root, dirs, files in os.walk(folder_path):
+        for root, _, files in os.walk(folder_path):
             for file in files:
                 file_path = os.path.join(root, file)
                 rel_path = os.path.relpath(file_path, folder_path)

@@ -1,24 +1,25 @@
 #Test Plan section in HDL Designer. This class will call note_dialog.py when adding/editing test plan and tesplan_help.md if help button is clicked
 #This class will save all entered data to the .hdlgen. The save happens when there is a change.
 import os
+import sys
+import configparser
 from xml.dom import minidom
+import qtawesome as qta
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
-import qtawesome as qta
-import sys
-import configparser
-sys.path.append("..")
 from ProjectManager.project_manager import ProjectManager
 from HDLDesigner.Architecture.note_dialog import note_Dialog
 from HDLDesigner.testPlan.testplan_help import TestPlanHelpDialog
 
+sys.path.append("..")
 
 WHITE_COLOR = "color: white"
 BLACK_COLOR = "color: black"
 
 class TestPlan(QWidget):
     save_signal = Signal(bool)
+
     def __init__(self, proj_dir):
         super().__init__()
         small_text_font = QFont()
@@ -27,9 +28,9 @@ class TestPlan(QWidget):
         title_font.setPointSize(12)
         title_font.setBold(True)
         self.proj_dir = proj_dir
-        self.note="None"
+        self.note = "None"
 
-        self.mainLayout = QVBoxLayout()
+        self.main_layout = QVBoxLayout()
 
         self.input_layout = QGridLayout()
 
@@ -51,10 +52,10 @@ class TestPlan(QWidget):
         self.testplan_input = QTextEdit()
         self.testplan_input.setReadOnly(True)
 
-        self.testPlan_info_btn = QPushButton()
-        self.testPlan_info_btn.setIcon(qta.icon("mdi.help"))
-        self.testPlan_info_btn.setFixedSize(25, 25)
-        self.testPlan_info_btn.clicked.connect(self.testPlan_help_window)
+        self.testplan_info_btn = QPushButton()
+        self.testplan_info_btn.setIcon(qta.icon("mdi.help"))
+        self.testplan_info_btn.setFixedSize(25, 25)
+        self.testplan_info_btn.clicked.connect(self.testplan_help_window)
 
         self.top_layout = QHBoxLayout()#QGridLayout()
         self.arch_action_layout = QVBoxLayout()
@@ -66,7 +67,7 @@ class TestPlan(QWidget):
         self.main_frame = QFrame()
         self.input_frame = QFrame()
         self.setup_ui()
-        if proj_dir != None:
+        if proj_dir is not None:
             self.load_data(proj_dir)
 
     def setup_ui(self):
@@ -75,7 +76,7 @@ class TestPlan(QWidget):
 
         self.top_layout.addWidget(self.testplan_label)#, 0, 0, 1, 1)
         self.top_layout.addWidget(self.testbench_btn, alignment=Qt.AlignRight)#, 0, 1, 1, 1)
-        self.top_layout.addWidget(self.testPlan_info_btn)#, 0, 2, 1, 1)
+        self.top_layout.addWidget(self.testplan_info_btn)#, 0, 2, 1, 1)
 
         self.arch_action_layout.addLayout(self.top_layout)
 
@@ -95,19 +96,21 @@ class TestPlan(QWidget):
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.testbench_btn.clicked.connect(self.add_testplan)
 
-        self.mainLayout.addWidget(self.main_frame)
+        self.main_layout.addWidget(self.main_frame)
 
-        self.setLayout(self.mainLayout)
+        self.setLayout(self.main_layout)
 
     def add_testplan(self):
         if self.proj_dir is not None:
             root = minidom.parse(self.proj_dir[0])
             HDLGen = root.documentElement
-            hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-            testbench_node = hdlDesign[0].getElementsByTagName('testbench')
+            hdl_design = HDLGen.getElementsByTagName("hdlDesign")
+            testbench_node = hdl_design[0].getElementsByTagName('testbench')
+            
             if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
                 tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
                 self.note = tb_node.firstChild.nodeValue
+
         button = self.sender()
         if button:
             add_note = note_Dialog("edit","Test Plan",self.note)
@@ -123,12 +126,12 @@ class TestPlan(QWidget):
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement
-        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
+        hdl_design = HDLGen.getElementsByTagName("hdlDesign")
         testbench_node = root.createElement("testbench")
         tb_node = root.createElement("TBNote")
         tb_node.appendChild(root.createTextNode(self.note))
         testbench_node.appendChild(tb_node)
-        hdlDesign[0].replaceChild(testbench_node, hdlDesign[0].getElementsByTagName("testbench")[0])
+        hdl_design[0].replaceChild(testbench_node, hdl_design[0].getElementsByTagName("testbench")[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
         xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
@@ -154,14 +157,15 @@ class TestPlan(QWidget):
         self.testplan_input.setText(note_data)
         self.note = note_data
         print("Saved test plan")
+
     def load_data(self, proj_dir):
         self.note = "No test plan created"
 
         if proj_dir is not None:
             root = minidom.parse(proj_dir[0])
             HDLGen = root.documentElement
-            hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-            testbench_node = hdlDesign[0].getElementsByTagName('testbench')
+            hdl_design = HDLGen.getElementsByTagName("hdlDesign")
+            testbench_node = hdl_design[0].getElementsByTagName('testbench')
             if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
                 tb_node = testbench_node[0].getElementsByTagName('TBNote')[0]
                 self.note = tb_node.firstChild.nodeValue
@@ -183,7 +187,6 @@ class TestPlan(QWidget):
             self.testplan_input.setText(note_data)
             self.note = note_data
 
-    def testPlan_help_window(self):
-        testPlan_help_dialog = TestPlanHelpDialog()
-        testPlan_help_dialog.exec_()
-
+    def testplan_help_window(self):
+        testplan_help_dialog = TestPlanHelpDialog()
+        testplan_help_dialog.exec_()
