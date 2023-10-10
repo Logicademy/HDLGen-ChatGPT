@@ -157,6 +157,7 @@ class IOPorts(QWidget):
 
     def update_clk_rst_btn(self):
         self.seqSytle_editbtn.setText("Edit clk/rst")
+
     def edit_RTL(self):
         seq_dialog = seqDialog(self.proj_dir_value)
         seq_dialog.exec_()
@@ -211,7 +212,6 @@ class IOPorts(QWidget):
                 self.all_signals_names.append(("rst"))
             self.update_clk_rst_btn()
             self.save_data()
-
 
     def add_signal(self):
 
@@ -298,8 +298,6 @@ class IOPorts(QWidget):
                 self.seqSytle_editbtn.setVisible(True)
                 self.seqSytle_checkBox.setChecked(True)
         self.save_data()
-
-
 
     def edit_signal(self):
         button = self.sender()
@@ -413,8 +411,8 @@ class IOPorts(QWidget):
     def io_help_window(self):
         io_help_dialog = IoHelpDialog()
         io_help_dialog.exec_()
-    def load_data(self, proj_dir):
 
+    def load_data(self, proj_dir):
         root = minidom.parse(proj_dir[0])
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
