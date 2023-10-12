@@ -3,8 +3,8 @@
 import os
 from xml.dom import minidom
 from pathlib import Path
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
+from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QLineEdit, QRadioButton, QCheckBox, QComboBox, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QFileDialog
+from PySide2.QtGui import QFont, Qt
 import qtawesome as qta
 import configparser
 import webbrowser
@@ -422,7 +422,7 @@ class ProjectManager(QWidget):
             ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
             ProjectManager.xml_data_path = self.proj_dir + self.proj_name + "/" + "HDLGenPrj" + "/" + self.proj_name + ".hdlgen"
             ProjectManager.xml_data_path = ProjectManager.xml_data_path.replace("\\", "/")
-            ProjectManager.package_xml_data_path = self.proj_enviro + "\Package\mainPackage.hdlgen"
+            ProjectManager.package_xml_data_path = ProjectManager.get_package_hdlgen();
             ProjectManager.package_xml_data_path = ProjectManager.package_xml_data_path.replace("\\", "/")
 
     def proj_folder_change(self):
@@ -493,11 +493,11 @@ class ProjectManager(QWidget):
         return ProjectManager.proj_enviro
     
     @staticmethod
-    def get_main_hdlgen():
+    def get_package_hdlgen():
         return os.path.join(ProjectManager.proj_enviro, "Package", "mainPackage.hdlgen")
     
     @staticmethod
-    def get_main_vhd():
+    def get_package_vhd():
         return os.path.join(ProjectManager.proj_enviro, "Package", "MainPackage.vhd")
     
     def set_proj_environment(self):
@@ -770,10 +770,10 @@ class ProjectManager(QWidget):
                 f.write(xml_str)
 
         ProjectManager.xml_data_path = ProjectManager.proj_dir + ProjectManager.proj_name + "/" + "HDLGenPrj" + "/" + ProjectManager.proj_name + ".hdlgen"
-        ProjectManager.package_xml_data_path = ProjectManager.proj_enviro + "\Package\mainPackage.hdlgen"
+        ProjectManager.package_xml_data_path = ProjectManager.get_package_hdlgen()
         if not os.path.exists(ProjectManager.package_xml_data_path):
-            if not os.path.exists(ProjectManager.proj_enviro + "\Package\\"):
-                os.makedirs(ProjectManager.proj_enviro + "\Package\\")
+            if not os.path.exists(os.path.join(ProjectManager.proj_enviro, "Package")):
+                os.makedirs(os.path.join(ProjectManager.proj_enviro, "Package"))
             # converting the doc into a string in xml format
             package_xml_str = rootPack.toprettyxml(indent="\t")
             with open(ProjectManager.package_xml_data_path, "w") as f:
