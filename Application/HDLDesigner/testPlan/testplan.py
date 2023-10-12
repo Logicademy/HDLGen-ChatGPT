@@ -191,6 +191,11 @@ class TestPlan(QWidget):
             self.note = note_data
 
     def generate_testplan_template(self):
+        
+        if self.proj_dir is not None:
+            io_ports = minidom.parse(self.proj_dir[0]).documentElement.getElementsByTagName("hdlDesign")[0].getElementsByTagName("entityIOPorts")
+
+
         template = [
             ("Signals", "Signal Radix")
         ]
