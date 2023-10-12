@@ -31,7 +31,7 @@ class TestPlan(QWidget):
         title_font.setBold(True)
 
         self.proj_dir = proj_dir
-        self.note = "None"
+        self.note = self.generate_testplan_template()
 
         self.main_layout = QVBoxLayout()
         self.input_layout = QGridLayout()
@@ -175,7 +175,7 @@ class TestPlan(QWidget):
             testbench_node = hdl_design[0].getElementsByTagName('testbench')
             if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
                 tb_note = testbench_node[0].getElementsByTagName('TBNote')[0]
-                self.note = tb_note.firstChild.nodeValue
+                self.note = tb_note.firstChild.nodeValue if tb_note.firstChild.nodeValue != "None" else self.note
             note_data = self.note
             note_data = note_data.replace("&#10;", "\n")
             note_data = note_data.replace("&amp;", "&")
@@ -191,22 +191,37 @@ class TestPlan(QWidget):
             self.note = note_data
 
     def generate_testplan_template(self):
-        
-        if self.proj_dir is not None:
-            io_ports = minidom.parse(self.proj_dir[0]).documentElement.getElementsByTagName("hdlDesign")[0].getElementsByTagName("entityIOPorts")
+        signals = []
 
+        if self.proj_dir is not None:
+            signal_nodes = minidom.parse(self.proj_dir[0]).documentElement.getElementsByTagName("hdlDesign")[0].getElementsByTagName("entityIOPorts")[0].getElementsByTagName('signal')
+            for idx, i in enumerate(signal_nodes):
+                name = i.getElementsByTagName('name')[0].firstChild.data
+                mode = i.getElementsByTagName('mode')[0].firstChild.data
+                port = i.getElementsByTagName('type')[0].firstChild.data
+                port_width = (int(port[port.index("(")+1]) + 1) if port.endswith(")") else 1
+                signals.append([name, mode, port_width])
+                
 
         template = [
-            ("Signals", "Signal Radix")
+            ("Signals", "Mode", "Width", "Radix", "Test 1", "Test 2")
         ]
 
-        for name, mode, _, width in self.HDLDesigner.ioPorts.all_signals:
+        for name, mode, port_width in signals:
             template.append(
-                (f"{name} ({mode})", width)
+                (name, mode, str(port_width), "hex" if port_width >= 4 else "binary", "0" * port_width, "0" * port_width)
             )
 
         template.append(
-            ("TestNo", "1'd"), ("Delay", "1'd"), ("Note", "String")
+            ("Delay",  "-", "-", "-", "1", "1")
+        )
+
+        template.append(
+            ("TestNo", "-", "-", "-", "1", "2")
+        )
+
+        template.append(
+            ("Note",   "-", "-", "-", "Test 1", "Test 2")
         )
 
         output = ""
