@@ -372,6 +372,7 @@ class ProjectManager(QWidget):
         self.vivado_check.clicked.connect(self.edaCheckbox)
         #self.intel_check.clicked.connect(self.save_xml)
         #self.vivado_check.clicked.connect(self.save_xml)
+    
     def fill_default_proj_details(self):
         self.config.read('config.ini')
         self.proj_enviro = self.config.get('user', 'recentEnviro')
@@ -410,6 +411,7 @@ class ProjectManager(QWidget):
             msgBox.setText("If changing a Project Environment in an existing project, the types or subcomponents will not be included in the created VHDL package file. You may wish to include types and subcomponents in the new environment, using the Types and Subcomponent menus.")
             msgBox.exec_()
             #self.save_xml()
+    
     def proj_detail_change(self):
         self.project_manager_change = True
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
@@ -446,8 +448,6 @@ class ProjectManager(QWidget):
 
             #self.save_xml()
 
-
-
     @staticmethod
     def get_xml_data_path():
         return ProjectManager.xml_data_path
@@ -482,7 +482,6 @@ class ProjectManager(QWidget):
             self.vivado_dir_input.setText(ProjectManager.vivado_bat_path)
             #self.save_xml()
 
-
     @staticmethod
     def get_vivado_bat_path():
         return ProjectManager.vivado_bat_path
@@ -502,6 +501,10 @@ class ProjectManager(QWidget):
     @staticmethod
     def get_proj_hdlgen():
         return os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj", ProjectManager.proj_name + ".hdlgen")
+
+    @staticmethod
+    def get_proj_specification_dir():
+        return os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "Specification")
     
     def set_proj_environment(self):
         self.project_manager_change = True

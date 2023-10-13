@@ -11,3 +11,9 @@ User_Projects/
 # Stop commits of local user configs
 # Override with "git add -f config.ini" to update ChatGPT Prompts
 Application/config.ini
+
+# Ignore PyCharm files
+.idea/
+
+# Ignore VSCode files
+Application/.vscode/

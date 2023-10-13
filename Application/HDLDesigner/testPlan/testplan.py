@@ -4,6 +4,7 @@
 import os
 import sys
 import configparser
+import math
 from xml.dom import minidom
 import qtawesome as qta
 from PySide2.QtWidgets import *
@@ -128,6 +129,11 @@ class TestPlan(QWidget):
 
     def save_data(self):
         xml_data_path = ProjectManager.get_xml_data_path()
+        spec_dir_path = ProjectManager.get_proj_specification_dir()
+        specification_file = os.path.join(
+            ProjectManager.get_proj_specification_dir(),
+            "testbench.txt"
+        )
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement
@@ -143,6 +149,7 @@ class TestPlan(QWidget):
         # Writing xml file
         with open(xml_data_path, "w") as f:
             f.write(xml_str)
+
         note_data = self.note
         note_data = note_data.replace("&#10;", "\n")
         note_data = note_data.replace("&amp;", "&")
@@ -153,6 +160,10 @@ class TestPlan(QWidget):
         note_data = note_data.replace("&#x9;", "\t")
         note_data = note_data.replace("&gt;", ">")
         note_data = note_data.replace("&#44;", ",")
+
+        # Writing Specification file
+        with open(specification_file, "w", encoding="utf-8") as f:
+            f.write(note_data)
 
         # if note_data != "None":
         #     self.testbench_btn.setText("Edit Test Plan")
@@ -208,9 +219,14 @@ class TestPlan(QWidget):
         ]
 
         for name, mode, port_width in signals:
-            template.append(
-                (name, mode, str(port_width), "hex" if port_width >= 4 else "binary", "0" * port_width, "0" * port_width)
-            )
+            template.append((
+                name,
+                mode,
+                str(port_width),
+                "hex" if port_width >= 4 else "binary",
+                ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width),
+                ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width)
+            ))
 
         template.append(
             ("Delay",  "-", "-", "-", "1", "1")
