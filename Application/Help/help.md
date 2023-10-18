@@ -3,7 +3,7 @@
   ([Fearghal Morgan](mailto:fearghal.morgan1@gmail.com?subject=HDLGen-ChatGPT), John Patrick Byrne, Abishek Bupathi).
   Contact us with comments or suggestions.
 
-- Project website, with lots of links [HDLGen-ChatGPT github repository](https://github.com/fearghal1/HDLGen-ChatGPT)
+- Project website, with lots of links [HDLGen-ChatGPT github repository](https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT)
 
 - Our other work:
 [Vicilogic](https://www.vicilogic.com): online learning, assessment, remote FPGA prototying and coure builder platform

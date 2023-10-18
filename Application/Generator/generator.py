@@ -46,17 +46,16 @@ class Generator(QWidget):
             # If vhdl is present in the hdl settings then directory with vhdl_folder tag are read
             if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "VHDL":
                 for folder in genFolder_data[0].getElementsByTagName("vhdl_folder"):
-                    # Creating the directory
+                    # Creating the VHDL directory
                     path = os.path.join(location, folder.firstChild.data)
                     os.makedirs(path, exist_ok=True)
-                    # If verilog is present in the hdl settings then directory with verilog_folder are read
+            # If verilog is present in the hdl settings then directory with verilog_folder are read
             if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
                 for folder in genFolder_data[0].getElementsByTagName("verilog_folder"):
-                    # Creating the directory
+                    # Creating the Verilog directory
                     path = os.path.join(location, folder.firstChild.data)
                     os.makedirs(path, exist_ok=True)
 
-    # @staticmethod
     def generate_vhdl(self):
 
         entity_name = ""
@@ -64,18 +63,24 @@ class Generator(QWidget):
         chatgpt_header = ""
         chatgpt_vhdl = ""
 
+        # Load Project XML Data
         xml_data_path = ProjectManager.get_xml_data_path()
 
+        # Load VHDL Syntax Database
         vhdl_database_path = "./Generator/HDL_Database/vhdl_database.xml"
 
-        # Parsing the xml file
+        # Parse the HDLGen Project XML file, and get the root element (<HDLGen> element)
         project_data = minidom.parse(xml_data_path)
         HDLGen = project_data.documentElement
 
+        # Parse the VHDL Database XML file, and get the root element (<vhdl> element)
         vhdl_database = minidom.parse(vhdl_database_path)
         vhdl_root = vhdl_database.documentElement
 
+        # Get the hdlDesign element which contains all info about the component
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
+
+        # Internal variables
         stateTypesList = ""
         gen_int_sig = ""
         gen_internal_signal_result = ""
@@ -87,17 +92,23 @@ class Generator(QWidget):
         unsignedList = []
         signedList = []
         integerList = []
+
         # Entity Section
         gen_signals = ""
         entity_signal_description = ""
+        # Get the <entityIOPorts> element
         io_port_node = hdl_design[0].getElementsByTagName("entityIOPorts")
         gen_entity = ""
         self.includeArrays = False
         stateTypeSig = False
         instances = []
 
+        # Loop over all signals in the <entityIOPorts> element
+        # The main purpose of this loop is to fill arrayList, busList,
+        # single_bitList, unsignedList and signedList with data.
+        #
+        # It also generates the VHDL signal declarations for each signal
         if len(io_port_node) != 0 and io_port_node[0].firstChild is not None:
-
             for signal in io_port_node[0].getElementsByTagName('signal'):
                 name = signal.getElementsByTagName('name')[0].firstChild.data
                 portSignals.append(name)
@@ -118,21 +129,29 @@ class Generator(QWidget):
                 elif type[0:6] == "signed":
                     signedList.append(name)
 
+                # Get the syntax to declare a signal from the VHDL Syntax Database
                 signal_declare_syntax = vhdl_root.getElementsByTagName("signalDeclaration")[0].firstChild.data
 
-                signal_declare_syntax = signal_declare_syntax.replace("$sig_name",
-                                                                      signal.getElementsByTagName('name')[
-                                                                          0].firstChild.data)
-                signal_declare_syntax = signal_declare_syntax.replace("$mode",
-                                                                      signal.getElementsByTagName('mode')[
-                                                                          0].firstChild.data)
+                # Fill in the signal name to be declared
+                signal_declare_syntax = signal_declare_syntax.replace("$sig_name", signal.getElementsByTagName('name')[0].firstChild.data)
+
+                # Fill in the signal mode for the signal being declared
+                signal_declare_syntax = signal_declare_syntax.replace("$mode", signal.getElementsByTagName('mode')[0].firstChild.data)
+
+                # Fill in the signal type for the signal being declared                                                         
                 signal_declare_syntax = signal_declare_syntax.replace("$type", type)
-                signal_description = signal.getElementsByTagName('description')[
-                    0].firstChild.data
+                
+                # Grab the signal description for the signal being declared
+                signal_description = signal.getElementsByTagName('description')[0].firstChild.data
+            
+                # Replace XML Escape codes with Escape Characters
                 signal_description = signal_description.replace("&#10;", "\n-- ")
-                entity_signal_description += "-- " + signal.getElementsByTagName('name')[
-                    0].firstChild.data + "\t" + signal_description + "\n"
+
+                # Assemble the entity signal description (Name  Description)
+                entity_signal_description += "-- " + signal.getElementsByTagName('name')[0].firstChild.data + "\t" + signal_description + "\n"
+
                 gen_signals += "\t" + signal_declare_syntax + "\n"
+
             gen_signals = gen_signals.rstrip()
             gen_signals = gen_signals[0:-1]
 
@@ -146,6 +165,7 @@ class Generator(QWidget):
             gen_int_sig = "-- Internal signal declarations"
 
             int_sig_node = hdl_design[0].getElementsByTagName("internalSignals")
+
 
             if int_sig_node[0].firstChild is not None:
                 stateTypesString = ""
@@ -204,7 +224,6 @@ class Generator(QWidget):
                 gen_internal_signal_result = "-- None\n"
 
         # Header Section
-
         header_node = hdl_design[0].getElementsByTagName("header")
         if header_node is not None:
             comp_node = header_node[0].getElementsByTagName("compName")[0]
@@ -212,7 +231,7 @@ class Generator(QWidget):
                 entity_name = comp_node.firstChild.data
 
                 gen_header = "-- Title Section Start\n"
-                gen_header += "-- Generated by HDLGen, Github https://github.com/fearghal1/HDLGen-ChatGPT, on " + str(
+                gen_header += "-- Generated by HDLGen, Github https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT, on " + str(
                     datetime.now().strftime("%d-%B-%Y")) + " at " + str(datetime.now().strftime("%H:%M")) + "\n\n"
                 gen_header += "-- Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
@@ -716,7 +735,6 @@ class Generator(QWidget):
             with open(vhdl_file_path, "w") as f:
                 f.write(vhdl_code)
             print("VHDL Model successfully generated at ", vhdl_file_path)
-
         if "5" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_header_HDLGen_file_path)
             new_filename = chatgpt_header_HDLGen_file_path
@@ -737,14 +755,12 @@ class Generator(QWidget):
                 with open(new_filename, "w") as f:
                     f.write(chatgpt_header)
                 print("ChatGPT VHDL title Backup successfully generated at ", new_filename)
-
         if "4" in filesNumber:
             # Writing xml file
             with open(chatgpt_header_file_path, "w") as f:
                 f.write(chatgpt_header)
             pyperclip.copy(chatgpt_header)
             print("ChatGPT VHDL title successfully generated at ", chatgpt_header_file_path)
-
         if "7" in filesNumber:
             base_name, extension = os.path.splitext(chatgpt_vhdl_HDLGen_file_path)
             new_filename = chatgpt_vhdl_HDLGen_file_path
@@ -765,7 +781,6 @@ class Generator(QWidget):
                 with open(new_filename, "w") as f:
                     f.write(chatgpt_vhdl)
                 print("ChatGPT VHDL model Backup successfully generated at ", new_filename)
-
         if "6" in filesNumber:
             # Writing xml file
             with open(chatgpt_vhdl_file_path, "w") as f:
@@ -773,6 +788,7 @@ class Generator(QWidget):
             pyperclip.copy(chatgpt_vhdl)
             print("ChatGPT VHDL model successfully generated at ", chatgpt_vhdl_file_path)
         self.entity_name = entity_name
+
         # return overwrite, instances
         return instances
 
@@ -1023,7 +1039,38 @@ class Generator(QWidget):
 
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
         wcfg = ""
-        # TB = ""
+        testbench_node = hdl_design[0].getElementsByTagName("testbench")
+
+        if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
+            self.tb_note = testbench_node[0].getElementsByTagName('TBNote')[0]
+            self.tb_note = self.tb_note.firstChild.nodeValue if self.tb_note.firstChild.nodeValue != "None" else None
+            self.tb_note = self.tb_note.replace("&#10;", "\n").replace("&amp;", "&").replace("&quot;", "\"").replace("&apos;", "\'").replace("&lt;", "<").replace("&#x9;", "\t").replace("&gt;", ">").replace("&#44;", "\,")
+
+        # Load the testbench table as testbench_table[row][col]
+        testbench_table = self.tb_note.split("\n")
+        for idx, row in enumerate(testbench_table):
+            testbench_table[idx] = row.split("\t")
+
+        # Build out the VHDL for the tests
+        # No. of tests = length of first row minus 4 for first 4 headers (Signals, Mode, Width, Radix)
+        testbench_code = ""
+        for test in range(1, len(testbench_table[0]) - 3):
+            testbench_code += f'\t-- BEGIN Test Number {test}\n'
+
+            testbench_code += f'\ttestNo <= {test};\n'
+
+            for _, row in enumerate(testbench_table):
+                if row[1] == "in":
+                    testbench_code += f'\t{row[0]} <= {"h" if row[3] == "hex" else ""}\"{row[test + 3]}\";\n'
+
+            testbench_code += f'\twait for ({testbench_table[5][test + 3]} * period);\n'
+
+            for _, row in enumerate(testbench_table):
+                if row[1] == "out":
+                    testbench_code += f'\tassert {row[0]} = {"h" if row[3] == "hex" else ""}\"{row[test+3]}\" report \"TestNo {test} {row[0]} mismatch\" severity warning;\n'
+
+            testbench_code += f'\t-- END Test Number {test}\n\n'
+
         UUTEnt = ""
         header_node = hdl_design[0].getElementsByTagName("header")
         comp_node = header_node[0].getElementsByTagName("compName")[0]
@@ -1173,7 +1220,7 @@ class Generator(QWidget):
             gen_signals = gen_signals[0:-1]
 
             entity_syntax = vhdl_root.getElementsByTagName("entity")
-            gen_entity = "-- Testbench entity declaration. No inputs or outputs\n"
+            gen_entity = "-- Testbench entity declaration\n"
             gen_entity += entity_syntax[0].firstChild.data
             UUTInternal = "\t</wvobject>"
             # Internal signals
@@ -1232,29 +1279,30 @@ class Generator(QWidget):
                 entity_name = comp_node.firstChild.data
 
                 gen_header = "-- Title Section Start\n"
-                gen_header += "-- VHDL testbench " + entity_name + "_TB\n"
-                gen_header += "-- Generated by HDLGen, Github https://github.com/fearghal1/HDLGen-ChatGPT, on " + str(
-                    datetime.now().strftime("%d-%B-%Y")) + " at " + str(datetime.now().strftime("%H:%M")) + "\n\n"
-                gen_header += "-- Component Name : " + entity_name + "\n"
+                gen_header += "-- VHDL Testbench - " + entity_name + "_TB\n"
+                gen_header += "-- Generated by HDLGen-ChatGPT on " + str(
+                    datetime.now().strftime("%d-%B-%Y")) + " at " + str(datetime.now().strftime("%H:%M")) + "\n"
+                gen_header += "-- Github: https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT\n\n"
+                gen_header += "-- Component Name:\t" + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
-                gen_header += "-- Title          : " + (title if title != "null" else "") + "\n\n"
+                gen_header += "-- Title:\t" + (title if title != "null" else "") + "\n\n"
 
                 authors = header_node[0].getElementsByTagName("authors")[0].firstChild.data
-                gen_header += "-- Author(s)      : " + (authors if authors != "null" else "") + "\n"
+                gen_header += "-- Author(s):\t" + (authors if authors != "null" else "") + "\n"
                 company = header_node[0].getElementsByTagName("company")[0].firstChild.data
-                gen_header += "-- Organisation   : " + (company if company != "null" else "") + "\n"
+                gen_header += "-- Organisation:\t" + (company if company != "null" else "") + "\n"
                 email = header_node[0].getElementsByTagName("email")[0].firstChild.data
-                gen_header += "-- Email          : " + (email if email != "null" else "") + "\n"
-                gen_header += "-- Date           : " + header_node[0].getElementsByTagName("date")[
+                gen_header += "-- Email:\t" + (email if email != "null" else "") + "\n"
+                gen_header += "-- Date:\t" + header_node[0].getElementsByTagName("date")[
                     0].firstChild.data + "\n\n"
-                gen_header += "-- Description    : refer to component hdl model for function description and signal dictionary\n"
-                gen_header += "-- Title Section End\n"
+                gen_header += "-- Description:\t Refer to component's HDL Model for description and signal dictionary\n"
+                gen_header += "-- Title Section End\n\n"
                 tb_code += gen_header
-                # Libraries Section
 
+                # Libraries Section
                 libraries_node = vhdl_root.getElementsByTagName("libraries")
                 libraries = libraries_node[0].getElementsByTagName("library")
-                gen_library = "-- library declarations\n"
+                gen_library = "-- Library declarations\n"
                 for library in libraries:
                     gen_library += library.firstChild.data + "\n"
                 if arrayPackage == True:
@@ -1276,35 +1324,40 @@ class Generator(QWidget):
                 # Process
                 arch_node = hdl_design[0].getElementsByTagName("architecture")
                 gen_process = ""
+
                 if clkrst > 0:
                     gen_process += "-- Generate clk signal, when endOfSim = FALSE / 0\n"
                     gen_process += "clkStim: clk <= not clk after period/2 when endOfSim = false else '0';\n\n"
-                gen_process += "-- instantiate unit under test (UUT)\n"
-                gen_process += "UUT: " + entity_name + "-- map component internal sigs => testbench signals\n"
+
+                gen_process += "-- Instantiate the Unit Under Test (UUT)\n"
+                gen_process += "-- Map the component's internal signals to testbench signals\n"
+                gen_process += "UUT: " + entity_name + "\n"
                 gen_process += "port map\n\t(\n"
                 gen_process += io_port_map + "\n\t);\n\n"
-                gen_process += "-- Signal stimulus process\n"
-                gen_process += "stim_p: process -- process sensitivity list is empty, so process automatically executes at start of simulation. Suspend process at the wait; statement\n"
+                gen_process += "-- Signal stimulus process\n-- Process automatically executes at start of simulation due to empty sensitivity list.\n-- Process halts at the \'wait;\' statement"
+                gen_process += "stim_p: process\n"
                 gen_process += "begin\n"
                 gen_process += "\treport \"%N Simulation start, time = \"& time'image(now);\n\n"
-                gen_process += "\t-- Apply default INPUT signal values. Do not assign output signals (generated by the UUT) in this stim_p process\n"
+                gen_process += "\t-- Apply default INPUT signal values.\n"
                 gen_process += "\t-- Each stimulus signal change occurs 0.2*period after the active low-to-high clk edge\n"
-                gen_process += "\t-- if signal type is\n\t-- std_logic, use '0'\n\t-- std_logic_vector use (others => '0')\n\t-- integer use 0\n"
+                gen_process += "\t-- if signal type is \'std_logic\', use '0'\n\t-- if signal type is \'std_logic_vector\' use (others => '0')\n\t-- if signal type is \'integer\' use 0\n"
                 gen_process += inputsToZero
 
                 if clkrst == 2:
                     gen_process += "\treport \"Assert and toggle rst\";\n\ttestNo <= 0;\n\trst    <= '1';\n"
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
-                    gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"  # -- <delete (End)\n\n"
-                gen_process += "\n\t-- START Add testbench stimulus here\n\t-- === If copying a stim_p process generated by ChatGPT, delete the following lines from the beginning of the pasted code\n\t-- === Delete the -- === notes\n\t-- === stim_p: process\n\t-- === begin\n\n"
-                gen_process += "\n\t-- ==== If copying a stim_p process generated by ChatGPT, delete the following lines from the pasted code\n\t-- === wait;\n\t-- === end process stim_p;\n\n\t-- END Add testbench stimulus here\n"
-                gen_process += "\t-- Print picosecond (ps) = 1000*ns (nanosecond) time to simulation transcript\n"
-                gen_process += "\t-- Use to find time when simulation ends (endOfSim is TRUE)\n"
-                gen_process += "\t-- Re-run the simulation for this time\n"
-                gen_process += "\t-- Select timing diagram and use View>Zoom Fit\n"
-                gen_process += "\treport \"%N Simulation end, time = \"& time'image(now);\n"
-                gen_process += "\tendOfSim <= TRUE; -- assert flag to stop clk signal generation\n\n"
-                gen_process += "\twait; -- wait forever\n"
+                    gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"
+                
+                gen_process += "\n\t-- START Testbench stimulus\n"
+
+                gen_process += testbench_code
+
+                gen_process += "\n\t-- END Testbench stimulus\n"
+
+                gen_process += "\n\treport \"%N Simulation end, time = \"& time'image(now);\n"
+                gen_process += "\t-- Assert \'endOfSim\' flag to stop the clock signal\n\tendOfSim <= TRUE;\n"
+                gen_process += "\twait; -- Wait forever\n"
+
                 if len(arch_node) != 0 and arch_node[0].firstChild is not None:
                     arch_syntax = vhdl_root.getElementsByTagName("architecture")[0].firstChild.data
 
@@ -1322,7 +1375,6 @@ class Generator(QWidget):
     def create_testbench_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        #root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
         root = minidom.parse(
             os.path.join(proj_path, "HDLGenPrj", proj_name + ".hdlgen")
         )
@@ -1717,7 +1769,7 @@ class Generator(QWidget):
                 entity_name = comp_node.firstChild.data
 
                 gen_header = "// Title Section Start\n"
-                gen_header += "// Generated by HDLGen, Github https://github.com/fearghal1/HDLGen-ChatGPT, on " + str(
+                gen_header += "// Generated by HDLGen, Github https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT, on " + str(
                     datetime.now().strftime("%d-%B-%Y")) + " at " + str(datetime.now().strftime("%H:%M")) + "\n\n"
                 gen_header += "// Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
@@ -2597,7 +2649,7 @@ class Generator(QWidget):
 
                 gen_header = "// Title Section Start\n"
                 gen_header += "// Verilog testbench " + entity_name + "_TB\n"
-                gen_header += "// Generated by HDLGen, Github https://github.com/fearghal1/HDLGen-ChatGPT, on " + str(
+                gen_header += "// Generated by HDLGen, Github https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT, on " + str(
                     datetime.now().strftime("%d-%B-%Y")) + " at " + str(datetime.now().strftime("%H:%M")) + "\n\n"
                 gen_header += "// Component Name : " + entity_name + "\n"
                 title = header_node[0].getElementsByTagName("title")[0].firstChild.data
