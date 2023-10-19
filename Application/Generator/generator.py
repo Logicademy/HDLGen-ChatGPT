@@ -1048,6 +1048,9 @@ class Generator(QWidget):
 
         # Load the testbench table as testbench_table[row][col]
         testbench_table = self.tb_note.split("\n")
+        # Remove any blank rows from the testbench_table, sometimes the XML parser
+        # will insert blank lines when pretty-printing the HDLGen XML file
+        testbench_table = [row for row in testbench_table if row != ""]
         for idx, row in enumerate(testbench_table):
             testbench_table[idx] = row.split("\t")
 
