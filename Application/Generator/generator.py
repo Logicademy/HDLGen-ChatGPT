@@ -1051,20 +1051,27 @@ class Generator(QWidget):
         for idx, row in enumerate(testbench_table):
             testbench_table[idx] = row.split("\t")
 
-        # Build out the VHDL for the tests
-        # No. of tests = length of first row minus 4 for first 4 headers (Signals, Mode, Width, Radix)
+        # Generate VHDL Testbench based on Testplan
+        # No. of tests = length of first row minus 3 to remove the first 4 headers (Signals, Mode, Width, Radix)
+        # No. of tests should start at 1 and continue until the Nth test
+        # No. of rows = len(testbench)
+        # No. of cols = len(testbench[0])
         testbench_code = ""
         for test in range(1, len(testbench_table[0]) - 3):
             testbench_code += f'\t-- BEGIN Test Number {test}\n'
+            # Print the test number and the comment for that test
+            testbench_code += f'\ttestNo <= {test}; -- {testbench_table[7][test+3]}\n'
 
-            testbench_code += f'\ttestNo <= {test};\n'
-
+            # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
             for _, row in enumerate(testbench_table):
                 if row[1] == "in":
+                    # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
                     testbench_code += f'\t{row[0]} <= {"h" if row[3] == "hex" else ""}\"{row[test + 3]}\";\n'
 
+            # Add the wait statement, inserting the delay value for the test being assembled
             testbench_code += f'\twait for ({testbench_table[5][test + 3]} * period);\n'
 
+            # Loop over each row in the testbench_table, and check if the 2nd entry is 
             for _, row in enumerate(testbench_table):
                 if row[1] == "out":
                     testbench_code += f'\tassert {row[0]} = {"h" if row[3] == "hex" else ""}\"{row[test+3]}\" report \"TestNo {test} {row[0]} mismatch\" severity warning;\n'
