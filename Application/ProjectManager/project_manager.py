@@ -1008,7 +1008,7 @@ class ProjectManager(QWidget):
     def export_project(self):
         #self.named_edit_done()
         # Get the base name of the folder
-        dir = self.proj_dir +"/"+self.proj_name_input.text()+"/HDLGenPrj/"+self.proj_name_input.text()+".hdlgen"
+        dir = os.path.join(self.proj_dir, self.proj_name_input.text(), "HDLGenPrj", self.proj_name_input.text(), ".hdlgen")
         folder_path = os.path.dirname(os.path.dirname(dir))
         base_name = os.path.basename(folder_path)
         # Get the directory path of the folder
