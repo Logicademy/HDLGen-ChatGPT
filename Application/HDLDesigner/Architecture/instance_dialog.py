@@ -287,7 +287,7 @@ class InstanceDialog(QDialog):
     def load_data(self):
         self.comps = []
         self.comps_names = []
-        mainPackageDir = ProjectManager.get_main_hdlgen()
+        mainPackageDir = ProjectManager.get_package_hdlgen()
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")

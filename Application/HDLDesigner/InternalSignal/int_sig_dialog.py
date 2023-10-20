@@ -187,7 +187,7 @@ class IntSignalDialog(QDialog):
         self.cancelled = True
         self.arrays = []
         self.setup_ui()
-        mainPackageDir = ProjectManager.get_main_hdlgen()
+        mainPackageDir = ProjectManager.get_package_hdlgen()
 
         root = minidom.parse(mainPackageDir)
         HDLGen = root.documentElement
