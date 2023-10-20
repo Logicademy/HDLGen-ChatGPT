@@ -51,7 +51,7 @@ class note_Dialog(QDialog):
         self.cancelled = True
 
         self.setup_ui()
-        if add_or_edit == "edit" and note_data != None:
+        if add_or_edit == "edit" and note_data is not None:
             self.load_sig_data(note_data)
 
     def setup_ui(self):

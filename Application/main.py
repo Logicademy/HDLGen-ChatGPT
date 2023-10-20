@@ -13,7 +13,7 @@ import configparser
 
 APP_AUTHORS = "Created by Fearghal Morgan, Abishek Bupathi & JP Byrne"
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
-APP_DESCRIPTION = "<ul><li>Open source application and tutorials found on <a href='https://github.com/fearghal1/HDLGen'>GitHub</a></li>" \
+APP_DESCRIPTION = "<ul><li>Open source application and tutorials found on <a href='https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT'>GitHub</a></li>" \
                  "<li>Fast digital systems design capture from design and test specifications</li>" \
                  "<li>Generate HDL model templates and low-level logic pseudo code</li>" \
                  "<li>Generate HDL testbench templates (stimulus and signal checking)</li>" \
@@ -107,7 +107,7 @@ class HDLGen(QMainWindow):
             '<a href="https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf">Tutorials</a> Tutorial videos on HDLGen/ChatGPT, for a range of design examples')
         self.tutorial_link.setFont(text_font)
         self.tutorial_link.linkActivated.connect(self.link)
-        self.github_link = QLabel('<a href="https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use HDLGen-ChatGPT, please include the Github reference to our work')
+        self.github_link = QLabel('<a href="https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT">GitHub</a>\nIf you use HDLGen-ChatGPT, please include the Github reference to our work')
         self.github_link.setFont(text_font)
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
