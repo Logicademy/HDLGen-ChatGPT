@@ -37,9 +37,16 @@ class TestPlan(QWidget):
         self.main_layout = QVBoxLayout()
         self.input_layout = QGridLayout()
 
-        self.testbench_btn = QPushButton("Test Plan")
+        self.testbench_btn = QPushButton("Edit Test Plan")
         self.testbench_btn.setFont(small_text_font)
         self.testbench_btn.setStyleSheet(
+            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
+            "QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
+        )
+
+        self.testbench_template_btn = QPushButton("Reset Test Plan")
+        self.testbench_template_btn.setFont(small_text_font)
+        self.testbench_template_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
             "QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}"
         )
@@ -80,9 +87,10 @@ class TestPlan(QWidget):
         bold_font = QFont()
         bold_font.setBold(True)
 
-        self.top_layout.addWidget(self.testplan_label)
+        self.top_layout.addWidget(self.testplan_label, alignment=Qt.AlignLeft)
+        self.top_layout.addWidget(self.testbench_template_btn, alignment=Qt.AlignRight)
         self.top_layout.addWidget(self.testbench_btn, alignment=Qt.AlignRight)
-        self.top_layout.addWidget(self.testplan_info_btn)
+        self.top_layout.addWidget(self.testplan_info_btn, alignment=Qt.AlignRight)
 
         self.arch_action_layout.addLayout(self.top_layout)
 
@@ -101,6 +109,7 @@ class TestPlan(QWidget):
         self.arch_action_layout.addWidget(self.list_frame)
         self.arch_action_layout.addItem(QSpacerItem(0, 5))
         self.testbench_btn.clicked.connect(self.add_testplan)
+        self.testbench_template_btn.clicked.connect(self.reset_testplan)
 
         self.main_layout.addWidget(self.main_frame)
 
@@ -126,6 +135,12 @@ class TestPlan(QWidget):
                 note_data = add_note.get_data()
                 self.note = note_data
                 self.save_data()
+
+    def reset_testplan(self):
+        button = self.sender()
+        if button:
+            self.note = self.generate_testplan_template()
+            self.save_data()
 
     def save_data(self):
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -165,13 +180,6 @@ class TestPlan(QWidget):
         with open(specification_file, "w", encoding="utf-8") as f:
             f.write(note_data)
 
-        # if note_data != "None":
-        #     self.testbench_btn.setText("Edit Test Plan")
-        # else:
-        #     note_data = "No test plan created"
-        #     self.testbench_btn.setText("Add Test Plan")
-        self.testbench_btn.setText("Edit Test Plan")
-
         self.testplan_input.setText(note_data)
         self.note = note_data
         print("Saved test plan")
@@ -197,7 +205,6 @@ class TestPlan(QWidget):
             note_data = note_data.replace("&#x9;", "\t")
             note_data = note_data.replace("&gt;", ">")
             note_data = note_data.replace(",","&#44;")
-            self.testbench_btn.setText("Edit Test Plan")
             self.testplan_input.setText(note_data)
             self.note = note_data
 
@@ -219,14 +226,15 @@ class TestPlan(QWidget):
         ]
 
         for name, mode, port_width in signals:
-            template.append((
-                name,
-                mode,
-                str(port_width),
-                "hex" if port_width >= 4 else "binary",
-                ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width),
-                ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width)
-            ))
+            if name != "clk":
+                template.append((
+                    name,
+                    mode,
+                    str(port_width),
+                    "hex" if port_width >= 4 else "binary",
+                    ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width),
+                    ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width)
+                ))
 
         template.append(
             ("Delay",  "-", "-", "-", "1", "1")
