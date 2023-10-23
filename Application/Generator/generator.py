@@ -1046,40 +1046,41 @@ class Generator(QWidget):
             self.tb_note = self.tb_note.firstChild.nodeValue if self.tb_note.firstChild.nodeValue != "None" else None
             self.tb_note = self.tb_note.replace("&#10;", "\n").replace("&amp;", "&").replace("&quot;", "\"").replace("&apos;", "\'").replace("&lt;", "<").replace("&#x9;", "\t").replace("&gt;", ">").replace("&#44;", "\,")
 
-        # Load the testbench table as testbench_table[row][col]
-        testbench_table = self.tb_note.split("\n")
-        # Remove any blank rows from the testbench_table, sometimes the XML parser
-        # will insert blank lines when pretty-printing the HDLGen XML file
-        testbench_table = [row for row in testbench_table if row != ""]
-        for idx, row in enumerate(testbench_table):
-            testbench_table[idx] = row.split("\t")
+            # Load the testbench table as testbench_table[row][col]
+            self.testbench_table = self.tb_note.split("\n")
+        
+            # Remove any blank rows from the testbench_table, sometimes the XML parser
+            # will insert blank lines when pretty-printing the HDLGen XML file
+            self.testbench_table = [row for row in self.testbench_table if row != ""]
+            for idx, row in enumerate(self.testbench_table):
+                self.testbench_table[idx] = row.split("\t")
 
-        # Generate VHDL Testbench based on Testplan
-        # No. of tests = length of first row minus 3 to remove the first 4 headers (Signals, Mode, Width, Radix)
-        # No. of tests should start at 1 and continue until the Nth test
-        # No. of rows = len(testbench)
-        # No. of cols = len(testbench[0])
-        testbench_code = ""
-        for test in range(1, len(testbench_table[0]) - 3):
-            testbench_code += f'\t-- BEGIN Test Number {test}\n'
-            # Print the test number and the comment for that test
-            testbench_code += f'\ttestNo <= {test}; -- {testbench_table[7][test+3]}\n'
+            # Generate VHDL Testbench based on Testplan
+            # No. of tests = length of first row minus 3 to remove the first 4 headers (Signals, Mode, Width, Radix)
+            # No. of tests should start at 1 and continue until the Nth test
+            # No. of rows = len(testbench)
+            # No. of cols = len(testbench[0])
+            testbench_code = ""
+            for test in range(1, len(self.testbench_table[0]) - 3):
+                testbench_code += f'\t-- BEGIN Test Number {test}\n'
+                # Print the test number and the comment for that test
+                testbench_code += f'\ttestNo <= {test}; -- {self.testbench_table[len(self.testbench_table) - 2][test+3]}\n'
 
-            # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
-            for _, row in enumerate(testbench_table):
-                if row[1] == "in":
-                    # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
-                    testbench_code += f'\t{row[0]} <= {"h" if row[3] == "hex" else ""}\"{row[test + 3]}\";\n'
+                # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
+                for _, row in enumerate(self.testbench_table):
+                    if row[1] == "in":
+                        # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
+                        testbench_code += f'\t{row[0]} <= {"h" if row[3] == "hex" else ""}\"{row[test + 3]}\";\n'
 
-            # Add the wait statement, inserting the delay value for the test being assembled
-            testbench_code += f'\twait for ({testbench_table[5][test + 3]} * period);\n'
+                # Add the wait statement, inserting the delay value for the test being assembled
+                testbench_code += f'\twait for ({self.testbench_table[len(self.testbench_table) - 3][test + 3]} * period);\n'
 
-            # Loop over each row in the testbench_table, and check if the 2nd entry is 
-            for _, row in enumerate(testbench_table):
-                if row[1] == "out":
-                    testbench_code += f'\tassert {row[0]} = {"h" if row[3] == "hex" else ""}\"{row[test+3]}\" report \"TestNo {test} {row[0]} mismatch\" severity warning;\n'
+                # Loop over each row in the testbench_table, and check if the 2nd entry is 
+                for _, row in enumerate(self.testbench_table):
+                    if row[1] == "out":
+                        testbench_code += f'\tassert {row[0]} = {"h" if row[3] == "hex" else ""}\"{row[test+3]}\" report \"TestNo {test} {row[0]} mismatch\" severity warning;\n'
 
-            testbench_code += f'\t-- END Test Number {test}\n\n'
+                testbench_code += f'\t-- END Test Number {test}\n\n'
 
         UUTEnt = ""
         header_node = hdl_design[0].getElementsByTagName("header")
@@ -1360,7 +1361,7 @@ class Generator(QWidget):
                 
                 gen_process += "\n\t-- START Testbench stimulus\n"
 
-                gen_process += testbench_code
+                gen_process += testbench_code if testbench_code else None
 
                 gen_process += "\n\t-- END Testbench stimulus\n"
 

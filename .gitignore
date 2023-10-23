@@ -12,8 +12,9 @@ User_Projects/
 # Override with "git add -f config.ini" to update ChatGPT Prompts
 Application/config.ini
 
-# Ignore PyCharm files
+# Ignore PyCharm and VSCode Files
 .idea/
+.vscode/
 
 # Ignore VSCode files
 Application/.vscode/
