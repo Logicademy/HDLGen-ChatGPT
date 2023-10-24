@@ -799,13 +799,11 @@ class Generator(QWidget):
     def create_tcl_file(self, lang, instances):
         print("creating tcl")
 
-        proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
         if lang == "VHDL":
-            self.tcl_path = os.path.join(proj_path, "VHDL", "AMDprj", self.entity_name + ".tcl")
+            self.tcl_path = os.path.join(ProjectManager.get_proj_dir(), "VHDL", "AMDprj", self.entity_name + ".tcl")
             ext = "vhd"
         else:
-            self.tcl_path = os.path.join(proj_path, "Verilog", "AMDprj", self.entity_name + ".tcl")
+            self.tcl_path = os.path.join(ProjectManager.get_proj_dir(), "Verilog", "AMDprj", self.entity_name + ".tcl")
             ext = "v"
 
         tcl_database_path = Path("./Generator/TCL_Database/tcl_database.xml")
