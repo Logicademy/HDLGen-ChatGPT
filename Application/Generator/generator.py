@@ -679,7 +679,7 @@ class Generator(QWidget):
     def create_vhdl_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
         proj_path = ProjectManager.get_proj_dir()
-        root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        root = minidom.parse(ProjectManager.get_project_hdlgen())
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         VHDLModel = "None"
