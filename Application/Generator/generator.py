@@ -879,8 +879,8 @@ class Generator(QWidget):
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$files", "")
         tcl_vivado_code = tcl_vivado_code.replace("$tb_name", tb_file_name)
-        tcl_vivado_code = tcl_vivado_code.replace("$proj_name", proj_name)
-        tcl_proj_path = "{" + str(proj_path) + "}"
+        tcl_vivado_code = tcl_vivado_code.replace("$proj_name", ProjectManager.get_proj_name())
+        tcl_proj_path = "{" + str(ProjectManager.get_proj_dir()) + "}"
         tcl_vivado_code = tcl_vivado_code.replace("$proj_dir", tcl_proj_path)
         tcl_vivado_code = tcl_vivado_code.replace("$lang", lang)
         tcl_vivado_code = tcl_vivado_code.replace("$ext", ext)
@@ -960,9 +960,9 @@ class Generator(QWidget):
 
     def run_tcl_file(self, lang, edaTool):
         proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        proj_path = ProjectManager.get_proj_dir()
 
-        subprocess.Popen("cd " + proj_path, shell=True)
+        subprocess.Popen("cd " + str(proj_path), shell=True)
 
         vivado_bat_file_path = ProjectManager.get_vivado_bat_path()
         intel_exe_file_path = ProjectManager.get_intel_exe_path()
@@ -1075,7 +1075,10 @@ class Generator(QWidget):
                 for _, row in enumerate(self.testbench_table):
                     if row[1] == "in":
                         # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
-                        testbench_code += f'\t{row[0]} <= {"h" if row[3] == "hex" else ""}\"{row[test + 3]}\";\n'
+                        testbench_code += "\t{row} <= {if_statement};\n".format(
+                            row = row[0],
+                            if_statement = ("x\"" + row[test+3] + "\"") if row[3] == "hex" else ("'" + row[test + 3] + "'")
+                        )
 
                 # Add the wait statement, inserting the delay value for the test being assembled
                 testbench_code += f'\twait for ({self.testbench_table[len(self.testbench_table) - 3][test + 3]} * period);\n'
@@ -1083,7 +1086,11 @@ class Generator(QWidget):
                 # Loop over each row in the testbench_table, and check if the 2nd entry is 
                 for _, row in enumerate(self.testbench_table):
                     if row[1] == "out":
-                        testbench_code += f'\tassert {row[0]} = {"h" if row[3] == "hex" else ""}\"{row[test+3]}\" report \"TestNo {test} {row[0]} mismatch\" severity warning;\n'
+                        testbench_code += "assert {row} = {if_statement} report \"TestNo {testNo} {row} mismatch\" severity warning;\n".format(
+                            row = row[0],
+                            if_statement = ("x\"" + row[test+3] + "\"") if row[3] == "hex" else ("'" + row[test+3] + "'"),
+                            testNo = test
+                        )
 
                 testbench_code += f'\t-- END Test Number {test}\n\n'
 
@@ -1350,7 +1357,7 @@ class Generator(QWidget):
                 gen_process += "UUT: " + entity_name + "\n"
                 gen_process += "port map\n\t(\n"
                 gen_process += io_port_map + "\n\t);\n\n"
-                gen_process += "-- Signal stimulus process\n-- Process automatically executes at start of simulation due to empty sensitivity list.\n-- Process halts at the \'wait;\' statement"
+                gen_process += "-- Signal stimulus process\n-- Process automatically executes at start of simulation due to empty sensitivity list.\n-- Process halts at the \'wait;\' statement\n"
                 gen_process += "stim_p: process\n"
                 gen_process += "begin\n"
                 gen_process += "\treport \"%N Simulation start, time = \"& time'image(now);\n\n"
@@ -1395,10 +1402,8 @@ class Generator(QWidget):
 
     def create_testbench_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        root = minidom.parse(
-            os.path.join(proj_path, "HDLGenPrj", proj_name + ".hdlgen")
-        )
+        proj_path = ProjectManager.get_proj_dir()
+        root = minidom.parse(ProjectManager.get_proj_hdlgen())
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')

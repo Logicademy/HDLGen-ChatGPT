@@ -817,7 +817,7 @@ class ProjectManager(QWidget):
 
         new_proj_loc = new_xml_path[0]
 
-        for i in range(1, len(new_xml_path) - 3):
+        for i in range(1, len(new_xml_path) - 2):
             new_proj_loc = new_proj_loc + "/" + new_xml_path[i]
 
         if proj_loc != new_proj_loc:
