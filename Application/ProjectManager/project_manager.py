@@ -390,19 +390,6 @@ class ProjectManager(QWidget):
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
-   # def name_edit(self):
-        #if self.proj_name_input.isReadOnly():
-          #  self.name_change_btn.setText("Save")
-          #  self.proj_name_input.setReadOnly(False)
-        #else:
-            #self.name_change_btn.setText("Edit")
-            #self.proj_name_input.setReadOnly(True)
-            #self.save_xml()
-    #def named_edit_done(self):
-        #if self.name_change_btn.text() == "Save":
-            #self.name_change_btn.setText("Edit")
-            #self.proj_name_input.setReadOnly(True)
-            #self.save_xml()
 
     def proj_enviro_change(self):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
@@ -431,7 +418,7 @@ class ProjectManager(QWidget):
     def proj_folder_change(self):
         if self.startApp != True:
             if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
-                while not ProjectManager.proj_enviro in self.proj_folder_input.text():
+                while not str(ProjectManager.proj_enviro) in self.proj_folder_input.text():
                     msgBox = QMessageBox()
                     msgBox.setWindowTitle("Alert")
                     msgBox.setText(
