@@ -1368,7 +1368,12 @@ class Generator(QWidget):
                 
                 gen_process += "\n\t-- START Testbench stimulus\n"
 
-                gen_process += testbench_code if testbench_code else None
+                try:
+                    testbench_code
+                except NameError:
+                    testbench_code = None
+
+                gen_process += testbench_code
 
                 gen_process += "\n\t-- END Testbench stimulus\n"
 
