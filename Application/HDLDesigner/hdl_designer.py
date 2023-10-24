@@ -101,9 +101,7 @@ class HDLDesigner(QWidget):
         self.generate.tab_widget.currentChanged.connect(self.update_preview)
 
     def update_preview(self, hdl):
-        proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        root = minidom.parse(ProjectManager.get_proj_hdlgen())
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')
@@ -225,7 +223,7 @@ class HDLDesigner(QWidget):
             self.preview_window.setText(self.code)
             self.preview_label.setText("HDL Model Preview")
     def update_arch(self):
-        xml_data_path = ProjectManager.get_xml_data_path()
+        xml_data_path = ProjectManager.get_proj_hdlgen()
         self.architecture.updateProcessName(xml_data_path)
 
     def get_hdl(self):
