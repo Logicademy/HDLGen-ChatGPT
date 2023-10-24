@@ -509,13 +509,12 @@ class ProjectManager(QWidget):
     def set_proj_environment(self):
         self.project_manager_change = True
         #self.named_edit_done()
-        file = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", self.proj_enviro)
+        file = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", str(self.proj_enviro))
         if file != "":
             ProjectManager.proj_enviro = file
             ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
             self.proj_enviro_input.setText(ProjectManager.proj_enviro)
             self.proj_folder_input.setText(ProjectManager.proj_enviro)
-            #self.save_xml()
 
     def get_intel_dir(self):
         self.project_manager_change = True
