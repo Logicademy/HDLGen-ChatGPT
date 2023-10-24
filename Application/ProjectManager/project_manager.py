@@ -479,19 +479,19 @@ class ProjectManager(QWidget):
     
     @staticmethod
     def get_package_hdlgen():
-        return os.path.join(ProjectManager.proj_enviro, "Package", "mainPackage.hdlgen")
+        return os.path.join(ProjectManager.proj_dir, "Package", "mainPackage.hdlgen")
     
     @staticmethod
     def get_package_vhd():
-        return os.path.join(ProjectManager.proj_enviro, "Package", "MainPackage.vhd")
+        return os.path.join(ProjectManager.proj_dir, "Package", "MainPackage.vhd")
 
     @staticmethod
     def get_proj_hdlgen():
-        return os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj", ProjectManager.proj_name + ".hdlgen")
+        return os.path.join(ProjectManager.proj_dir, "HDLGenPrj", ProjectManager.proj_name + ".hdlgen")
 
     @staticmethod
     def get_proj_specification_dir():
-        return os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "Specification")
+        return os.path.join(ProjectManager.proj_dir, "Specification")
     
     def set_proj_environment(self):
         self.project_manager_change = True
