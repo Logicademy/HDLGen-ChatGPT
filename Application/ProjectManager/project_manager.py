@@ -514,7 +514,7 @@ class ProjectManager(QWidget):
             ProjectManager.proj_enviro = file
             ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
             self.proj_enviro_input.setText(str(ProjectManager.proj_enviro))
-            self.proj_folder_input.setText(str(ProjectManager.proj_enviro))
+            self.proj_folder_input.setText(str(ProjectManager.proj_dir))
 
     def get_intel_dir(self):
         self.project_manager_change = True
