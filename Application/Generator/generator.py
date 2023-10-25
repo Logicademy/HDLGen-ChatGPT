@@ -979,8 +979,14 @@ class Generator(QWidget):
             if os.path.exists(tcl_path):
                 if os.path.exists(model_path):
                     if os.path.exists(tb_path):
-                        start_vivado_cmd = str(vivado_bat_file_path) + " -source " + str(tcl_path)
-                        subprocess.Popen(start_vivado_cmd, shell=True)
+                        if os.path.exists(vivado_bat_file_path):
+                            start_vivado_cmd = str(vivado_bat_file_path) + " -source " + str(tcl_path)
+                            subprocess.Popen(start_vivado_cmd, shell=True)
+                        else:
+                            msgBox = QMessageBox()
+                            msgBox.setWindowTitle("Alert")
+                            msgBox.setText("Vivado not found at the specified path")
+                            msgBox.exec_()
                     else:
                         msgBox = QMessageBox()
                         msgBox.setWindowTitle("Alert")
