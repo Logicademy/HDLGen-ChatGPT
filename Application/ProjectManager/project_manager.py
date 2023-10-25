@@ -479,11 +479,11 @@ class ProjectManager(QWidget):
     
     @staticmethod
     def get_package_hdlgen():
-        return os.path.join(ProjectManager.proj_dir, "Package", "mainPackage.hdlgen")
+        return os.path.join(ProjectManager.proj_enviro, "Package", "mainPackage.hdlgen")
     
     @staticmethod
     def get_package_vhd():
-        return os.path.join(ProjectManager.proj_dir, "Package", "MainPackage.vhd")
+        return os.path.join(ProjectManager.proj_enviro, "Package", "MainPackage.vhd")
 
     @staticmethod
     def get_proj_hdlgen():
@@ -765,8 +765,8 @@ class ProjectManager(QWidget):
         ProjectManager.package_xml_data_path = ProjectManager.get_package_hdlgen()
 
         if not os.path.exists(ProjectManager.package_xml_data_path):
-            if not os.path.exists(os.path.join(ProjectManager.proj_dir, "Package")):
-                os.makedirs(os.path.join(ProjectManager.proj_dir, "Package"))
+            if not os.path.exists(os.path.join(ProjectManager.proj_enviro, "Package")):
+                os.makedirs(os.path.join(ProjectManager.proj_enviro, "Package"))
             # converting the doc into a string in xml format
             package_xml_str = rootPack.toprettyxml(indent="\t")
             with open(ProjectManager.package_xml_data_path, "w") as f:
