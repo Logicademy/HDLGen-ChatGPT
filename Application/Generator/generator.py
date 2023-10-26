@@ -996,6 +996,7 @@ class Generator(QWidget):
 
                         result = msgBox.exec_()
 
+
                         if result == QMessageBox.No:
                             start_vivado_cmd = str(vivado_bat_file_path) + " -source " + str(tcl_path)
                             subprocess.Popen(start_vivado_cmd, shell=True)
