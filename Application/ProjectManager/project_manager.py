@@ -390,19 +390,6 @@ class ProjectManager(QWidget):
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
-   # def name_edit(self):
-        #if self.proj_name_input.isReadOnly():
-          #  self.name_change_btn.setText("Save")
-          #  self.proj_name_input.setReadOnly(False)
-        #else:
-            #self.name_change_btn.setText("Edit")
-            #self.proj_name_input.setReadOnly(True)
-            #self.save_xml()
-    #def named_edit_done(self):
-        #if self.name_change_btn.text() == "Save":
-            #self.name_change_btn.setText("Edit")
-            #self.proj_name_input.setReadOnly(True)
-            #self.save_xml()
 
     def proj_enviro_change(self):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
@@ -416,22 +403,22 @@ class ProjectManager(QWidget):
         self.project_manager_change = True
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             # Get project name from text field
-            ProjectManager.proj_name             = self.proj_name_input.text()
+            ProjectManager.proj_name = self.proj_name_input.text()
 
             # Get project location from text field
-            ProjectManager.proj_dir              = Path(self.proj_folder_input.text())
+            ProjectManager.proj_dir = Path(self.proj_folder_input.text())
 
             # Get project environment from text field
-            ProjectManager.proj_enviro           = Path(self.proj_enviro_input.text())
+            ProjectManager.proj_enviro = Path(self.proj_enviro_input.text())
 
             # Set Project HDLGen Path and Package HDLGen Path based on new name, directory, environment
-            ProjectManager.xml_data_path         = ProjectManager.get_proj_hdlgen()
+            ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
             ProjectManager.package_xml_data_path = ProjectManager.get_package_hdlgen()
 
     def proj_folder_change(self):
         if self.startApp != True:
             if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
-                while not ProjectManager.proj_enviro in self.proj_folder_input.text():
+                while not str(ProjectManager.proj_enviro) in self.proj_folder_input.text():
                     msgBox = QMessageBox()
                     msgBox.setWindowTitle("Alert")
                     msgBox.setText(
@@ -500,22 +487,21 @@ class ProjectManager(QWidget):
 
     @staticmethod
     def get_proj_hdlgen():
-        return os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj", ProjectManager.proj_name + ".hdlgen")
+        return os.path.join(ProjectManager.proj_dir, "HDLGenPrj", ProjectManager.proj_name + ".hdlgen")
 
     @staticmethod
     def get_proj_specification_dir():
-        return os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "Specification")
+        return os.path.join(ProjectManager.proj_dir, "Specification")
     
     def set_proj_environment(self):
         self.project_manager_change = True
         #self.named_edit_done()
-        file = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", self.proj_enviro)
+        file = QFileDialog.getExistingDirectory(self, "Choose Environment Folder", str(self.proj_enviro))
         if file != "":
             ProjectManager.proj_enviro = file
             ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
-            self.proj_enviro_input.setText(ProjectManager.proj_enviro)
-            self.proj_folder_input.setText(ProjectManager.proj_enviro)
-            #self.save_xml()
+            self.proj_enviro_input.setText(str(ProjectManager.get_proj_environment()))
+            self.proj_folder_input.setText(str(ProjectManager.get_proj_dir()))
 
     def get_intel_dir(self):
         self.project_manager_change = True
@@ -536,8 +522,8 @@ class ProjectManager(QWidget):
         ProjectManager.intel_exe_path = self.intel_dir_input.text()
         self.vivado_dir = self.vivado_dir_input.text()
         self.intel_dir = self.intel_dir_input.text()
-        spec_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "Specification")
-        xml_data_dir = os.path.join(ProjectManager.proj_dir, ProjectManager.proj_name, "HDLGenPrj")
+        spec_dir = os.path.join(ProjectManager.get_proj_dir(), "Specification")
+        xml_data_dir = os.path.join(ProjectManager.get_proj_dir(), "HDLGenPrj")
         print("Saving project details at ", xml_data_dir)
 
         temp_xml_data_path = ProjectManager.get_proj_hdlgen()
@@ -579,9 +565,9 @@ class ProjectManager(QWidget):
         project_info = root.createElement('info')
         # Inserting project name to the name element
         project_name.appendChild(root.createTextNode(ProjectManager.proj_name))
-        project_env.appendChild(root.createTextNode(self.proj_enviro_input.text()))#ProjectManager.proj_enviro))
+        project_env.appendChild(root.createTextNode(self.proj_enviro_input.text()))
         # Inserting project location to the location element
-        project_loc.appendChild(root.createTextNode(str(os.path.join(ProjectManager.proj_dir, ProjectManager.get_proj_name()))))
+        project_loc.appendChild(root.createTextNode(str(ProjectManager.get_proj_dir())))
         project_info.appendChild(root.createTextNode(self.info))
         # Adding name and location as child to settings element
         settings_data.appendChild(project_name)
@@ -831,7 +817,7 @@ class ProjectManager(QWidget):
 
         new_proj_loc = new_xml_path[0]
 
-        for i in range(1, len(new_xml_path) - 3):
+        for i in range(1, len(new_xml_path) - 2):
             new_proj_loc = new_proj_loc + "/" + new_xml_path[i]
 
         if proj_loc != new_proj_loc:

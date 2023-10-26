@@ -165,7 +165,7 @@ class Gen(QWidget):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px;}"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
-        self.testbench_label = QLabel("Generate HDL Testbench Template")
+        self.testbench_label = QLabel("Generate HDL Testbench")
         self.testbench_label.setStyleSheet(BLACK_COLOR)
         self.testbench_label.setFont(small_text_font)
 
