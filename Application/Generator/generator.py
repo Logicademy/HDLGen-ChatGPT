@@ -851,17 +851,17 @@ class Generator(QWidget):
                     if not os.path.exists(
                         os.path.join(ProjectManager.get_proj_environment(), dir)
                     ):
-                        print(ProjectManager.get_proj_environment() + dir + " Does not exist")
+                        print(str(ProjectManager.get_proj_environment()) + dir + " does not exist")
                         msgBox = QMessageBox()
                         msgBox.setWindowTitle("Alert")
-                        msgBox.setText(ProjectManager.get_proj_environment() + dir + "\nDoes not exist")
+                        msgBox.setText(str(ProjectManager.get_proj_environment()) + dir + "\nDoes not exist")
                         msgBox.exec_()
                     self.dirs.append(dir)
                     directories = dir.split('/')
 
                     # Remove the last two elements (folders)
                     dir = '/'.join(directories[:-3])
-                    hdlgenDir = ProjectManager.get_proj_environment() + dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
+                    hdlgenDir = str(ProjectManager.get_proj_environment()) + dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
                     modelRoot = minidom.parse(hdlgenDir)
                     modelHDLGen = modelRoot.documentElement
                     modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
@@ -876,7 +876,7 @@ class Generator(QWidget):
                 break
         if self.dirs is not None:
             for dir in self.dirs:
-                files += "add_files -norecurse  " + ProjectManager.get_proj_environment() + dir + " \n"
+                files += "add_files -norecurse  " + str(ProjectManager.get_proj_environment()) + dir + " \n"
             tcl_vivado_code = tcl_vivado_code.replace("$files", files)
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$files", "")
