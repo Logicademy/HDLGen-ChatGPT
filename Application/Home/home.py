@@ -24,29 +24,23 @@ class Home(QMainWindow):
         self.setWindowTitle("HDLGen-ChatGPT Version 1.0.0")
 
         self.cornerWidget = QWidget()
-        #self.generate_btn = QPushButton("Generate")
-        #self.generate_btn.setFont(small_text_font)
         self.start_vivado_btn = QPushButton("Open EDA Project")
         self.start_vivado_btn.setFont(small_text_font)
         self.export_project_btn = QPushButton("Export Project")
         self.export_project_btn.setFont(small_text_font)
         self.cornerWidgetLayout = QHBoxLayout()
         self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)
-        #self.cornerWidgetLayout.addWidget(self.generate_btn)
         self.cornerWidgetLayout.addWidget(self.start_vivado_btn)
         self.cornerWidgetLayout.addWidget(self.export_project_btn)
         self.cornerWidget.setLayout(self.cornerWidgetLayout)
 
         # Initializing UI Elements
         self.mainLayout = QVBoxLayout()
-
         self.tabs = QTabWidget()
 
         # Creating a container
         self.container = QWidget()
-
         self.proj_dir = proj_dir
-
         self.generator = Generator()
         self.project_manager = ProjectManager(self.proj_dir, self)
 

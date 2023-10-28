@@ -3,6 +3,7 @@ import os
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
+from pathlib import Path
 import sys
 sys.path.append(".")
 from Home.home import Home
@@ -27,10 +28,9 @@ APP_DESCRIPTION1 = "<ul><li>Fast capture and generation of HDL model and testben
                  "<li>EDA project creation and launch</li>" \
                  "<li>Supports VHDL and Verilog / AMD Xilinx Vivado</li>" \
                  "<li>Open source application</li></ul>"
+
 class HDLGen(QMainWindow):
-
     def __init__(self):
-
         super().__init__()
         self.setWindowTitle("HDLGen-ChatGPT Version 1.0.0")
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
@@ -124,42 +124,28 @@ class HDLGen(QMainWindow):
         self.setup_ui()
 
     def setup_ui(self):
-
         print("Setting up UI")
-        self.button_layout.addWidget(self.hdlgen_logo,0,0,1,3) #alignment=Qt.AlignLeft)
-        self.button_layout.addWidget(self.new_btn, 0, 5, 1,1) #alignment= Qt.AlignRight)
-        self.button_layout.addWidget(self.open_btn, 0, 4,1,1) #alignment= Qt.AlignRight)
-        self.button_layout.addWidget(self.settings_btn, 0, 6,1,1)# alignment=Qt.AlignRight)
-        self.button_layout.addWidget(self.help_btn, 0, 7,1,1)# alignment=Qt.AlignLeft)
+        self.button_layout.addWidget(self.hdlgen_logo,0,0,1,3)
+        self.button_layout.addWidget(self.new_btn, 0, 5, 1,1)
+        self.button_layout.addWidget(self.open_btn, 0, 4,1,1)
+        self.button_layout.addWidget(self.settings_btn, 0, 6,1,1)
+        self.button_layout.addWidget(self.help_btn, 0, 7,1,1)
 
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-
-        #self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addLayout(self.button_layout)
-       # self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addWidget(self.hdlgen_logo_1, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 5))
-        #self.info_layout.addLayout(self.button_layout)
         self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 5))
         self.info_layout.addWidget(self.github_link, alignment=Qt.AlignCenter)
-        #self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
-        #self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
 
-       # self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)
-        #self.mainLayout.addWidget(self.help_btn_spacer, alignment=Qt.AlignTop)
         self.mainLayout.addLayout(self.info_layout)
-        #self.mainLayout.addWidget(self.settings_btn, alignment=Qt.AlignTop)
-        #self.mainLayout.addWidget(self.help_btn, alignment=Qt.AlignTop)
-
-
-        self.setLayout(self.mainLayout)
-
         self.container.setLayout(self.mainLayout)
 
+        self.setLayout(self.mainLayout)
         self.setCentralWidget(self.container)
 
     def help_window(self):
@@ -174,38 +160,39 @@ class HDLGen(QMainWindow):
     def open_project(self):
         self.config.read('config.ini')
         lastDir = self.config.get('user', 'recentEnviro')
+
         if not os.path.exists(lastDir):
-            lastDir = "../User_Projects/"
-        self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", lastDir,
-                                                         filter="HDLGen (*.hdlgen)")
-        if self.load_proj_dir[0]:
-            print("Loading project from ", self.load_proj_dir[0])
-            self.window = Home(self.load_proj_dir)
+            lastDir = Path("../User_Projects/")
+
+        selected_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project HDLGen File", lastDir, filter="HDLGen (*.hdlgen)")
+        load_proj_dir = Path(selected_proj_dir[0])
+
+        if load_proj_dir.exists():
+            print("Loading project from ", str(load_proj_dir))
+            self.window = Home(load_proj_dir)
             self.window.showMaximized()
             self.close()
 
     def link(self, url_str):
         QDesktopServices.openUrl(QUrl(url_str))
+
     def settings_window(self):
         settings_dialog = settingsDialog()
         settings_dialog.exec_()
 
 def main():
+    if hasattr(Qt, 'AA_EnableHighDpiScaling'):
+        QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+      
+    if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
+        QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     app = QApplication(sys.argv)
     window = HDLGen()
     window.setWindowFlags(window.windowFlags() | Qt.WindowMaximizeButtonHint)
     window.move(0, 0)
     window.show()
-    #window.showMaximized()
     app.setStyle('windowsvista')
     app.exec_()
 
-
 if __name__ == '__main__':
-    if hasattr(Qt, 'AA_EnableHighDpiScaling'):
-        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-      
-    if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
-        QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
-      
     main()

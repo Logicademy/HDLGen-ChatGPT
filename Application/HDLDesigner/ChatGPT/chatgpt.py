@@ -246,7 +246,7 @@ class ChatGPT(QWidget):
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
 
 
-        root = minidom.parse(proj_dir[0])
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         projectManager = HDLGen.getElementsByTagName("projectManager")
         HDL = projectManager[0].getElementsByTagName("HDL")[0]

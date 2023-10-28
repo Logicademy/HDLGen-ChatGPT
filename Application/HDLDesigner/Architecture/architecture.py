@@ -485,7 +485,7 @@ class Architecture(QWidget):
     def load_data(self, proj_dir):
         xml_data_path = ProjectManager.get_xml_data_path()
         self.updateProcessName(xml_data_path)
-        root = minidom.parse(proj_dir[0])
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 

@@ -117,7 +117,7 @@ class TestPlan(QWidget):
 
     def add_testplan(self):
         if self.proj_dir is not None:
-            root = minidom.parse(self.proj_dir[0])
+            root = minidom.parse(str(self.proj_dir))
             HDLGen = root.documentElement
             hdl_design = HDLGen.getElementsByTagName("hdlDesign")
             testbench_node = hdl_design[0].getElementsByTagName('testbench')
@@ -144,11 +144,7 @@ class TestPlan(QWidget):
 
     def save_data(self):
         xml_data_path = ProjectManager.get_xml_data_path()
-        spec_dir_path = ProjectManager.get_proj_specification_dir()
-        specification_file = os.path.join(
-            ProjectManager.get_proj_specification_dir(),
-            "testbench.txt"
-        )
+        specification_file = os.path.join(ProjectManager.get_proj_specification_dir(), "testbench.txt")
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement
@@ -188,7 +184,7 @@ class TestPlan(QWidget):
         self.note = self.generate_testplan_template()
 
         if self.proj_dir is not None:
-            root = minidom.parse(self.proj_dir[0])
+            root = minidom.parse(str(self.proj_dir))
             HDLGen = root.documentElement
             hdl_design = HDLGen.getElementsByTagName("hdlDesign")
             testbench_node = hdl_design[0].getElementsByTagName('testbench')
@@ -212,7 +208,7 @@ class TestPlan(QWidget):
         signals = []
 
         if self.proj_dir is not None:
-            signal_nodes = minidom.parse(self.proj_dir[0]).documentElement.getElementsByTagName("hdlDesign")[0].getElementsByTagName("entityIOPorts")[0].getElementsByTagName('signal')
+            signal_nodes = minidom.parse(str(self.proj_dir)).documentElement.getElementsByTagName("hdlDesign")[0].getElementsByTagName("entityIOPorts")[0].getElementsByTagName('signal')
             for idx, i in enumerate(signal_nodes):
                 name = i.getElementsByTagName('name')[0].firstChild.data
                 mode = i.getElementsByTagName('mode')[0].firstChild.data
