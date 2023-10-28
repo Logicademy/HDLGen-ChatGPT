@@ -233,7 +233,7 @@ class ChatGPT(QWidget):
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        xml_str = os.linesep.join([line for line in xml_str.splitlines() if line.strip() != ''])
         # Writing xml file
         with open(xml_data_path, "w") as f:
             f.write(xml_str)

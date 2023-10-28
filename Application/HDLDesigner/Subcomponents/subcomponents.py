@@ -209,7 +209,7 @@ class Subcomponents(QWidget):
         hdlDesign[0].replaceChild(new_comp_node, hdlDesign[0].getElementsByTagName("components")[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        xml_str = os.linesep.join([line for line in xml_str.splitlines() if line.strip() != ''])
         # Writing xml file
         with open(mainPackageDir, "w") as f:
             f.write(xml_str)

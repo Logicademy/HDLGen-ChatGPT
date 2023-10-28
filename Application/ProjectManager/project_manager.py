@@ -42,9 +42,7 @@ class ProjectManager(QWidget):
         ProjectManager.xml_data_path = None
         ProjectManager.package_xml_data_path = None
 
-
         # Initializing Widgets
-
         title_font = QFont()
         title_font.setPointSize(12)
         title_font.setBold(True)
@@ -61,9 +59,11 @@ class ProjectManager(QWidget):
         self.proj_setting_title = QLabel("Project Settings")
         self.proj_setting_title.setFont(title_font)
         self.proj_setting_title.setStyleSheet(WHITE_COLOR)
+
         self.eda_tools_title = QLabel("EDA Tools")
         self.eda_tools_title.setFont(title_font)
         self.eda_tools_title.setStyleSheet(WHITE_COLOR)
+
         self.generate_title = QLabel("Generate")
         self.generate_title.setFont(title_font)
         self.generate_title.setStyleSheet(WHITE_COLOR)
@@ -71,58 +71,53 @@ class ProjectManager(QWidget):
         self.name_label = QLabel('Project Name*')
         self.name_label.setStyleSheet("color: white;")
         self.name_label.setFont(input_font)
-        #self.name_change_btn = QPushButton("Edit")
-        #self.name_change_btn.setStyleSheet(
-          #  "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; }"
-           # " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;}")
-        #self.name_change_btn.setFixedSize(50, 22)
+
         self.enviro_label = QLabel('Project Environment*')
         self.enviro_label.setStyleSheet("color: white;")
         self.enviro_label.setFont(input_font)
+
         self.dir_label = QLabel('Project Folder*')
         self.dir_label.setStyleSheet("color: white;")
         self.dir_label.setFont(input_font)
+
         self.proj_folder_input = QLineEdit()
         self.proj_folder_input.setReadOnly(True)
         self.proj_folder_input.setFont(input_font)
+
         self.proj_enviro_input = QLineEdit()
         self.proj_enviro_input.setReadOnly(True)
         self.proj_enviro_input.setFont(input_font)
+
         self.proj_name_input = QLineEdit()
         self.proj_name_input.setFont(input_font)
-       # self.proj_name_input.setReadOnly(True)
+
         self.proj_folder_btn = QPushButton("Browse")
         self.proj_folder_btn.setFont(input_font)
         self.proj_folder_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain; padding; 10px; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding; 10px;}")
+        
         self.proj_enviro_btn = QPushButton("Browse")
         self.proj_enviro_btn.setFont(input_font)
         self.proj_enviro_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain;padding; 10px; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding; 10px;}")
-        #self.proj_folder_btn.setFixedSize(50, 22)
-        #self.proj_enviro_btn.setFixedSize(50, 22)
 
         self.copy_proj_btn = QPushButton("Copy project")
         self.copy_proj_btn.setFont(input_font)
         self.copy_proj_btn.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 5px; border-style: plain;padding; 10px; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 5px; border-style: plain;padding; 10px;}")
-        #self.copy_proj_btn.setFixedSize(80, 22)
         self.copy_proj_btn.setVisible(False)
+
         self.proj_info_label = QLabel("Project Information Link")
         self.proj_info_label.setFont(input_font)
         self.proj_info_label.setStyleSheet(WHITE_COLOR)
         self.proj_info_link = QPushButton("Project Link")
         self.proj_info_link.setFont(input_font)
-        #self.proj_info_link.setFixedSize(100,25)
         self.proj_info_link.setEnabled(False)
         self.proj_info_addlink = QPushButton("Add Project Link")
         self.proj_info_addlink.setFont(input_font)
-        #self.proj_info_addlink.setFixedSize(120, 25)
-
-
 
         self.lang_label = QLabel("Languages")
         self.lang_label.setFont(bold_font)
@@ -162,7 +157,6 @@ class ProjectManager(QWidget):
         self.intel_dir_input.setReadOnly(True)
         self.intel_select_dir = QPushButton("Browse")
         self.intel_select_dir.setFont(input_font)
-       # self.intel_select_dir.setFixedSize(60, 26)
 
         self.vivado_check = QCheckBox("Xilinx Vivado")
         self.vivado_check.setFont(bold_font)
@@ -516,6 +510,7 @@ class ProjectManager(QWidget):
     @staticmethod
     def get_intel_exe_path():
         return ProjectManager.intel_exe_path
+
     def save_xml(self):
         self.project_manager_change = False
         ProjectManager.vivado_bat_path = self.vivado_dir_input.text()
@@ -753,7 +748,7 @@ class ProjectManager(QWidget):
 
             # converting the doc into a string in xml format
             xml_str = data.toprettyxml()
-            xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+            xml_str = os.linesep.join([line for line in xml_str.splitlines() if line.strip() != ''])
 
             ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
 
@@ -794,7 +789,6 @@ class ProjectManager(QWidget):
             proj_dir = os.path.dirname(proj_dir)
         return None
 
-
     def load_proj_data(self, load_proj_dir):
 
         print("Loading project from ", load_proj_dir[0])
@@ -827,7 +821,7 @@ class ProjectManager(QWidget):
             settings.getElementsByTagName("location")[0].firstChild.data = new_proj_loc
             # converting the doc into a string in xml format
             xml_str = data.toprettyxml()
-            xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+            xml_str = os.linesep.join([line for line in xml_str.splitlines() if line.strip() != ''])
             # Writing xml file
             with open(load_proj_dir[0], "w") as f:
                 f.write(xml_str)
@@ -909,6 +903,7 @@ class ProjectManager(QWidget):
     def language_help_window(self):
         language_help_dialog = LanguageHelpDialog()
         language_help_dialog.exec_()
+        
     @staticmethod
     def get_hdl():
         if ProjectManager.hdl == "VHDL":
@@ -931,6 +926,7 @@ class ProjectManager(QWidget):
             else:
                 self.proj_info_addlink.setText("Add Project Link")
                 self.proj_info_link.setEnabled(False)
+    
     def openLink(self):
         #self.named_edit_done()
         msgBox = QMessageBox()
@@ -991,6 +987,7 @@ class ProjectManager(QWidget):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("Error with folder set up")
             msgBox.exec_()
+    
     def export_project(self):
         #self.named_edit_done()
         # Get the base name of the folder
@@ -1031,6 +1028,7 @@ class ProjectManager(QWidget):
         msgBox.setText("Zipped to " + zip_file_name)
         msgBox.exec_()
         print(f"Successfully created {zip_file_name}!")
+    
     def edaCheckbox(self):
         self.project_manager_change = True
         button = self.sender()
