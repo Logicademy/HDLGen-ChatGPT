@@ -213,6 +213,7 @@ class TestPlan(QWidget):
                 name = i.getElementsByTagName('name')[0].firstChild.data
                 mode = i.getElementsByTagName('mode')[0].firstChild.data
                 port = i.getElementsByTagName('type')[0].firstChild.data
+                # COMMENT : Comment this fuckery and see if there's a better way to do this
                 port_width = (int(port[port.index("(")+1:].split(' ')[0]) + 1) if port.endswith(")") else 1
                 signals.append([name, mode, port_width])
                 

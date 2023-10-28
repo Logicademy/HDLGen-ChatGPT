@@ -1098,7 +1098,7 @@ class Generator(QWidget):
                     # Loop over each row in the testbench_table, and check if the 2nd entry is 
                     for _, row in enumerate(self.testbench_table):
                         if row[1] == "out":
-                            testbench_code += "assert {row} = {if_statement} report \"TestNo {testNo} {row} mismatch\" severity warning;\n".format(
+                            testbench_code += "\tassert {row} = {if_statement} report \"TestNo {testNo} {row} mismatch\" severity warning;\n".format(
                                 row = row[0],
                                 if_statement = ("x\"" + row[test+3] + "\"") if row[3] == "hex" else ("'" + row[test+3] + "'"),
                                 testNo = test
