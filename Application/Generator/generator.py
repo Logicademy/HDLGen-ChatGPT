@@ -848,7 +848,9 @@ class Generator(QWidget):
                     dir = dir.replace("/VHDL/model/" + namedir[0] + ".vhd",
                                       "/" + lang + "/model/" + namedir[0] + "." + ext)
 
-                    if not os.path.exists(ProjectManager.get_proj_environment() + dir):
+                    if not os.path.exists(
+                        os.path.join(ProjectManager.get_proj_environment(), dir)
+                    ):
                         print(ProjectManager.get_proj_environment() + dir + " Does not exist")
                         msgBox = QMessageBox()
                         msgBox.setWindowTitle("Alert")
