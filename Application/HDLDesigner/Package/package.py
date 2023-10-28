@@ -238,7 +238,7 @@ class Package(QWidget):
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([line for line in xml_str.splitlines() if line.strip() != ''])
+        xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
         with open(mainPackageDir, "w") as f:
             f.write(xml_str)

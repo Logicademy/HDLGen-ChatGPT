@@ -748,7 +748,7 @@ class ProjectManager(QWidget):
 
             # converting the doc into a string in xml format
             xml_str = data.toprettyxml()
-            xml_str = os.linesep.join([line for line in xml_str.splitlines() if line.strip() != ''])
+            xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
 
             ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
 
@@ -821,7 +821,7 @@ class ProjectManager(QWidget):
             settings.getElementsByTagName("location")[0].firstChild.data = new_proj_loc
             # converting the doc into a string in xml format
             xml_str = data.toprettyxml()
-            xml_str = os.linesep.join([line for line in xml_str.splitlines() if line.strip() != ''])
+            xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
             # Writing xml file
             with open(load_proj_dir[0], "w") as f:
                 f.write(xml_str)
