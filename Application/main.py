@@ -164,7 +164,7 @@ class HDLGen(QMainWindow):
         if not os.path.exists(lastDir):
             lastDir = Path("../User_Projects/")
 
-        selected_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project HDLGen File", lastDir, filter="HDLGen (*.hdlgen)")
+        selected_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project HDLGen File", str(lastDir), filter="HDLGen (*.hdlgen)")
         load_proj_dir = Path(selected_proj_dir[0])
 
         if load_proj_dir.exists():
