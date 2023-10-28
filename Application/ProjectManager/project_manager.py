@@ -805,7 +805,7 @@ class ProjectManager(QWidget):
 
         # If the project location saved in the XML file, doesn't match the XML file's actual path
         # then the whole project has been moved. The parents attribute of a Path() is a list of parents to the Path().
-        if Path(proj_loc) != load_proj_dir.parents[1]:
+        if str(proj_loc) != str(load_proj_dir.parents[1]):
             print(f"Project Location Change Detected!\nNew location: {str(load_proj_dir.parents[1])}")
             print(f"New environment: {str(load_proj_dir.parents[2])}")
 
