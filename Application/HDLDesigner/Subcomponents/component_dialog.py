@@ -246,7 +246,7 @@ class ComponentDialog(QDialog):
 
         data.append(self.component_name_input.text())
         dir = self.file_path_input.text()
-        dir = dir.replace(ProjectManager.get_proj_environment(),"")
+        dir = dir.replace(str(ProjectManager.get_proj_environment()),"")
         data.append(dir)
         data.append(signals)
         self.cancelled = False
