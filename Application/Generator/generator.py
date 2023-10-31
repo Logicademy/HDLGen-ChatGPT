@@ -851,10 +851,10 @@ class Generator(QWidget):
                     if not os.path.exists(
                         os.path.join(ProjectManager.get_proj_environment(), dir)
                     ):
-                        print(dir + " does not exist")
+                        print(str(ProjectManager.get_proj_environment()) + dir + " does not exist")
                         msgBox = QMessageBox()
                         msgBox.setWindowTitle("Alert")
-                        msgBox.setText(dir + "\nDoes not exist")
+                        msgBox.setText(str(ProjectManager.get_proj_environment()) + dir + "\nDoes not exist")
                         msgBox.exec_()
                     self.dirs.append(dir)
                     directories = dir.split('/')
