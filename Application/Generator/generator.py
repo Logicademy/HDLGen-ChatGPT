@@ -861,7 +861,7 @@ class Generator(QWidget):
 
                     # Remove the last two elements (folders)
                     dir = '/'.join(directories[:-3])
-                    hdlgenDir = dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
+                    hdlgenDir = str(ProjectManager.get_proj_environment()) + dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
                     modelRoot = minidom.parse(hdlgenDir)
                     modelHDLGen = modelRoot.documentElement
                     modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
