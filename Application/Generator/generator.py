@@ -851,17 +851,17 @@ class Generator(QWidget):
                     if not os.path.exists(
                         os.path.join(ProjectManager.get_proj_environment(), dir)
                     ):
-                        print(str(ProjectManager.get_proj_environment()) + dir + " does not exist")
+                        print(dir + " does not exist")
                         msgBox = QMessageBox()
                         msgBox.setWindowTitle("Alert")
-                        msgBox.setText(str(ProjectManager.get_proj_environment()) + dir + "\nDoes not exist")
+                        msgBox.setText(dir + "\nDoes not exist")
                         msgBox.exec_()
                     self.dirs.append(dir)
                     directories = dir.split('/')
 
                     # Remove the last two elements (folders)
                     dir = '/'.join(directories[:-3])
-                    hdlgenDir = str(ProjectManager.get_proj_environment()) + dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
+                    hdlgenDir = dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
                     modelRoot = minidom.parse(hdlgenDir)
                     modelHDLGen = modelRoot.documentElement
                     modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
