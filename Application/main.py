@@ -168,7 +168,6 @@ class HDLGen(QMainWindow):
         load_proj_dir = Path(selected_proj_dir[0])
 
         if load_proj_dir.exists():
-            print("Loading project from ", str(load_proj_dir))
             self.window = Home(load_proj_dir)
             self.window.showMaximized()
             self.close()

@@ -812,6 +812,8 @@ class ProjectManager(QWidget):
             # Set the new project location and environment in the settings block of the XML file
             settings.getElementsByTagName("location")[0].firstChild.data = str(load_proj_dir.parents[1])
             settings.getElementsByTagName("environment")[0].firstChild.data = str(load_proj_dir.parents[2])
+            proj_loc = str(load_proj_dir.parents[1])
+            proj_env = str(load_proj_dir.parents[2])
 
             # Convert the raw XML data into a formatted XML document
             xml_str = data.toprettyxml()
@@ -828,6 +830,7 @@ class ProjectManager(QWidget):
 
         self.proj_folder_input.setText(proj_loc)
         self.info = proj_info
+
         if self.info != "None":
             self.proj_info_addlink.setText("Edit Project Link")
             self.proj_info_link.setEnabled(True)
