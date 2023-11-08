@@ -99,7 +99,7 @@ class Home(QMainWindow):
         self.hdl_designer = HDLDesigner(self.proj_dir, load_data)
 
         self.tabs.addTab(self.project_manager, "Project Manager")
-        self.tabs.addTab(self.hdl_designer, "HDL Designer")
+        self.tabs.addTab(self.hdl_designer, "Component Designer")
         self.tabs.addTab(Help(), "Help")
         self.tabs.currentChanged.connect(self.handle_tab_change)
         font = self.tabs.font()
@@ -118,18 +118,15 @@ class Home(QMainWindow):
         self.hdl_designer.generate.generate_model.clicked.connect(self.HDL_model_generate)
         self.hdl_designer.generate.generate_chatgpt_model.clicked.connect(self.chatgpt_model_generate)
         self.hdl_designer.generate.generate_testbench.clicked.connect(self.HDL_testbench_generate)
-        self.hdl_designer.generate.generate_chatgpt_testbench.clicked.connect(self.chatgpt_testbench_generate)
         self.hdl_designer.generate.generate_chatgpt_title.clicked.connect(self.chatgpt_title_generate)
 
         self.hdl_designer.generate.loc_model.clicked.connect(self.open_model_folder)
         self.hdl_designer.generate.chatgpt_loc_model.clicked.connect(self.open_chatgpt_folder)
         self.hdl_designer.generate.loc_testbench.clicked.connect(self.open_testbench_folder)
-        self.hdl_designer.generate.chatgpt_loc_testbench.clicked.connect(self.open_chatgpt_folder)
         self.hdl_designer.generate.chatgpt_loc_title.clicked.connect(self.open_chatgpt_folder)
 
         self.hdl_designer.generate.delete_bk_title_chatgpt.clicked.connect(self.delete_title_msg_backups)
         self.hdl_designer.generate.delete_bk_model_chatgpt.clicked.connect(self.delete_model_msg_backups)
-        self.hdl_designer.generate.delete_bk_testbench_chatgpt.clicked.connect(self.delete_testbench_msg_backups)
         self.hdl_designer.generate.testbench_log.clicked.connect(self.openEDALog)
         self.hdl_designer.generate.delete_bk_model.clicked.connect(self.delete_model_backups)
         self.hdl_designer.generate.delete_bk_testbench.clicked.connect(self.delete_testbench_backups)

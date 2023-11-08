@@ -1089,7 +1089,7 @@ class Generator(QWidget):
                             # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
                             testbench_code += "\t{row} <= {if_statement};\n".format(
                                 row = row[0],
-                                if_statement = ("x\"" + row[test+3] + "\"") if row[3] == "hex" else ("'" + row[test + 3] + "'")
+                                if_statement = ("x\"" + row[test+3] + "\"") if row[3] == "hex" else ("\"" + row[test + 3] + "\"")
                             )
 
                     # Add the wait statement, inserting the delay value for the test being assembled
@@ -2761,7 +2761,7 @@ class Generator(QWidget):
     def create_verilog_testbench_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
         proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        root = minidom.parse(ProjectManager.get_proj_hdlgen())
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         testbench_node = hdlDesign[0].getElementsByTagName('testbench')
