@@ -1065,47 +1065,66 @@ class Generator(QWidget):
                 
                 # Load the testbench table as testbench_table[row][col]
                 self.testbench_table = self.tb_note.split("\n")
-            
-                # Remove any blank rows from the testbench_table, sometimes the XML parser
+                # Remove any blank rows and comments from the testbench_table, sometimes the XML parser
                 # will insert blank lines when pretty-printing the HDLGen XML file
-                self.testbench_table = [row for row in self.testbench_table if row != ""]
+                self.testbench_table = [line for line in self.testbench_table if not (line.startswith("#") or line.strip() == "")]
+
                 for idx, row in enumerate(self.testbench_table):
                     self.testbench_table[idx] = row.split("\t")
 
+                signal_names = self.testbench_table[0][1:-3]
+                signal_modes = self.testbench_table[1][1:-3]
+                signal_radix = self.testbench_table[2][1:-3]
+
+                signals = list(zip(signal_names, signal_modes, signal_radix))
+
+                tests = self.testbench_table[4:]
+                tests = [test[1:] for test in tests]
+
                 # Generate VHDL Testbench based on Testplan
-                # No. of tests = length of first row minus 3 to remove the first 4 headers (Signals, Mode, Width, Radix)
+                # No. of tests = total rows (excluding comments) - 4 (for first 4 lines)
                 # No. of tests should start at 1 and continue until the Nth test
                 # No. of rows = len(testbench)
                 # No. of cols = len(testbench[0])
                 testbench_code = ""
-                for test in range(1, len(self.testbench_table[0]) - 3):
-                    testbench_code += f'\t-- BEGIN Test Number {test}\n'
+                for idx, test in enumerate(tests):
+                    testbench_code += f'\t-- BEGIN Test Number {test[-2]}\n'
                     # Print the test number and the comment for that test
-                    testbench_code += f'\ttestNo <= {test}; -- {self.testbench_table[len(self.testbench_table) - 2][test+3]}\n'
+                    testbench_code += f'\ttestNo <= {test[-2]}; -- {test[-1]}\n'
 
                     # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
-                    for _, row in enumerate(self.testbench_table):
-                        if row[1] == "in":
-                            # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
-                            testbench_code += "\t{row} <= {if_statement};\n".format(
-                                row = row[0],
-                                if_statement = ("x\"" + row[test+3] + "\"") if row[3] == "hex" else ("\"" + row[test + 3] + "\"")
-                            )
+                    for index, (name, mode, radix) in enumerate(signals):
+                        # Determine if the signal radix is hex, binary, or decimal
+                        if radix.split('\'')[1] == "h":
+                            test_value = f'x"{test[index]}"'
+                        elif radix.split('\'')[1] == "b":
+                            test_value = f'"{test[index]}"'
+                        elif radix.split('\'')[1] == "d":
+                            test_value = test[index]
+
+                         # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
+                        if mode == "in":
+                            testbench_code += f"\t{name} <= {test_value};\n"
 
                     # Add the wait statement, inserting the delay value for the test being assembled
-                    testbench_code += f'\twait for ({self.testbench_table[len(self.testbench_table) - 3][test + 3]} * period);\n'
+                    testbench_code += f'\twait for ({test[-3]} * period);\n'
 
-                    # Loop over each row in the testbench_table, and check if the 2nd entry is 
-                    for _, row in enumerate(self.testbench_table):
-                        if row[1] == "out":
-                            testbench_code += "\tassert {row} = {if_statement} report \"TestNo {testNo} {row} mismatch\" severity warning;\n".format(
-                                row = row[0],
-                                if_statement = ("x\"" + row[test+3] + "\"") if row[3] == "hex" else ("'" + row[test+3] + "'"),
-                                testNo = test
-                            )
+                    # Loop over each row in the testbench_table, and check if the 2nd entry is "out", indicating an Output signal
+                    for index, (name, mode, radix) in enumerate(signals):
+                        # Determine if the signal radix is hex, binary, or decimal
+                        if radix.split('\'')[1] == "h":
+                            test_value = f'x"{test[index]}"'
+                        elif radix.split('\'')[1] == "b":
+                            test_value = f'"{test[index]}"'
+                        elif radix.split('\'')[1] == "d":
+                            test_value = test[index]
 
-                    testbench_code += f'\t-- END Test Number {test}\n\n'
-            except Exception  as e:
+                        # If an input signal is found, add the VHDL to set that input to the corrosponding value in the test table
+                        if mode == "out":
+                            testbench_code += f"\tassert {name} = {test_value} report \"TestNo {test[-2]} {name} mismatch\" severity warning;\n"
+
+                    testbench_code += f'\t-- END Test Number {test[-2]}\n\n'
+            except Exception as e:
                 testbench_code = ""
 
         UUTEnt = ""

@@ -215,35 +215,27 @@ class TestPlan(QWidget):
                 port = i.getElementsByTagName('type')[0].firstChild.data
                 # COMMENT : Comment this fuckery and see if there's a better way to do this
                 port_width = (int(port[port.index("(")+1:].split(' ')[0]) + 1) if port.endswith(")") else 1
-                signals.append([name, mode, port_width])
+
+                if name not in ["clk", "rst"]:
+                    signals.append([name, mode, port_width])
                 
 
         template = [
-            ("Signals", "Mode", "Width", "Radix", "Test 1", "Test 2")
+            ("Signals",) + tuple(signal[0] for signal in signals) + ("Delay", "TestNo", "Note"),
+            ("Mode",) + tuple(signal[1] for signal in signals) + ("None", "None", "None"),
+            ("Radix",) + tuple(str(signal[2]) + ('\'h' if signal[2] >= 4 else '\'b') for signal in signals) + ("None", "None", "None")
         ]
 
-        for name, mode, port_width in signals:
-            if name != "clk":
-                template.append((
-                    name,
-                    mode,
-                    str(port_width),
-                    "hex" if port_width >= 4 else "binary",
-                    ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width),
-                    ("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width)
-                ))
+        template.append(tuple('=' for _ in template[0]))
 
-        template.append(
-            ("Delay",  "-", "-", "-", "1", "1")
-        )
+        for i in range(3):
+            template.append(
+                ("",) +
+                tuple(("0" * math.ceil(port_width / 4)) if port_width >= 4 else ("0" * port_width) for _, _, port_width in signals) +
+                ("1", str(i+1), f"Note for test number {i+1}")
+            )
 
-        template.append(
-            ("TestNo", "-", "-", "-", "1", "2")
-        )
-
-        template.append(
-            ("Note",   "-", "-", "-", "Test 1", "Test 2")
-        )
+        template.append(("# Example of a comment - comments are ignored by the testplan generator", ""))
 
         output = ""
         for row in template:

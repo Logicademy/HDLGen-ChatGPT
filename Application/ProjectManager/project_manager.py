@@ -3,8 +3,9 @@
 import os
 from xml.dom import minidom
 from pathlib import Path
-from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QLineEdit, QRadioButton, QCheckBox, QComboBox, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QFileDialog
-from PySide2.QtGui import QFont, Qt
+from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QLineEdit, QRadioButton, QCheckBox, QComboBox, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QFileDialog, QToolTip
+from PySide2.QtGui import QFont, Qt, QRegExpValidator
+from PySide2.QtCore import QRegExp
 import qtawesome as qta
 import configparser
 import webbrowser
@@ -67,15 +68,23 @@ class ProjectManager(QWidget):
         self.generate_title.setFont(title_font)
         self.generate_title.setStyleSheet(WHITE_COLOR)
 
-        self.name_label = QLabel('Project Name*')
-        self.name_label.setStyleSheet("color: white;")
-        self.name_label.setFont(input_font)
-
-        self.enviro_label = QLabel('Project Environment*')
+        self.enviro_label = QLabel('Project Folder*')
+        self.enviro_label.setToolTip("The folder containing all components of this project")
         self.enviro_label.setStyleSheet("color: white;")
         self.enviro_label.setFont(input_font)
 
-        self.dir_label = QLabel('Project Folder*')
+        self.enviro_name = QLabel('Project Name')
+        self.enviro_name.setToolTip("The name of the project")
+        self.enviro_name.setStyleSheet("color: white;")
+        self.enviro_name.setFont(input_font)
+
+        self.name_label = QLabel('Component Name*')
+        self.name_label.setToolTip("The name of the component")
+        self.name_label.setStyleSheet("color: white;")
+        self.name_label.setFont(input_font)
+
+        self.dir_label = QLabel('Component Folder*')
+        self.dir_label.setToolTip("A folder in the Project Folder where the component is stored")
         self.dir_label.setStyleSheet("color: white;")
         self.dir_label.setFont(input_font)
 
@@ -83,12 +92,20 @@ class ProjectManager(QWidget):
         self.proj_folder_input.setReadOnly(True)
         self.proj_folder_input.setFont(input_font)
 
+        self.proj_enviro_name_input = QLineEdit()
+        self.proj_enviro_name_input.setReadOnly(True)
+        self.proj_enviro_name_input.setFont(input_font)
+
         self.proj_enviro_input = QLineEdit()
         self.proj_enviro_input.setReadOnly(True)
         self.proj_enviro_input.setFont(input_font)
 
         self.proj_name_input = QLineEdit()
         self.proj_name_input.setFont(input_font)
+        # Disallow invalid characters in the component name (any characters not allowed in a Vivado entity)
+        self.validator = QRegExpValidator(QRegExp(r'[^\s\t\r\n-]*'))
+        # Have to do this by checking all characters when cursor position changes, validating entire string at once causes weirdness
+        self.proj_name_input.cursorPositionChanged.connect(lambda oldPos, newPos: self.show_character_input_error(newPos))
 
         self.proj_folder_btn = QPushButton("Browse")
         self.proj_folder_btn.setFont(input_font)
@@ -240,25 +257,46 @@ class ProjectManager(QWidget):
             self.fill_default_proj_details()
         self.startApp=False
 
+    def show_character_input_error(self, newPos):
+        valid = self.validator.validate(self.proj_name_input.text(), newPos)
+        if valid[0] == 0:
+            self.proj_name_input.setText(self.proj_name_input.text()[:-1])
+            QToolTip.showText(self.proj_name_input.mapToGlobal(self.proj_name_input.rect().bottomLeft()), "Character not allowed")
+        else:
+            QToolTip.hideText()
+
     def setup_ui(self):
         self.Settings_top_layout.addWidget(self.proj_setting_title, 0, 0, 1, 1)
         self.Settings_top_layout.addWidget(self.settings_info_btn, 0, 1, 1, 1)
+
         self.projSettingLayout.addLayout(self.Settings_top_layout)
         self.projSettingLayout.addSpacing(SMALL_SPACING)
-        self.projDetailIpLayout.addWidget(self.name_label, 0, 0, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_name_input, 1, 0, 1, 3)
-        #self.projDetailIpLayout.addWidget(self.name_change_btn, 1, 3, 1, 1, Qt.AlignRight)
-        self.projDetailIpLayout.addWidget(self.copy_proj_btn, 1, 3, 1, 1, Qt.AlignRight)
+
+        # Show Project Name label and Project Name immutable input
+        self.projDetailIpLayout.addWidget(self.enviro_name, 0, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_enviro_name_input, 1, 0, 1, 3)
+
+        # Show Project Folder label and Project Folder immutable input, with Browse Button
         self.projDetailIpLayout.addWidget(self.enviro_label, 2, 0, 1, 1)
         self.projDetailIpLayout.addWidget(self.proj_enviro_input, 3, 0, 1, 3)
         self.projDetailIpLayout.addWidget(self.proj_enviro_btn, 3, 3, 1, 1, Qt.AlignRight)
 
-        self.projDetailIpLayout.addWidget(self.dir_label, 4, 0, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_folder_input, 5, 0, 1, 3)
-        self.projDetailIpLayout.addWidget(self.proj_folder_btn, 5, 3, 1, 1, Qt.AlignRight)
-        self.projDetailIpLayout.addWidget(self.proj_info_label, 6, 0, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_info_link, 6, 1, 1, 1)
-        self.projDetailIpLayout.addWidget(self.proj_info_addlink, 6, 2, 1, 1)
+        self.projDetailIpLayout.addWidget(self.copy_proj_btn, 1, 3, 1, 1, Qt.AlignRight)
+
+        # Show Component Name label and Component Name immutable input
+        self.projDetailIpLayout.addWidget(self.name_label, 4, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_name_input, 5, 0, 1, 3)
+
+        # Show Component Folder label and Component Folder input, with Browse Button
+        self.projDetailIpLayout.addWidget(self.dir_label, 6, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_folder_input, 7, 0, 1, 3)
+        self.projDetailIpLayout.addWidget(self.proj_folder_btn, 7, 3, 1, 1, Qt.AlignRight)
+        
+        # Project Information Link
+        self.projDetailIpLayout.addWidget(self.proj_info_label, 8, 0, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_link, 8, 1, 1, 1)
+        self.projDetailIpLayout.addWidget(self.proj_info_addlink, 8, 2, 1, 1)
+        
         self.projSettingLayout.addLayout(self.projDetailIpLayout)
 
         self.proj_name_input.textChanged.connect(self.proj_detail_change)
@@ -376,6 +414,7 @@ class ProjectManager(QWidget):
 
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_enviro_input.setText(self.proj_enviro)
+        self.proj_enviro_name_input.setText(os.path.dirname(self.proj_enviro))
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
@@ -490,6 +529,7 @@ class ProjectManager(QWidget):
             ProjectManager.proj_enviro = file
             ProjectManager.proj_enviro = ProjectManager.proj_enviro.replace("\\", "/")
             self.proj_enviro_input.setText(str(ProjectManager.get_proj_environment()))
+            self.proj_enviro_name_input.setText(str(os.path.dirname(ProjectManager.get_proj_environment())))
             self.proj_folder_input.setText(str(ProjectManager.get_proj_dir()))
 
     def get_intel_dir(self):
@@ -798,22 +838,24 @@ class ProjectManager(QWidget):
         # Get the <settings/> element inside of the <projectManager/> element
         settings = project_manager.getElementsByTagName("settings")[0]
 
-        proj_name = settings.getElementsByTagName("name")[0].firstChild.data
-        proj_env = settings.getElementsByTagName("environment")[0].firstChild.data
-        proj_loc = settings.getElementsByTagName("location")[0].firstChild.data
-        proj_info = settings.getElementsByTagName("info")[0].firstChild.data
+        self.proj_name = settings.getElementsByTagName("name")[0].firstChild.data
+        self.proj_enviro = Path(settings.getElementsByTagName("environment")[0].firstChild.data)
+        self.proj_env_name = Path(self.proj_enviro).stem
+        self.proj_dir = settings.getElementsByTagName("location")[0].firstChild.data
+        self.proj_info = settings.getElementsByTagName("info")[0].firstChild.data
 
         # If the project location saved in the XML file, doesn't match the XML file's actual path
         # then the whole project has been moved. The parents attribute of a Path() is a list of parents to the Path().
-        if str(proj_loc) != str(load_proj_dir.parents[1]):
+        if str(self.proj_dir) != str(load_proj_dir.parents[1]):
             print(f"Project Location Change Detected!\nNew location: {str(load_proj_dir.parents[1])}")
             print(f"New environment: {str(load_proj_dir.parents[2])}")
 
             # Set the new project location and environment in the settings block of the XML file
             settings.getElementsByTagName("location")[0].firstChild.data = str(load_proj_dir.parents[1])
             settings.getElementsByTagName("environment")[0].firstChild.data = str(load_proj_dir.parents[2])
-            proj_loc = str(load_proj_dir.parents[1])
-            proj_env = str(load_proj_dir.parents[2])
+            self.proj_dir = str(load_proj_dir.parents[1])
+            self.proj_enviro = str(load_proj_dir.parents[2])
+            self.proj_env_name = str(load_proj_dir.parents[2].stem)
 
             # Convert the raw XML data into a formatted XML document
             xml_str = data.toprettyxml()
@@ -825,13 +867,14 @@ class ProjectManager(QWidget):
             with open(load_proj_dir, "w", encoding="utf-8") as f:
                 f.write(xml_str)
 
-        self.proj_name_input.setText(proj_name)
-        self.proj_enviro_input.setText(proj_env)
+        self.proj_name_input.setText(self.proj_name)
+        self.proj_enviro_input.setText(str(self.proj_enviro))
+        self.proj_enviro_name_input.setText(self.proj_env_name)
 
-        self.proj_folder_input.setText(proj_loc)
-        self.info = proj_info
+        self.proj_folder_input.setText(str(self.proj_dir))
+        self.info = self.proj_info
 
-        if self.info != "None":
+        if self.proj_info != "None":
             self.proj_info_addlink.setText("Edit Project Link")
             self.proj_info_link.setEnabled(True)
 
@@ -865,7 +908,7 @@ class ProjectManager(QWidget):
                 self.verilog_check.setChecked(True)
                 ProjectManager.hdl = "Verilog"
         self.config.read('config.ini')
-        self.config.set("user", "recentEnviro", proj_env)
+        self.config.set("user", "recentEnviro", str(self.proj_enviro))
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
         print("Project successfully loaded!")
@@ -968,13 +1011,12 @@ class ProjectManager(QWidget):
             msgBox.exec_()
     
     def export_project(self):
-        #self.named_edit_done()
         # Get the base name of the folder
-        dir = os.path.join(self.proj_dir, self.proj_name_input.text(), "HDLGenPrj", self.proj_name_input.text(), ".hdlgen")
-        folder_path = os.path.dirname(os.path.dirname(dir))
-        base_name = os.path.basename(folder_path)
+        dir = Path(ProjectManager.get_proj_hdlgen())
+        folder_path = dir.parents[1]
+        base_name = ProjectManager.get_proj_name()
         # Get the directory path of the folder
-        folder_dir = os.path.dirname(folder_path)
+        folder_dir = self.proj_enviro
 
         # Prompt the user to enter a zip file name
         while True:
