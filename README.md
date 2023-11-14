@@ -11,8 +11,7 @@
 * [Tutorials and project downloads](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/videos/HDLGen-ChatGPT+demos.pdf)
 * [User experiences](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/Early+user+feedback+(16+users)+To+John+Patrick.pdf)
 ##
-* [Kanban project management](https://github.com/users/abishek-bupathi/projects/1)
+* [Kanban project management](https://github.com/orgs/HDLGen-ChatGPT/projects/3/views/1)
 * HDLGen-ChatGPT / ChatGPT / EDA toolsuite process diagram:
 ![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png)
 * License: MIT - <http://www.opensource.org/licenses/mit-license.ph
-* [Links to online HDL testbench generators](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/Online+HDL+Generator+Examples.pdf)
