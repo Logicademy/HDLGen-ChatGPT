@@ -182,6 +182,7 @@ class Subcomponents(QWidget):
             self.comps.pop(row)
             self.comps_names.pop(row)
             self.save_data()
+            
     def save_data(self):
         mainPackageDir = ProjectManager.get_package_hdlgen()
 

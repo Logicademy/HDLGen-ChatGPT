@@ -207,17 +207,52 @@ class TestPlan(QWidget):
     def generate_testplan_template(self):
         signals = []
 
+        title = None
+        authors = None
+        company = None
+        email = None
+        date = None
+        component_type = None
+
+        xml_data_path = ProjectManager.get_xml_data_path()
+        HDLDesign = minidom.parse(xml_data_path).documentElement.getElementsByTagName("hdlDesign")[0]
+        project_header_data = HDLDesign.getElementsByTagName("header")
+        project_clkrst_data = HDLDesign.getElementsByTagName("clkAndRst")
+
+        if project_header_data is not None:
+            title = project_header_data[0].getElementsByTagName("title")[0].firstChild.data
+            authors = project_header_data[0].getElementsByTagName("authors")[0].firstChild.data
+            company = project_header_data[0].getElementsByTagName("company")[0].firstChild.data
+            email = project_header_data[0].getElementsByTagName("email")[0].firstChild.data
+            date = project_header_data[0].getElementsByTagName("date")[0].firstChild.data
+
+        if project_clkrst_data is not None:
+            component_type = "Register-Transfer Logic"
+        else:
+            component_type = "Combinational Logic"
+
         if self.proj_dir is not None:
             signal_nodes = minidom.parse(str(self.proj_dir)).documentElement.getElementsByTagName("hdlDesign")[0].getElementsByTagName("entityIOPorts")[0].getElementsByTagName('signal')
+            
+            inputs = []
+            outputs = []
+
             for idx, i in enumerate(signal_nodes):
                 name = i.getElementsByTagName('name')[0].firstChild.data
                 mode = i.getElementsByTagName('mode')[0].firstChild.data
                 port = i.getElementsByTagName('type')[0].firstChild.data
                 # COMMENT : Comment this fuckery and see if there's a better way to do this
+                # Edit 2024: **what the fuck** was I thinking when I wrote this holy crap
                 port_width = (int(port[port.index("(")+1:].split(' ')[0]) + 1) if port.endswith(")") else 1
 
                 if name not in ["clk", "rst"]:
-                    signals.append([name, mode, port_width])
+                    if mode == "in":
+                        inputs.append([name, mode, port_width])
+                    elif mode == "out":
+                        outputs.append([name, mode, port_width])
+            
+            signals += inputs
+            signals += outputs
                 
 
         template = [
@@ -235,7 +270,14 @@ class TestPlan(QWidget):
                 ("1", str(i+1), f"Note for test number {i+1}")
             )
 
+        template.append(("", ""))
         template.append(("# Example of a comment - comments are ignored by the testplan generator", ""))
+
+        template.append(("# HDLGen-ChatGPT Test Specification", ""))
+        template.append((f"# Title: {title}", ""))
+        template.append((f"# Created by: {authors}", ""))
+        template.append((f"# Date: {date}", ""))
+        template.append((f"# Component type: {component_type}", ""))
 
         output = ""
         for row in template:

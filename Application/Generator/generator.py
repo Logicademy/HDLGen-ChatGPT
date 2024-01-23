@@ -1404,14 +1404,12 @@ class Generator(QWidget):
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                     gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"
                 
-                gen_process += "\n\t-- START Testbench stimulus\n"
+                gen_process += "\n\t-- START Testbench stimulus\n\n"
 
                 try:
                     gen_process += testbench_code
                 except NameError:
                     print("Testbench code doesn't exist yet, skipping...")
-
-                
 
                 gen_process += "\n\t-- END Testbench stimulus\n"
 
