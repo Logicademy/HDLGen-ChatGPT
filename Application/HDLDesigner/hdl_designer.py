@@ -31,7 +31,6 @@ class HDLDesigner(QWidget):
         self.tb_code = "No Testbench"
         self.ModelCmd = "No Command Entered"
         self.HeaderCmd = "No Command Entered"
-        self.TBCmd = "No Command Entered"
         self.hdl = "VHDL"
         self.mainLayout = QHBoxLayout()
         self.preview_pane_layout = QVBoxLayout()
@@ -142,19 +141,6 @@ class HDLDesigner(QWidget):
                 filtered_lines = [line for line in lines if not line.startswith('~')]
                 VHDLModel = '\n'.join(filtered_lines)
                 self.ModelCmd = VHDLModel
-                VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
-                VHDLTestbench = VHDLTestbench.replace("&#10;", "\n")
-                VHDLTestbench = VHDLTestbench.replace("&amp;", "&")
-                VHDLTestbench = VHDLTestbench.replace("&quot;", "\"")
-                VHDLTestbench = VHDLTestbench.replace("&apos;", "\'")
-                VHDLTestbench = VHDLTestbench.replace("&lt;", "<")
-                VHDLTestbench = VHDLTestbench.replace("&#x9;", "\t")
-                VHDLTestbench = VHDLTestbench.replace("&gt;", ">")
-                VHDLTestbench = VHDLTestbench.replace("&#44;", ",")
-                lines = VHDLTestbench.split('\n')
-                filtered_lines = [line for line in lines if not line.startswith('~')]
-                VHDLTestbench = '\n'.join(filtered_lines)
-                self.TBCmd = VHDLTestbench
         elif self.hdl == "Verilog":
             entity_name,self.code, instances, self.chatgpt_header, self.chatgpt_model = Generator.generate_verilog(self)
             entity_name, self.tb_code, wcfg, self.chatgpt_tb = Generator.create_verilog_testbench_code(self)
@@ -174,19 +160,6 @@ class HDLDesigner(QWidget):
                 filtered_lines = [line for line in lines if not line.startswith('~')]
                 VerilogModel = '\n'.join(filtered_lines)
                 self.ModelCmd=VerilogModel
-                VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
-                VerilogTestbench = VerilogTestbench.replace("&#10;", "\n")
-                VerilogTestbench = VerilogTestbench.replace("&amp;", "&")
-                VerilogTestbench = VerilogTestbench.replace("&quot;", "\"")
-                VerilogTestbench = VerilogTestbench.replace("&apos;", "\'")
-                VerilogTestbench = VerilogTestbench.replace("&lt;", "<")
-                VerilogTestbench = VerilogTestbench.replace("&#x9;", "\t")
-                VerilogTestbench = VerilogTestbench.replace("&gt;", ">")
-                VerilogTestbench = VerilogTestbench.replace("&#44;", ",")
-                lines = VerilogTestbench.split('\n')
-                filtered_lines = [line for line in lines if not line.startswith('~')]
-                VerilogTestbench = '\n'.join(filtered_lines)
-                self.TBCmd = VerilogTestbench
         if self.tabs.currentIndex() == 6:
             self.preview_window.setText(self.tb_code)
             self.preview_label.setText("HDL Testbench Preview")
@@ -204,14 +177,9 @@ class HDLDesigner(QWidget):
             elif self.generate.tab_widget.currentIndex() == 1:
                 if self.generate.header_testbench_check.isChecked():
                     self.preview_label.setText("ChatGPT Prompt Header Preview")
-                    self.preview_window.setText(self.TBCmd)
                 elif self.generate.testbench_check.isChecked():
                     self.preview_window.setText(self.tb_code)
                     self.preview_label.setText("HDL Testbench Preview")
-                elif self.generate.msg_testbench_check.isChecked():
-                    chatgpt_tb = self.TBCmd + "\n\n" + self.chatgpt_tb + "\n\n" + self.tbnote
-                    self.preview_window.setText(chatgpt_tb)
-                    self.preview_label.setText("ChatGPT Prompt, to generate final HDL testbench")
             elif self.generate.tab_widget.currentIndex() == 2:
                 if self.generate.header_title_check.isChecked():
                     self.preview_label.setText("ChatGPT Prompt Header Preview")
@@ -278,5 +246,3 @@ class VerticalTabWidget(QTabWidget):
                 lang = self.other_class.get_hdl()
                 self.other_class.update_preview(lang)
         self.previous_index = index
-
-

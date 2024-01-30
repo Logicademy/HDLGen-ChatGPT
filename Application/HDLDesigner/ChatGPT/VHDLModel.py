@@ -1,7 +1,7 @@
 #Called in generation.py used for editing the ChatGPT Prompt header
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-import configparser
+import yaml
 
 BLACK_COLOR = "color: black"
 WHITE_COLOR = "color: white"
@@ -51,14 +51,12 @@ class VHDLModelDialog(QDialog):
         self.input_frame = QFrame()
 
         self.cancelled = True
-        self.config = configparser.ConfigParser()
 
         self.setup_ui()
-        if add_or_edit == "edit" and data != None:
-            self.load_data(data)
-    def setup_ui(self):
-        self.config.read('config.ini')
 
+        self.load_data()
+    
+    def setup_ui(self):
         self.input_layout.addWidget(self.ChatGPT_model_label, 0, 0, 1, 4)
         self.input_layout.addWidget(self.ChatGPT_model_input, 1, 0, 4, 4)
         self.input_layout.addWidget(self.reset_btn, 5, 1, 1, 1, alignment=Qt.AlignRight)
@@ -81,68 +79,24 @@ class VHDLModelDialog(QDialog):
         self.cancelled = True
         self.close()
 
-    def load_data(self, data):
-        if data == "None":
-            #data=""
-            self.config.read('config.ini')
-            data = self.config.get('user', 'vhdlchatgptmodel')
-        else:
-            data = data.replace("&#10;", "\n")
-            data = data.replace("&amp;","&")
-            data = data.replace("&amp;", "&")
-            data = data.replace("&quot;","\"")
-            data = data.replace("&apos;","\'")
-            data = data.replace("&lt;","<")
-            data = data.replace("&#x9;","\t")
-            data = data.replace("&gt;",">")
-            data = data.replace("&#44;", ",")
-        lines = data.splitlines()
-        non_empty_lines = []
-        consecutive_empty_lines = 0
-
-        for line in lines:
-            if line.strip() == '':
-                consecutive_empty_lines += 1
-                if consecutive_empty_lines <= 1:
-                    non_empty_lines.append(line)
-            else:
-                consecutive_empty_lines = 0
-                non_empty_lines.append(line)
-
-        data = '\n'.join(non_empty_lines)
+    def load_data(self):
+        with open('prompts.yml', 'r') as prompts:
+            self.config = yaml.safe_load(prompts)
+        
+        data = self.config["vhdlchatgptmodel"]
+        
         self.ChatGPT_model_input.setPlainText(data)
+
     def get_data(self):
         data = self.ChatGPT_model_input.toPlainText().strip()
-        data = data.replace("&", "&amp;")
-        data = data.replace("\n", "&#10;")
-        data = data.replace("\"", "&quot;")
-        data = data.replace("\'", "&apos;")
-        data = data.replace("\n", "&#10;")
-        data = data.replace("<", "&lt;")
-        data = data.replace("\t", "&#x9;")
-        data = data.replace(">", "&gt;")
-        data = data.replace(",", "&#44;")
-        if data == "":
-            data = "None"
         self.cancelled = False
         self.close()
         return data
         
     def reset(self):
-        self.config.read('config.ini')
-        data = self.config.get('user', 'vhdlchatgptmodel')
-        lines = data.splitlines()
-        non_empty_lines = []
-        consecutive_empty_lines = 0
+        with open('prompts.yml', 'r') as prompts:
+            self.config = yaml.safe_load(prompts)
 
-        for line in lines:
-            if line.strip() == '':
-                consecutive_empty_lines += 1
-                if consecutive_empty_lines <= 1:
-                    non_empty_lines.append(line)
-            else:
-                consecutive_empty_lines = 0
-                non_empty_lines.append(line)
-
-        data = '\n'.join(non_empty_lines)
+        data = self.config["vhdlchatgptmodelreset"]
+        
         self.ChatGPT_model_input.setPlainText(data)
