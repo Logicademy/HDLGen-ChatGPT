@@ -240,7 +240,7 @@ class Package(QWidget):
         xml_str = root.toprettyxml()
         xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(mainPackageDir, "w") as f:
+        with open(mainPackageDir, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         self.generator.generate_mainPackage()
         print("Saved type")

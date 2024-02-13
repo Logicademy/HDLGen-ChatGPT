@@ -1098,7 +1098,7 @@ class Generator(QWidget):
                         if radix.split('\'')[1] == "h":
                             test_value = f'x"{test[index]}"'
                         elif radix.split('\'')[1] == "b":
-                            test_value = f'"{test[index]}"'
+                            test_value = f"'{test[index]}'"
                         elif radix.split('\'')[1] == "d":
                             test_value = test[index]
 

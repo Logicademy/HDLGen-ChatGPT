@@ -478,7 +478,7 @@ class Gen(QWidget):
         xml_str = root.toprettyxml()
         xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)
@@ -541,6 +541,7 @@ class Gen(QWidget):
 
                 child = next
         return processNames, concurrentNames
+    
     def chatgpt_help_window(self):
         chatgpt_help_dialog = ChatGPTHelpDialog()
         chatgpt_help_dialog.exec_()
@@ -679,6 +680,7 @@ class Gen(QWidget):
         # Combine the lines into the final output
         output_string = '&#10;'.join(output_lines)
         return output_string
+    
     def replace_with_reserved_concurrent(self, match):
         self.match_count += 1
         if self.match_count == self.total_matches:
@@ -781,7 +783,6 @@ class Gen(QWidget):
             msgBox.setText("An error occurred. Check terminal for details")
             msgBox.exec_()
             print("An error occurred:", str(e))
-
 
     def open_model_folder(self):
         if self.model_VHDL.isVisible():

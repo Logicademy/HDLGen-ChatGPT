@@ -169,6 +169,7 @@ class settingsDialog(QDialog):
         self.browse_btn.clicked.connect(self.set_vivado_bat_path)
         self.quartus_browse_btn.clicked.connect(self.set_quartus_exe_path)
         self.ok_btn.clicked.connect(self.save)
+    
     def set_vivado_bat_path(self):
         vivado_bat_path = QFileDialog.getOpenFileName(self,"Select Xilinx Vivado Batch file (vivado.bat)","C:/", filter="Batch (*.bat)")
         vivado_bat_path = vivado_bat_path[0]

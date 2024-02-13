@@ -331,15 +331,14 @@ class Home(QMainWindow):
     def openEDALog(self):
         if self.project_manager.vhdl_check.isChecked():
             if self.project_manager.vivado_check.isChecked():
-                proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
-                xvhdlpath = proj_folder + "/VHDL/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/xvhdl.log"
-                elabpath = proj_folder + "/VHDL/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/elaborate.log"
+                proj_folder = self.project_manager.get_proj_dir()
+                xvhdlpath = os.path.join(proj_folder, "VHDL", "AMDprj", f"{self.project_manager.get_proj_name()}.sim", "sim_1", "behav", "xsim", "xvhdl.log")
+                elabpath = os.path.join(proj_folder, "VHDL", "AMDprj", f"{self.project_manager.get_proj_name()}.sim", "sim_1", "behav", "xsim", "elaborate.log")
                 msg_box = QMessageBox()
                 msg_box.setIcon(QMessageBox.Question)
                 msg_box.setText("Choose a log option:")
                 msg_box.setWindowTitle("Log Options")
                 msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-                #msg_box.setDefaultButton(QMessageBox.Yes)
                 msg_box.setButtonText(QMessageBox.Yes, "xvhdl.log")
                 msg_box.setButtonText(QMessageBox.No, "elaborate.log")
 
@@ -389,8 +388,6 @@ class Home(QMainWindow):
                 msgBox.setWindowTitle("Alert")
                 msgBox.setText("Intel Quartus is still a work in progress")
                 msgBox.exec_()
-
-
 
         elif self.project_manager.verilog_check.isChecked():
             if self.project_manager.vivado_check.isChecked():

@@ -28,6 +28,7 @@ WHITE_COLOR = "color: white"
 ICONS_DIR = "../Resources/icons/"
 
 class ProjectManager(QWidget):
+    
     def __init__(self, proj_dir, MainWindow):
         super().__init__()
         self.proj_dir = None
@@ -418,14 +419,12 @@ class ProjectManager(QWidget):
         self.proj_name_input.setText("Untitled")
         self.info="None"
 
-
     def proj_enviro_change(self):
         if self.proj_name_input.text() != "" and self.proj_enviro_input.text() != "" and self.proj_folder_input.text() != "":
             msgBox = QMessageBox()
             msgBox.setWindowTitle("Alert")
             msgBox.setText("If changing a Project Environment in an existing project, the types or subcomponents will not be included in the created VHDL package file. You may wish to include types and subcomponents in the new environment, using the Types and Subcomponent menus.")
             msgBox.exec_()
-            #self.save_xml()
     
     def proj_detail_change(self):
         self.project_manager_change = True
@@ -460,8 +459,6 @@ class ProjectManager(QWidget):
                         self.set_proj_environment()
                     else:
                         self.set_proj_dir()
-
-            #self.save_xml()
 
     @staticmethod
     def get_xml_data_path():
@@ -769,11 +766,10 @@ class ProjectManager(QWidget):
             ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
 
             # Writing xml file
-            with open(ProjectManager.xml_data_path, "w") as f:
+            with open(ProjectManager.xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
                 f.write(xml_str)
 
         else:
-
             # Parsing the xml file
             data = minidom.parse(temp_xml_data_path)
             HDLGen = data.documentElement
@@ -788,7 +784,7 @@ class ProjectManager(QWidget):
             ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
 
             # Writing xml file
-            with open(ProjectManager.xml_data_path, "w") as f:
+            with open(ProjectManager.xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
                 f.write(xml_str)
 
         ProjectManager.xml_data_path = ProjectManager.get_proj_hdlgen()
@@ -799,7 +795,7 @@ class ProjectManager(QWidget):
                 os.makedirs(os.path.join(ProjectManager.proj_enviro, "Package"))
             # converting the doc into a string in xml format
             package_xml_str = rootPack.toprettyxml(indent="\t")
-            with open(ProjectManager.package_xml_data_path, "w") as f:
+            with open(ProjectManager.package_xml_data_path, "w", encoding="UTF-8", newline='\n') as f:
                 f.write(package_xml_str)
         self.config.read('config.ini')
         self.config.set("user", "recentEnviro", self.proj_enviro_input.text())
@@ -864,7 +860,7 @@ class ProjectManager(QWidget):
             xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
             
             # Write the updated and formatted XML file back to the disk
-            with open(load_proj_dir, "w", encoding="utf-8") as f:
+            with open(load_proj_dir, "w", encoding="UTF-8", newline='\n') as f:
                 f.write(xml_str)
 
         self.proj_name_input.setText(self.proj_name)
@@ -990,7 +986,7 @@ class ProjectManager(QWidget):
                 shutil.copy(source_path, new_file_name)
 
                 # Open the new file and replace the old file name with the new one
-                with open(new_file_name, 'r+') as f:
+                with open(new_file_name, 'r+', encoding="UTF-8", newline='\n') as f:
                     content = f.read()
                     new_content = content.replace(os.path.basename(source_path)[:-7],
                                                   os.path.basename(new_file_name)[:-7])

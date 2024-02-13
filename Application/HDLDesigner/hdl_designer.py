@@ -54,6 +54,7 @@ class HDLDesigner(QWidget):
                 self.update_preview("Verilog")
         else:
             self.hdl = "VHDL"
+            
     def setup_ui(self):
         self.compDetails = CompDetails(self.proj_dir)
         self.ioPorts = IOPorts(self.proj_dir)
@@ -190,6 +191,7 @@ class HDLDesigner(QWidget):
         else:
             self.preview_window.setText(self.code)
             self.preview_label.setText("HDL Model Preview")
+    
     def update_arch(self):
         xml_data_path = ProjectManager.get_proj_hdlgen()
         self.architecture.updateProcessName(xml_data_path)
@@ -224,7 +226,6 @@ class TabBar(QTabBar):
             painter.translate(-c)
             painter.drawControl(QStyle.CE_TabBarTabLabel, opt)
             painter.restore()
-
 
 class VerticalTabWidget(QTabWidget):
     def __init__(self, other_class=None, *args, **kwargs):
