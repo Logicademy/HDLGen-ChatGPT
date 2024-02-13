@@ -343,7 +343,7 @@ class InternalSignal(QWidget):
         xml_str = root.toprettyxml()
         xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)

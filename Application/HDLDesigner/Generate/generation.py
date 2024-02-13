@@ -1,29 +1,22 @@
 #Generation section in HDL Designer. This class will call VHDLModel.py, VerilogModel.py, VHDLTestbench.py, VerilogTestbench.py, generotor.py
 
-import os
-import re
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
-import pyperclip
-import sys
-import configparser
 import qtawesome as qta
+import pyperclip, sys, yaml, os, re
 
 sys.path.append("..")
 from HDLDesigner.ChatGPT.chatgpt_help import ChatGPTHelpDialog
 from HDLDesigner.ChatGPT.VHDLModel import VHDLModelDialog
 from HDLDesigner.ChatGPT.VerilogModel import VerilogModelDialog
-from HDLDesigner.ChatGPT.VHDLTestbench import VHDLTestbenchDialog
-from HDLDesigner.ChatGPT.VerilogTestbench import VerilogTestbenchDialog
 from ProjectManager.project_manager import ProjectManager
 from Generator.generator import Generator
 
 WHITE_COLOR = "color: white"
 BLACK_COLOR = "color: black"
 MEDIUM_SPACING = 25
-
 
 class Gen(QWidget):
     save_signal = Signal(bool)
@@ -39,17 +32,6 @@ class Gen(QWidget):
         input_font = QFont()
         input_font.setPointSize(10)
         self.proj_dir = proj_dir
-        self.config = configparser.ConfigParser()
-        self.config.read('config.ini')
-        VHDLModel = self.config.get('user', 'vhdlchatgptmodel')
-        VerilogModel = self.config.get('user', 'verilogchatgptmodel')
-        VHDLTestbench = self.config.get('user', 'vhdlchatgpttestbench')
-        VerilogTestbench = self.config.get('user', 'verilogchatgpttestbench')
-        VHDLModel = self.remove_blank_lines(VHDLModel)
-        VerilogModel = self.remove_blank_lines(VerilogModel)
-        VHDLTestbench = self.remove_blank_lines(VHDLTestbench)
-        VerilogTestbench = self.remove_blank_lines(VerilogTestbench)
-        self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
         self.proj_path = ""
         self.entity_name = ""
         self.mainLayout = QVBoxLayout()
@@ -63,6 +45,12 @@ class Gen(QWidget):
         self.headerTitleFrame = QFrame()
         self.chatgptTitleFrame = QFrame()
         
+        with open('prompts.yml', 'r') as prompts:
+            self.config = yaml.safe_load(prompts)
+
+        VHDLModel = self.config["vhdlchatgptmodel"]
+        VerilogModel = self.config["verilogchatgptmodel"]
+        self.commands = [VHDLModel, VerilogModel]
         
         self.input_layout = QGridLayout()
 
@@ -462,11 +450,6 @@ class Gen(QWidget):
 
         self.setLayout(self.mainLayout)
 
-    def remove_blank_lines(self, text):
-        lines = text.split("\n")  # Split the string into lines
-        non_empty_lines = [line for line in lines if line.strip()]  # Remove blank lines
-        return "\n".join(non_empty_lines)
-
     def save_data(self):
 
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -488,16 +471,6 @@ class Gen(QWidget):
         VerilogModel_node.appendChild(root.createTextNode(self.commands[1]))
         commands_node.appendChild(VerilogModel_node)
 
-        VHDLTestbench_node = root.createElement('VHDLTestbench')
-        self.commands[2] = self.commands[2].replace("\n", "&#10;")
-        VHDLTestbench_node.appendChild(root.createTextNode(self.commands[2]))
-        commands_node.appendChild(VHDLTestbench_node)
-
-        VerilogTestbench_node = root.createElement('VerilogTestbench')
-        self.commands[3] = self.commands[3].replace("\n", "&#10;")
-        VerilogTestbench_node.appendChild(root.createTextNode(self.commands[3]))
-        commands_node.appendChild(VerilogTestbench_node)
-
         new_chatgpt.appendChild(commands_node)
         hdlDesign[0].replaceChild(new_chatgpt, hdlDesign[0].getElementsByTagName('chatgpt')[0])
 
@@ -505,7 +478,7 @@ class Gen(QWidget):
         xml_str = root.toprettyxml()
         xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)
@@ -538,10 +511,8 @@ class Gen(QWidget):
 
             VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
             VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
-            VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
-            VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
 
-            self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
+            self.commands = [VHDLModel, VerilogModel]
 
     def getProcessAndConcur(self, proj_dir):
         if proj_dir == None:
@@ -570,6 +541,7 @@ class Gen(QWidget):
 
                 child = next
         return processNames, concurrentNames
+    
     def chatgpt_help_window(self):
         chatgpt_help_dialog = ChatGPTHelpDialog()
         chatgpt_help_dialog.exec_()
@@ -708,29 +680,13 @@ class Gen(QWidget):
         # Combine the lines into the final output
         output_string = '&#10;'.join(output_lines)
         return output_string
+    
     def replace_with_reserved_concurrent(self, match):
         self.match_count += 1
         if self.match_count == self.total_matches:
             return "~***Reserved for concurrent statements***"
         else:
             return ''
-    def vhdl_testbench_command(self):
-        vhdl_testbench = VHDLTestbenchDialog("edit", self.commands[2])
-        vhdl_testbench.exec_()
-
-        if not vhdl_testbench.cancelled:
-            vhdl_testbench = vhdl_testbench.get_data()
-            self.commands[2] = vhdl_testbench
-        self.save_data()
-
-    def verilog_testbench_command(self):
-        verilog_testbench = VerilogTestbenchDialog("edit", self.commands[3])
-        verilog_testbench.exec_()
-
-        if not verilog_testbench.cancelled:
-            verilog_testbench = verilog_testbench.get_data()
-            self.commands[3] = verilog_testbench
-        self.save_data()
 
     def header_VHDL_file(self):
         self.generator.generate_folders()
@@ -827,7 +783,6 @@ class Gen(QWidget):
             msgBox.setText("An error occurred. Check terminal for details")
             msgBox.exec_()
             print("An error occurred:", str(e))
-
 
     def open_model_folder(self):
         if self.model_VHDL.isVisible():

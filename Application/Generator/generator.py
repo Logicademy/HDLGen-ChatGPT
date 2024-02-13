@@ -1098,7 +1098,7 @@ class Generator(QWidget):
                         if radix.split('\'')[1] == "h":
                             test_value = f'x"{test[index]}"'
                         elif radix.split('\'')[1] == "b":
-                            test_value = f'"{test[index]}"'
+                            test_value = f"'{test[index]}'"
                         elif radix.split('\'')[1] == "d":
                             test_value = test[index]
 
@@ -1404,14 +1404,12 @@ class Generator(QWidget):
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
                     gen_process += "\trst   <= '0';\n\twait for period; -- wait 1 clock period\n\t"
                 
-                gen_process += "\n\t-- START Testbench stimulus\n"
+                gen_process += "\n\t-- START Testbench stimulus\n\n"
 
                 try:
                     gen_process += testbench_code
                 except NameError:
                     print("Testbench code doesn't exist yet, skipping...")
-
-                
 
                 gen_process += "\n\t-- END Testbench stimulus\n"
 
@@ -1454,26 +1452,10 @@ class Generator(QWidget):
         else:
             self.note = "--- No Test Plan Created"
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-        VHDLTestbench = "None"
-        if chatgpt.hasChildNodes():
-            commands_node = chatgpt.getElementsByTagName('commands')[0]
-            VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
-            VHDLTestbench = VHDLTestbench.replace("&#10;", "\n")
-            VHDLTestbench = VHDLTestbench.replace("&amp;", "&")
-            VHDLTestbench = VHDLTestbench.replace("&quot;", "\"")
-            VHDLTestbench = VHDLTestbench.replace("&apos;", "\'")
-            VHDLTestbench = VHDLTestbench.replace("&lt;", "<")
-            VHDLTestbench = VHDLTestbench.replace("&#x9;", "\t")
-            VHDLTestbench = VHDLTestbench.replace("&gt;", ">")
-            VHDLTestbench = VHDLTestbench.replace("&#44;", ",")
-            # does not display lines starting with ~
-            lines = VHDLTestbench.split('\n')
-            filtered_lines = [line for line in lines if not line.startswith('~')]
-            VHDLTestbench = '\n'.join(filtered_lines)
 
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
 
-        chatgpt_tb = VHDLTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
+        chatgpt_tb = chatgpt_tb + "\n\n" + self.note
 
         vhdl_tb_path = os.path.join(proj_path, "VHDL", "testbench", entity_name + "_TB.vhd")
 

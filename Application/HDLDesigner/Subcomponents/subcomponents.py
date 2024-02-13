@@ -182,6 +182,7 @@ class Subcomponents(QWidget):
             self.comps.pop(row)
             self.comps_names.pop(row)
             self.save_data()
+            
     def save_data(self):
         mainPackageDir = ProjectManager.get_package_hdlgen()
 
@@ -211,7 +212,7 @@ class Subcomponents(QWidget):
         xml_str = root.toprettyxml()
         xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(mainPackageDir, "w") as f:
+        with open(mainPackageDir, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         self.generator.generate_mainPackage()
         print("Saved sub component")

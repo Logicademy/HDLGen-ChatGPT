@@ -1,4 +1,4 @@
-#Dialog box for the ChatGPT prompt from config.ini file. This is called from setting.py and data is exchanged. User can edit the config.ini file using this for the specific prompt
+#Dialog box for the ChatGPT prompt from  prompts.yml file. This is called from setting.py and data is exchanged. User can edit the  prompts.yml file using this for the specific prompt
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 import configparser

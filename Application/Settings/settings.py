@@ -1,13 +1,10 @@
 #settings dialog box when settings is clicked in main.py. Reads/writes from config.ini file default and reusable information
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-import sys
+import sys, yaml, configparser
 # make sure to add to requirements.txt
-import configparser
 from Settings.VHDLModelDefault import VHDLModelDefaultDialog
 from Settings.VerilogModelDefault import VerilogModelDefaultDialog
-from Settings.VHDLTestbenchDefault import VHDLTestbenchDefaultDialog
-from Settings.VerilogTestbenchDefault import VerilogTestbenchDefaultDialog
 sys.path.append("..")
 
 BLACK_COLOR = "color: black"
@@ -62,11 +59,6 @@ class settingsDialog(QDialog):
         self.model_VHDL.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
-        self.testbench_VHDL = QPushButton("VHDL Testbench Command")
-        #self.testbench_VHDL.setFixedSize(250, 25)
-        self.testbench_VHDL.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
         self.header_Verilog = QPushButton("Verilog Title Section Command")
         #self.header_Verilog.setFixedSize(200, 25)
         self.header_Verilog.setStyleSheet(
@@ -77,12 +69,6 @@ class settingsDialog(QDialog):
         self.model_Verilog.setStyleSheet(
             "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
-        self.testbench_Verilog = QPushButton("Verilog Testbench Command")
-        #self.testbench_Verilog.setFixedSize(250, 25)
-        self.testbench_Verilog.setStyleSheet(
-            "QPushButton {background-color: white; color: black; border-radius: 8px; border-style: plain;padding: 10px; }"
-            " QPushButton:pressed { background-color: rgb(250, 250, 250);  color: black; border-radius: 8px; border-style: plain;padding: 10px;}")
-
         self.browse_btn = QPushButton("Browse")
         #self.browse_btn.setFixedSize(80, 25)
         self.browse_btn.setStyleSheet(
@@ -121,28 +107,28 @@ class settingsDialog(QDialog):
         self.quartus_input.setFont(input_font)
         self.browse_btn.setFont(input_font)
         self.quartus_browse_btn.setFont(input_font)
-        self.testbench_VHDL.setFont(input_font)
-        self.testbench_Verilog.setFont(input_font)
         self.model_VHDL.setFont(input_font)
         self.model_Verilog.setFont(input_font)
         self.ok_btn.setFont(input_font)
         self.cancel_btn.setFont(input_font)
         self.setup_ui()
+
     def setup_ui(self):
         self.config.read('config.ini')
+
+        with open('prompts.yml', 'r') as prompts:
+            self.prompts = yaml.safe_load(prompts)
+
         vivadoPath= self.config.get('user', 'vivado.bat')
         quartusPath = self.config.get('user','quartus')
         author = self.config.get('user', 'author')
         email = self.config.get('user', 'email')
         company = self.config.get('user', 'company')
-        self.commands[1] = self.config.get('user', 'verilogchatgptmodel')
-        self.commands[3] = self.config.get('user', 'verilogchatgpttestbench')
-        self.commands[0] = self.config.get('user', 'vhdlchatgptmodel')
-        self.commands[2] = self.config.get('user', 'vhdlchatgpttestbench')
-        self.commands[5] = self.config.get('user', 'verilogchatgptmodelreset')
-        self.commands[7] = self.config.get('user', 'verilogchatgpttestbenchreset')
-        self.commands[4] = self.config.get('user', 'vhdlchatgptmodelreset')
-        self.commands[6] = self.config.get('user', 'vhdlchatgpttestbenchreset')
+
+        self.commands[0] = self.prompts["vhdlchatgptmodel"]
+        self.commands[1] = self.prompts["verilogchatgptmodel"]
+        self.commands[2] = self.prompts["vhdlchatgptmodelreset"]
+        self.commands[3] = self.prompts["verilogchatgptmodelreset"]
 
         self.vivado_input.setText(vivadoPath.strip())
         self.quartus_input.setText(quartusPath.strip())
@@ -162,15 +148,11 @@ class settingsDialog(QDialog):
         self.input_layout.addWidget(self.quartus_input, 5, 0, 1, 3)
         self.input_layout.addWidget(self.quartus_browse_btn, 5, 3, 1, 1)
         self.input_layout.addWidget(self.model_VHDL, 6, 0)
-        self.input_layout.addWidget(self.testbench_VHDL, 7, 0)
         self.input_layout.addWidget(self.model_Verilog, 6, 1)
-        self.input_layout.addWidget(self.testbench_Verilog, 7, 1)
         #self.header_VHDL.clicked.connect(self.vhdl_header_command)
         #self.header_Verilog.clicked.connect(self.verilog_header_command)
         self.model_VHDL.clicked.connect(self.vhdl_model_command)
         self.model_Verilog.clicked.connect(self.verilog_model_command)
-        self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
-        self.testbench_Verilog.clicked.connect(self.verilog_testbench_command)
 
         self.input_layout.addWidget(self.cancel_btn, 9, 2, 1, 1, alignment=Qt.AlignRight)
         self.input_layout.addWidget(self.ok_btn, 9, 3, 1, 1, alignment=Qt.AlignRight)
@@ -187,6 +169,7 @@ class settingsDialog(QDialog):
         self.browse_btn.clicked.connect(self.set_vivado_bat_path)
         self.quartus_browse_btn.clicked.connect(self.set_quartus_exe_path)
         self.ok_btn.clicked.connect(self.save)
+    
     def set_vivado_bat_path(self):
         vivado_bat_path = QFileDialog.getOpenFileName(self,"Select Xilinx Vivado Batch file (vivado.bat)","C:/", filter="Batch (*.bat)")
         vivado_bat_path = vivado_bat_path[0]
@@ -224,35 +207,24 @@ class settingsDialog(QDialog):
         self.config.set("user", "company", self.company_input.text())
         self.config.set("user", "vivado.bat", self.vivado_input.text())
         self.config.set("user", "quartus", self.quartus_input.text())
-        #self.config.set("user", 'verilogchatgptheader', self.commands[1])
-        self.config.set("user", 'verilogchatgptmodel', self.commands[1])
-        self.config.set("user", 'verilogchatgpttestbench', self.commands[3])
-        #self.config.set("user", 'vhdlchatgptheader', self.commands[0])
-        self.config.set("user", 'vhdlchatgptmodel', self.commands[0])
-        self.config.set("user", 'vhdlchatgpttestbench', self.commands[2])
+
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
+
+        with open('prompts.yml', 'r') as prompts:
+            self.prompts = yaml.safe_load(prompts)
+
+        self.prompts["vhdlchatgptmodel"] = self.commands[0]
+        self.prompts["verilogchatgptmodel"] = self.commands[1]
+
+        with open('prompts.yml', 'w') as prompts:
+            yaml.dump(self.prompts, prompts)
+
         self.cancelled = False
         self.close()
 
-    #def vhdl_header_command(self):
-    #    vhdl_header = VHDLHeaderDefaultDialog("edit", self.commands[0])
-    #    vhdl_header.exec_()
-
-    #    if not vhdl_header.cancelled:
-    #        vhdl_header = vhdl_header.get_data()
-    #        self.commands[0] = vhdl_header
-
-    #def verilog_header_command(self):
-    #    verilog_header = VerilogHeaderDefaultDialog("edit", self.commands[1])
-    #    verilog_header.exec_()
-
-    #    if not verilog_header.cancelled:
-    #        verilog_header = verilog_header.get_data()
-    #        self.commands[1] = verilog_header
-
     def vhdl_model_command(self):
-        vhdl_model = VHDLModelDefaultDialog("edit", self.commands[0], self.commands[4])
+        vhdl_model = VHDLModelDefaultDialog("edit", self.commands[0], self.commands[2])
         vhdl_model.exec_()
 
         if not vhdl_model.cancelled:
@@ -260,25 +232,9 @@ class settingsDialog(QDialog):
             self.commands[0] = vhdl_model
 
     def verilog_model_command(self):
-        verilog_model = VerilogModelDefaultDialog("edit", self.commands[1], self.commands[5])
+        verilog_model = VerilogModelDefaultDialog("edit", self.commands[1], self.commands[3])
         verilog_model.exec_()
 
         if not verilog_model.cancelled:
             verilog_model = verilog_model.get_data()
             self.commands[1] = verilog_model
-
-    def vhdl_testbench_command(self):
-        vhdl_testbench = VHDLTestbenchDefaultDialog("edit", self.commands[2], self.commands[6])
-        vhdl_testbench.exec_()
-
-        if not vhdl_testbench.cancelled:
-            vhdl_testbench = vhdl_testbench.get_data()
-            self.commands[2] = vhdl_testbench
-
-    def verilog_testbench_command(self):
-        verilog_testbench = VerilogTestbenchDefaultDialog("edit", self.commands[3], self.commands[7])
-        verilog_testbench.exec_()
-
-        if not verilog_testbench.cancelled:
-            verilog_testbench = verilog_testbench.get_data()
-            self.commands[3] = verilog_testbench
