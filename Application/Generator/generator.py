@@ -1067,7 +1067,7 @@ class Generator(QWidget):
                 self.testbench_table = self.tb_note.split("\n")
                 # Remove any blank rows and comments from the testbench_table, sometimes the XML parser
                 # will insert blank lines when pretty-printing the HDLGen XML file
-                self.testbench_table = [line for line in self.testbench_table if not (line.startswith("#") or line.strip() == "")]
+                self.testbench_table = [line.rstrip("\t") for line in self.testbench_table if not (line.startswith("#") or line.strip() == "")]
 
                 for idx, row in enumerate(self.testbench_table):
                     self.testbench_table[idx] = row.split("\t")
@@ -1098,7 +1098,7 @@ class Generator(QWidget):
                         if radix.split('\'')[1] == "h":
                             test_value = f'x"{test[index]}"'
                         elif radix.split('\'')[1] == "b":
-                            test_value = f"'{test[index]}'"
+                            test_value = f'\'{test[index]}\''
                         elif radix.split('\'')[1] == "d":
                             test_value = test[index]
 
@@ -1126,6 +1126,7 @@ class Generator(QWidget):
                     testbench_code += f'\t-- END Test Number {test[-2]}\n\n'
             except Exception as e:
                 testbench_code = ""
+                print(repr(e))
 
         UUTEnt = ""
         header_node = hdl_design[0].getElementsByTagName("header")
