@@ -3,6 +3,7 @@ import re
 import os
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+from pathlib import Path
 import sys
 
 sys.path.append("..")
@@ -135,13 +136,17 @@ class ComponentDialog(QDialog):
 
         self.setLayout(self.mainLayout)
 
-    def populate_signals(self, proj_dir, comp_dir):
+    def populate_signals(self, comp_dir):
+        abs_component_path = os.path.join(ProjectManager.get_proj_environment(), comp_dir)
         rows = self.signal_table.rowCount()
+
+        # Remove all existing rows if repopulating the signals table
         for i in range(rows):
             self.signal_table.removeRow(0)
-        self.comp_signals, self.model, self.comp_mode = self.loadComponent(comp_dir)
-        i = 0
-        for signal in self.comp_signals:
+
+        self.comp_signals, self.model, self.comp_mode = self.loadComponent(abs_component_path)
+
+        for i, signal in enumerate(self.comp_signals):
             temp = self.comp_mode[i].split(' ')
             row_position = self.signal_table.rowCount()
             self.signal_table.insertRow(row_position)
@@ -154,40 +159,34 @@ class ComponentDialog(QDialog):
                 temp[1] = "bus "+ "["+temp[1][17:]+":0]"
             self.signal_table.setItem(row_position, 1, QTableWidgetItem(temp[0]))
             self.signal_table.setItem(row_position, 2, QTableWidgetItem(temp[1]))
-            i = i + 1
 
-    def is_subdirectory(self, directory, potential_parent):
-        # Normalize the paths to use forward slashes
-        directory = os.path.normpath(directory).replace("\\", "/")
-        potential_parent = os.path.normpath(potential_parent).replace("\\", "/")
+    @staticmethod
+    def is_subdirectory(directory, parent):
         # Get the common prefix of the two paths
-        common_prefix = os.path.commonprefix([directory, potential_parent])
+        common_prefix = os.path.commonprefix([directory, parent])
 
         # Check if the common prefix is the same as the potential parent
-        return os.path.normpath(common_prefix) == os.path.normpath(potential_parent)
+        return os.path.normpath(common_prefix) == os.path.normpath(parent)
 
     def set_comp_path(self):
-        self.config.read('config.ini')
-        lastDir = self.config.get('user', 'recentEnviro')
-        if not os.path.exists(lastDir):
-            lastDir = "../User_Projects/"
-        comp_path = QFileDialog.getOpenFileName(self,"Select model .vhd file",lastDir, filter="VHDL files (*.vhd)")
+        environment = ProjectManager.get_proj_environment()
+
+        comp_path = QFileDialog.getOpenFileName(self, "Select model .vhd file", dir=str(environment), filter="VHDL files (*.vhd)")
+        
         comp_path = comp_path[0]
-        if self.is_subdirectory(comp_path, lastDir):
-            if comp_path != "":
-                self.file_path_input.setText(comp_path)
-                self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
-                print("The directory is within the potential parent directory.")
+        
+        if comp_path != "" and ComponentDialog.is_subdirectory(comp_path, environment):
+            comp_rel_path = os.path.relpath(comp_path, environment)
+            self.file_path_input.setText(comp_path)
+            self.populate_signals(comp_rel_path)
+            print("The directory is within the potential parent directory.")
         else:
-            if comp_path != "":
-                print("The directory is not within the potential parent directory.")
-                msgBox = QMessageBox()
-                msgBox.setWindowTitle("Alert")
-                msgBox.setText("Component cannot be added!\nThe component is not part of the project environment.")
-                msgBox.exec_()
-       # if comp_path != "":
-           # self.file_path_input.setText(comp_path)
-           # self.populate_signals(ProjectManager.get_xml_data_path(), self.file_path_input.text())
+            print("The directory is not within the potential parent directory.")
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Alert")
+            msgBox.setText("Component cannot be added!\nThe component is not part of the project environment.")
+            msgBox.exec_()
+
     def load_component_data(self, component_data):
         self.component_name_input.setText(component_data[0])
         self.file_path_input.setText(str(ProjectManager.get_proj_environment())+component_data[1])
@@ -237,11 +236,14 @@ class ComponentDialog(QDialog):
             signal = self.signal_table.item(i, 0).text()
             mode = self.signal_table.item(i, 1).text()
             type = self.signal_table.item(i, 2).text()
+
             if type == "single bit":
                 type = "std_logic"
+
             elif type[0:3] == "bus":
-                type = "std_logic_vector("+type[5:]+" downto 0)"
+                type = "std_logic_vector(" + type[5:] + " downto 0)"
                 type = type.replace(":0]","")
+
             signals.append(signal + "," + mode + "," + type)
 
         data.append(self.component_name_input.text())

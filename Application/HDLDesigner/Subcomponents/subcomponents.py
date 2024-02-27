@@ -223,44 +223,48 @@ class Subcomponents(QWidget):
                 self.component_table.removeRow(0)
                 self.comps.pop(0)
                 self.comps_names.pop(0)
+
         mainPackageDir = ProjectManager.get_package_hdlgen()
+
         try:
+            # Fetch component information from mainPackage.hdlgen for the project
             root = minidom.parse(mainPackageDir)
             HDLGen = root.documentElement
             hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
             compPackage = hdlDesign[0].getElementsByTagName("components")
-            comp_nodes = compPackage[0].getElementsByTagName('component')
+            comp_nodes = compPackage[0].getElementsByTagName("component")
 
-            for i in range(0, len(comp_nodes)):
-                model = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
-                directory = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
-                self.comps_names.append(model)
-                output_signal_nodes = comp_nodes[i].getElementsByTagName("port")
+            # Iterate over all component instances in the package file
+            for idx, node in enumerate(comp_nodes):
+                # Get the model name and model .vhd path from the package file
+                model_name = node.getElementsByTagName('model')[0].firstChild.data
+                directory = node.getElementsByTagName('dir')[0].firstChild.data
+                
+                # Get port data for each <port> in the <component>
+                signals = (signal.firstChild.data for signal in node.getElementsByTagName("port"))
+                component_data = [model_name, directory, signals]
 
-                output_signals = []
-                for output_signal_node in output_signal_nodes:
-                    output_signals.append(output_signal_node.firstChild.data)
+                self.comps_names.append(model_name)
+                self.comps.append(component_data)
 
-                comp_data = [
-                    model,
-                    directory,
-                    output_signals
-                ]
-                delete_btn = QPushButton()
-                delete_btn.setIcon(qta.icon("mdi.delete"))
-                delete_btn.setFixedSize(35, 22)
-                delete_btn.clicked.connect(self.delete_component)
-
+                # Create Component Edit Button
                 edit_btn = QPushButton()
                 edit_btn.setIcon(qta.icon("mdi.pencil"))
                 edit_btn.setFixedSize(35, 22)
                 edit_btn.clicked.connect(self.edit_component)
 
-                self.component_table.insertRow(i)
-                self.component_table.setRowHeight(i, 5)
-                self.component_table.setItem(i, 0, QTableWidgetItem(comp_data[0]))
-                self.component_table.setCellWidget(i, 1, edit_btn)
-                self.component_table.setCellWidget(i, 2, delete_btn)
-                self.comps.append(comp_data)
-        except:
-            print("")
+                # Create Component Delete Button
+                delete_btn = QPushButton()
+                delete_btn.setIcon(qta.icon("mdi.delete"))
+                delete_btn.setFixedSize(35, 22)
+                delete_btn.clicked.connect(self.delete_component)
+
+                # Add Component name, Edit button, Delete button to sub-components table
+                self.component_table.insertRow(idx)
+                self.component_table.setRowHeight(idx, 5)
+                self.component_table.setItem(idx, 0, QTableWidgetItem(model_name))
+                self.component_table.setCellWidget(idx, 1, edit_btn)
+                self.component_table.setCellWidget(idx, 2, delete_btn)
+
+        except Exception as e:
+            print(repr(e))
