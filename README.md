@@ -14,4 +14,4 @@
 * [Kanban project management](https://github.com/orgs/HDLGen-ChatGPT/projects/3/views/1)
 * HDLGen-ChatGPT / ChatGPT / EDA toolsuite process diagram:
 ![image](https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/HDLGen_ChatGPT_DetailedProcessDiagram.png)
-* License: MIT - <http://www.opensource.org/licenses/mit-license.ph
+* License: GNU Affero General Public License 3.0 - [http://www.opensource.org/licenses/mit-license.ph](https://opensource.org/license/agpl-v3)
