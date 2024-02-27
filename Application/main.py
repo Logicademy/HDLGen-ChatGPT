@@ -13,7 +13,9 @@ import configparser
 
 
 APP_AUTHORS = "Created by Fearghal Morgan, Abishek Bupathi & JP Byrne"
+
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
+
 APP_DESCRIPTION = "<ul><li>Open source application and tutorials found on <a href='https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT'>GitHub</a></li>" \
                  "<li>Fast digital systems design capture from design and test specifications</li>" \
                  "<li>Generate HDL model templates and low-level logic pseudo code</li>" \
@@ -73,7 +75,6 @@ class HDLGen(QMainWindow):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.open_btn.clicked.connect(self.open_project)
-        #self.new_btn.setFixedSize(150, 50)
         self.new_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
