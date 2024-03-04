@@ -173,11 +173,11 @@ class ComponentDialog(QDialog):
 
         comp_path = QFileDialog.getOpenFileName(self, "Select model .vhd file", dir=str(environment), filter="VHDL files (*.vhd)")
         
-        comp_path = comp_path[0]
+        comp_path = Path(comp_path[0])
         
         if comp_path != "" and ComponentDialog.is_subdirectory(comp_path, environment):
             comp_rel_path = os.path.relpath(comp_path, environment)
-            self.file_path_input.setText(comp_path)
+            self.file_path_input.setText(str(comp_path))
             self.populate_signals(comp_rel_path)
             print("The directory is within the potential parent directory.")
         else:
@@ -247,9 +247,13 @@ class ComponentDialog(QDialog):
             signals.append(signal + "," + mode + "," + type)
 
         data.append(self.component_name_input.text())
-        dir = self.file_path_input.text()
-        dir = dir.replace(str(ProjectManager.get_proj_environment()),"")
-        data.append(dir)
+        # When saving the component path to disk, save it as a relative path, relative to the project environment.
+        # This keeps file paths intact if the project is moved from one disk to another.
+        comp_path = self.file_path_input.text()
+        environment = ProjectManager.get_proj_environment()
+        comp_rel_path = os.path.relpath(comp_path, environment)
+
+        data.append(comp_rel_path)
         data.append(signals)
         self.cancelled = False
         self.close()

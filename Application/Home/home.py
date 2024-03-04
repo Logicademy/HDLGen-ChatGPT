@@ -593,7 +593,7 @@ class Home(QMainWindow):
                 if self.project_manager.vhdl_check.isChecked():
                     msgBox.setText("Starting EDA tool")
                     msgBox.exec_()
-                    self.generator.run_tcl_file("VHDL","Vivado")
+                    self.generator.run_tcl_file("VHDL", "Vivado")
                 else:
                     msgBox.setText("Starting EDA tool")
                     msgBox.exec_()

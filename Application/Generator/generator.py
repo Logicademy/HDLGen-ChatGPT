@@ -834,52 +834,55 @@ class Generator(QWidget):
         self.dirs = []
 
         packageDirs = []
-        for i in range(0, len(comp_nodes)):
-            packageDirs.append([comp_nodes[i].getElementsByTagName('model')[0].firstChild.data,
-                                comp_nodes[i].getElementsByTagName('dir')[
-                                    0].firstChild.data])
+        # For each component in the Package.hdlgen, find the model name and model directory
+        # and store this in packageDirs
+        for idx, node in enumerate(comp_nodes):
+            packageDirs.append([
+                node.getElementsByTagName('model')[0].firstChild.data,
+                node.getElementsByTagName('dir')[0].firstChild.data
+            ])
 
         while (instances):
             instances_unchanged = False
             for namedir in packageDirs:
                 if namedir[0] == instances[0]:
                     instances_unchanged = True
-                    dir = namedir[1]
-                    dir = dir.replace("/VHDL/model/" + namedir[0] + ".vhd",
-                                      "/" + lang + "/model/" + namedir[0] + "." + ext)
-
+                    component_path = namedir[1]
+                    # Ensure that the component exists on disk
                     if not os.path.exists(
-                        os.path.join(ProjectManager.get_proj_environment(), dir)
+                        os.path.join(ProjectManager.get_proj_environment(), component_path)
                     ):
-                        print(str(ProjectManager.get_proj_environment()) + dir + " does not exist")
+                        print(str(ProjectManager.get_proj_environment()) + component_path + " does not exist")
                         msgBox = QMessageBox()
                         msgBox.setWindowTitle("Alert")
-                        msgBox.setText(str(ProjectManager.get_proj_environment()) + dir + "\nDoes not exist")
+                        msgBox.setText(str(ProjectManager.get_proj_environment()) + component_path + "\nDoes not exist")
                         msgBox.exec_()
-                    self.dirs.append(dir)
-                    directories = dir.split('/')
-
-                    # Remove the last two elements (folders)
-                    dir = '/'.join(directories[:-3])
-                    hdlgenDir = str(ProjectManager.get_proj_environment()) + dir + "/HDLgenPrj/" + namedir[0] + ".hdlgen"
-                    modelRoot = minidom.parse(hdlgenDir)
+                    
+                    self.dirs.append(component_path)
+                    # Assemble the path to the .hdlgen file for the component
+                    component_hdlgen_file = os.path.join(ProjectManager.get_proj_environment(), namedir[0], "HDLGenPrj", f'{namedir[0]}.hdlgen')
+                    modelRoot = minidom.parse(component_hdlgen_file)
                     modelHDLGen = modelRoot.documentElement
                     modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
                     modelComponents = modelHdlDesign[0].getElementsByTagName("architecture")
                     modelComp_nodes = modelComponents[0].getElementsByTagName('instance')
-                    for i in range(0, len(modelComp_nodes)):
-                        instances.append(modelComp_nodes[i].getElementsByTagName('model')[0].firstChild.data)
+                    for model_component in modelComp_nodes:
+                        instances.append(model_component.getElementsByTagName('model')[0].firstChild.data)
                     instances.pop(0)
                     if len(instances) == 0:
                         break
+
             if instances_unchanged == False:
                 break
+
         if self.dirs is not None:
             for dir in self.dirs:
-                files += "add_files -norecurse  " + str(ProjectManager.get_proj_environment()) + dir + " \n"
+                # Vivado only accepts paths with forward slashes (/) and will interpret back slashes (\) as an empty escape sequence
+                files += "add_files -norecurse  " + str(os.path.join(ProjectManager.get_proj_environment(), dir).replace("\\", "/") + "\n")
             tcl_vivado_code = tcl_vivado_code.replace("$files", files)
         else:
             tcl_vivado_code = tcl_vivado_code.replace("$files", "")
+
         tcl_vivado_code = tcl_vivado_code.replace("$tb_name", tb_file_name)
         tcl_vivado_code = tcl_vivado_code.replace("$proj_name", ProjectManager.get_proj_name())
         tcl_proj_path = "{" + str(ProjectManager.get_proj_dir()) + "}"
@@ -888,7 +891,7 @@ class Generator(QWidget):
         tcl_vivado_code = tcl_vivado_code.replace("$ext", ext)
 
         # Writing xml file
-        with open(self.tcl_path, "w") as f:
+        with open(self.tcl_path, "w", encoding='UTF-8') as f:
             f.write(tcl_vivado_code)
 
         print("TCL file successfully generated at ", self.tcl_path)
@@ -995,9 +998,7 @@ class Generator(QWidget):
                         msgBox.setText("No testbench found!\nDo you want to go back and generate the testbench?")
                         msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
                         msgBox.setDefaultButton(QMessageBox.Yes)
-
                         result = msgBox.exec_()
-
 
                         if result == QMessageBox.No:
                             start_vivado_cmd = str(vivado_bat_file_path) + " -source " + str(tcl_path)
@@ -1011,7 +1012,7 @@ class Generator(QWidget):
                 msgBox = QMessageBox()
                 msgBox.setWindowTitle("Alert")
                 msgBox.setText("No TCL script found!\nPlease generate model and try again")
-
+                msgBox.exec_()
 
         else:
             if lang == "VHDL":
