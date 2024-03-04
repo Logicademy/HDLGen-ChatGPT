@@ -13,7 +13,9 @@ import configparser
 
 
 APP_AUTHORS = "Created by Fearghal Morgan, Abishek Bupathi & JP Byrne"
+
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
+
 APP_DESCRIPTION = "<ul><li>Open source application and tutorials found on <a href='https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT'>GitHub</a></li>" \
                  "<li>Fast digital systems design capture from design and test specifications</li>" \
                  "<li>Generate HDL model templates and low-level logic pseudo code</li>" \
@@ -73,7 +75,6 @@ class HDLGen(QMainWindow):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.open_btn.clicked.connect(self.open_project)
-        #self.new_btn.setFixedSize(150, 50)
         self.new_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
@@ -81,7 +82,6 @@ class HDLGen(QMainWindow):
         self.help_btn.clicked.connect(self.help_window)
 
         self.settings_btn.clicked.connect(self.settings_window)
-
 
         self.help_btn_spacer = QLabel("")
         self.settings_btn_spacer = QLabel("")
@@ -121,6 +121,11 @@ class HDLGen(QMainWindow):
         # Creating a container
         self.container = QWidget()
         self.config = configparser.ConfigParser()
+        
+        if not self.config.read('config.ini'):
+            HDLGen.create_config_file()
+            self.config.read('config.ini')
+
         self.setup_ui()
 
     def setup_ui(self):
@@ -158,7 +163,6 @@ class HDLGen(QMainWindow):
         self.close()
 
     def open_project(self):
-        self.config.read('config.ini')
         lastDir = self.config.get('user', 'recentEnviro')
 
         if not os.path.exists(lastDir):
@@ -179,17 +183,41 @@ class HDLGen(QMainWindow):
         settings_dialog = settingsDialog()
         settings_dialog.exec_()
 
+    @staticmethod
+    def create_config_file():
+        config_file = os.path.join(os.getcwd(), 'config.ini')
+
+        default_config = configparser.ConfigParser()
+        
+        default_environment = Path(os.getcwd()).parent.absolute() / 'User_Projects'
+
+        default_config['user'] = {
+            'author': 'To be completed',
+            'email': 'To be completed',
+            'company': 'To be completed',
+            'vivado.bat': 'To be completed',
+            'recentenviro': default_environment,
+            'quartus': 'To be completed'
+        }
+
+        with open(config_file, 'w', encoding='UTF-8') as f:
+            default_config.write(f)
+            f.flush()
+
 def main():
     if hasattr(Qt, 'AA_EnableHighDpiScaling'):
         QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
       
     if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
         QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+    
     app = QApplication(sys.argv)
+    
     window = HDLGen()
     window.setWindowFlags(window.windowFlags() | Qt.WindowMaximizeButtonHint)
     window.move(0, 0)
     window.show()
+    
     app.setStyle('windowsvista')
     app.exec_()
 

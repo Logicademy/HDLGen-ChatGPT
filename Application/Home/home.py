@@ -24,10 +24,13 @@ class Home(QMainWindow):
         self.setWindowTitle("HDLGen-ChatGPT Version 1.0.0")
 
         self.cornerWidget = QWidget()
+
         self.start_vivado_btn = QPushButton("Open EDA Project")
         self.start_vivado_btn.setFont(small_text_font)
+
         self.export_project_btn = QPushButton("Export Project")
         self.export_project_btn.setFont(small_text_font)
+        
         self.cornerWidgetLayout = QHBoxLayout()
         self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)
         self.cornerWidgetLayout.addWidget(self.start_vivado_btn)
@@ -87,7 +90,6 @@ class Home(QMainWindow):
             return QMessageBox.Discard
         else:
             return QMessageBox.Cancel
-
 
     def setup_ui(self):
         load_data = False
@@ -156,6 +158,7 @@ class Home(QMainWindow):
             self.model_generate("0,1")
         else:
             self.model_generate("0")
+    
     def chatgpt_testbench_generate(self):
         if self.hdl_designer.generate.chatgpt_testbench_bk_checkBox.isChecked():
             self.testbench_generate("8,9")
@@ -171,6 +174,7 @@ class Home(QMainWindow):
             self.testbench_generate("2,10")
         else:
             self.testbench_generate("2")
+    
     def testbench_generate(self, files):
         if self.project_manager.vhdl_check.isChecked():
             self.generator.generate_folders()
@@ -192,6 +196,7 @@ class Home(QMainWindow):
             else:
                 msgBox.setText("Generated")
             msgBox.exec_()
+    
     def model_generate(self, files):
         if self.project_manager.vhdl_check.isChecked():
             self.generator.generate_folders()
@@ -250,7 +255,6 @@ class Home(QMainWindow):
         elif self.project_manager.verilog_check.isChecked():
             path = proj_folder+"/Verilog/testbench"
             self.open_file_explorer(path)
-
 
     def delete_title_msg_backups(self):
         backup_files = ""
@@ -449,6 +453,7 @@ class Home(QMainWindow):
                 msgBox.setWindowTitle("Alert")
                 msgBox.setText("Intel Quartus is still a work in progress")
                 msgBox.exec_()
+    
     def delete_testbench_msg_backups(self):
         backup_files = ""
         bk = False
@@ -608,7 +613,6 @@ class Home(QMainWindow):
     def export_project(self):
         self.project_manager.export_project()
 
-
     def handle_tab_change(self, index):
         #self.project_manager.named_edit_done()
         if index != 0:
@@ -622,7 +626,3 @@ class Home(QMainWindow):
             self.hdl_designer.generate.save_data()
             self.hdl_designer.internalSignal.save_data()
             self.hdl_designer.testplan.save_data()
-
-
-
-

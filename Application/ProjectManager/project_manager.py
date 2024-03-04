@@ -253,9 +253,9 @@ class ProjectManager(QWidget):
 
         if proj_dir != None:
             self.load_proj_data(proj_dir)
-
         else:
             self.fill_default_proj_details()
+        
         self.startApp=False
 
     def show_character_input_error(self, newPos):
@@ -402,16 +402,10 @@ class ProjectManager(QWidget):
         #self.vivado_check.clicked.connect(self.save_xml)
     
     def fill_default_proj_details(self):
-        self.config.read('config.ini')
-        self.proj_enviro = self.config.get('user', 'recentEnviro')
-        self.proj_dir = self.proj_enviro
-        if not os.path.exists(self.proj_enviro):
-            path = Path(os.getcwd())
-            parent_path = path.parent.absolute()
-            self.proj_enviro = os.path.join(parent_path, "User_Projects")
-            self.proj_dir = os.path.join(parent_path, "User_Projects")
-            self.config.set("user", "recentEnviro", self.proj_enviro)
-
+        path = Path(os.getcwd())
+        parent_path = path.parent.absolute()
+        self.proj_enviro = os.path.join(parent_path, "User_Projects")
+        self.proj_dir = os.path.join(self.proj_enviro, "Untitled")
 
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_enviro_input.setText(self.proj_enviro)

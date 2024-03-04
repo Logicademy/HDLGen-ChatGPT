@@ -32,7 +32,8 @@ class TestPlan(QWidget):
         title_font.setBold(True)
 
         self.proj_dir = proj_dir
-        self.note = self.generate_testplan_template()
+        if (self.proj_dir is not None):
+            self.note = self.generate_testplan_template()
 
         self.main_layout = QVBoxLayout()
         self.input_layout = QGridLayout()
@@ -181,16 +182,18 @@ class TestPlan(QWidget):
         print("Saved test plan")
 
     def load_data(self):
-        self.note = self.generate_testplan_template()
-
         if self.proj_dir is not None:
+            self.note = self.generate_testplan_template()
+
             root = minidom.parse(str(self.proj_dir))
             HDLGen = root.documentElement
             hdl_design = HDLGen.getElementsByTagName("hdlDesign")
             testbench_node = hdl_design[0].getElementsByTagName('testbench')
+
             if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
                 tb_note = testbench_node[0].getElementsByTagName('TBNote')[0]
                 self.note = tb_note.firstChild.nodeValue if tb_note.firstChild.nodeValue != "None" else self.note
+                
             note_data = self.note
             note_data = note_data.replace("&#10;", "\n")
             note_data = note_data.replace("&amp;", "&")
