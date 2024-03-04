@@ -19,3 +19,6 @@ Application/config.ini
 
 # Ignore VSCode files
 Application/.vscode/
+
+**/*.log
+**/*.jou
