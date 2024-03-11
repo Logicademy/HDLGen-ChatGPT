@@ -303,5 +303,5 @@ class Package(QWidget):
                 self.package_table.setCellWidget(i, 4, edit_btn)
                 self.package_table.setCellWidget(i, 5, delete_btn)
                 self.arrays.append(loaded_array_data)
-        except:
-            print("")
+        except Exception as e:
+            print(repr(e))

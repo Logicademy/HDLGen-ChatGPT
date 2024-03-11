@@ -241,7 +241,7 @@ class Subcomponents(QWidget):
                 directory = node.getElementsByTagName('dir')[0].firstChild.data
                 
                 # Get port data for each <port> in the <component>
-                signals = (signal.firstChild.data for signal in node.getElementsByTagName("port"))
+                signals = list(signal.firstChild.data for signal in node.getElementsByTagName("port"))
                 component_data = [model_name, directory, signals]
 
                 self.comps_names.append(model_name)

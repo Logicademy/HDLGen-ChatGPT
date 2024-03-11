@@ -433,6 +433,6 @@ class ChatGPT(QWidget):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("An error occurred. Check terminal for details")
             msgBox.exec_()
-            print("An error occurred:", str(e))
+            print("An error occurred:", str(repr(e)))
     
 

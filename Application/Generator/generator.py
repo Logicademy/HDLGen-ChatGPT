@@ -49,13 +49,13 @@ class Generator(QWidget):
                 for folder in genFolder_data[0].getElementsByTagName("vhdl_folder"):
                     # Creating the VHDL directory
                     # BROKEN BROKEN BROKEN
-                    path = os.path.join(ProjectManager.get_proj_environment(), folder.firstChild.data)
+                    path = os.path.join(ProjectManager.get_proj_dir(), "..", folder.firstChild.data)
                     os.makedirs(path, exist_ok=True)
             # If verilog is present in the hdl settings then directory with verilog_folder are read
             if hdl_lang.getElementsByTagName('name')[0].firstChild.data == "Verilog":
                 for folder in genFolder_data[0].getElementsByTagName("verilog_folder"):
                     # Creating the Verilog directory
-                    path = os.path.join(location, folder.firstChild.data)
+                    path = os.path.join(ProjectManager.get_proj_dir(), "..", folder.firstChild.data)
                     os.makedirs(path, exist_ok=True)
 
     def generate_vhdl(self):

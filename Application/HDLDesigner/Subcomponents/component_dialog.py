@@ -189,7 +189,9 @@ class ComponentDialog(QDialog):
 
     def load_component_data(self, component_data):
         self.component_name_input.setText(component_data[0])
-        self.file_path_input.setText(str(ProjectManager.get_proj_environment())+component_data[1])
+        self.file_path_input.setText(
+            str(os.path.join(ProjectManager.get_proj_environment(), component_data[1]))
+        )
         signals = []
         mode = []
         type = []
