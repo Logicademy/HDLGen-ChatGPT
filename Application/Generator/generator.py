@@ -848,6 +848,15 @@ class Generator(QWidget):
                 if namedir[0] == instances[0]:
                     instances_unchanged = True
                     component_path = namedir[1]
+
+                    # The '*' is the 'unpacking' operator, which unpacks the '.parts' tuple into a bunch of Strings
+                    # These strings are then passed into os.path.join() to build the path
+                    comp_hdlgen_path = os.path.join(
+                        *Path(component_path).parts[:-3],
+                        "HDLGenPrj",
+                        f'{namedir[0]}.hdlgen'
+                    )
+
                     # Ensure that the component exists on disk
                     if not os.path.exists(
                         os.path.join(ProjectManager.get_proj_environment(), component_path)
@@ -860,7 +869,7 @@ class Generator(QWidget):
                     
                     self.dirs.append(component_path)
                     # Assemble the path to the .hdlgen file for the component
-                    component_hdlgen_file = os.path.join(ProjectManager.get_proj_environment(), namedir[0], "HDLGenPrj", f'{namedir[0]}.hdlgen')
+                    component_hdlgen_file = os.path.join(ProjectManager.get_proj_environment(), comp_hdlgen_path)
                     modelRoot = minidom.parse(component_hdlgen_file)
                     modelHDLGen = modelRoot.documentElement
                     modelHdlDesign = modelHDLGen.getElementsByTagName("hdlDesign")
