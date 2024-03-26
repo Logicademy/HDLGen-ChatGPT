@@ -102,6 +102,7 @@ class ProjectManager(QWidget):
         self.proj_enviro_input.setFont(input_font)
 
         self.proj_name_input = QLineEdit()
+        # self.proj_name_input.setReadOnly(True)
         self.proj_name_input.setFont(input_font)
         # Disallow invalid characters in the component name (any characters not allowed in a Vivado entity)
         self.validator = QRegExpValidator(QRegExp(r'[^\s\t\r\n-]*'))
@@ -409,7 +410,7 @@ class ProjectManager(QWidget):
 
         self.proj_folder_input.setText(self.proj_dir)
         self.proj_enviro_input.setText(self.proj_enviro)
-        self.proj_enviro_name_input.setText(os.path.dirname(self.proj_enviro))
+        self.proj_enviro_name_input.setText("User_Projects")
         self.proj_name_input.setText("Untitled")
         self.info="None"
 

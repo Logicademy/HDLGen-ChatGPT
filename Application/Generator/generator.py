@@ -706,11 +706,16 @@ class Generator(QWidget):
         chatgpt_vhdl = VHDLModel + "\n\n" + vhdl_code
 
         vhdl_file_path = os.path.join(proj_path, "VHDL", "model", entity_name + ".vhd")
+        
         vhdl_file_HDLGen_path = os.path.join(proj_path, "VHDL", "model", entity_name + "_backup.vhd")
+        
         chatgpt_header_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_header_ChatGPT.txt")
+        
         chatgpt_vhdl_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", entity_name + "_VHDL_ChatGPT.txt")
+        
         chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", "Backups",
                                                        entity_name + "_VHDL_header_ChatGPT_backup.txt")
+        
         chatgpt_vhdl_HDLGen_file_path = os.path.join(proj_path, "VHDL", "ChatGPT", "Backups",
                                                      entity_name + "_VHDL_ChatGPT_backup.txt")
 
@@ -1462,6 +1467,7 @@ class Generator(QWidget):
             self.note = self.note.replace("&#44;", ",")
         else:
             self.note = "--- No Test Plan Created"
+        
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
 
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
@@ -2356,8 +2362,9 @@ class Generator(QWidget):
     def create_verilog_file(self, filesNumber):
 
         proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
-        root = minidom.parse(proj_path + "/HDLGenPrj/" + proj_name + ".hdlgen")
+        proj_path = ProjectManager.get_proj_dir()
+        proj_hdlgen = ProjectManager.get_proj_hdlgen()
+        root = minidom.parse(proj_hdlgen)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         VerilogModel = "None"
@@ -2379,16 +2386,23 @@ class Generator(QWidget):
             lines = VerilogModel.split('\n')
             filtered_lines = [line for line in lines if not line.startswith('~')]
             VerilogModel = '\n'.join(filtered_lines)
+        
         entity_name, verilog_code, instances, chatgpt_header, chatgpt_verilog = self.generate_verilog()
         model = VerilogModel
         chatgpt_verilog = model + "\n\n" + verilog_code
+        
         verilog_file_path = os.path.join(proj_path, "Verilog", "model", entity_name + ".v")
+        
         verilog_file_HDLGen_path = os.path.join(proj_path, "Verilog", "model", entity_name + "_backup.v")
+        
         chatgpt_header_file_path = os.path.join(proj_path, "Verilog", "ChatGPT",
                                                 entity_name + "_Verilog_header_ChatGPT.txt")
+        
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", entity_name + "_Verilog_ChatGPT.txt")
+        
         chatgpt_header_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "Backups",
                                                        entity_name + "_Verilog_header_ChatGPT_backup.txt")
+        
         chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "Backups",
                                                         entity_name + "_Verilog_ChatGPT_backup.txt")
 
@@ -2491,6 +2505,85 @@ class Generator(QWidget):
 
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
         wcfg = ""
+        testbench_node = hdl_design[0].getElementsByTagName("testbench")
+
+        if len(testbench_node) != 0 and testbench_node[0].firstChild is not None:
+            self.tb_note = testbench_node[0].getElementsByTagName('TBNote')[0]
+            self.tb_note = self.tb_note.firstChild.nodeValue
+            self.tb_note = self.tb_note.replace("&#10;", "\n").replace("&amp;", "&").replace("&quot;", "\"").replace("&apos;", "\'").replace("&lt;", "<").replace("&#x9;", "\t").replace("&gt;", ">").replace("&#44;", "\,")
+            try:
+                if self.tb_note == "None":
+                    self.tb_Note = None
+                
+                # Load the testbench table as testbench_table[row][col]
+                self.testbench_table = self.tb_note.split("\n")
+                # Remove any blank rows and comments from the testbench_table, sometimes the XML parser
+                # will insert blank lines when pretty-printing the HDLGen XML file
+                self.testbench_table = [line.rstrip("\t") for line in self.testbench_table if not (line.startswith("#") or line.strip() == "")]
+
+                for idx, row in enumerate(self.testbench_table):
+                    self.testbench_table[idx] = row.split("\t")
+
+                signal_names = self.testbench_table[0][1:-3]
+                signal_modes = self.testbench_table[1][1:-3]
+                signal_radix = self.testbench_table[2][1:-3]
+
+                signals = list(zip(signal_names, signal_modes, signal_radix))
+
+                tests = self.testbench_table[4:]
+                tests = [test[1:] for test in tests]
+
+                # Generate Verilog Testbench based on Testplan
+                # No. of tests = total rows (excluding comments) - 4 (for first 4 lines)
+                # No. of tests should start at 1 and continue until the Nth test
+                # No. of rows = len(testbench)
+                # No. of cols = len(testbench[0])
+                testbench_code = ""
+                for idx, test in enumerate(tests):
+                    testbench_code += f'// BEGIN Test Number {test[-2]}\n'
+                    # Print the test number and the comment for that test
+                    testbench_code += f'testNo = {test[-2]}; // {test[-1]}\n'
+
+                    # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
+                    for index, (name, mode, radix) in enumerate(signals):
+                        # # Determine if the signal radix is hex, binary, or decimal
+                        # if radix.split('\'')[1] == "h":
+                        #     test_value = f'{radix}{test[index]}'
+                        # elif radix.split('\'')[1] == "b":
+                        #     test_value = f'{radix}{test[index]}'
+                        # elif radix.split('\'')[1] == "o":
+                        #     test_vale = f'{radix}{test[index]}'
+                        # elif radix.split('\'')[1] == "d":
+                        #     test_value = test[index]
+                        test_value = f'{radix}{test[index]}'
+
+                         # If an input signal is found, add the Verilog to set that input to the corrosponding value in the test table
+                        if mode == "in":
+                            testbench_code += f"{name} = {test_value};\n"
+
+                    # Add the wait statement, inserting the delay value for the test being assembled
+                    testbench_code += f'#({test[-3]} * period);\n'
+
+                    # Loop over each row in the testbench_table, and check if the 2nd entry is "out", indicating an Output signal
+                    for index, (name, mode, radix) in enumerate(signals):
+                        # Determine if the signal radix is hex, binary, or decimal
+                        # if radix.split('\'')[1] == "h":
+                        #     test_value = f'x"{test[index]}"'
+                        # elif radix.split('\'')[1] == "b":
+                        #     test_value = f'\'{test[index]}\''
+                        # elif radix.split('\'')[1] == "d":
+                        #     test_value = test[index]
+                        test_value = f'{radix}{test[index]}'
+
+                        # If an input signal is found, add the Verilog to set that input to the corrosponding value in the test table
+                        if mode == "out":
+                            testbench_code += f"if ({name} !== {test_value})\n\t $display(\"TestNo {test[-2]} {name} mismatch\");\n"
+
+                    testbench_code += f'// END Test Number {test[-2]}\n\n'
+            except Exception as e:
+                testbench_code = ""
+                print(repr(e))
+
         UUTEnt = ""
         header_node = hdl_design[0].getElementsByTagName("header")
         comp_node = header_node[0].getElementsByTagName("compName")[0]
@@ -2599,22 +2692,22 @@ class Generator(QWidget):
                             signal.getElementsByTagName('name')[0].firstChild.data != "rst":
                         if signal.getElementsByTagName('type')[0].firstChild.data == "single bit":
                             inputArray.append(signal.getElementsByTagName('name')[0].firstChild.data)
-                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = 1'b0;\n"
-                            inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = '1'b1;\n"
+                            inputsToZero += signal.getElementsByTagName('name')[0].firstChild.data + " = 1'b0;\n"
+                            inputsToOne += signal.getElementsByTagName('name')[0].firstChild.data + " = '1'b1;\n"
                         elif signal.getElementsByTagName('type')[0].firstChild.data[0:3] == "bus":
                             size = signal.getElementsByTagName('type')[0].firstChild.data
                             digits_list = re.findall(r'\d+', size)
                             size = int(digits_list[0]) + 1
-                            inputsToZero += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(
+                            inputsToZero += signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(
                                 size) + "'b0;\n"
-                            inputsToOne += "\t" + signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(
+                            inputsToOne += signal.getElementsByTagName('name')[0].firstChild.data + " = " + str(
                                 size) + "'b1;\n"
                         else:
                             for i in range(0, len(arrayList)):
                                 if signal.getElementsByTagName('name')[0].firstChild.data == arrayList[i][0]:
                                     size = int(arrayList[i][1]) * int(arrayList[i][2])
                                     name = signal.getElementsByTagName('name')[0].firstChild.data + "_" + str(size)
-                                    inputsToZero += "\t" + name + " = " + str(size) + "'b0;\n"
+                                    inputsToZero += name + " = " + str(size) + "'b0;\n"
 
                 signal_description = signal.getElementsByTagName('description')[
                     0].firstChild.data
@@ -2741,27 +2834,33 @@ class Generator(QWidget):
                 gen_process += io_port_map + "\n\t);\n\n"
                 gen_process += "initial\nbegin\n"
                 gen_process += "$timeformat(-9, 2, \" ns\", 20);\n"
-                gen_process += "$display(\"Simulation start :: time is %0t\",$time);\n"
-                gen_process += "\t// Apply default INPUT signal values. Do not assign output signals (generated by the UUT) here\n"
-                gen_process += "\t// Each stimulus signal change occurs 0.2*period after the active low-to-high clk edge\n"
-                gen_process += "\ttestNo = 0;\n"
-                gen_process += inputsToZero
-                if clkrst == 2:
-                    gen_process += "\trst    = 1'b1;\n"
-                    gen_process += "\t# (1.2 * period);\n"
-                    gen_process += "\trst   = 1'b0;\n"
-                    gen_process += "\t# (1 * period);\n"
-                if clkrst == 1:
-                    gen_process += "\t# (1.2 * period);\n"
+                gen_process += "$display(\"Simulation start :: time is %0t\",$time);\n\n"
 
-                gen_process += "\n\t// Add testbench stimulus here START\n\n\t// === If copying stim_p testbench code, generated by ChatGPT, \n\t// === delete the following lines from the beginning of the pasted code (if they exist)\n\t// === integer testNo;\n\t// === parameter period = 20; // 20 ns\n\t// === reg, wire, declarations  ....\n\t// === initial begin\n\t// === Delete the -- === notes\n\n"
-                gen_process += "\t// === If copying a stim_p process generated by ChatGPT, \n\t// === delete the following lines from the end of the pasted code \n\t// === begin end\n\t// === Delete the -- === notes\n\n\t// Add testbench stimulus here END\n\n"
-                gen_process += "\t// Print nanosecond (ns) time to simulation transcript\n"
-                gen_process += "\t// Use to find time when simulation ends (endOfSim is TRUE)\n"
-                gen_process += "\t// Re-run the simulation for this time\n"
-                gen_process += "\t// Select timing diagram and use View>Zoom Fit\n"
-                gen_process += "\t$display(\"Simulation end :: time is %0t\",$time);\n"
-                gen_process += "\tendOfSim = 1'b1; // assert to stop clk signal generation\n\n"
+                gen_process += "// Default input signal values\n"
+                gen_process += "testNo = 0;\n"
+                gen_process += inputsToZero
+                gen_process += "\n"
+
+                if clkrst == 2:
+                    gen_process += "rst    = 1'b1;\n"
+                    gen_process += "# (1.2 * period);\n"
+                    gen_process += "rst   = 1'b0;\n"
+                    gen_process += "# (1 * period);\n"
+                if clkrst == 1:
+                    gen_process += "# (1.2 * period);\n"
+
+                gen_process += "// START Testbench stimulus\n\n"
+
+                try:
+                    gen_process += testbench_code
+                except NameError:
+                    print("Testbench code doesn't exist yet, skipping...")
+
+                gen_process += "// END Testbench stimulus\n\n"
+                
+                gen_process += "// Print simulation runtime in ns\n"
+                gen_process += "$display(\"Simulation end time is %0t ns\",$time);\n"
+                gen_process += "endOfSim = 1'b1; // Stop CLK signal\n\n"
 
                 arch_syntax = verilog_root.getElementsByTagName("architecture")[0].firstChild.data
                 gen_arch = arch_syntax.replace("$tbSignalDeclaration", tbSignalDeclaration)
@@ -2772,7 +2871,7 @@ class Generator(QWidget):
 
     def create_verilog_testbench_file(self, filesNumber):
         proj_name = ProjectManager.get_proj_name()
-        proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        proj_path = ProjectManager.get_proj_dir()
         root = minidom.parse(ProjectManager.get_proj_hdlgen())
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
@@ -2790,30 +2889,22 @@ class Generator(QWidget):
             self.note = self.note.replace("&#44;", ",")
         else:
             self.note = "No Test Plan created"
+
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
-        VerilogTestbench = "None"
-        if chatgpt.hasChildNodes():
-            commands_node = chatgpt.getElementsByTagName('commands')[0]
-            VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
-            VerilogTestbench = VerilogTestbench.replace("&#10;", "\n")
-            VerilogTestbench = VerilogTestbench.replace("&amp;", "&")
-            VerilogTestbench = VerilogTestbench.replace("&quot;", "\"")
-            VerilogTestbench = VerilogTestbench.replace("&apos;", "\'")
-            VerilogTestbench = VerilogTestbench.replace("&lt;", "<")
-            VerilogTestbench = VerilogTestbench.replace("&#x9;", "\t")
-            VerilogTestbench = VerilogTestbench.replace("&gt;", ">")
-            VerilogTestbench = VerilogTestbench.replace("&#44;", ",")
-            #does not display lines starting with ~
-            lines = VerilogTestbench.split('\n')
-            filtered_lines = [line for line in lines if not line.startswith('~')]
-            VerilogTestbench = '\n'.join(filtered_lines)
+        
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
-        chatgpt_tb = VerilogTestbench + "\n\n" + chatgpt_tb + "\n\n" + self.note
+        
+        chatgpt_tb = chatgpt_tb + "\n\n" + self.note
+        
         verilog_tb_path = os.path.join(proj_path, "Verilog", "testbench", entity_name + "_TB.v")
+        
         verilog_tb_HDLGen_path = os.path.join(proj_path, "Verilog", "testbench", entity_name + "_TB_backup.v")
+        
         waveform_path = os.path.join(proj_path, "Verilog", "AMDprj", entity_name + "_TB_behav.wcfg")
+        
         chatgpt_verilog_file_path = os.path.join(proj_path, "Verilog", "ChatGPT",
                                                  entity_name + "_Verilog_TB_ChatGPT.txt")
+        
         chatgpt_verilog_HDLGen_file_path = os.path.join(proj_path, "Verilog", "ChatGPT", "Backups",
                                                         entity_name + "_Verilog_TB_ChatGPT_backup.txt")
 
