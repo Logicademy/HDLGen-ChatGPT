@@ -1683,7 +1683,7 @@ class Generator(QWidget):
                         if typeName == type[1]:
                             depth = array_nodes[i].getElementsByTagName('depth')[0].firstChild.data
                             width = array_nodes[i].getElementsByTagName('width')[0].firstChild.data
-                    arrayListIO .append(name)
+                    arrayListIO.append(name)
                     arrayInfo.append([name, depth, width])
                     bits = int(width) * int(depth) - 1
                     width = int(width) - 1
@@ -2129,7 +2129,7 @@ class Generator(QWidget):
                                         if input_signal.firstChild.data in arrayList:
                                             for row_idx, row in enumerate(arrayInfo):
                                                 for col_idx, element in enumerate(row):
-                                                    if input_signal.firstChild.data in element:
+                                                    if input_signal.firstChild.data in str(element):
                                                         num = int(arrayInfo[row_idx][1])
                                                         for i in range(num):
                                                             gen_in_sig += input_signal.firstChild.data + "[" + str(
@@ -2148,13 +2148,15 @@ class Generator(QWidget):
                                     note_syntax = verilog_root.getElementsByTagName("note")[0].firstChild.data
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     if notes == "None":
-                                        gen_defaults = gen_defaults.replace("<","")
+                                        # Why the fuck is this line here? 
+                                        # gen_defaults = gen_defaults.replace("<","")
                                         gen_defaults += ""
                                         if caseEmpty == False:
                                             case_syntax = case_syntax.replace("$whenCase", whenCase)
                                             gen_defaults += "\n" + case_syntax
                                     else:
-                                        gen_defaults = gen_defaults.replace("<", "")
+                                        # What the fuck is this like...
+                                        # gen_defaults = gen_defaults.replace("<", "")
                                         gen_defaults += "\n" + note_syntax
                                     gen_defaults = gen_defaults.rstrip()
                                     process_syntax = process_syntax.replace("$input_signals", gen_in_sig)
@@ -2282,7 +2284,6 @@ class Generator(QWidget):
                                     gen_conc += conc_syntax
                             gen_conc += "\n"
 
-
                         elif (child.nodeType == arch_node[0].ELEMENT_NODE and child.tagName == "instance"):
                             self.includeArrays = True
                             gen_stmts = ""
@@ -2314,6 +2315,7 @@ class Generator(QWidget):
                             gen_instance += instance_syntax + "\n"
 
                         child = next
+
                     # gen_process = gen_process[:-1]
                     gen_archs += gen_process
                     gen_archs += gen_conc
