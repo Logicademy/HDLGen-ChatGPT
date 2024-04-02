@@ -332,8 +332,18 @@ class Generator(QWidget):
                             notes = notes.replace("&#10;", "\n---")
 
                             pattern = r'(?<!downto\s)(?<!\d)([01]+)(?!\d)(?!\s*downto)'
-                            notes = re.sub(pattern, lambda m: f"'{m.group(1)}'" if len(
-                                m.group(1)) == 1 else f'"{m.group(1)}"', notes)
+                            # Integer assignment bug
+                            notes = re.sub(
+                                pattern,
+                                lambda m: f"'{m.group(1)}'" if len(m.group(1)) == 1 else f'"{m.group(1)}"',
+                                notes
+                            )
+                            # pattern = r"(?<!downto\s)(?<!\d)(\w+)(\s=\s)([01]+)(?!\d)(?!\s*downto)"
+                            # notes = re.sub(
+                            #     pattern,
+                            #     Generator.signal_syntax_match,
+                            #     notes
+                            # )
                             pattern1 = r"(\(|\w+)(['\"])(\d+)\2\)"
                             match = re.search(pattern1, notes)
                             while match:
@@ -1110,7 +1120,7 @@ class Generator(QWidget):
                     # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
                     for index, (name, mode, radix) in enumerate(signals):
                         # Determine if the signal radix is hex, binary, or decimal
-                        if radix.split('\'')[1] == "h":
+                        if (radix.split('\'')[1] == "h") or (radix.split('\'')[1] == "b" and len(test[index]) > 1):
                             test_value = f'x"{test[index]}"'
                         elif radix.split('\'')[1] == "b":
                             test_value = f'\'{test[index]}\''
@@ -1951,8 +1961,9 @@ class Generator(QWidget):
                                             if arr[0] == signals[0]:
                                                 depth = int(arr[1])
                                                 width = int(arr[2])
-                                                array_syntax = "integer i;\n\tfor (i=0; i<" + str(
-                                                    depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
+                                                gen_int_sig += "\ninteger i;" if "integer i;" not in gen_int_sig else ""
+                                                array_syntax = "for (i=0; i<" + str(
+                                                    depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] = " + str(
                                                     width) + "'b0;\n\t\tend"
                                                 arraySignal = True
                                     elif signals[0] in arrayListIO:
@@ -1963,8 +1974,9 @@ class Generator(QWidget):
                                                 width = int(arr[2])
                                                 bits = depth * width
                                                 signals[0] = signals[0] + "_" + str(bits)
-                                                array_syntax = "integer i;\n\tfor (i=0; i<" + str(
-                                                    depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + str(
+                                                gen_int_sig += "\ninteger i;" if "integer i;" not in gen_int_sig else ""
+                                                array_syntax = "for (i=0; i<" + str(
+                                                    depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] = " + str(
                                                     width) + "'b0;\n\t\tend\n"
                                                 arraySignal = True
                                     elif signals[0] in single_bitList:
@@ -1994,8 +2006,9 @@ class Generator(QWidget):
                                             for arr in arrayInfo:
                                                 if arr[0] == signals[0]:
                                                     depth = int(arr[1])
-                                                    array_syntax = "integer i;\n\tfor (i=0; i<" + str(
-                                                        depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] <= " + \
+                                                    gen_int_sig += "\ninteger i;" if "integer i;" not in gen_int_sig else ""
+                                                    array_syntax = "for (i=0; i<" + str(
+                                                        depth) + "; i=i+1)\n\t\tbegin\n\t\t\t" + signals[0] + "[i] = " + \
                                                                    signals[1] + "[i];" + "\n\t\tend"
                                                     arraySignal = True
 
@@ -2053,26 +2066,31 @@ class Generator(QWidget):
                                 if arraySignal == True:
                                     assign_syntax = array_syntax
                                 else:
-                                    assign_syntax = verilog_root.getElementsByTagName("processAssign")[
-                                        0].firstChild.data
+                                    assign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
                                     assign_syntax = assign_syntax.replace("$output_signal", signals[0])
                                     assign_syntax = assign_syntax.replace("$value", value)
                                     assign_syntax = assign_syntax
+                                
                                 if_gen_defaults += "\n\t\t" + assign_syntax
+                                
                                 gen_defaults += "\n\t" + assign_syntax + " // Default assignment"
+                                
                                 if len(signals) == 4:
-                                    clkAssign_syntax = verilog_root.getElementsByTagName("processAssign")[
-                                        0].firstChild.data
-                                    clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
-                                    clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
+                                    if arraySignal == True:
+                                        clkAssign_syntax = array_syntax
+                                    else:
+                                        clkAssign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
+                                        clkAssign_syntax = clkAssign_syntax.replace("$output_signal", signals[0])
+                                        clkAssign_syntax = clkAssign_syntax.replace("$value", signals[2])
+                                        
                                     clkgen_defaults += "\n\t\t" + clkAssign_syntax
+                                    
                                     if signals[3] != "N/A":
                                         ceInSeq = signals[3]
                                 else:
                                     signalList += ", " + signals[0]
-                            process_syntax = process_syntax.replace("$process_label",
-                                                                    child.getElementsByTagName("label")[
-                                                                        0].firstChild.data)
+
+                            process_syntax = process_syntax.replace("$process_label", child.getElementsByTagName("label")[0].firstChild.data)
 
                             if gen_defaults != "":
                                 if clkgen_defaults != "":
@@ -2083,7 +2101,7 @@ class Generator(QWidget):
                                         gen_in_sig = clkEdge + " clk"
                                         if clkRst.getElementsByTagName('rst')[0].firstChild.data == "Yes":
                                             if_syntax = verilog_root.getElementsByTagName("ifStatement")[
-                                                0].firstChild.data
+                                                0].firstChild.data  
                                             if_syntax = if_syntax.replace("$assignment", "rst")
                                             lvl = "1"
                                             rstlvl = "posedge"
