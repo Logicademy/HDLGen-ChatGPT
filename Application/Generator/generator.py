@@ -1120,8 +1120,10 @@ class Generator(QWidget):
                     # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
                     for index, (name, mode, radix) in enumerate(signals):
                         # Determine if the signal radix is hex, binary, or decimal
-                        if (radix.split('\'')[1] == "h") or (radix.split('\'')[1] == "b" and len(test[index]) > 1):
+                        if radix.split('\'')[1] == "h":
                             test_value = f'x"{test[index]}"'
+                        elif radix.split('\'')[1] == "b" and len(test[index]) > 1:
+                            test_value = f'"{test[index]}"'
                         elif radix.split('\'')[1] == "b":
                             test_value = f'\'{test[index]}\''
                         elif radix.split('\'')[1] == "d":
