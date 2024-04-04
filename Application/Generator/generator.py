@@ -1141,6 +1141,8 @@ class Generator(QWidget):
                         # Determine if the signal radix is hex, binary, or decimal
                         if radix.split('\'')[1] == "h":
                             test_value = f'x"{test[index]}"'
+                        elif radix.split('\'')[1] == "b" and len(test[index]) > 1:
+                            test_value = f'"{test[index]}"'
                         elif radix.split('\'')[1] == "b":
                             test_value = f'\'{test[index]}\''
                         elif radix.split('\'')[1] == "d":

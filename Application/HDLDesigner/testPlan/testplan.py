@@ -145,7 +145,7 @@ class TestPlan(QWidget):
 
     def save_data(self):
         xml_data_path = ProjectManager.get_xml_data_path()
-        specification_file = os.path.join(ProjectManager.get_proj_specification_dir(), "testbench.txt")
+        specification_file = os.path.join(ProjectManager.get_proj_specification_dir(), f"{ProjectManager.get_proj_name()}_testbench.txt")
 
         root = minidom.parse(xml_data_path)
         HDLGen = root.documentElement
