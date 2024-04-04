@@ -1429,6 +1429,9 @@ class Generator(QWidget):
                 gen_process += "\t-- if signal type is \'std_logic\', use '0'\n\t-- if signal type is \'std_logic_vector\' use (others => '0')\n\t-- if signal type is \'integer\' use 0\n"
                 gen_process += inputsToZero
 
+                if clkrst == 1:
+                    gen_process += "\twait for period * 1.2; -- Align input signal changes to 0.2 periods after the active clock edge"
+
                 if clkrst == 2:
                     gen_process += "\treport \"Assert and toggle rst\";\n\ttestNo <= 0;\n\trst    <= '1';\n"
                     gen_process += "\twait for period*1.2; -- assert rst for 1.2*period, deasserting rst 0.2*period after active clk edge\n"
