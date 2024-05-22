@@ -5,7 +5,7 @@ import re
 from xml.dom import minidom
 from pathlib import Path
 import pyperclip
-from PySide2.QtWidgets import *
+from PySide2.QtWidgets import QMessageBox, QWidget
 import subprocess
 import sys
 from datetime import datetime
@@ -37,8 +37,6 @@ class Generator(QWidget):
 
         # Accessing the projectManager and genFolder Elements
         project_Manager = HDLGen.getElementsByTagName("projectManager")
-        settings = project_Manager[0].getElementsByTagName("settings")[0]
-        location = settings.getElementsByTagName("location")[0].firstChild.data
         genFolder_data = HDLGen.getElementsByTagName("genFolder")
         hdl_data = project_Manager[0].getElementsByTagName("HDL")[0]
         hdl_langs = hdl_data.getElementsByTagName("language")
@@ -393,7 +391,7 @@ class Generator(QWidget):
                                 elif value in portSignals or value in internalSignals:
                                     value = value
 
-                                elif stateTypeSig == True and value == CSState:
+                                elif stateTypeSig is True and value == CSState:
                                     caseEmpty = False
                                     case_syntax = vhdl_root.getElementsByTagName("case")[0].firstChild.data
                                     case_syntax = case_syntax.replace("$stateType", value)
@@ -509,7 +507,7 @@ class Generator(QWidget):
                                     note_syntax = note_syntax.replace("$notes", notes)
                                     if notes == "None":
                                         gen_defaults += ""
-                                        if caseEmpty == False:
+                                        if caseEmpty is False:
                                             case_syntax = case_syntax.replace("$whenCase", whenCase)
                                             gen_defaults += "\n" + case_syntax
                                     else:
@@ -687,7 +685,6 @@ class Generator(QWidget):
         return entity_name, gen_vhdl, instances, chatgpt_header, chatgpt_vhdl
 
     def create_vhdl_file(self, filesNumber):
-        proj_name = ProjectManager.get_proj_name()
         proj_path = ProjectManager.get_proj_dir()
         root = minidom.parse(ProjectManager.get_proj_hdlgen())
         HDLGen = root.documentElement
@@ -896,7 +893,7 @@ class Generator(QWidget):
                     if len(instances) == 0:
                         break
 
-            if instances_unchanged == False:
+            if instances_unchanged is False:
                 break
 
         if self.dirs is not None:
@@ -941,7 +938,6 @@ class Generator(QWidget):
         tcl_file_template = tcl_root.getElementsByTagName("quartus_tcl")[0]
         tcl_file_template = tcl_file_template.firstChild.data
         comp = self.entity_name
-        tb_file_name = self.entity_name + "_TB"
         tcl_quartus_code = tcl_file_template.replace("$tcl_path", self.tcl_path)
         tcl_quartus_code = tcl_quartus_code.replace("$comp_name", comp)
         wd = os.getcwd()
@@ -949,32 +945,10 @@ class Generator(QWidget):
         mainPackagePath = "add_files -norecurse  "  # + wd
         mainPackagePath = mainPackagePath + ProjectManager.get_package_vhd()
         mainPackagePath = mainPackagePath.replace("\\", "/")
-        # if self.includeArrays == True:
-        # tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage", mainPackagePath)
-        # else:
-        # tcl_quartus_code = tcl_quartus_code.replace("$arrayPackage","")
-        files = ""
-        # mainPackageDir = os.getcwd() + "\HDLDesigner\Package\mainPackage.hdlgen"
-        mainPackageDir = ProjectManager.get_package_hdlgen()
-        root = minidom.parse(mainPackageDir)
-        HDLGen = root.documentElement
-        hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
-        components = hdlDesign[0].getElementsByTagName("components")
-        comp_nodes = components[0].getElementsByTagName('component')
+
         self.dirs = []
-        # for i in range(0, len(comp_nodes)):
-        #   if comp_nodes[i].getElementsByTagName('model')[0].firstChild.data in instances:
-        #       dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
-        #       self.dirs.append(dir)
-        # if self.dirs is not None:
-        #    for dir in self.dirs:
-        #        files += "add_files -norecurse  "+ dir + " \n"
-        #    tcl_quartus_code = tcl_quartus_code.replace("$files", files)
-        # else:
-        #    tcl_quartus_code = tcl_quartus_code.replace("$files", "")
-        # tcl_quartus_code = tcl_quartus_code.replace("$tb_name", tb_file_name)
+
         tcl_quartus_code = tcl_quartus_code.replace("$proj_name", proj_name)
-        # proj_path = "{" + proj_path + "}"
         tcl_quartus_code = tcl_quartus_code.replace("$proj_dir", proj_path)
         tcl_quartus_code = tcl_quartus_code.replace("$lang", lang)
         tcl_quartus_code = tcl_quartus_code.replace("$ext", ext)
@@ -1119,7 +1093,7 @@ class Generator(QWidget):
 
                     # Loop over each row in the testbench_table, and check if the 2nd entry in the row is "in", indicating an Input signal
                     for index, (name, mode, radix) in enumerate(signals):
-                        # Determine if the signal radix is hex, binary, or decimal
+                        # Determine if the signal radix is hex, binary, or decimal, and use the appropriate syntax
                         if radix.split('\'')[1] == "h":
                             test_value = f'x"{test[index]}"'
                         elif radix.split('\'')[1] == "b" and len(test[index]) > 1:
@@ -1391,7 +1365,7 @@ class Generator(QWidget):
                 gen_library = "-- Library declarations\n"
                 for library in libraries:
                     gen_library += library.firstChild.data + "\n"
-                if arrayPackage == True:
+                if arrayPackage is True:
                     gen_library += "use work.MainPackage.all;"
                 gen_library += "\n"
                 tb_code += gen_library
@@ -1465,7 +1439,6 @@ class Generator(QWidget):
         return entity_name, tb_code, wcfg, chatgpt_tb
 
     def create_testbench_file(self, filesNumber):
-        proj_name = ProjectManager.get_proj_name()
         proj_path = ProjectManager.get_proj_dir()
         root = minidom.parse(ProjectManager.get_proj_hdlgen())
         HDLGen = root.documentElement
@@ -1484,8 +1457,6 @@ class Generator(QWidget):
             self.note = self.note.replace("&#44;", ",")
         else:
             self.note = "--- No Test Plan Created"
-        
-        chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
 
         entity_name, vhdl_tb_code, waveform, chatgpt_tb = self.create_vhdl_testbench_code()
 
@@ -1590,7 +1561,6 @@ class Generator(QWidget):
             gen_arrays += gen_arrayType_syntax
         for i in range(0, len(comp_nodes)):
             model = comp_nodes[i].getElementsByTagName('model')[0].firstChild.data
-            dir = comp_nodes[i].getElementsByTagName('dir')[0].firstChild.data
             ports = ""
             for port_signal in comp_nodes[i].getElementsByTagName("port"):
                 signals = port_signal.firstChild.data.split(",")
@@ -2019,7 +1989,7 @@ class Generator(QWidget):
                                                                    signals[1] + "[i];" + "\n\t\tend"
                                                     arraySignal = True
 
-                                elif stateTypeSig == True and value == CSState:
+                                elif stateTypeSig is True and value == CSState:
                                     caseEmpty = False
                                     case_syntax = verilog_root.getElementsByTagName("case")[0].firstChild.data
                                     case_syntax = case_syntax.replace("$stateType", value)
@@ -2070,7 +2040,7 @@ class Generator(QWidget):
 
 
 
-                                if arraySignal == True:
+                                if arraySignal is True:
                                     assign_syntax = array_syntax
                                 else:
                                     assign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
@@ -2083,7 +2053,7 @@ class Generator(QWidget):
                                 gen_defaults += "\n\t" + assign_syntax + " // Default assignment"
                                 
                                 if len(signals) == 4:
-                                    if arraySignal == True:
+                                    if arraySignal is True:
                                         clkAssign_syntax = array_syntax
                                     else:
                                         clkAssign_syntax = verilog_root.getElementsByTagName("processAssign")[0].firstChild.data
@@ -2176,7 +2146,7 @@ class Generator(QWidget):
                                         # Why the fuck is this line here? 
                                         # gen_defaults = gen_defaults.replace("<","")
                                         gen_defaults += ""
-                                        if caseEmpty == False:
+                                        if caseEmpty is False:
                                             case_syntax = case_syntax.replace("$whenCase", whenCase)
                                             gen_defaults += "\n" + case_syntax
                                     else:
@@ -2295,7 +2265,7 @@ class Generator(QWidget):
                                             value = str(size) + "'b0"
                                         else:
                                             value = str(0)
-                                    if arraySignal == True:
+                                    if arraySignal is True:
                                         conc_syntax = array_syntax
                                     else:
                                         assign_syntax = verilog_root.getElementsByTagName("sigAssign")[
@@ -2387,15 +2357,12 @@ class Generator(QWidget):
         return entity_name, gen_verilog, instances, chatgpt_header, chatgpt_verilog
 
     def create_verilog_file(self, filesNumber):
-
-        proj_name = ProjectManager.get_proj_name()
         proj_path = ProjectManager.get_proj_dir()
         proj_hdlgen = ProjectManager.get_proj_hdlgen()
         root = minidom.parse(proj_hdlgen)
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
         VerilogModel = "None"
-        VerilogHeader = "None"
         chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
         if chatgpt.hasChildNodes():
             commands_node = chatgpt.getElementsByTagName('commands')[0]
@@ -2897,7 +2864,6 @@ class Generator(QWidget):
         return entity_name, tb_code, wcfg, chatgpt_tb
 
     def create_verilog_testbench_file(self, filesNumber):
-        proj_name = ProjectManager.get_proj_name()
         proj_path = ProjectManager.get_proj_dir()
         root = minidom.parse(ProjectManager.get_proj_hdlgen())
         HDLGen = root.documentElement
@@ -2916,8 +2882,6 @@ class Generator(QWidget):
             self.note = self.note.replace("&#44;", ",")
         else:
             self.note = "No Test Plan created"
-
-        chatgpt = hdlDesign[0].getElementsByTagName('chatgpt')[0]
         
         entity_name, verilog_tb_code, waveform, chatgpt_tb = self.create_verilog_testbench_code()
         

@@ -244,9 +244,35 @@ class TestPlan(QWidget):
                 name = i.getElementsByTagName('name')[0].firstChild.data
                 mode = i.getElementsByTagName('mode')[0].firstChild.data
                 port = i.getElementsByTagName('type')[0].firstChild.data
-                # COMMENT : Comment this fuckery and see if there's a better way to do this
-                # Edit 2024: **what the fuck** was I thinking when I wrote this holy crap
-                port_width = (int(port[port.index("(")+1:].split(' ')[0]) + 1) if port.endswith(")") else 1
+                
+                # In the .HDLGEN file, a signal looks like this:
+                # <signal>
+                #   <name>B</name>
+                #   <mode>in</mode>
+                #   <type>bus(31 downto 0)</type>
+                #   <description>ALU data input B</description>
+                # </signal>
+                #
+                # (31 downto 0) means a width of 32 - ports should always go (X downto 0)
+                # Hence the width can be found by taking the 'X' part and adding 1
+                #
+                # To do this, find the index of the opening bracket using .index('('),
+                # then add 1 to get the index of the first digit of X.
+                # Then the : operator can be used to yield a slice containing X onwards.
+                #
+                # Use the split function to split the string on a space character,
+                # leaving an array slice containing ["31", "downto", "0)"].
+                #
+                # Taking the first object in the array, casting it to an integer and adding 1
+                # yields the signal width.
+                # 
+                # Ensure the port ends with a closing bracket, otherwise
+                # none of these assumptions are valid as the port is actually a single bit wide.
+                port_width = (
+                    int(
+                        port[port.index("(")+1:].split(' ')[0]
+                    ) + 1
+                ) if port.endswith(")") else 1
 
                 if name not in ["clk", "rst"]:
                     if mode == "in":

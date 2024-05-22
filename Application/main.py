@@ -125,7 +125,7 @@ class HDLGen(QMainWindow):
         if not self.config.read('config.ini'):
             HDLGen.create_config_file()
             self.config.read('config.ini')
-
+            
         self.setup_ui()
 
     def setup_ui(self):
