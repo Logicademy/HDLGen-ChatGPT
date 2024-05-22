@@ -2,23 +2,18 @@
 __pycache__/
 *.py[cod]
 *$py.class
-# Ignore PyCharm files
-**/.idea/
+
 # Application specific files generated at runtime
 # Override with "git add -f User_Projects/*" to update example User Projects
-**/mainPackage.hdlgen
+**/config.ini
 User_Projects/
 
-# Stop commits of local user configs
-# Override with "git add -f config.ini" to update ChatGPT Prompts
-**/config.ini
-
-# Ignore PyCharm and VSCode Files
+# Ignore PyCharm, VSCode and Vivado files
+**/.idea/
 .idea/
-.vscode/
-
-# Ignore VSCode files
-Application/.vscode/
-
+**/.vscode/
+.vscode
 **/*.log
+*.log
 **/*.jou
+*.jou
