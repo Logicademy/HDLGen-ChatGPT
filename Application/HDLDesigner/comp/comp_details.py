@@ -92,6 +92,8 @@ class CompDetails(QWidget):
         self.comp_date_picker = QDateEdit(calendarPopup=True)
         self.comp_date_picker.setDate(QDate.currentDate())
         self.comp_date_picker.setFont(small_text_font)
+        self.comp_date_picker.setDisplayFormat("dd/MM/yyyy")
+        
         self.input_frame = QFrame()
         self.setup_ui()
         if proj_dir != None:
@@ -224,10 +226,10 @@ class CompDetails(QWidget):
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
 
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)
@@ -248,7 +250,7 @@ class CompDetails(QWidget):
         self.comp_date_picker.setDate(QDate.currentDate())
 
     def load_data(self, proj_dir):
-        root = minidom.parse(proj_dir[0])
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 

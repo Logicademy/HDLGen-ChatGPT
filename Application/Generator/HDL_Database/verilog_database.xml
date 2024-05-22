@@ -29,7 +29,7 @@
     <caseCopy>&#x9;case ( $stateType )&#10;</caseCopy>
     <case>&#x9;case ( $stateType )$whenCase&#10;&#x9;&#x9;default :&#10;&#x9;&#x9;&#x9;begin&#10;&#10;&#x9;&#x9;&#x9;end&#10;&#x9;endcase</case>
     <sigAssign>$output_signal = $value;</sigAssign>
-    <processAssign>$output_signal &lt;= $value;</processAssign>
+    <processAssign>$output_signal = $value;</processAssign>
     <portAssign>.$output_signal ($value)</portAssign>
     <concurrentstmt>assign $statement&#10;</concurrentstmt>
     <instance>$instance $instance_label&#10;(&#10;$portAssign&#10;&#x9;);</instance>

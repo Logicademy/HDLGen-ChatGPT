@@ -30,7 +30,7 @@ class note_Dialog(QDialog):
         self.note_label.setFont(input_font)
         self.note_label.setStyleSheet(WHITE_COLOR)
         self.note_input = QPlainTextEdit()
-        self.note_input.setLineWrapMode(QPlainTextEdit.WidgetWidth)
+        self.note_input.setLineWrapMode(QPlainTextEdit.NoWrap)
         self.note_input.setFont(input_font)
 
         self.cancel_btn = QPushButton("Cancel")
@@ -51,7 +51,7 @@ class note_Dialog(QDialog):
         self.cancelled = True
 
         self.setup_ui()
-        if add_or_edit == "edit" and note_data != None:
+        if add_or_edit == "edit" and note_data is not None:
             self.load_sig_data(note_data)
 
     def setup_ui(self):

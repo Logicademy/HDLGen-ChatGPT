@@ -165,7 +165,7 @@ class seqDialog(QDialog):
 
     def load_data(self, proj_dir):
 
-        root = minidom.parse(proj_dir[0])
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 

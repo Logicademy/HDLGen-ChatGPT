@@ -24,29 +24,26 @@ class Home(QMainWindow):
         self.setWindowTitle("HDLGen-ChatGPT Version 1.0.0")
 
         self.cornerWidget = QWidget()
-        #self.generate_btn = QPushButton("Generate")
-        #self.generate_btn.setFont(small_text_font)
+
         self.start_vivado_btn = QPushButton("Open EDA Project")
         self.start_vivado_btn.setFont(small_text_font)
+
         self.export_project_btn = QPushButton("Export Project")
         self.export_project_btn.setFont(small_text_font)
+        
         self.cornerWidgetLayout = QHBoxLayout()
         self.cornerWidgetLayout.setContentsMargins(0, 0, 0, 0)
-        #self.cornerWidgetLayout.addWidget(self.generate_btn)
         self.cornerWidgetLayout.addWidget(self.start_vivado_btn)
         self.cornerWidgetLayout.addWidget(self.export_project_btn)
         self.cornerWidget.setLayout(self.cornerWidgetLayout)
 
         # Initializing UI Elements
         self.mainLayout = QVBoxLayout()
-
         self.tabs = QTabWidget()
 
         # Creating a container
         self.container = QWidget()
-
         self.proj_dir = proj_dir
-
         self.generator = Generator()
         self.project_manager = ProjectManager(self.proj_dir, self)
 
@@ -86,14 +83,13 @@ class Home(QMainWindow):
             self.hdl_designer.ioPorts.save_data()
             self.hdl_designer.architecture.save_data()
             self.hdl_designer.generate.save_data()
-            self.hdl_designer.testplan.save_xml()
+            self.hdl_designer.testplan.save_data()
             self.hdl_designer.internalSignal.save_data()
             return QMessageBox.Save
         elif result == QMessageBox.Discard:
             return QMessageBox.Discard
         else:
             return QMessageBox.Cancel
-
 
     def setup_ui(self):
         load_data = False
@@ -105,7 +101,7 @@ class Home(QMainWindow):
         self.hdl_designer = HDLDesigner(self.proj_dir, load_data)
 
         self.tabs.addTab(self.project_manager, "Project Manager")
-        self.tabs.addTab(self.hdl_designer, "HDL Designer")
+        self.tabs.addTab(self.hdl_designer, "Component Designer")
         self.tabs.addTab(Help(), "Help")
         self.tabs.currentChanged.connect(self.handle_tab_change)
         font = self.tabs.font()
@@ -124,18 +120,15 @@ class Home(QMainWindow):
         self.hdl_designer.generate.generate_model.clicked.connect(self.HDL_model_generate)
         self.hdl_designer.generate.generate_chatgpt_model.clicked.connect(self.chatgpt_model_generate)
         self.hdl_designer.generate.generate_testbench.clicked.connect(self.HDL_testbench_generate)
-        self.hdl_designer.generate.generate_chatgpt_testbench.clicked.connect(self.chatgpt_testbench_generate)
         self.hdl_designer.generate.generate_chatgpt_title.clicked.connect(self.chatgpt_title_generate)
 
         self.hdl_designer.generate.loc_model.clicked.connect(self.open_model_folder)
         self.hdl_designer.generate.chatgpt_loc_model.clicked.connect(self.open_chatgpt_folder)
         self.hdl_designer.generate.loc_testbench.clicked.connect(self.open_testbench_folder)
-        self.hdl_designer.generate.chatgpt_loc_testbench.clicked.connect(self.open_chatgpt_folder)
         self.hdl_designer.generate.chatgpt_loc_title.clicked.connect(self.open_chatgpt_folder)
 
         self.hdl_designer.generate.delete_bk_title_chatgpt.clicked.connect(self.delete_title_msg_backups)
         self.hdl_designer.generate.delete_bk_model_chatgpt.clicked.connect(self.delete_model_msg_backups)
-        self.hdl_designer.generate.delete_bk_testbench_chatgpt.clicked.connect(self.delete_testbench_msg_backups)
         self.hdl_designer.generate.testbench_log.clicked.connect(self.openEDALog)
         self.hdl_designer.generate.delete_bk_model.clicked.connect(self.delete_model_backups)
         self.hdl_designer.generate.delete_bk_testbench.clicked.connect(self.delete_testbench_backups)
@@ -165,6 +158,7 @@ class Home(QMainWindow):
             self.model_generate("0,1")
         else:
             self.model_generate("0")
+    
     def chatgpt_testbench_generate(self):
         if self.hdl_designer.generate.chatgpt_testbench_bk_checkBox.isChecked():
             self.testbench_generate("8,9")
@@ -180,6 +174,7 @@ class Home(QMainWindow):
             self.testbench_generate("2,10")
         else:
             self.testbench_generate("2")
+    
     def testbench_generate(self, files):
         if self.project_manager.vhdl_check.isChecked():
             self.generator.generate_folders()
@@ -201,6 +196,7 @@ class Home(QMainWindow):
             else:
                 msgBox.setText("Generated")
             msgBox.exec_()
+    
     def model_generate(self, files):
         if self.project_manager.vhdl_check.isChecked():
             self.generator.generate_folders()
@@ -259,7 +255,6 @@ class Home(QMainWindow):
         elif self.project_manager.verilog_check.isChecked():
             path = proj_folder+"/Verilog/testbench"
             self.open_file_explorer(path)
-
 
     def delete_title_msg_backups(self):
         backup_files = ""
@@ -340,15 +335,14 @@ class Home(QMainWindow):
     def openEDALog(self):
         if self.project_manager.vhdl_check.isChecked():
             if self.project_manager.vivado_check.isChecked():
-                proj_folder = os.path.join(self.project_manager.get_proj_dir(), self.project_manager.get_proj_name())
-                xvhdlpath = proj_folder + "/VHDL/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/xvhdl.log"
-                elabpath = proj_folder + "/VHDL/AMDprj/" + self.project_manager.get_proj_name() + ".sim/sim_1/behav/xsim/elaborate.log"
+                proj_folder = self.project_manager.get_proj_dir()
+                xvhdlpath = os.path.join(proj_folder, "VHDL", "AMDprj", f"{self.project_manager.get_proj_name()}.sim", "sim_1", "behav", "xsim", "xvhdl.log")
+                elabpath = os.path.join(proj_folder, "VHDL", "AMDprj", f"{self.project_manager.get_proj_name()}.sim", "sim_1", "behav", "xsim", "elaborate.log")
                 msg_box = QMessageBox()
                 msg_box.setIcon(QMessageBox.Question)
                 msg_box.setText("Choose a log option:")
                 msg_box.setWindowTitle("Log Options")
                 msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-                #msg_box.setDefaultButton(QMessageBox.Yes)
                 msg_box.setButtonText(QMessageBox.Yes, "xvhdl.log")
                 msg_box.setButtonText(QMessageBox.No, "elaborate.log")
 
@@ -398,8 +392,6 @@ class Home(QMainWindow):
                 msgBox.setWindowTitle("Alert")
                 msgBox.setText("Intel Quartus is still a work in progress")
                 msgBox.exec_()
-
-
 
         elif self.project_manager.verilog_check.isChecked():
             if self.project_manager.vivado_check.isChecked():
@@ -461,6 +453,7 @@ class Home(QMainWindow):
                 msgBox.setWindowTitle("Alert")
                 msgBox.setText("Intel Quartus is still a work in progress")
                 msgBox.exec_()
+    
     def delete_testbench_msg_backups(self):
         backup_files = ""
         bk = False
@@ -600,7 +593,7 @@ class Home(QMainWindow):
                 if self.project_manager.vhdl_check.isChecked():
                     msgBox.setText("Starting EDA tool")
                     msgBox.exec_()
-                    self.generator.run_tcl_file("VHDL","Vivado")
+                    self.generator.run_tcl_file("VHDL", "Vivado")
                 else:
                     msgBox.setText("Starting EDA tool")
                     msgBox.exec_()
@@ -620,7 +613,6 @@ class Home(QMainWindow):
     def export_project(self):
         self.project_manager.export_project()
 
-
     def handle_tab_change(self, index):
         #self.project_manager.named_edit_done()
         if index != 0:
@@ -633,8 +625,4 @@ class Home(QMainWindow):
             self.hdl_designer.architecture.save_data()
             self.hdl_designer.generate.save_data()
             self.hdl_designer.internalSignal.save_data()
-            self.hdl_designer.testplan.save_xml()
-
-
-
-
+            self.hdl_designer.testplan.save_data()

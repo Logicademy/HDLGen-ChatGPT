@@ -233,9 +233,9 @@ class ChatGPT(QWidget):
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)
@@ -246,7 +246,7 @@ class ChatGPT(QWidget):
         self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
 
 
-        root = minidom.parse(proj_dir[0])
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         projectManager = HDLGen.getElementsByTagName("projectManager")
         HDL = projectManager[0].getElementsByTagName("HDL")[0]
@@ -433,6 +433,6 @@ class ChatGPT(QWidget):
             msgBox.setWindowTitle("Alert")
             msgBox.setText("An error occurred. Check terminal for details")
             msgBox.exec_()
-            print("An error occurred:", str(e))
+            print("An error occurred:", str(repr(e)))
     
 

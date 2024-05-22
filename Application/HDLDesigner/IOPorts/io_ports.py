@@ -157,6 +157,7 @@ class IOPorts(QWidget):
 
     def update_clk_rst_btn(self):
         self.seqSytle_editbtn.setText("Edit clk/rst")
+
     def edit_RTL(self):
         seq_dialog = seqDialog(self.proj_dir_value)
         seq_dialog.exec_()
@@ -211,7 +212,6 @@ class IOPorts(QWidget):
                 self.all_signals_names.append(("rst"))
             self.update_clk_rst_btn()
             self.save_data()
-
 
     def add_signal(self):
 
@@ -298,8 +298,6 @@ class IOPorts(QWidget):
                 self.seqSytle_editbtn.setVisible(True)
                 self.seqSytle_checkBox.setChecked(True)
         self.save_data()
-
-
 
     def edit_signal(self):
         button = self.sender()
@@ -402,9 +400,9 @@ class IOPorts(QWidget):
         hdlDesign[0].replaceChild(new_Clk_rst, hdlDesign[0].getElementsByTagName('clkAndRst')[0])
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)
@@ -413,9 +411,9 @@ class IOPorts(QWidget):
     def io_help_window(self):
         io_help_dialog = IoHelpDialog()
         io_help_dialog.exec_()
-    def load_data(self, proj_dir):
 
-        root = minidom.parse(proj_dir[0])
+    def load_data(self, proj_dir):
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         hdlDesign = HDLGen.getElementsByTagName("hdlDesign")
 

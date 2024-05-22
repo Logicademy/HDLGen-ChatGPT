@@ -395,10 +395,7 @@ class IntSignalDialog(QDialog):
         intSignalDescription = intSignalDescription.replace(",", "&#44;")
 
 
-        intSignalDescription = os.linesep.join([
-            line for line in intSignalDescription.splitlines()
-            if line.strip() != ''
-        ])
+        intSignalDescription = '\n'.join([line for line in intSignalDescription.splitlines() if line.strip()])
         if intSignalDescription == "":
             intSignalDescription = "to be completed"
         data.append(self.intSig_name_input.text().strip().replace(" ", ""))

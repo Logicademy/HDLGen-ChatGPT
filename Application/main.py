@@ -3,6 +3,7 @@ import os
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
+from pathlib import Path
 import sys
 sys.path.append(".")
 from Home.home import Home
@@ -12,8 +13,10 @@ import configparser
 
 
 APP_AUTHORS = "Created by Fearghal Morgan, Abishek Bupathi & JP Byrne"
+
 VICI_DESCRIPTION = "Online learning and assessment, Remote FPGA\nprototyping and course builder"
-APP_DESCRIPTION = "<ul><li>Open source application and tutorials found on <a href='https://github.com/fearghal1/HDLGen'>GitHub</a></li>" \
+
+APP_DESCRIPTION = "<ul><li>Open source application and tutorials found on <a href='https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT'>GitHub</a></li>" \
                  "<li>Fast digital systems design capture from design and test specifications</li>" \
                  "<li>Generate HDL model templates and low-level logic pseudo code</li>" \
                  "<li>Generate HDL testbench templates (stimulus and signal checking)</li>" \
@@ -27,10 +30,9 @@ APP_DESCRIPTION1 = "<ul><li>Fast capture and generation of HDL model and testben
                  "<li>EDA project creation and launch</li>" \
                  "<li>Supports VHDL and Verilog / AMD Xilinx Vivado</li>" \
                  "<li>Open source application</li></ul>"
+
 class HDLGen(QMainWindow):
-
     def __init__(self):
-
         super().__init__()
         self.setWindowTitle("HDLGen-ChatGPT Version 1.0.0")
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
@@ -73,7 +75,6 @@ class HDLGen(QMainWindow):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.open_btn.clicked.connect(self.open_project)
-        #self.new_btn.setFixedSize(150, 50)
         self.new_btn.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
@@ -81,7 +82,6 @@ class HDLGen(QMainWindow):
         self.help_btn.clicked.connect(self.help_window)
 
         self.settings_btn.clicked.connect(self.settings_window)
-
 
         self.help_btn_spacer = QLabel("")
         self.settings_btn_spacer = QLabel("")
@@ -107,7 +107,7 @@ class HDLGen(QMainWindow):
             '<a href="https://vicicourse.s3.eu-west-1.amazonaws.com/HDLGen/RSP2023/RSP2023_Top.pdf">Tutorials</a> Tutorial videos on HDLGen/ChatGPT, for a range of design examples')
         self.tutorial_link.setFont(text_font)
         self.tutorial_link.linkActivated.connect(self.link)
-        self.github_link = QLabel('<a href="https://github.com/fearghal1/HDLGen">GitHub</a>\nIf you use HDLGen-ChatGPT, please include the Github reference to our work')
+        self.github_link = QLabel('<a href="https://github.com/HDLGen-ChatGPT/HDLGen-ChatGPT">GitHub</a>\nIf you use HDLGen-ChatGPT, please include the Github reference to our work')
         self.github_link.setFont(text_font)
         self.app_authors = QLabel(APP_AUTHORS)
         self.app_authors.setFont(bold_font)
@@ -121,45 +121,36 @@ class HDLGen(QMainWindow):
         # Creating a container
         self.container = QWidget()
         self.config = configparser.ConfigParser()
+        
+        if not self.config.read('config.ini'):
+            HDLGen.create_config_file()
+            self.config.read('config.ini')
+            
         self.setup_ui()
 
     def setup_ui(self):
-
         print("Setting up UI")
-        self.button_layout.addWidget(self.hdlgen_logo,0,0,1,3) #alignment=Qt.AlignLeft)
-        self.button_layout.addWidget(self.new_btn, 0, 5, 1,1) #alignment= Qt.AlignRight)
-        self.button_layout.addWidget(self.open_btn, 0, 4,1,1) #alignment= Qt.AlignRight)
-        self.button_layout.addWidget(self.settings_btn, 0, 6,1,1)# alignment=Qt.AlignRight)
-        self.button_layout.addWidget(self.help_btn, 0, 7,1,1)# alignment=Qt.AlignLeft)
+        self.button_layout.addWidget(self.hdlgen_logo,0,0,1,3)
+        self.button_layout.addWidget(self.new_btn, 0, 5, 1,1)
+        self.button_layout.addWidget(self.open_btn, 0, 4,1,1)
+        self.button_layout.addWidget(self.settings_btn, 0, 6,1,1)
+        self.button_layout.addWidget(self.help_btn, 0, 7,1,1)
 
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
-
-        #self.info_layout.addWidget(self.hdlgen_logo, alignment= Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addLayout(self.button_layout)
-       # self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 25))
         self.info_layout.addWidget(self.hdlgen_logo_1, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 5))
-        #self.info_layout.addLayout(self.button_layout)
         self.info_layout.addWidget(self.processphoto, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 5))
         self.info_layout.addWidget(self.github_link, alignment=Qt.AlignCenter)
-        #self.info_layout.addWidget(self.vici_link, alignment=Qt.AlignCenter)
-        #self.info_layout.addWidget(self.chatgpt_link, alignment=Qt.AlignCenter)
         self.info_layout.addSpacerItem(QSpacerItem(1, 10))
 
-       # self.mainLayout.addWidget(self.settings_btn_spacer, alignment=Qt.AlignTop)
-        #self.mainLayout.addWidget(self.help_btn_spacer, alignment=Qt.AlignTop)
         self.mainLayout.addLayout(self.info_layout)
-        #self.mainLayout.addWidget(self.settings_btn, alignment=Qt.AlignTop)
-        #self.mainLayout.addWidget(self.help_btn, alignment=Qt.AlignTop)
-
-
-        self.setLayout(self.mainLayout)
-
         self.container.setLayout(self.mainLayout)
 
+        self.setLayout(self.mainLayout)
         self.setCentralWidget(self.container)
 
     def help_window(self):
@@ -172,40 +163,63 @@ class HDLGen(QMainWindow):
         self.close()
 
     def open_project(self):
-        self.config.read('config.ini')
         lastDir = self.config.get('user', 'recentEnviro')
+
         if not os.path.exists(lastDir):
-            lastDir = "../User_Projects/"
-        self.load_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project XML File", lastDir,
-                                                         filter="HDLGen (*.hdlgen)")
-        if self.load_proj_dir[0]:
-            print("Loading project from ", self.load_proj_dir[0])
-            self.window = Home(self.load_proj_dir)
+            lastDir = Path("../User_Projects/")
+
+        selected_proj_dir = QFileDialog.getOpenFileName(self, "Select the Project HDLGen File", str(lastDir), filter="HDLGen (*.hdlgen)")
+        load_proj_dir = Path(selected_proj_dir[0])
+
+        if load_proj_dir.exists():
+            self.window = Home(load_proj_dir)
             self.window.showMaximized()
             self.close()
 
     def link(self, url_str):
         QDesktopServices.openUrl(QUrl(url_str))
+
     def settings_window(self):
         settings_dialog = settingsDialog()
         settings_dialog.exec_()
 
+    @staticmethod
+    def create_config_file():
+        config_file = os.path.join(os.getcwd(), 'config.ini')
+
+        default_config = configparser.ConfigParser()
+        
+        default_environment = Path(os.getcwd()).parent.absolute() / 'User_Projects'
+
+        default_config['user'] = {
+            'author': 'To be completed',
+            'email': 'To be completed',
+            'company': 'To be completed',
+            'vivado.bat': 'To be completed',
+            'recentenviro': default_environment,
+            'quartus': 'To be completed'
+        }
+
+        with open(config_file, 'w', encoding='UTF-8') as f:
+            default_config.write(f)
+            f.flush()
+
 def main():
+    if hasattr(Qt, 'AA_EnableHighDpiScaling'):
+        QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+      
+    if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
+        QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+    
     app = QApplication(sys.argv)
+    
     window = HDLGen()
     window.setWindowFlags(window.windowFlags() | Qt.WindowMaximizeButtonHint)
     window.move(0, 0)
     window.show()
-    #window.showMaximized()
+    
     app.setStyle('windowsvista')
     app.exec_()
 
-
 if __name__ == '__main__':
-    if hasattr(Qt, 'AA_EnableHighDpiScaling'):
-        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-      
-    if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
-        QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
-      
     main()

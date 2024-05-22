@@ -1,29 +1,22 @@
 #Generation section in HDL Designer. This class will call VHDLModel.py, VerilogModel.py, VHDLTestbench.py, VerilogTestbench.py, generotor.py
 
-import os
-import re
 from xml.dom import minidom
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
-import pyperclip
-import sys
-import configparser
 import qtawesome as qta
+import pyperclip, sys, yaml, os, re
 
 sys.path.append("..")
 from HDLDesigner.ChatGPT.chatgpt_help import ChatGPTHelpDialog
 from HDLDesigner.ChatGPT.VHDLModel import VHDLModelDialog
 from HDLDesigner.ChatGPT.VerilogModel import VerilogModelDialog
-from HDLDesigner.ChatGPT.VHDLTestbench import VHDLTestbenchDialog
-from HDLDesigner.ChatGPT.VerilogTestbench import VerilogTestbenchDialog
 from ProjectManager.project_manager import ProjectManager
 from Generator.generator import Generator
 
 WHITE_COLOR = "color: white"
 BLACK_COLOR = "color: black"
 MEDIUM_SPACING = 25
-
 
 class Gen(QWidget):
     save_signal = Signal(bool)
@@ -39,17 +32,6 @@ class Gen(QWidget):
         input_font = QFont()
         input_font.setPointSize(10)
         self.proj_dir = proj_dir
-        self.config = configparser.ConfigParser()
-        self.config.read('config.ini')
-        VHDLModel = self.config.get('user', 'vhdlchatgptmodel')
-        VerilogModel = self.config.get('user', 'verilogchatgptmodel')
-        VHDLTestbench = self.config.get('user', 'vhdlchatgpttestbench')
-        VerilogTestbench = self.config.get('user', 'verilogchatgpttestbench')
-        VHDLModel = self.remove_blank_lines(VHDLModel)
-        VerilogModel = self.remove_blank_lines(VerilogModel)
-        VHDLTestbench = self.remove_blank_lines(VHDLTestbench)
-        VerilogTestbench = self.remove_blank_lines(VerilogTestbench)
-        self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
         self.proj_path = ""
         self.entity_name = ""
         self.mainLayout = QVBoxLayout()
@@ -63,6 +45,12 @@ class Gen(QWidget):
         self.headerTitleFrame = QFrame()
         self.chatgptTitleFrame = QFrame()
         
+        with open('prompts.yml', 'r') as prompts:
+            self.config = yaml.safe_load(prompts)
+
+        VHDLModel = self.config["vhdlchatgptmodel"]
+        VerilogModel = self.config["verilogchatgptmodel"]
+        self.commands = [VHDLModel, VerilogModel]
         
         self.input_layout = QGridLayout()
 
@@ -165,18 +153,9 @@ class Gen(QWidget):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px;}"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
-        self.testbench_label = QLabel("Generate HDL Testbench Template")
+        self.testbench_label = QLabel("Generate HDL Testbench")
         self.testbench_label.setStyleSheet(BLACK_COLOR)
         self.testbench_label.setFont(small_text_font)
-
-
-        self.chatgpt_testbench_label = QLabel("ChatGPT Prompt Header")
-        self.chatgpt_testbench_label.setStyleSheet(BLACK_COLOR)
-        self.chatgpt_testbench_label.setFont(small_text_font)
-
-        self.msg_testbench_label = QLabel("Generate ChatGPT Prompt\nMerged Header and Template")
-        self.msg_testbench_label.setStyleSheet(BLACK_COLOR)
-        self.msg_testbench_label.setFont(small_text_font)
 
         self.generate_testbench = QPushButton("Generate")
         self.generate_testbench.setFont(input_font)
@@ -194,38 +173,15 @@ class Gen(QWidget):
         self.wcfg_checkBox.setFont(input_font)
         self.wcfg_checkBox.setChecked(True)
 
-        self.generate_chatgpt_testbench = QPushButton("Generate and Copy")
-        self.generate_chatgpt_testbench.setFont(input_font)
-        self.generate_chatgpt_testbench.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
-
-        self.chatgpt_testbench_bk_checkBox = QCheckBox("Enable backup of previous version (_n)")
-        self.chatgpt_testbench_bk_checkBox.setStyleSheet(BLACK_COLOR)
-        self.chatgpt_testbench_bk_checkBox.setFont(input_font)
-        self.chatgpt_testbench_bk_checkBox.setChecked(True)
-
         self.delete_bk_testbench = QPushButton("Delete backups")
         self.delete_bk_testbench.setFont(input_font)
         self.delete_bk_testbench.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
-        self.delete_bk_testbench_chatgpt = QPushButton("Delete backups")
-        self.delete_bk_testbench_chatgpt.setFont(input_font)
-        self.delete_bk_testbench_chatgpt.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
-
         self.loc_testbench = QPushButton("Go to folder")
         self.loc_testbench.setFont(input_font)
         self.loc_testbench.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
-
-        self.chatgpt_loc_testbench = QPushButton("Go to folder")
-        self.chatgpt_loc_testbench.setFont(input_font)
-        self.chatgpt_loc_testbench.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
@@ -238,13 +194,6 @@ class Gen(QWidget):
         self.model_VHDL = QPushButton("Edit")
         self.model_VHDL.setFont(input_font)
         self.model_VHDL.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
-
-
-        self.testbench_VHDL = QPushButton("Edit")
-        self.testbench_VHDL.setFont(input_font)
-        self.testbench_VHDL.setStyleSheet(
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
 
@@ -269,14 +218,6 @@ class Gen(QWidget):
             "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
             " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
         self.model_Verilog.setVisible(False)
-
-
-        self.testbench_Verilog = QPushButton("Edit")
-        self.testbench_Verilog.setFont(input_font)
-        self.testbench_Verilog.setStyleSheet(
-            "QPushButton {background-color: rgb(97, 107, 129); color: white; border-radius: 10px; border-style: plain;padding: 10px; }"
-            " QPushButton:pressed { background-color: rgb(72, 80, 98);  color: white; border-radius: 10px; border-style: plain;padding: 10px;}")
-        self.testbench_Verilog.setVisible(False)
 
         self.header_title_check = QRadioButton("Preview")
         self.header_title_check.setStyleSheet(BLACK_COLOR)
@@ -311,11 +252,6 @@ class Gen(QWidget):
         self.model_button_group.addButton(self.msg_model_check)
         self.model_button_group.addButton(self.model_check)
 
-        self.testbench_button_group = QButtonGroup()
-        self.testbench_button_group.addButton(self.header_testbench_check)
-        self.testbench_button_group.addButton(self.msg_testbench_check)
-        self.testbench_button_group.addButton(self.testbench_check)
-
         self.title_button_group = QButtonGroup()
         self.title_button_group.addButton(self.header_title_check)
         self.title_button_group.addButton(self.msg_title_check)
@@ -345,8 +281,6 @@ class Gen(QWidget):
         self.main_frame.setStyleSheet('.QFrame{background-color: rgb(97, 107, 129); border-radius: 5px;}')
         self.model_VHDL.clicked.connect(self.vhdl_model_command)
         self.model_Verilog.clicked.connect(self.verilog_model_command)
-        self.testbench_VHDL.clicked.connect(self.vhdl_testbench_command)
-        self.testbench_Verilog.clicked.connect(self.verilog_testbench_command)
         self.main_frame.setLayout(self.arch_action_layout)
 
         self.list_frame.setFrameShape(QFrame.StyledPanel)
@@ -451,28 +385,6 @@ class Gen(QWidget):
         self.testbenchFrame.setStyleSheet(
             ".QFrame{background-color: white; border-radius: 5px;}")
 
-        self.header_msg_testbench_layout.addWidget(self.chatgpt_testbench_label, 0, 0)
-        self.header_msg_testbench_layout.addWidget(self.header_testbench_check, 1, 0)
-        self.header_msg_testbench_layout.addWidget(self.testbench_VHDL, 0, 1)
-        self.header_msg_testbench_layout.addWidget(self.testbench_Verilog, 0, 1)
-        self.headerTestbenchFrame.setLayout(self.header_msg_testbench_layout)
-        self.headerTestbenchFrame.setStyleSheet(
-            ".QFrame{background-color: white; border-radius: 5px;}")
-        self.headerTestbenchBorderFrame = QFrame()
-        self.headerTestbenchBorderFrame.setStyleSheet(
-            ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
-        self.headerTestbenchBorderFrameLayout = QVBoxLayout(self.headerTestbenchBorderFrame)
-        self.headerTestbenchBorderFrameLayout.addWidget(self.headerTestbenchFrame)
-        self.HDLTestbenchLayout.addWidget(self.headerTestbenchBorderFrame)
-        self.HDLTestbenchLayout.addSpacing(MEDIUM_SPACING)
-
-        self.ChatgptTestbenchLayout.addWidget(self.msg_testbench_label, 0, 0)
-        self.ChatgptTestbenchLayout.addWidget(self.chatgpt_loc_testbench, 0, 1)
-        self.ChatgptTestbenchLayout.addWidget(self.generate_chatgpt_testbench, 1, 0)
-        self.ChatgptTestbenchLayout.addWidget(self.chatgpt_testbench_bk_checkBox, 2, 1)
-        self.ChatgptTestbenchLayout.addWidget(self.msg_testbench_check, 2, 0)
-        self.ChatgptTestbenchLayout.addWidget(self.delete_bk_testbench_chatgpt, 1, 1)
-
         self.chatgptTestbenchFrame.setLayout(self.ChatgptTestbenchLayout)
         self.chatgptTestbenchFrame.setStyleSheet(
             ".QFrame{background-color: white; border-radius: 5px;}")
@@ -481,16 +393,15 @@ class Gen(QWidget):
             ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
         self.testbenchBorderFrameLayout = QVBoxLayout(self.testbenchBorderFrame)
         self.testbenchBorderFrameLayout.addWidget(self.testbenchFrame)
+        self.spacer = QSpacerItem(0, 0, QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
 
         self.HDLTestbenchLayout.addWidget(self.testbenchBorderFrame)
-        self.HDLTestbenchLayout.addSpacing(MEDIUM_SPACING)
-
+        self.HDLTestbenchLayout.addItem(self.spacer)
+        
         self.chatgptTestbenchBorderFrame = QFrame()
         self.chatgptTestbenchBorderFrame.setStyleSheet(
             ".QFrame{background-color: rgb(97, 107, 129); border: 2.5px solid rgb(97, 107, 129);}")
         self.chatgptTestbenchBorderFrameLayout = QVBoxLayout(self.chatgptTestbenchBorderFrame)
-        self.chatgptTestbenchBorderFrameLayout.addWidget(self.chatgptTestbenchFrame)
-        self.HDLTestbenchLayout.addWidget(self.chatgptTestbenchBorderFrame)
 
         self.header_msg_title_layout.addWidget(self.chatgpt_title_label, 0, 0)
         self.header_msg_title_layout.addWidget(self.header_title_check, 1, 0)
@@ -539,11 +450,6 @@ class Gen(QWidget):
 
         self.setLayout(self.mainLayout)
 
-    def remove_blank_lines(self, text):
-        lines = text.split("\n")  # Split the string into lines
-        non_empty_lines = [line for line in lines if line.strip()]  # Remove blank lines
-        return "\n".join(non_empty_lines)
-
     def save_data(self):
 
         xml_data_path = ProjectManager.get_xml_data_path()
@@ -565,24 +471,14 @@ class Gen(QWidget):
         VerilogModel_node.appendChild(root.createTextNode(self.commands[1]))
         commands_node.appendChild(VerilogModel_node)
 
-        VHDLTestbench_node = root.createElement('VHDLTestbench')
-        self.commands[2] = self.commands[2].replace("\n", "&#10;")
-        VHDLTestbench_node.appendChild(root.createTextNode(self.commands[2]))
-        commands_node.appendChild(VHDLTestbench_node)
-
-        VerilogTestbench_node = root.createElement('VerilogTestbench')
-        self.commands[3] = self.commands[3].replace("\n", "&#10;")
-        VerilogTestbench_node.appendChild(root.createTextNode(self.commands[3]))
-        commands_node.appendChild(VerilogTestbench_node)
-
         new_chatgpt.appendChild(commands_node)
         hdlDesign[0].replaceChild(new_chatgpt, hdlDesign[0].getElementsByTagName('chatgpt')[0])
 
         # converting the doc into a string in xml format
         xml_str = root.toprettyxml()
-        xml_str = os.linesep.join([s for s in xml_str.splitlines() if s.strip()])
+        xml_str = '\n'.join([line for line in xml_str.splitlines() if line.strip()])
         # Writing xml file
-        with open(xml_data_path, "w") as f:
+        with open(xml_data_path, "w", encoding='UTF-8', newline='\n') as f:
             f.write(xml_str)
         hdl = False
         self.save_signal.emit(hdl)
@@ -590,9 +486,9 @@ class Gen(QWidget):
 
     def load_data(self, proj_dir):
         proj_name = ProjectManager.get_proj_name()
-        self.proj_path = os.path.join(ProjectManager.get_proj_dir(), proj_name)
+        self.proj_path = ProjectManager.get_proj_dir()
 
-        root = minidom.parse(proj_dir[0])
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         projectManager = HDLGen.getElementsByTagName("projectManager")
         HDL = projectManager[0].getElementsByTagName("HDL")[0]
@@ -615,23 +511,18 @@ class Gen(QWidget):
 
             VHDLModel = commands_node.getElementsByTagName('VHDLModel')[0].firstChild.data
             VerilogModel = commands_node.getElementsByTagName('VerilogModel')[0].firstChild.data
-            VHDLTestbench = commands_node.getElementsByTagName('VHDLTestbench')[0].firstChild.data
-            VerilogTestbench = commands_node.getElementsByTagName('VerilogTestbench')[0].firstChild.data
 
-            self.commands = [VHDLModel, VerilogModel, VHDLTestbench, VerilogTestbench]
+            self.commands = [VHDLModel, VerilogModel]
 
     def getProcessAndConcur(self, proj_dir):
         if proj_dir == None:
-            proj_name = ProjectManager.get_proj_name()
-            proj_dir = os.path.join(ProjectManager.get_proj_dir(), proj_name,"HDLGenPrj",proj_name+".hdlgen")
+            proj_dir = ProjectManager.get_proj_dir()
             print(proj_dir)
-        else:
-            proj_dir = proj_dir[0]
+
         processNames=[]
         concurrentNames=[]
 
-
-        root = minidom.parse(proj_dir)
+        root = minidom.parse(str(proj_dir))
         HDLGen = root.documentElement
         hdl_design = HDLGen.getElementsByTagName("hdlDesign")
         arch_node = hdl_design[0].getElementsByTagName("architecture")
@@ -650,6 +541,7 @@ class Gen(QWidget):
 
                 child = next
         return processNames, concurrentNames
+    
     def chatgpt_help_window(self):
         chatgpt_help_dialog = ChatGPTHelpDialog()
         chatgpt_help_dialog.exec_()
@@ -788,29 +680,13 @@ class Gen(QWidget):
         # Combine the lines into the final output
         output_string = '&#10;'.join(output_lines)
         return output_string
+    
     def replace_with_reserved_concurrent(self, match):
         self.match_count += 1
         if self.match_count == self.total_matches:
             return "~***Reserved for concurrent statements***"
         else:
             return ''
-    def vhdl_testbench_command(self):
-        vhdl_testbench = VHDLTestbenchDialog("edit", self.commands[2])
-        vhdl_testbench.exec_()
-
-        if not vhdl_testbench.cancelled:
-            vhdl_testbench = vhdl_testbench.get_data()
-            self.commands[2] = vhdl_testbench
-        self.save_data()
-
-    def verilog_testbench_command(self):
-        verilog_testbench = VerilogTestbenchDialog("edit", self.commands[3])
-        verilog_testbench.exec_()
-
-        if not verilog_testbench.cancelled:
-            verilog_testbench = verilog_testbench.get_data()
-            self.commands[3] = verilog_testbench
-        self.save_data()
 
     def header_VHDL_file(self):
         self.generator.generate_folders()
@@ -874,22 +750,18 @@ class Gen(QWidget):
     def VHDLVisible(self):
         self.model_VHDL.setVisible(True)
         self.title_VHDL.setVisible(True)
-        self.testbench_VHDL.setVisible(True)
         self.gen_label.setText("Generate VHDL")
 
         self.model_Verilog.setVisible(False)
         self.title_Verilog.setVisible(False)
-        self.testbench_Verilog.setVisible(False)
 
     def VerilogVisible(self):
         self.model_Verilog.setVisible(True)
         self.title_Verilog.setVisible(True)
-        self.testbench_Verilog.setVisible(True)
         self.gen_label.setText("Generate Verilog")
 
         self.model_VHDL.setVisible(False)
         self.title_VHDL.setVisible(False)
-        self.testbench_VHDL.setVisible(False)
 
     def copy_file_contents_to_clipboard(self, file_path):
         try:
@@ -911,7 +783,6 @@ class Gen(QWidget):
             msgBox.setText("An error occurred. Check terminal for details")
             msgBox.exec_()
             print("An error occurred:", str(e))
-
 
     def open_model_folder(self):
         if self.model_VHDL.isVisible():
