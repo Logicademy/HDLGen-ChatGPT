@@ -1,4 +1,6 @@
-
+<p align="center">
+  <img src="Application/Resources/hdlgen_title_blue.png" />
+</p>
 ## 
 ### HDLGen-ChatGPT and ChatGPT: 
 ### Digital Systems Design and Test Plan Capture Wizard, VHDL/Verilog Model and Testbench Generator, EDA Project Generator/Launcher
