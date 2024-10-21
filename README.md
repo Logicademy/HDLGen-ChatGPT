@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="Application/Resources/hdlgen_title_blue.png" />
+</p>
 
 ## 
 ### HDLGen-ChatGPT and ChatGPT: 
